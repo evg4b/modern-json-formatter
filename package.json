@@ -1,0 +1,11 @@
+{
+  "name": "modern-json-formatter",
+  "packageManager": "yarn@4.2.2",
+  "devDependencies": {
+    "@types/chrome": "^0.0.267",
+    "@types/node": "^20.12.11",
+    "esbuild-plugin-json-merge": "^0.1.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}

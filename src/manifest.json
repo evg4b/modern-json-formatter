@@ -11,6 +11,12 @@
       "run_at": "document_end"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["parser.wasm"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "permissions": ["storage"],
   "host_permissions": ["*://*/*", "<all_urls>"]
 }

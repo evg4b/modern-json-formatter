@@ -1,3 +1,4 @@
+import copy from 'esbuild-plugin-copy';
 import jsonMerge from 'esbuild-plugin-json-merge';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
@@ -11,12 +12,23 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   cjsInterop: true,
+  target: 'es2020',
   esbuildPlugins: [
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, name, description }],
       outfile: 'manifest.json',
     }),
-    sassPlugin({type: 'css-text'}),
+    sassPlugin({
+      type: 'css-text',
+    }),
+    copy({
+      resolveFrom: 'cwd',
+      assets: {
+        from: ['parser/parser.wasm'],
+        to: ['dist/parser.wasm'],
+      },
+      watch: true,
+    }),
   ],
   clean: true,
 });

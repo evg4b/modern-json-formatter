@@ -13,12 +13,12 @@ const runPlugin = async () => {
   const data = document.querySelector<HTMLPreElement>('body > pre');
 
   isNotNull(data, 'No data found');
+
   const go = new Go();
   const wasm = await fetch(chrome.runtime.getURL('parser.wasm'));
   WebAssembly.instantiateStreaming(wasm, go.importObject).then((result) => {
     go.run(result.instance);
-    // @ts-ignore
-    console.log(formatJSON(data.innerText))
+    console.log(parseJSON(data.innerText))
   });
 
   console.log('originalPreElement:', JSON.parse(data.innerText));

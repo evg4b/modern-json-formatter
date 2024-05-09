@@ -4,7 +4,17 @@ import nullNode from './nodes';
 export const buildDom = (object: unknown): HTMLElement => {
   const div = document.createElement('span');
   switch (true) {
+    case typeof object === 'string':
+    case typeof object === 'number':
+    case object === true || object === false:
+      div.className = 'primitive';
+      div.appendChild(element(JSON.stringify(object)));
+      return div;
+    case object === null:
+      div.className = 'primitive';
+      return clone(nullNode);
     case Array.isArray(object):
+      div.className = 'array';
       div.appendChild(element('[', { class: 'bracket' }));
       const innerDiv = element('', { class: 'inner' });
       div.appendChild(innerDiv);
@@ -35,13 +45,6 @@ export const buildDom = (object: unknown): HTMLElement => {
       });
       div.appendChild(element('}'));
       return div;
-    case typeof object === 'string':
-    case typeof object === 'number':
-    case object === true || object === false:
-      div.appendChild(element(JSON.stringify(object)));
-      return div;
-    case object === null:
-      return clone(nullNode);
   }
   return div;
 };

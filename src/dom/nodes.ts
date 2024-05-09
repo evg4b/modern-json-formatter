@@ -1,3 +1,3 @@
-const nullNode = document.createElement('div');
-nullNode.innerHTML = 'Null';
+const nullNode = document.createElement('span');
+nullNode.innerHTML = 'null';
 export default nullNode;

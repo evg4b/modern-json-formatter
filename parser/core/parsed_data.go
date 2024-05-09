@@ -48,5 +48,12 @@ func (a *ParsedData) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
+	boolean := false
+	if err := json.Unmarshal(b, &boolean); err == nil {
+		(*a)["type"] = "bool"
+		(*a)["value"] = boolean
+		return nil
+	}
+
 	return nil
 }

@@ -24,43 +24,50 @@ func runTestCases(t *testing.T, tests []testCases) {
 	}
 }
 
-func tString(value string) core.ParsedData {
-	return core.ParsedData{
+func tString(value string) map[string]any {
+	return map[string]any{
 		"type":  "string",
 		"value": value,
 	}
 }
 
-func tNumber(value string) core.ParsedData {
-	return core.ParsedData{
+func tNumber(value string) map[string]any {
+	return map[string]any{
 		"type":  "number",
 		"value": value,
 	}
 }
 
-func tNull() core.ParsedData {
-	return core.ParsedData{
+func tBoolean(value bool) map[string]any {
+	return map[string]any{
+		"type":  "bool",
+		"value": value,
+	}
+}
+
+func tNull() map[string]any {
+	return map[string]any{
 		"type": "null",
 	}
 }
 
-func tArray(items ...core.ParsedData) core.ParsedData {
+func tArray(items ...any) map[string]any {
 	if items == nil {
-		items = []core.ParsedData{}
+		items = []any{}
 	}
 
-	return core.ParsedData{
+	return map[string]any{
 		"type":  "array",
 		"items": items,
 	}
 }
 
-func tObject(properties map[string]core.ParsedData) core.ParsedData {
+func tObject(properties map[string]any) map[string]any {
 	if properties == nil {
-		properties = map[string]core.ParsedData{}
+		properties = map[string]any{}
 	}
 
-	return core.ParsedData{
+	return map[string]any{
 		"type":       "object",
 		"properties": properties,
 	}
@@ -72,27 +79,27 @@ func TestParse(t *testing.T) {
 			{
 				name:  "empty object",
 				input: "{}",
-				want:  tObject(map[string]core.ParsedData{}),
+				want:  tObject(map[string]any{}),
 			},
 			{
 				name:  "object with string",
 				input: `{"key": "value"}`,
-				want: tObject(map[string]core.ParsedData{
+				want: tObject(map[string]any{
 					"key": tString("value"),
 				}),
 			},
 			{
 				name:  "object with number",
 				input: `{"key": 1234}`,
-				want: tObject(map[string]core.ParsedData{
+				want: tObject(map[string]any{
 					"key": tNumber("1234"),
 				}),
 			},
 			{
 				name:  "object with object",
 				input: `{"key": {"key2": "value2"}}`,
-				want: tObject(map[string]core.ParsedData{
-					"key": tObject(map[string]core.ParsedData{
+				want: tObject(map[string]any{
+					"key": tObject(map[string]any{
 						"key2": tString("value2"),
 					}),
 				}),
@@ -100,7 +107,7 @@ func TestParse(t *testing.T) {
 			{
 				name:  "object with array",
 				input: `{"key": ["value", "value2"]}`,
-				want: tObject(map[string]core.ParsedData{
+				want: tObject(map[string]any{
 					"key": tArray(
 						tString("value"),
 						tString("value2"),
@@ -139,10 +146,10 @@ func TestParse(t *testing.T) {
 				name:  "array with object",
 				input: `[{"key": "value"}, {"key2": "value2"}]`,
 				want: tArray(
-					tObject(map[string]core.ParsedData{
+					tObject(map[string]any{
 						"key": tString("value"),
 					}),
-					tObject(map[string]core.ParsedData{
+					tObject(map[string]any{
 						"key2": tString("value2"),
 					}),
 				),
@@ -167,13 +174,13 @@ func TestParse(t *testing.T) {
 				want: tArray(
 					tString("value"),
 					tNumber("1"),
-					tObject(map[string]core.ParsedData{
+					tObject(map[string]any{
 						"key": tString("value"),
 					}),
 					tNull(),
 					tArray(
 						tArray(
-							tObject(map[string]core.ParsedData{}),
+							tObject(map[string]any{}),
 						),
 					),
 				),
@@ -207,6 +214,21 @@ func TestParse(t *testing.T) {
 				name:  "null",
 				input: "null",
 				want:  tNull(),
+			},
+		})
+	})
+
+	t.Run("boolean parsing", func(t *testing.T) {
+		runTestCases(t, []testCases{
+			{
+				name:  "true",
+				input: "true",
+				want:  tBoolean(true),
+			},
+			{
+				name:  "false",
+				input: "false",
+				want:  tBoolean(false),
 			},
 		})
 	})

@@ -18,11 +18,14 @@ const runPlugin = async () => {
   const wasm = await fetch(chrome.runtime.getURL('parser.wasm'));
   WebAssembly.instantiateStreaming(wasm, go.importObject).then((result) => {
     go.run(result.instance);
-    console.log(parseJSON(data.innerText))
+    const parsedJson = parseJSON(data.innerText);
+    if (parsedJson.type === 'error') {
+      console.error('Error parsing JSON:', parsedJson.error);
+      return;
+    }
+    shadow.appendChild(buildDom(parsedJson.value));
+    console.log('parsedJson:', parsedJson);
   });
-
-  console.log('originalPreElement:', JSON.parse(data.innerText));
-  shadow.appendChild(buildDom(JSON.parse(data.innerText)));
 };
 
 const isJson = document.querySelector('pre + .json-formatter-container');

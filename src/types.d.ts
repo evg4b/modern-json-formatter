@@ -23,11 +23,16 @@ type NumberNode = {
   value: number;
 }
 
+type BooleanNode = {
+  type: 'bool';
+  value: boolean;
+}
+
 type NullNode = {
   type: 'null';
 }
 
-type ParsedJSON = ObjectNode | ArrayNode | StringNode | NumberNode | NullNode;
+type ParsedJSON = ObjectNode | ArrayNode | StringNode | NumberNode | BooleanNode | NullNode;
 
 interface ErrorParserResponse {
   type: 'error';
@@ -36,7 +41,7 @@ interface ErrorParserResponse {
 
 interface SuccessParserResponse {
   type: 'success';
-  data: ParsedJSON;
+  value: ParsedJSON;
 }
 
 type ParserResponse = ErrorParserResponse | SuccessParserResponse;

@@ -1,24 +1,23 @@
-import { clone, element } from './helpres';
-import nullNode from './nodes';
+import { element } from './helpres';
 
-export const buildDom = (object: unknown): HTMLElement => {
+export const buildDom = (object: ParsedJSON): HTMLElement => {
   const div = document.createElement('span');
-  switch (true) {
-    case typeof object === 'string':
-    case typeof object === 'number':
-    case object === true || object === false:
+  switch (object.type) {
+    case  'string':
+    case  'number':
+    case 'bool':
       div.className = 'primitive';
       div.appendChild(element(JSON.stringify(object)));
       return div;
-    case object === null:
+    case 'null':
       div.className = 'primitive';
-      return clone(nullNode);
-    case Array.isArray(object):
+      return element('null');
+    case 'array':
       div.className = 'array';
       div.appendChild(element('[', { class: 'bracket' }));
       const innerDiv = element('', { class: 'inner' });
       div.appendChild(innerDiv);
-      object.forEach((item, index) => {
+      object.items.forEach((item, index) => {
         const subInnerDiv = element('', { class: 'item' });
         innerDiv.appendChild(subInnerDiv);
         subInnerDiv.appendChild(buildDom(item));
@@ -28,12 +27,12 @@ export const buildDom = (object: unknown): HTMLElement => {
       });
       div.appendChild(element(']', { class: 'bracket' }));
       return div;
-    case typeof object === 'object':
+    case 'object':
       div.className = 'object';
       div.appendChild(element('{'));
       const innerDiv2 = element('', { class: 'inner' });
       div.appendChild(innerDiv2);
-      Object.entries(object as any).forEach(([key, value], index) => {
+      Object.entries(object.properties).forEach(([key, value], index) => {
         const subInnerDiv = element('', { class: 'property' });
         innerDiv2.appendChild(subInnerDiv);
         subInnerDiv.appendChild(element(JSON.stringify(key)));
@@ -45,6 +44,8 @@ export const buildDom = (object: unknown): HTMLElement => {
       });
       div.appendChild(element('}'));
       return div;
+    default:
+      throw new Error(`Unknown type: ${ object }`);
   }
   return div;
 };

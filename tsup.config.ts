@@ -1,4 +1,5 @@
 import jsonMerge from 'esbuild-plugin-json-merge';
+import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 
@@ -15,6 +16,7 @@ export default defineConfig({
       entryPoints: ['src/manifest.json', { version, name, description }],
       outfile: 'manifest.json',
     }),
+    sassPlugin({type: 'css-text'}),
   ],
   clean: true,
 });

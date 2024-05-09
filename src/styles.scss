@@ -1,0 +1,40 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.bracket {
+  margin: 2px;
+}
+
+.object {
+  display: inline;
+  background: rgba(255, 196, 0, 0.1);
+
+  .inner {
+    padding-left: 15px;
+    display: block;
+
+    .property {
+      display: block;
+      padding-left: 15px;
+      background: rgba(0, 48, 241, 0.1);
+    }
+  }
+}
+
+.array {
+  display: inline;
+  background: rgba(29, 255, 0, 0.1);
+
+  .inner {
+    padding-left: 15px;
+    display: block;
+
+    .item {
+      display: block;
+      padding-left: 15px;
+      background: rgba(241, 0, 0, 0.1);
+    }
+  }
+}

@@ -1,6 +1,9 @@
 package main
 
-import "syscall/js"
+import (
+	"github.com/evg4b/modern-json-formatter/parser/core"
+	"syscall/js"
+)
 
 func ParseWrapper() js.Func {
 	return js.FuncOf(func(_ js.Value, args []js.Value) any {
@@ -11,7 +14,7 @@ func ParseWrapper() js.Func {
 			}
 		}
 		inputJSON := args[0].String()
-		pretty, err := Parse(inputJSON)
+		pretty, err := core.Parse(inputJSON)
 		if err != nil {
 			return errorResponse(err.Error())
 		}

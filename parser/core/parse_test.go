@@ -4,6 +4,9 @@ import (
 	"github.com/evg4b/modern-json-formatter/parser/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"os"
+	"path"
+	"runtime"
 	"testing"
 )
 
@@ -231,5 +234,32 @@ func TestParse(t *testing.T) {
 				want:  tBoolean(false),
 			},
 		})
+	})
+
+	t.Run("save json structure", func(t *testing.T) {
+		_, filename, _, _ := runtime.Caller(0)
+		testDataDir := path.Join(path.Dir(filename), "_testdata")
+
+		files, err := os.ReadDir(testDataDir)
+		require.NoError(t, err)
+
+		for _, file := range files {
+			t.Run(file.Name(), func(t *testing.T) {
+				data, err := os.ReadFile(path.Join(testDataDir, file.Name()))
+				require.NoError(t, err)
+
+				expected, err := core.Parse(string(data))
+				require.NoError(t, err)
+
+				for range 10 {
+					actual, err := core.Parse(string(data))
+					require.NoError(t, err)
+
+					assert.Equal(t, actual, expected)
+				}
+			})
+		}
+
+		t.Logf("Current test filename: %s", testDataDir)
 	})
 }

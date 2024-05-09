@@ -1,4 +1,4 @@
-package main
+package js
 
 func errorResponse(error string) map[string]any {
 	return map[string]any{

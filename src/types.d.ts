@@ -3,9 +3,14 @@ declare module '*.scss' {
   export default styles;
 }
 
+type PropertyNode = {
+  key: string;
+  value: ParsedJSON;
+}
+
 type ObjectNode = {
   type: 'object';
-  properties: Record<string, ParsedJSON>;
+  properties: PropertyNode[];
 }
 
 type ArrayNode = {
@@ -20,7 +25,7 @@ type StringNode = {
 
 type NumberNode = {
   type: 'number';
-  value: number;
+  value: string;
 }
 
 type BooleanNode = {
@@ -40,7 +45,7 @@ interface ErrorParserResponse {
 }
 
 interface SuccessParserResponse {
-  type: 'success';
+  type: 'response';
   value: ParsedJSON;
 }
 

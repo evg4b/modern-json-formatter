@@ -4,13 +4,19 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
   const div = document.createElement('span');
   switch (object.type) {
     case  'string':
+      div.className = 'string';
+      div.appendChild(element(JSON.stringify(object.value)));
+      return div;
     case  'number':
+      div.className = 'number';
+      div.appendChild(element(object.value));
+      return div;
     case 'bool':
-      div.className = 'primitive';
-      div.appendChild(element(JSON.stringify(object)));
+      div.className = 'boolean';
+      div.appendChild(element(JSON.stringify(object.value)));
       return div;
     case 'null':
-      div.className = 'primitive';
+      div.className = 'null';
       return element('null');
     case 'array':
       div.className = 'array';
@@ -32,7 +38,7 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
       div.appendChild(element('{'));
       const innerDiv2 = element('', { class: 'inner' });
       div.appendChild(innerDiv2);
-      Object.entries(object.properties).forEach(([key, value], index) => {
+      object.properties.forEach(({ key, value }, index) => {
         const subInnerDiv = element('', { class: 'property' });
         innerDiv2.appendChild(subInnerDiv);
         subInnerDiv.appendChild(element(JSON.stringify(key)));

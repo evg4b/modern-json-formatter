@@ -14,17 +14,23 @@ const runPlugin = async () => {
 
   isNotNull(data, 'No data found');
 
+  await initParser();
+
+  const parsedJson = parseJSON(data.innerText);
+  if (parsedJson.type === 'error') {
+    console.error('Error parsing JSON:', parsedJson.error);
+    return;
+  }
+
+  shadow.appendChild(buildDom(parsedJson.value));
+  console.log('parsedJson:', parsedJson);
+};
+
+const initParser = async () => {
   const go = new Go();
   const wasm = await fetch(chrome.runtime.getURL('parser.wasm'));
-  WebAssembly.instantiateStreaming(wasm, go.importObject).then((result) => {
+  await WebAssembly.instantiateStreaming(wasm, go.importObject).then((result) => {
     go.run(result.instance);
-    const parsedJson = parseJSON(data.innerText);
-    if (parsedJson.type === 'error') {
-      console.error('Error parsing JSON:', parsedJson.error);
-      return;
-    }
-    shadow.appendChild(buildDom(parsedJson.value));
-    console.log('parsedJson:', parsedJson);
   });
 };
 

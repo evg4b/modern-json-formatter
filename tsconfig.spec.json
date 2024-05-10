@@ -4,17 +4,14 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "allowJs": false,
-    "types": ["node", "chrome", "golang-wasm-exec"],
+    "types": ["jest", "node", "golang-wasm-exec"],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
+    "src/**/*.test.ts",
+    "parser/**/*.test.ts",
     "src/types.d.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.test.ts"
-  ]
 }

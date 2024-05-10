@@ -27,13 +27,6 @@ func (a *ParsedData) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
-	arr := []ParsedData{}
-	if err := json.Unmarshal(b, &arr); err == nil {
-		(*a)["type"] = "array"
-		(*a)["items"] = arr
-		return nil
-	}
-
 	str := ""
 	if err := json.Unmarshal(b, &str); err == nil {
 		(*a)["type"] = "string"
@@ -52,6 +45,13 @@ func (a *ParsedData) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &boolean); err == nil {
 		(*a)["type"] = "bool"
 		(*a)["value"] = boolean
+		return nil
+	}
+
+	arr := []ParsedData{}
+	if err := json.Unmarshal(b, &arr); err == nil {
+		(*a)["type"] = "array"
+		(*a)["items"] = arr
 		return nil
 	}
 

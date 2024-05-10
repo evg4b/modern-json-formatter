@@ -13,14 +13,15 @@ export default defineConfig({
   sourcemap: true,
   cjsInterop: true,
   target: 'es2020',
+  clean: true,
+  bundle: true,
+  treeshake: true,
   esbuildPlugins: [
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, name, description }],
       outfile: 'manifest.json',
     }),
-    sassPlugin({
-      type: 'css-text',
-    }),
+    sassPlugin({ type: 'css-text' }),
     copy({
       resolveFrom: 'cwd',
       assets: {
@@ -30,5 +31,4 @@ export default defineConfig({
       watch: true,
     }),
   ],
-  clean: true,
 });

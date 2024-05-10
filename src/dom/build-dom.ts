@@ -53,5 +53,6 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
     default:
       throw new Error(`Unknown type: ${ object }`);
   }
+
   return div;
 };

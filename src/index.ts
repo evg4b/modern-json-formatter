@@ -1,7 +1,7 @@
 import { isNotNull } from 'typed-assert';
-import { buildDom } from './dom/build-dom';
+import { buildDom } from './dom';
+import { initParser } from './parser';
 import styles from './styles.scss';
-import '../parser/wasm_exec.js';
 
 const runPlugin = async () => {
   const shadow = document.body.attachShadow({ mode: 'open' });
@@ -26,16 +26,8 @@ const runPlugin = async () => {
   console.log('parsedJson:', parsedJson);
 };
 
-const initParser = async () => {
-  const go = new Go();
-  const wasm = await fetch(chrome.runtime.getURL('parser.wasm'));
-  await WebAssembly.instantiateStreaming(wasm, go.importObject).then((result) => {
-    go.run(result.instance);
-  });
-};
-
-const isJson = document.querySelector('pre + .json-formatter-container');
-if (isJson) {
-  runPlugin();
+if (document.querySelector('pre + .json-formatter-container')) {
+  runPlugin()
+    .catch((error) => console.error('Error running plugin:', error));
 }
 

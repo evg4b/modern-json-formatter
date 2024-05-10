@@ -5,5 +5,6 @@ export const element = (content: string, options?: { class: string }) => {
   if (options?.class) {
     span.className = options.class;
   }
+
   return span;
 };

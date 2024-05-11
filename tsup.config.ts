@@ -30,5 +30,13 @@ export default defineConfig({
       },
       watch: true,
     }),
+    copy({
+      resolveFrom: 'cwd',
+      assets: {
+        from: ['assets/**/*'],
+        to: ['dist'],
+      },
+      watch: true,
+    }),
   ],
 });

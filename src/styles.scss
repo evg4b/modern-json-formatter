@@ -1,3 +1,5 @@
+$indentation: 20px;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -14,12 +16,11 @@
   background: rgba(255, 196, 0, 0.1);
 
   .inner {
-    padding-left: 15px;
+    padding-left: $indentation;
     display: block;
 
     .property {
       display: block;
-      padding-left: 15px;
       background: rgba(0, 48, 241, 0.1);
     }
   }
@@ -30,12 +31,11 @@
   background: rgba(29, 255, 0, 0.1);
 
   .inner {
-    padding-left: 15px;
+    padding-left: $indentation;
     display: block;
 
     .item {
       display: block;
-      padding-left: 15px;
       background: rgba(241, 0, 0, 0.1);
     }
   }

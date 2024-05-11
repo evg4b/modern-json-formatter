@@ -13,7 +13,7 @@ $indentation: 20px;
 }
 
 .bracket {
-  margin: 2px;
+  margin: 0 2px;
   color: #eeeeee;
 }
 
@@ -59,4 +59,9 @@ $indentation: 20px;
 
 .null {
   color: #717171;
+}
+
+.colon {
+  margin: 0 4px 0 2px;
+  color: #eeeeee;
 }

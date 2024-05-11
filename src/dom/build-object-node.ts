@@ -5,17 +5,17 @@ export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
   div.className = 'object';
   div.appendChild(element('{', { class: 'bracket' }));
   if (object.properties.length) {
-    const innerDiv2 = element('', { class: 'inner' });
-    div.appendChild(innerDiv2);
+    const objectInner = element('', { class: 'inner' });
+    div.appendChild(objectInner);
     const lastIndex = object.properties.length - 1;
     object.properties.forEach(({ key, value }, index) => {
-      const subInnerDiv = element('', { class: 'property' });
-      innerDiv2.appendChild(subInnerDiv);
-      subInnerDiv.appendChild(element(JSON.stringify(key), { class: 'key' }));
-      subInnerDiv.appendChild(element(':'));
-      subInnerDiv.appendChild(buildDom(value));
+      const propertyDiv = element('', { class: 'property' });
+      objectInner.appendChild(propertyDiv);
+      propertyDiv.appendChild(element(JSON.stringify(key), { class: 'key' }));
+      propertyDiv.appendChild(element(':', { class: 'colon' }));
+      propertyDiv.appendChild(buildDom(value));
       if (index !== lastIndex) {
-        subInnerDiv.appendChild(element(','));
+        propertyDiv.appendChild(element(','));
       }
     });
   }

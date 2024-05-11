@@ -1,34 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 $indentation: 20px;
 
 :host {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  font-family: "Roboto Light", Arial, sans-serif;
+  padding: $indentation;
+  font-family: "Roboto", Arial, sans-serif;
+  background: #1a1a1a;
+  color: #eeeeee;
+  font-size: 14px;
 }
 
 .bracket {
   margin: 2px;
+  color: #eeeeee;
 }
 
 .object {
   display: inline;
-  background: rgba(255, 196, 0, 0.1);
 
   .inner {
     padding-left: $indentation;
     display: block;
+    border-left: 1px dotted #3b3b3b;
 
     .property {
       display: block;
-      background: rgba(0, 48, 241, 0.1);
     }
   }
 }
 
 .array {
   display: inline;
-  background: rgba(29, 255, 0, 0.1);
 
   .inner {
     padding-left: $indentation;
@@ -36,7 +40,23 @@ $indentation: 20px;
 
     .item {
       display: block;
-      background: rgba(241, 0, 0, 0.1);
     }
   }
+}
+
+.string {
+  color: #5dd9ff;
+}
+
+.boolean,
+.number {
+  color: #9f84ff;
+}
+
+.key {
+  color: #7dadf9;
+}
+
+.null {
+  color: #717171;
 }

@@ -64,6 +64,23 @@ describe('parser wasm', () => {
         runTestCases([
           { name: 'positive', input: '42', expected: tNumber('42') },
           { name: 'negative', input: '-42', expected: tNumber('-42') },
+          { name: 'max int8', input: '127', expected: tNumber('127') },
+          { name: 'min int8', input: '-128', expected: tNumber('-128') },
+          { name: 'max int16', input: '32767', expected: tNumber('32767') },
+          { name: 'min int16', input: '-32768', expected: tNumber('-32768') },
+          { name: 'max int32', input: '2147483647', expected: tNumber('2147483647') },
+          { name: 'min int32', input: '-2147483648', expected: tNumber('-2147483648') },
+          { name: 'max int64', input: '9223372036854775807', expected: tNumber('9223372036854775807') },
+          { name: 'min int64', input: '-9223372036854775808', expected: tNumber('-9223372036854775808') },
+        ]);
+      });
+
+      describe('unsigned integers', () => {
+        runTestCases([
+          { name: 'max uint8', input: '255', expected: tNumber('255') },
+          { name: 'max uint16', input: '65535', expected: tNumber('65535') },
+          { name: 'max uint32', input: '4294967295', expected: tNumber('4294967295') },
+          { name: 'max uint64', input: '18446744073709551615', expected: tNumber('18446744073709551615') },
         ]);
       });
 
@@ -72,29 +89,27 @@ describe('parser wasm', () => {
           { name: 'positive', input: '42.42', expected: tNumber('42.42') },
           { name: 'negative', input: '-42.42', expected: tNumber('-42.42') },
           { name: 'maximum js value + 1', input: '23064690611454417', expected: tNumber('23064690611454417') },
+          {
+            name: 'max float32',
+            input: '3.40282346638528859811704183484516925440e+38',
+            expected: tNumber('3.40282346638528859811704183484516925440e+38'),
+          },
+          {
+            name: 'smallest nonzero float32',
+            input: '1.401298464324817070923729583289916131280e-45',
+            expected: tNumber('1.401298464324817070923729583289916131280e-45'),
+          },
+          {
+            name: 'max float64',
+            input: '1.79769313486231570814527423731704356798070e+308',
+            expected: tNumber('1.79769313486231570814527423731704356798070e+308'),
+          },
+          {
+            name: 'smallest nonzero float64',
+            input: '4.9406564584124654417656879286822137236505980e-324',
+            expected: tNumber('4.9406564584124654417656879286822137236505980e-324'),
+          },
         ]);
-
-        describe('integers', () => {
-          runTestCases([
-            { name: 'MaxInt8', input: '127', expected: tNumber('127') },
-            { name: 'MinInt8', input: '-128', expected: tNumber('-128') },
-            { name: 'MaxInt16', input: '32767', expected: tNumber('32767') },
-            { name: 'MinInt16', input: '-32768', expected: tNumber('-32768') },
-            { name: 'MaxInt32', input: '2147483647', expected: tNumber('2147483647') },
-            { name: 'MinInt32', input: '-2147483648', expected: tNumber('-2147483648') },
-            { name: 'MaxInt64', input: '9223372036854775807', expected: tNumber('9223372036854775807') },
-            { name: 'MinInt64', input: '-9223372036854775808', expected: tNumber('-9223372036854775808') },
-          ]);
-        });
-
-        describe('unsigned integers', () => {
-          runTestCases([
-            { name: 'MaxUint8', input: '255', expected: tNumber('255') },
-            { name: 'MaxUint16', input: '65535', expected: tNumber('65535') },
-            { name: 'MaxUint32', input: '4294967295', expected: tNumber('4294967295') },
-            { name: 'MaxUint64', input: '18446744073709551615', expected: tNumber('18446744073709551615') },
-          ]);
-        });
       });
     });
 

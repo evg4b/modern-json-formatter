@@ -3,37 +3,37 @@ declare module '*.scss' {
   export default styles;
 }
 
-type PropertyNode = {
+interface PropertyNode {
   key: string;
   value: ParsedJSON;
 }
 
-type ObjectNode = {
+interface ObjectNode {
   type: 'object';
   properties: PropertyNode[];
 }
 
-type ArrayNode = {
+interface ArrayNode {
   type: 'array';
   items: ParsedJSON[];
 }
 
-type StringNode = {
+interface StringNode {
   type: 'string';
   value: string;
 }
 
-type NumberNode = {
+interface NumberNode {
   type: 'number';
   value: string;
 }
 
-type BooleanNode = {
+interface BooleanNode {
   type: 'bool';
   value: boolean;
 }
 
-type NullNode = {
+interface NullNode {
   type: 'null';
 }
 

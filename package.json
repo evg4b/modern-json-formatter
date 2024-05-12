@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsup",
     "build:production": "NODE_ENV=production tsup",
+    "lint": "eslint .",
     "dev": "tsup --watch",
     "test": "jest"
   },

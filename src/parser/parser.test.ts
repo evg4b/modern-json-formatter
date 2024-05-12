@@ -31,8 +31,8 @@ describe('parser wasm', () => {
 
   beforeAll(async () => {
     const wasmBuffer = await fs.readFile('parser/parser.wasm');
-    const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     go = new Go();
+    const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     go.run(wasm.instance);
   });
 

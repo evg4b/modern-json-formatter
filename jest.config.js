@@ -15,6 +15,7 @@ module.exports = {
     'src/**/*.ts',
     '!src/**/*.spec.ts',
     '!src/**/*.d.ts',
+    '!src/**/index.ts',
   ],
   verbose: true,
   transform: {

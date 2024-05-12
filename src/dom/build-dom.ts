@@ -21,6 +21,6 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
     case 'object':
       return buildObjectNode(div, object);
     default:
-      throw new Error(`Unknown type: ${ object }`);
+      throw new Error('Unknown type');
   }
 };

@@ -174,5 +174,11 @@ describe('buildDom', () => {
 
     expect(parsed).toEqual(expected);
   });
+
+  it('should throw error for invalid type', () => {
+    const invalidJson = { ...parsedJson, type: 'invalid' } as unknown as ParsedJSON;
+
+    expect(() => buildDom(invalidJson)).toThrow('Unknown type');
+  });
 });
 

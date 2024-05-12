@@ -7,15 +7,9 @@ func castToMap(data ParsedData) map[string]any {
 	case "array":
 		return castArray(data)
 	case "string":
-		return map[string]any{
-			"type":  data["type"],
-			"value": data["value"],
-		}
+		fallthrough
 	case "number":
-		return map[string]any{
-			"type":  data["type"],
-			"value": data["value"],
-		}
+		fallthrough
 	case "bool":
 		return map[string]any{
 			"type":  data["type"],

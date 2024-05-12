@@ -1,4 +1,4 @@
-import { beforeAll } from '@jest/globals';
+import './polifills';
 import fs from 'fs/promises';
 import '../../parser/wasm_exec.js';
 
@@ -22,13 +22,17 @@ describe('parser wasm', () => {
   describe('primitives', () => {
     it('null', () => {
       const actual = parseJSON('null');
-      expect(actual).toEqual(tResponse(tNull()));
+      expect(actual).toEqual(
+        tResponse(tNull()),
+      );
     });
 
     describe('boolean', () => {
       it('true', () => {
         const actual = parseJSON('true');
-        expect(actual).toEqual(tResponse(tBool(true)));
+        expect(actual).toEqual(
+          tResponse(tBool(true)),
+        );
       });
 
       it('false', () => {
@@ -41,24 +45,79 @@ describe('parser wasm', () => {
       describe('integer', () => {
         it('positive', () => {
           const actual = parseJSON('42');
-          expect(actual).toEqual(tResponse(tNumber('42')));
+          expect(actual).toEqual(
+            tResponse(tNumber('42')),
+          );
         });
 
         it('negative', () => {
           const actual = parseJSON('-42');
-          expect(actual).toEqual(tResponse(tNumber('-42')));
+          expect(actual).toEqual(
+            tResponse(tNumber('-42')),
+          );
         });
       });
 
       describe('float', () => {
         it('positive', () => {
           const actual = parseJSON('42.42');
-          expect(actual).toEqual(tResponse(tNumber('42.42')));
+          expect(actual).toEqual(
+            tResponse(tNumber('42.42')),
+          );
         });
 
         it('negative', () => {
           const actual = parseJSON('-42.42');
-          expect(actual).toEqual(tResponse(tNumber('-42.42')));
+          expect(actual).toEqual(
+            tResponse(tNumber('-42.42')),
+          );
+        });
+
+        it('maximum js value + 1', () => {
+          const actual = parseJSON('23064690611454417');
+          expect(actual).toEqual(
+            tResponse(tNumber('23064690611454417')),
+          );
+        });
+
+        describe('integers', () => {
+          const cases = [
+            { name: 'MaxInt8', value: '127' },
+            { name: 'MinInt8', value: '-128' },
+            { name: 'MaxInt16', value: '32767' },
+            { name: 'MinInt16', value: '-32768' },
+            { name: 'MaxInt32', value: '2147483647' },
+            { name: 'MinInt32', value: '-2147483648' },
+            { name: 'MaxInt64', value: '9223372036854775807' },
+            { name: 'MinInt64', value: '-9223372036854775808' },
+          ];
+
+          cases.forEach(({ name, value }) => {
+            it(name, () => {
+              const actual = parseJSON(value);
+              expect(actual).toEqual(
+                tResponse(tNumber(value)),
+              );
+            });
+          });
+        });
+
+        describe('unsigned integers', () => {
+          const cases = [
+            { name: 'MaxUint8', value: '255' },
+            { name: 'MaxUint16', value: '65535' },
+            { name: 'MaxUint32', value: '4294967295' },
+            { name: 'MaxUint64', value: '18446744073709551615' },
+          ];
+
+          cases.forEach(({ name, value }) => {
+            it(name, () => {
+              const actual = parseJSON(value);
+              expect(actual).toEqual(
+                tResponse(tNumber(value)),
+              );
+            });
+          });
         });
       });
     });

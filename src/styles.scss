@@ -7,7 +7,7 @@ $indentation: 20px;
   flex-direction: column;
   padding: $indentation;
   font-family: "Roboto", Arial, sans-serif;
-  background: #1a1a1a;
+  background: #282828;
   color: #eeeeee;
   font-size: 14px;
 }
@@ -64,4 +64,28 @@ $indentation: 20px;
 .colon {
   margin: 0 4px 0 2px;
   color: #eeeeee;
+}
+
+.array-handler {
+  cursor: pointer;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background: red;
+  transition: all 0.3s;
+
+  &:before{
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4px 0 4px 6.9px;
+    border-color: transparent transparent transparent currentColor;
+  }
+
+  &:hover {
+    transform: rotate(90deg);
+  }
 }

@@ -22,8 +22,14 @@ const runPlugin = async () => {
     return;
   }
 
-  shadow.appendChild(buildDom(parsedJson.value));
-  console.log('parsedJson:', parsedJson);
+  const dom = buildDom(parsedJson.value);
+  shadow.appendChild(dom);
+  dom.addEventListener('click', (event) => {
+    if (event.target instanceof HTMLElement) {
+      console.log('Clicked:', event.target.className.includes('array-handler'));
+      console.log(event.target.parentNode);
+    }
+  });
 };
 
 if (document.querySelector('pre + .json-formatter-container')) {

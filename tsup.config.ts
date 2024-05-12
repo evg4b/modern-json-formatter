@@ -5,20 +5,25 @@ import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 
 const data = readFileSync('./package.json', 'utf8');
-const { description, name, version } = JSON.parse(data);
+const { description, version } = JSON.parse(data);
+const production = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
   entry: { index: 'src/index.ts' },
   splitting: false,
-  sourcemap: true,
+  sourcemap: !production,
   cjsInterop: true,
   target: 'es2020',
   clean: true,
   bundle: true,
   treeshake: true,
+  minify: production,
+  minifyWhitespace: production,
+  minifyIdentifiers: production,
+  minifySyntax: production,
   esbuildPlugins: [
     jsonMerge({
-      entryPoints: ['src/manifest.json', { version, name, description }],
+      entryPoints: ['src/manifest.json', { version, description }],
       outfile: 'manifest.json',
     }),
     sassPlugin({ type: 'css-text' }),
@@ -28,7 +33,7 @@ export default defineConfig({
         from: ['parser/parser.wasm'],
         to: ['dist/parser.wasm'],
       },
-      watch: true,
+      // watch: true,
     }),
     copy({
       resolveFrom: 'cwd',
@@ -36,7 +41,7 @@ export default defineConfig({
         from: ['assets/**/*'],
         to: ['dist'],
       },
-      watch: true,
+      // watch: true,
     }),
   ],
 });

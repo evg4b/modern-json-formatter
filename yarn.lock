@@ -834,12 +834,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jgoz/esbuild-plugin-livereload@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "@jgoz/esbuild-plugin-livereload@npm:2.0.4"
+"@jgoz/esbuild-plugin-livereload@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "@jgoz/esbuild-plugin-livereload@npm:2.0.5"
   peerDependencies:
-    esbuild: ">= 0.13.0"
-  checksum: 10c0/dc2137adafa9d9892bd15c6b8a3feed3ec7d15d2f750ccd6f135fa62853f5ca09ac0ee7610af1cc4fef9eed4b388d76e0bc366cd27e63bf8d031d6b250e622f8
+    esbuild: 0.20.x || 0.21.x
+  checksum: 10c0/3615906823d7fb2dd8a06c51990447885a0fb765e70664e13f9c25bcab49cc994fd8b00adc81260c108c2727446fb546a07a4b96ccd0ebcb98f67c08302e3f89
   languageName: node
   linkType: hard
 
@@ -1126,13 +1126,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.267":
-  version: 0.0.267
-  resolution: "@types/chrome@npm:0.0.267"
+"@types/chrome@npm:^0.0.268":
+  version: 0.0.268
+  resolution: "@types/chrome@npm:0.0.268"
   dependencies:
     "@types/filesystem": "npm:*"
     "@types/har-format": "npm:*"
-  checksum: 10c0/baa2e526c86e0c092668eff8fdca35c3eea09f0cded9bab86d692ae3834955bfa49d3c064c51b003406099cce73060872c8c824ceef526c72a446c863a2b520c
+  checksum: 10c0/2701a43ec00d102302adeb9c8b8ff3f7644c0359fada720e4c9c74f6fa4ac3b14ce231d4fbba743e6e758e9741f738d4d333b005e9a3ebb7fac23c13792bd532
   languageName: node
   linkType: hard
 
@@ -1241,6 +1241,13 @@ __metadata:
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
   checksum: 10c0/1f4658385ae936330581bcb8aa3a066df03867d90281cdf89cc356d404bd6579be0f11902304e1f775d92df22c6dd761d4451c804b0a4fba973e06211e9bd77c
+  languageName: node
+  linkType: hard
+
+"@types/text-encoding@npm:^0.0.39":
+  version: 0.0.39
+  resolution: "@types/text-encoding@npm:0.0.39"
+  checksum: 10c0/51bd2a4a9a66d3c5706814b97fd6ad1ad7d7244099f16e19d9d181db6668860668830bd4c5579d3cf9f3ddeab8c49075ef7af38112b61835e2e29202ce113e3b
   languageName: node
   linkType: hard
 
@@ -3696,16 +3703,18 @@ __metadata:
   resolution: "modern-json-formatter@workspace:."
   dependencies:
     "@jest/globals": "npm:^29.7.0"
-    "@jgoz/esbuild-plugin-livereload": "npm:^2.0.4"
-    "@types/chrome": "npm:^0.0.267"
+    "@jgoz/esbuild-plugin-livereload": "npm:^2.0.5"
+    "@types/chrome": "npm:^0.0.268"
     "@types/golang-wasm-exec": "npm:^1.15.2"
     "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:^20.12.11"
+    "@types/text-encoding": "npm:^0.0.39"
     esbuild-plugin-copy: "npm:^2.1.1"
     esbuild-plugin-json-merge: "npm:^0.1.0"
     esbuild-sass-plugin: "npm:^3.2.0"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
+    text-encoding: "npm:^0.7.0"
     ts-jest: "npm:^29.1.2"
     tsup: "npm:^8.0.2"
     typed-assert: "npm:^1.0.9"
@@ -4585,6 +4594,13 @@ __metadata:
     glob: "npm:^7.1.4"
     minimatch: "npm:^3.0.4"
   checksum: 10c0/019d33d81adff3f9f1bfcff18125fb2d3c65564f437d9be539270ee74b994986abb8260c7c2ce90e8f30162178b09dbbce33c6389273afac4f36069c48521f57
+  languageName: node
+  linkType: hard
+
+"text-encoding@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "text-encoding@npm:0.7.0"
+  checksum: 10c0/6c20f5d19f996501677cc60b79bc4af550f840b426eacc5f67bd2bd5a7a7a058ab58679f851e0afee879aaaaf7fdb95cfe4de35ab29f9b34f9ce2a7b8de9bacb
   languageName: node
   linkType: hard
 

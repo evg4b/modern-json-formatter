@@ -2,6 +2,8 @@ import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { initParser } from './parser';
 import styles from './styles.scss';
+import { buildButtons } from './ui/buttons';
+import { buildContainers } from './ui/containers';
 
 const runPlugin = async () => {
   const shadow = document.body.attachShadow({ mode: 'open' });
@@ -11,8 +13,22 @@ const runPlugin = async () => {
   shadow.appendChild(styleNode);
 
   const data = document.querySelector<HTMLPreElement>('body > pre');
-
   isNotNull(data, 'No data found');
+
+  const { rootContainer, rawContainer, formatContainer } = buildContainers(shadow);
+  rawContainer.appendChild(data);
+
+  const { rawButton, formatButton } = buildButtons(shadow);
+
+  rawButton.addEventListener('click', () => {
+    rootContainer.classList.remove('formatted');
+    rootContainer.classList.add('raw');
+  });
+
+  formatButton.addEventListener('click', () => {
+    rootContainer.classList.remove('raw');
+    rootContainer.classList.add('formatted');
+  });
 
   await initParser();
 
@@ -23,13 +39,7 @@ const runPlugin = async () => {
   }
 
   const dom = buildDom(parsedJson.value);
-  shadow.appendChild(dom);
-  dom.addEventListener('click', (event) => {
-    if (event.target instanceof HTMLElement) {
-      console.log('Clicked:', event.target.className.includes('array-handler'));
-      console.log(event.target.parentNode);
-    }
-  });
+  formatContainer.appendChild(dom);
 };
 
 if (document.querySelector('pre + .json-formatter-container')) {

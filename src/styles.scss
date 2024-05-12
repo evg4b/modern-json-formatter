@@ -10,6 +10,57 @@ $indentation: 20px;
   background: #282828;
   color: #eeeeee;
   font-size: 14px;
+
+  pre {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  & > .root-container.formatted {
+    & > .raw-json-container {
+      display: none;
+    }
+
+    & > .formatted-json-container {
+      display: block;
+    }
+  }
+
+  & > .root-container.raw {
+    & > .raw-json-container {
+      display: block;
+    }
+
+    & > .formatted-json-container {
+      display: none;
+    }
+  }
+
+  & > .root-container > {
+    .raw-json-container {
+      display: none;
+    }
+
+    .formatted-json-container {
+      display: block;
+    }
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 15px;
+  }
+}
+
+pre {
+  margin: 0;
+  padding: 0;
 }
 
 .bracket {
@@ -66,3 +117,37 @@ $indentation: 20px;
   color: #eeeeee;
 }
 
+.button-container {
+  button {
+    &:first-child {
+      border-bottom-left-radius: 5px;
+      border-top-left-radius: 5px;
+    }
+
+    &:last-child {
+      border-bottom-right-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    &:hover {
+      background: #525252;
+    }
+
+    &.active {
+      background: #2c2c2c;
+      color: #b4b2b2;
+      cursor: default;
+    }
+
+    padding: 5px 10px;
+    background: #3b3b3b;
+    color: #eeeeee;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.3s;
+    min-width: 41px;
+    display: block;
+  }
+}

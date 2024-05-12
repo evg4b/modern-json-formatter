@@ -4,8 +4,8 @@ import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 
-const data = readFileSync('./package.json', 'utf8');
-const { description, version } = JSON.parse(data);
+const packageJson = readFileSync('./package.json', 'utf8');
+const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
@@ -33,7 +33,7 @@ export default defineConfig({
         from: ['parser/parser.wasm'],
         to: ['dist/parser.wasm'],
       },
-      // watch: true,
+      watch: !production,
     }),
     copy({
       resolveFrom: 'cwd',
@@ -41,7 +41,7 @@ export default defineConfig({
         from: ['assets/**/*'],
         to: ['dist'],
       },
-      // watch: true,
+      watch: !production,
     }),
   ],
 });

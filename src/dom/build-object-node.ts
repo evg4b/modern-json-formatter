@@ -11,9 +11,6 @@ export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
     object.properties.forEach(({ key, value }, index) => {
       const propertyDiv = element('', { class: 'property' });
       objectInner.appendChild(propertyDiv);
-      // if (value.type == 'object' && value.properties.length) {
-      //   propertyDiv.appendChild(element('', { class: 'array-handler' }));
-      // }
       propertyDiv.appendChild(element(JSON.stringify(key), { class: 'key' }));
       propertyDiv.appendChild(element(':', { class: 'colon' }));
       propertyDiv.appendChild(buildDom(value));

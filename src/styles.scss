@@ -66,25 +66,3 @@ $indentation: 20px;
   color: #eeeeee;
 }
 
-.array-handler {
-  cursor: pointer;
-  position: relative;
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-  transition: all 0.3s;
-
-  &:before{
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 4px 0 4px 6.9px;
-    border-color: transparent transparent transparent currentColor;
-  }
-
-  &:hover {
-    transform: rotate(90deg);
-  }
-}

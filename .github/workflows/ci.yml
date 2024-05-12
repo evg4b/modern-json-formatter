@@ -43,7 +43,7 @@ jobs:
         run: yarn build:production
 
       - name: Test
-        run: yarn test
+        run: yarn test --color=true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

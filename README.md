@@ -8,10 +8,12 @@
   Format JSON in a modern way. Supports x64 integers and floats. 
 </p>
 
-## Key features:
+# Key features:
 
 - Fast parse and format JSON
 - Supports x64 numbers (integer and float)
+- Formatted and Raw view switcher
+- Safe for selecting and copying JSON
 - Chrome DevTools theme
 
 # Privacy policy:

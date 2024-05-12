@@ -10,11 +10,15 @@ $indentation: 20px;
   background: #282828;
   color: #eeeeee;
   font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
 
   pre {
     margin: 0;
     padding: 0;
     font-size: 14px;
+    text-wrap: pretty;
+    word-wrap: break-word;
   }
 
   & > .root-container.formatted {
@@ -97,6 +101,7 @@ pre {
 
 .string {
   color: #5dd9ff;
+  word-wrap: break-word;
 }
 
 .boolean,
@@ -106,6 +111,7 @@ pre {
 
 .key {
   color: #7dadf9;
+  word-wrap: break-word;
 }
 
 .null {
@@ -149,5 +155,6 @@ pre {
     transition: background 0.3s;
     min-width: 41px;
     display: block;
+    user-select: none;
   }
 }

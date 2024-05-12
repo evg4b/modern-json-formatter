@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/evg4b/modern-json-formatter" title="Modern JSON Formatter">
-    <img alt="Modern JSON Formatter" width="30%" src=".github/logo.png">
+    <img alt="Modern JSON Formatter" width="30%" src=".github/readme-logo.png">
   </a>
 </p>
 <h1 align="center">Modern JSON Formatter</h1>

@@ -164,6 +164,17 @@ describe('parser wasm', () => {
       ]),
     ));
   });
+
+  test('should parse JSON with arrays', () => {
+    const actual = parseJSON('[1, 2, 3]');
+    expect(actual).toEqual(tResponse(
+      tArray([
+        tNumber('1'),
+        tNumber('2'),
+        tNumber('3'),
+      ]),
+    ));
+  });
 });
 
 const tNull = (): NullNode => ({ type: 'null' });

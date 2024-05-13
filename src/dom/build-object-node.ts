@@ -1,5 +1,5 @@
 import { buildDom } from './build-dom';
-import { element } from './helpres';
+import { element, isValueExpandable } from './helpres';
 
 export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
   div.className = 'object';
@@ -11,6 +11,9 @@ export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
     object.properties.forEach(({ key, value }, index) => {
       const propertyDiv = element('', { class: 'property' });
       objectInner.appendChild(propertyDiv);
+      if (isValueExpandable(value)) {
+        propertyDiv.appendChild(element('[+]', { class: 'toggle' }));
+      }
       propertyDiv.appendChild(element(JSON.stringify(key), { class: 'key' }));
       propertyDiv.appendChild(element(':', { class: 'colon' }));
       propertyDiv.appendChild(buildDom(value));

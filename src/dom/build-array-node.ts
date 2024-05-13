@@ -1,5 +1,5 @@
 import { buildDom } from './build-dom';
-import { element } from './helpres';
+import { element, isValueExpandable } from './helpres';
 
 export const buildArrayNode = (div: HTMLSpanElement, object: ArrayNode) => {
   div.className = 'array';
@@ -11,6 +11,9 @@ export const buildArrayNode = (div: HTMLSpanElement, object: ArrayNode) => {
     object.items.forEach((item, index) => {
       const itemDiv = element('', { class: 'item' });
       arrayInner.appendChild(itemDiv);
+      if (isValueExpandable(item)) {
+        itemDiv.appendChild(element('[+]', { class: 'toggle' }));
+      }
       itemDiv.appendChild(buildDom(item));
       if (index !== lastIndex) {
         itemDiv.appendChild(element(','));

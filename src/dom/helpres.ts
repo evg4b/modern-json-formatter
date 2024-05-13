@@ -7,3 +7,7 @@ export const element = (content: string, options?: { class: string }) => {
 
   return span;
 };
+
+export const isValueExpandable = (value: ParsedJSON) =>
+  value.type === 'object' && value.properties.length
+  || value.type === 'array' && value.items.length;

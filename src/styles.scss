@@ -87,6 +87,16 @@ pre {
 
     .property {
       display: block;
+
+      &.collapsed {
+        & > .object,
+        & > .array {
+          .inner {
+            display: none;
+
+          }
+        }
+      }
     }
   }
 }
@@ -100,6 +110,15 @@ pre {
 
     .item {
       display: block;
+
+      &.collapsed {
+        & > .object,
+        & > .array {
+          .inner {
+            display: none;
+          }
+        }
+      }
     }
   }
 }
@@ -162,4 +181,8 @@ pre {
     display: block;
     user-select: none;
   }
+}
+
+.toggle {
+  cursor: pointer;
 }

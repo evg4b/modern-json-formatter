@@ -12,7 +12,7 @@ export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
       const propertyDiv = element({ class: 'property' });
       objectInner.appendChild(propertyDiv);
       if (isValueExpandable(value)) {
-        propertyDiv.appendChild(element({ content: '>', class: 'toggle' }));
+        propertyDiv.appendChild(element({ class: 'toggle' }));
       }
       propertyDiv.appendChild(element({ content: JSON.stringify(key), class: 'key' }));
       propertyDiv.appendChild(element({ content: ':', class: 'colon' }));

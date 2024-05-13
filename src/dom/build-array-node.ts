@@ -12,7 +12,7 @@ export const buildArrayNode = (div: HTMLSpanElement, object: ArrayNode) => {
       const itemDiv = element({ class: 'item' });
       arrayInner.appendChild(itemDiv);
       if (isValueExpandable(item)) {
-        itemDiv.appendChild(element({ content: '>', class: 'toggle' }));
+        itemDiv.appendChild(element({ class: 'toggle' }));
       }
       itemDiv.appendChild(buildDom(item));
       if (index !== lastIndex) {

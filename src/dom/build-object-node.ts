@@ -7,6 +7,7 @@ export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
   if (object.properties.length) {
     const objectInner = element({ class: 'inner' });
     div.appendChild(objectInner);
+    div.appendChild(element({ class: 'ellipsis' }));
     const lastIndex = object.properties.length - 1;
     object.properties.forEach(({ key, value }, index) => {
       const propertyDiv = element({ class: 'property' });

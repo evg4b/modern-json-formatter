@@ -7,6 +7,7 @@ export const buildArrayNode = (div: HTMLSpanElement, object: ArrayNode) => {
   if (object.items.length) {
     const arrayInner = element({ class: 'inner' });
     div.appendChild(arrayInner);
+    div.appendChild(element({ class: 'ellipsis' }));
     const lastIndex = object.items.length - 1;
     object.items.forEach((item, index) => {
       const itemDiv = element({ class: 'item' });

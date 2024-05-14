@@ -1,7 +1,7 @@
 {
   "name": "modern-json-formatter",
   "description": "Format JSON in a modern way.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "yarn@4.2.2",
   "scripts": {
     "build": "tsup",

@@ -26,7 +26,13 @@ export default defineConfig({
       entryPoints: ['src/manifest.json', { version, description }],
       outfile: 'manifest.json',
     }),
-    sassPlugin({ type: 'css-text' }),
+    sassPlugin({
+      type: 'css-text',
+      style: 'compressed',
+      verbose: true,
+      sourceMap: !production,
+      sourceMapIncludeSources: !production,
+    }),
     copy({
       resolveFrom: 'cwd',
       assets: {

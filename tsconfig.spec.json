@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es2020",
     "module": "commonjs",
     "esModuleInterop": true,
     "allowJs": false,
@@ -13,6 +13,7 @@
     "src/**/*.test.ts",
     "parser/**/*.test.ts",
     "testing/**/*.ts",
-    "src/types.d.ts"
-  ],
+    "src/types.d.ts",
+    "node_modules/@types/chrome/index.d.ts"
+  ]
 }

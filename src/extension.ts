@@ -5,7 +5,11 @@ import styles from './styles.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
 
-const runPlugin = async () => {
+export const runExtension = async () => {
+  if (!document.querySelector('pre + .json-formatter-container')) {
+    return;
+  }
+
   const shadow = document.body.attachShadow({ mode: 'open' });
   const styleNode = document.createElement('style');
   styleNode.textContent = styles;
@@ -38,12 +42,7 @@ const runPlugin = async () => {
     return;
   }
 
-  const dom = buildDom(parsedJson.value);
-  formatContainer.appendChild(dom);
+  formatContainer.appendChild(
+    buildDom(parsedJson.value),
+  );
 };
-
-if (document.querySelector('pre + .json-formatter-container')) {
-  runPlugin()
-    .catch((error) => console.error('Error running plugin:', error));
-}
-

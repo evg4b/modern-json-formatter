@@ -9,7 +9,6 @@ jest.mock('./parser', () => ({
 
 xdescribe('extension', () => {
   const originalFetch = global.fetch;
-  const mockFetch = jest.fn();
   let go: Go;
 
   beforeEach(() => {
@@ -23,8 +22,7 @@ xdescribe('extension', () => {
   });
 
   beforeAll(async () => {
-    const data = await readFile(resolve(__dirname, '../parser/parser.wasm'));
-    const wasmBuffer = await readFile('parser/parser.wasm');
+    const wasmBuffer = await readFile(resolve(__dirname, '../parser/parser.wasm'));
     go = new Go();
     const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     go.run(wasm.instance);

@@ -11,8 +11,10 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
   const root = element({ class: 'root' });
   if (object.type === 'object' && object.properties.length) {
     root.appendChild(toggle());
+    root.classList.add('padding');
   } else if (object.type === 'array' && object.items.length) {
     root.appendChild(toggle());
+    root.classList.add('padding');
   }
 
   root.appendChild(buildNode(object));

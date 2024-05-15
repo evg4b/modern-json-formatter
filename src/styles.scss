@@ -1,4 +1,4 @@
-$indentation: 25px;
+$indentation: 30px;
 
 @font-face {
   font-family: 'Monaco';
@@ -14,12 +14,12 @@ $indentation: 25px;
   font-family: "Monaco", Arial, sans-serif;
   background: #282828;
   color: #eeeeee;
-  font-size: 12px;
+  font-size: 14px;
   width: 100%;
   box-sizing: border-box;
 
   span {
-    line-height: 17px;
+    //line-height: 1;
   }
 
   pre {
@@ -28,7 +28,7 @@ $indentation: 25px;
     text-wrap: pretty;
     word-wrap: break-word;
     font-family: "Monaco", Arial, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   & > .root-container.formatted {
@@ -77,7 +77,6 @@ pre {
 }
 
 .bracket {
-  margin: 0 2px;
   color: #eeeeee;
 }
 
@@ -109,16 +108,24 @@ pre {
   }
 }
 
-.root.collapsed {
-  & > .object,
-  & > .array {
-    .inner {
-      display: none;
+.root {
+  display: block;
 
-    }
+  &.padding {
+    margin-left: 17px;
+  }
 
-    .ellipsis {
-      display: inline;
+  &.collapsed {
+    & > .object,
+    & > .array {
+      .inner {
+        display: none;
+
+      }
+
+      .ellipsis {
+        display: inline;
+      }
     }
   }
 }
@@ -127,7 +134,7 @@ pre {
   display: inline;
 
   .inner {
-    padding-left: $indentation;
+    padding: 7px 0 7px $indentation;
     display: block;
 
     .item {
@@ -169,8 +176,8 @@ pre {
 }
 
 .colon {
-  margin: 0 4px 0 2px;
   color: #eeeeee;
+  padding: 0 7px 0 0;
 }
 
 .button-container {
@@ -209,24 +216,34 @@ pre {
   }
 }
 
+.bracket {
+
+}
+
 .toggle {
-  cursor: pointer;
-  content: '';
   display: inline-block;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 4px 0 4px 6.9px;
-  border-color: transparent transparent transparent currentColor;
-  transform: rotate(90deg) translateY(6px) translateX(2px);
-  transition: transform 0.1s;
-  margin: 2px 0 2px -6.5px;
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  margin-left: -17px;
+  color: #575757;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    border-style: solid;
+    border-width: 5px 0 5px 8px;
+    border-color: transparent transparent transparent currentColor;
+    transform: translateX(4px) rotate(90deg);
+    transition: transform 0.1s;
+  }
 }
 
 .ellipsis {
   &:before {
     content: '...';
     color: #717171;
+    padding: 0 5px;
   }
 
   display: none;
@@ -234,7 +251,7 @@ pre {
 }
 
 .collapsed {
-  & > .toggle {
-    transform: rotate(0deg) translateY(2px) translateX(-4px);
+  & > .toggle:before {
+    transform: translateX(4px) rotate(0deg);
   }
 }

@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements colon 1`] = `
+<span
+  class="colon"
+>
+  :
+</span>
+`;
+
+exports[`elements comma 1`] = `
+<span
+  class="comma"
+>
+  ,
+</span>
+`;
+
+exports[`elements ellipsis 1`] = `
+<span
+  class="ellipsis"
+/>
+`;
+
+exports[`elements toggle 1`] = `
+<span
+  class="toggle"
+/>
+`;

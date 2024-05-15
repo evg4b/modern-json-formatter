@@ -5,12 +5,13 @@ import { buildNumberNode } from './build-number-node';
 import { buildObjectNode } from './build-object-node';
 import { buildStringNode } from './build-string-node';
 import { toggle } from './elements';
-import { isToogleElement } from './helpres';
+import { element, isToogleElement } from './helpres';
 
 export const buildDom = (object: ParsedJSON): HTMLElement => {
-  const root = document.createElement('span');
-  root.className = 'root';
-  if (object.type === 'object' || object.type === 'array') {
+  const root = element({ class: 'root' });
+  if (object.type === 'object' && object.properties.length) {
+    root.appendChild(toggle());
+  } else if (object.type === 'array' && object.items.length) {
     root.appendChild(toggle());
   }
 

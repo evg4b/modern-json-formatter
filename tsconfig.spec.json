@@ -12,6 +12,7 @@
   "include": [
     "src/**/*.test.ts",
     "parser/**/*.test.ts",
+    "testing/**/*.ts",
     "src/types.d.ts"
   ],
 }

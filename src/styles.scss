@@ -109,6 +109,20 @@ pre {
   }
 }
 
+.root.collapsed {
+  & > .object,
+  & > .array {
+    .inner {
+      display: none;
+
+    }
+
+    .ellipsis {
+      display: inline;
+    }
+  }
+}
+
 .array {
   display: inline;
 

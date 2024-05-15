@@ -180,5 +180,22 @@ describe('buildDom', () => {
 
     expect(() => buildDom(invalidJson)).toThrow('Unknown type');
   });
+
+  describe('expand/collapse', () => {
+    const table: { name: string, input: ParsedJSON }[] = [
+      { name: 'empty object', input: { 'type': 'object', 'properties': [] } },
+      { name: 'empty array', input: { 'type': 'array', 'items': [] } },
+      { name: 'string', input: { 'type': 'string', 'value': 'foo' } },
+      { name: 'number', input: { 'type': 'number', 'value': '1' } },
+      { name: 'bool', input: { 'type': 'bool', 'value': true } },
+      { name: 'null', input: { 'type': 'null' } },
+    ];
+
+    test.each(table)('should not render toggle for %name', ({ input }) => {
+      const dom = buildDom(input);
+
+      expect(dom.querySelector('.toggle')).toBeNull();
+    });
+  });
 });
 

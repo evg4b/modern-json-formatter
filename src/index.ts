@@ -40,18 +40,6 @@ const runPlugin = async () => {
 
   const dom = buildDom(parsedJson.value);
   formatContainer.appendChild(dom);
-  dom.addEventListener('click', ({ target }) => {
-    if (!(target instanceof HTMLElement) || !target.classList.contains('toggle')) {
-      return;
-    }
-
-    if (!(target.parentNode instanceof HTMLElement)) {
-      return;
-    }
-
-    const parent = target.parentNode;
-    parent.classList.toggle('collapsed');
-  });
 };
 
 if (document.querySelector('pre + .json-formatter-container')) {

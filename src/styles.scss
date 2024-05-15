@@ -18,10 +18,6 @@ $indentation: 30px;
   width: 100%;
   box-sizing: border-box;
 
-  span {
-    //line-height: 1;
-  }
-
   pre {
     margin: 0;
     padding: 0;
@@ -90,13 +86,13 @@ pre {
 
     .property {
       display: block;
+      margin: 2px 0 2px 0;
 
       &.collapsed {
         & > .object,
         & > .array {
           .inner {
             display: none;
-
           }
 
           .ellipsis {
@@ -120,7 +116,6 @@ pre {
     & > .array {
       .inner {
         display: none;
-
       }
 
       .ellipsis {
@@ -134,11 +129,12 @@ pre {
   display: inline;
 
   .inner {
-    padding: 7px 0 7px $indentation;
+    padding: 2px 0 2px $indentation;
     display: block;
 
     .item {
       display: block;
+      margin: 2px 0 2px 0;
 
       &.collapsed {
         & > .object,
@@ -216,17 +212,12 @@ pre {
   }
 }
 
-.bracket {
-
-}
-
 .toggle {
   display: inline-block;
   width: 17px;
   height: 17px;
   cursor: pointer;
   margin-left: -17px;
-  color: #575757;
 
   &:before {
     content: '';
@@ -236,6 +227,11 @@ pre {
     border-color: transparent transparent transparent currentColor;
     transform: translateX(4px) rotate(90deg);
     transition: transform 0.1s;
+    color: #575757;
+  }
+
+  &:hover:before {
+    color: #a6a6a6;
   }
 }
 
@@ -248,6 +244,13 @@ pre {
 
   display: none;
   user-select: none;
+}
+
+.object,
+.array {
+  .bracket + .bracket {
+    margin-left: 5px;
+  }
 }
 
 .collapsed {

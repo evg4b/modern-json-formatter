@@ -15,8 +15,10 @@ module.exports = {
     'src/**/*.ts',
     '!src/**/*.spec.ts',
     '!src/**/*.d.ts',
-    '!src/**/index.ts',
+    '!src/jest.setup.ts',
+    '!src/**/index.tsx',
   ],
+  setupFiles: ['<rootDir>/src/jest.setup.ts'],
   verbose: true,
   transform: {
     '^.+\\.[tj]sx?$': [
@@ -25,5 +27,6 @@ module.exports = {
         tsconfig: 'tsconfig.spec.json'
       },
     ],
+    '^.+\\.scss$': 'jest-transform-stub',
   },
 }

@@ -1,6 +1,7 @@
 import './polifills';
 import fs from 'fs/promises';
 import '../../parser/wasm_exec.js';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tResponse, tString } from '../../testing';
 
 describe('parser wasm', () => {
   let go: Go;
@@ -10,15 +11,6 @@ describe('parser wasm', () => {
     input: string;
     expected: ParsedJSON;
   }
-
-  const tNull = (): NullNode => ({ type: 'null' });
-  const tBool = (value: boolean): BooleanNode => ({ type: 'bool', value: value });
-  const tString = (value: string): StringNode => ({ type: 'string', value: value });
-  const tNumber = (value: string): NumberNode => ({ type: 'number', value: value });
-  const tArray = (items: ParsedJSON[]): ArrayNode => ({ type: 'array', items });
-  const tObject = (properties: PropertyNode[]): ObjectNode => ({ type: 'object', properties });
-  const tProperty = (key: string, value: ParsedJSON): PropertyNode => ({ key, value: value });
-  const tResponse = (value: ParsedJSON): SuccessParserResponse => ({ type: 'response', value: value });
 
   const runTestCases = (testCases: TestCase[]) => {
     testCases.forEach(({ name, input, expected }) => {
@@ -124,35 +116,35 @@ describe('parser wasm', () => {
   });
 
   runTestCases([
-    { name: 'should parse empty array', input: '[]', expected: tArray([]) },
-    { name: 'should parse empty object', input: '{}', expected: tObject([]) },
+    { name: 'should parse empty array', input: '[]', expected: tArray() },
+    { name: 'should parse empty object', input: '{}', expected: tObject() },
     {
       name: 'should parse JSON',
       input: '{"a": 1}',
       expected:
-        tObject([
+        tObject(
           tProperty('a', tNumber('1')),
-        ]),
+        ),
     },
     {
       name: 'should parse JSON with nested objects',
       input: '{"a": {"b": 2}}',
       expected:
-        tObject([
-          tProperty('a', tObject([
+        tObject(
+          tProperty('a', tObject(
             tProperty('b', tNumber('2')),
-          ])),
-        ]),
+          )),
+        ),
     },
     {
       name: 'should parse JSON with arrays',
       input: '[1, 2, 3]',
       expected:
-        tArray([
+        tArray(
           tNumber('1'),
           tNumber('2'),
           tNumber('3'),
-        ]),
+        ),
     },
   ]);
 });

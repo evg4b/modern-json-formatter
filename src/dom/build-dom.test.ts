@@ -1,4 +1,5 @@
 import assert from 'node:assert';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../../testing';
 import { buildDom } from './build-dom';
 
 describe('buildDom', () => {
@@ -179,6 +180,114 @@ describe('buildDom', () => {
     const invalidJson = { ...parsedJson, type: 'invalid' } as unknown as ParsedJSON;
 
     expect(() => buildDom(invalidJson)).toThrow('Unknown type');
+  });
+
+  describe('expand/collapse', () => {
+    describe('should not render toggle', () => {
+      const table: { name: string, input: ParsedJSON }[] = [
+        { name: 'empty object', input: tObject() },
+        { name: 'empty array', input: tArray() },
+        { name: 'string', input: tString('foo') },
+        { name: 'number', input: tNumber('1') },
+        { name: 'bool', input: tBool(true) },
+        { name: 'null', input: tNull() },
+      ];
+
+      test.each(table)('for %name', ({ input }) => {
+        const dom = buildDom(input);
+
+        expect(dom.querySelector('.toggle')).toBeNull();
+      });
+    });
+
+    describe('should render toggle', () => {
+      const table: { name: string, input: ParsedJSON, expected: number }[] = [
+        {
+          name: 'object with properties',
+          input: tObject(
+            tProperty('foo', tString('bar')),
+          ),
+          expected: 1,
+        },
+        {
+          name: 'object with nested objects',
+          input: tObject(
+            tProperty('foo', tObject(
+              tProperty('bar', tObject(
+                tProperty('baz', tString('baz')),
+              )),
+            )),
+          ),
+          expected: 3,
+        },
+        {
+          name: 'object with nested arrays',
+          input: tObject(
+            tProperty('foo', tObject(
+              tProperty('bar', tArray(
+                tString('baz'),
+                tString('qux'),
+                tString('quux'),
+              )),
+            )),
+          ),
+          expected: 3,
+        },
+        {
+          name: 'empty with elements',
+          input: tArray(
+            tString('foo'),
+          ),
+          expected: 1,
+        },
+        {
+          name: 'array with objects',
+          input: tArray(
+            tObject(
+              tProperty('foo', tString('bar')),
+            ),
+          ),
+          expected: 2,
+        },
+        {
+          name: 'array with nested objects',
+          input: tArray(
+            tObject(
+              tProperty('foo', tObject(
+                tProperty('bar', tObject(
+                  tProperty('baz', tString('baz')),
+                )),
+              )),
+            ),
+          ),
+          expected: 4,
+        },
+        {
+          name: 'array with nested arrays',
+          input: tArray(
+            tArray(
+              tString('baz'),
+              tString('qux'),
+              tString('quux'),
+            ),
+            tArray(
+              tString('baz'),
+              tString('qux'),
+              tString('quux'),
+            ),
+          ),
+          expected: 3,
+        },
+      ];
+
+      test.each(table)('for $name', ({ input, expected }) => {
+        const dom = buildDom(input);
+
+        const toggles = dom.querySelectorAll('.toggle');
+
+        expect(toggles.length).toEqual(expected);
+      });
+    });
   });
 });
 

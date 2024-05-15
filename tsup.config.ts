@@ -9,7 +9,7 @@ const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
-  entry: { index: 'src/index.ts' },
+  entry: { main: 'src/main.ts' },
   splitting: false,
   sourcemap: !production,
   cjsInterop: true,

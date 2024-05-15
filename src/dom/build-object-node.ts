@@ -1,24 +1,29 @@
-import { buildDom } from './build-dom';
-import { element } from './helpres';
+import { buildNode } from './build-dom';
+import { colon, comma, ellipsis, toggle } from './elements';
+import { element, isValueExpandable } from './helpres';
 
-export const buildObjectNode = (div: HTMLSpanElement, object: ObjectNode) => {
-  div.className = 'object';
-  div.appendChild(element('{', { class: 'bracket' }));
+export const buildObjectNode = (object: ObjectNode) => {
+  const objectNode = element({ class: 'object' });
+  objectNode.appendChild(element({ content: '{', class: 'bracket' }));
   if (object.properties.length) {
-    const objectInner = element('', { class: 'inner' });
-    div.appendChild(objectInner);
+    const objectInnerNode = element({ class: 'inner' });
+    objectNode.appendChild(objectInnerNode);
+    objectNode.appendChild(ellipsis());
     const lastIndex = object.properties.length - 1;
     object.properties.forEach(({ key, value }, index) => {
-      const propertyDiv = element('', { class: 'property' });
-      objectInner.appendChild(propertyDiv);
-      propertyDiv.appendChild(element(JSON.stringify(key), { class: 'key' }));
-      propertyDiv.appendChild(element(':', { class: 'colon' }));
-      propertyDiv.appendChild(buildDom(value));
+      const propertyDiv = element({ class: 'property' });
+      objectInnerNode.appendChild(propertyDiv);
+      if (isValueExpandable(value)) {
+        propertyDiv.appendChild(toggle());
+      }
+      propertyDiv.appendChild(element({ content: JSON.stringify(key), class: 'key' }));
+      propertyDiv.appendChild(colon());
+      propertyDiv.appendChild(buildNode(value));
       if (index !== lastIndex) {
-        propertyDiv.appendChild(element(','));
+        propertyDiv.appendChild(comma());
       }
     });
   }
-  div.appendChild(element('}', { class: 'bracket' }));
-  return div;
+  objectNode.appendChild(element({ content: '}', class: 'bracket' }));
+  return objectNode;
 };

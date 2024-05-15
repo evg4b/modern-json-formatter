@@ -37,6 +37,7 @@
 - Fast parse and format JSON
 - Supports x64 numbers (integer and float)
 - Formatted and Raw view switcher
+- Array and Object expand/collapse
 - Safe for selecting and copying JSON
 - Chrome DevTools theme
 

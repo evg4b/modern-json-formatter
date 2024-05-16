@@ -7,7 +7,7 @@ jest.mock('./parser', () => ({
   initParser: jest.fn().mockReturnValueOnce(Promise.resolve()),
 }));
 
-xdescribe('extension', () => {
+describe('extension', () => {
   const originalFetch = global.fetch;
   let go: Go;
 

@@ -1,4 +1,4 @@
-default: clean build copy-exec-scripts
+default: clean build
 
 build:
 	@echo "Building wasm..."

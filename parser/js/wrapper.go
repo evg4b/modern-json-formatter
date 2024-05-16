@@ -1,7 +1,7 @@
 package js
 
 import (
-	"github.com/evg4b/modern-json-formatter/parser/core"
+	"github.com/evg4b/modern-json-formatter/parser/decode"
 	"syscall/js"
 )
 
@@ -10,11 +10,11 @@ func ParseWrapper() js.Func {
 		if len(args) != 1 {
 			return map[string]interface{}{
 				"type":  "error",
-				"error": "Invalid no of arguments passed",
+				"error": "Invalid arguments passed",
 			}
 		}
 		inputJSON := args[0].String()
-		pretty, err := core.Parse(inputJSON)
+		pretty, err := decode.Decode(inputJSON)
 		if err != nil {
 			return errorResponse(err.Error())
 		}

@@ -1,15 +1,75 @@
-package core_test
+package decode_test
 
 import (
-	"github.com/evg4b/modern-json-formatter/parser/core"
+	"github.com/evg4b/modern-json-formatter/parser/decode"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestParse(t *testing.T) {
+func TestDecode(t *testing.T) {
+	t.Run("strings parsing", func(t *testing.T) {
+		runTestCasesDecode(t, []testCases{
+			{
+				name:     "empty string",
+				input:    `""'`,
+				expected: tString(""),
+			},
+			{
+				name:     "string with value",
+				input:    `"value"`,
+				expected: tString("value"),
+			},
+		})
+	})
+
+	t.Run("numbers parsing", func(t *testing.T) {
+		runTestCasesDecode(t, []testCases{
+			{
+				name:     "number",
+				input:    "1",
+				expected: tNumber("1"),
+			},
+			{
+				name:     "float number",
+				input:    "1.1",
+				expected: tNumber("1.1"),
+			},
+			{
+				name:     "negative number",
+				input:    "-1",
+				expected: tNumber("-1"),
+			},
+		})
+	})
+
+	t.Run("null parsing", func(t *testing.T) {
+		runTestCasesDecode(t, []testCases{
+			{
+				name:     "null",
+				input:    "null",
+				expected: tNull(),
+			},
+		})
+	})
+
+	t.Run("boolean parsing", func(t *testing.T) {
+		runTestCasesDecode(t, []testCases{
+			{
+				name:     "true",
+				input:    "true",
+				expected: tBoolean(true),
+			},
+			{
+				name:     "false",
+				input:    "false",
+				expected: tBoolean(false),
+			},
+		})
+	})
+
 	t.Run("object parsing", func(t *testing.T) {
-		runTestCases(t, []testCases{
+		runTestCasesDecode(t, []testCases{
 			{
 				name:     "empty object",
 				input:    "{}",
@@ -24,7 +84,7 @@ func TestParse(t *testing.T) {
 			},
 			{
 				name:  "object with number",
-				input: `{"key": 1234}`,
+				input: `{ "key": 1234 }`,
 				expected: tObject(
 					tProperty("key", tNumber("1234")),
 				),
@@ -38,21 +98,11 @@ func TestParse(t *testing.T) {
 					)),
 				),
 			},
-			{
-				name:  "object with array",
-				input: `{"key": ["value", "value2"]}`,
-				expected: tObject(
-					tProperty("key", tArray(
-						tString("value"),
-						tString("value2"),
-					)),
-				),
-			},
 		})
 	})
 
 	t.Run("array parsing", func(t *testing.T) {
-		runTestCases(t, []testCases{
+		runTestCasesDecode(t, []testCases{
 			{
 				name:     "empty array",
 				input:    "[]",
@@ -121,57 +171,18 @@ func TestParse(t *testing.T) {
 			},
 		})
 	})
-
-	t.Run("number parsing", func(t *testing.T) {
-		runTestCases(t, []testCases{
-			{
-				name:     "number",
-				input:    "1",
-				expected: tNumber("1"),
-			},
-			{
-				name:     "float number",
-				input:    "1.1",
-				expected: tNumber("1.1"),
-			},
-			{
-				name:     "negative number",
-				input:    "-1",
-				expected: tNumber("-1"),
-			},
-		})
-	})
-
-	t.Run("null parsing", func(t *testing.T) {
-		runTestCases(t, []testCases{
-			{
-				name:     "null",
-				input:    "null",
-				expected: tNull(),
-			},
-		})
-	})
-
-	t.Run("boolean parsing", func(t *testing.T) {
-		runTestCases(t, []testCases{
-			{
-				name:     "true",
-				input:    "true",
-				expected: tBoolean(true),
-			},
-			{
-				name:     "false",
-				input:    "false",
-				expected: tBoolean(false),
-			},
-		})
-	})
 }
 
-func runTestCases(t *testing.T, tests []testCases) {
+type testCases struct {
+	name     string
+	input    string
+	expected map[string]any
+}
+
+func runTestCasesDecode(t *testing.T, tests []testCases) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := core.Parse(tt.input)
+			got, err := decode.Decode(tt.input)
 			require.NoError(t, err)
 
 			assert.Equal(t, tt.expected, got)

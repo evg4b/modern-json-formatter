@@ -1,4 +1,3 @@
-import '../../wasm_exec.js';
 import { describe } from '@jest/globals';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';

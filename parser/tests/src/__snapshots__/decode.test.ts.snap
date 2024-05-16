@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sum module sum 1`] = `
+{
+  "type": "response",
+  "value": {
+    "properties": [
+      {
+        "key": "a",
+        "value": {
+          "type": "number",
+          "value": "1",
+        },
+      },
+      {
+        "key": "b",
+        "value": {
+          "type": "number",
+          "value": "2",
+        },
+      },
+    ],
+    "type": "object",
+  },
+}
+`;

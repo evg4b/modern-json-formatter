@@ -11,28 +11,28 @@ func TestParse(t *testing.T) {
 	t.Run("object parsing", func(t *testing.T) {
 		runTestCases(t, []testCases{
 			{
-				name:  "empty object",
-				input: "{}",
-				want:  tObject(),
+				name:     "empty object",
+				input:    "{}",
+				expected: tObject(),
 			},
 			{
 				name:  "object with string",
 				input: `{"key": "value"}`,
-				want: tObject(
+				expected: tObject(
 					tProperty("key", tString("value")),
 				),
 			},
 			{
 				name:  "object with number",
 				input: `{"key": 1234}`,
-				want: tObject(
+				expected: tObject(
 					tProperty("key", tNumber("1234")),
 				),
 			},
 			{
 				name:  "object with object",
 				input: `{"key": {"key2": "value2"}}`,
-				want: tObject(
+				expected: tObject(
 					tProperty("key", tObject(
 						tProperty("key2", tString("value2")),
 					)),
@@ -41,7 +41,7 @@ func TestParse(t *testing.T) {
 			{
 				name:  "object with array",
 				input: `{"key": ["value", "value2"]}`,
-				want: tObject(
+				expected: tObject(
 					tProperty("key", tArray(
 						tString("value"),
 						tString("value2"),
@@ -54,14 +54,14 @@ func TestParse(t *testing.T) {
 	t.Run("array parsing", func(t *testing.T) {
 		runTestCases(t, []testCases{
 			{
-				name:  "empty array",
-				input: "[]",
-				want:  tArray(),
+				name:     "empty array",
+				input:    "[]",
+				expected: tArray(),
 			},
 			{
 				name:  "array with string",
 				input: `["value", "value2", "value3"]`,
-				want: tArray(
+				expected: tArray(
 					tString("value"),
 					tString("value2"),
 					tString("value3"),
@@ -70,7 +70,7 @@ func TestParse(t *testing.T) {
 			{
 				name:  "array with number",
 				input: `[1, 2, 3]`,
-				want: tArray(
+				expected: tArray(
 					tNumber("1"),
 					tNumber("2"),
 					tNumber("3"),
@@ -79,7 +79,7 @@ func TestParse(t *testing.T) {
 			{
 				name:  "array with object",
 				input: `[{"key": "value"}, {"key2": "value2"}]`,
-				want: tArray(
+				expected: tArray(
 					tObject(
 						tProperty("key", tString("value")),
 					),
@@ -91,7 +91,7 @@ func TestParse(t *testing.T) {
 			{
 				name:  "array with array",
 				input: `[[1, 2], [3, 4]]`,
-				want: tArray(
+				expected: tArray(
 					tArray(
 						tNumber("1"),
 						tNumber("2"),
@@ -105,7 +105,7 @@ func TestParse(t *testing.T) {
 			{
 				name:  "array with mixed types",
 				input: `["value", 1, {"key": "value"}, null, [[{}]]]`,
-				want: tArray(
+				expected: tArray(
 					tString("value"),
 					tNumber("1"),
 					tObject(
@@ -125,19 +125,19 @@ func TestParse(t *testing.T) {
 	t.Run("number parsing", func(t *testing.T) {
 		runTestCases(t, []testCases{
 			{
-				name:  "number",
-				input: "1",
-				want:  tNumber("1"),
+				name:     "number",
+				input:    "1",
+				expected: tNumber("1"),
 			},
 			{
-				name:  "float number",
-				input: "1.1",
-				want:  tNumber("1.1"),
+				name:     "float number",
+				input:    "1.1",
+				expected: tNumber("1.1"),
 			},
 			{
-				name:  "negative number",
-				input: "-1",
-				want:  tNumber("-1"),
+				name:     "negative number",
+				input:    "-1",
+				expected: tNumber("-1"),
 			},
 		})
 	})
@@ -145,9 +145,9 @@ func TestParse(t *testing.T) {
 	t.Run("null parsing", func(t *testing.T) {
 		runTestCases(t, []testCases{
 			{
-				name:  "null",
-				input: "null",
-				want:  tNull(),
+				name:     "null",
+				input:    "null",
+				expected: tNull(),
 			},
 		})
 	})
@@ -155,23 +155,17 @@ func TestParse(t *testing.T) {
 	t.Run("boolean parsing", func(t *testing.T) {
 		runTestCases(t, []testCases{
 			{
-				name:  "true",
-				input: "true",
-				want:  tBoolean(true),
+				name:     "true",
+				input:    "true",
+				expected: tBoolean(true),
 			},
 			{
-				name:  "false",
-				input: "false",
-				want:  tBoolean(false),
+				name:     "false",
+				input:    "false",
+				expected: tBoolean(false),
 			},
 		})
 	})
-}
-
-type testCases struct {
-	name  string
-	input string
-	want  map[string]any
 }
 
 func runTestCases(t *testing.T, tests []testCases) {
@@ -180,7 +174,7 @@ func runTestCases(t *testing.T, tests []testCases) {
 			got, err := core.Parse(tt.input)
 			require.NoError(t, err)
 
-			assert.Equal(t, tt.want, got)
+			assert.Equal(t, tt.expected, got)
 		})
 	}
 }

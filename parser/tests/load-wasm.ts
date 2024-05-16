@@ -11,8 +11,4 @@ export const loadWasm = async () => {
     const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     go.run(wasm.instance);
   });
-
-  afterAll(() => {
-    go.exit(0);
-  });
 };

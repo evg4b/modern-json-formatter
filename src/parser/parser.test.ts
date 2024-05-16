@@ -28,10 +28,6 @@ describe('parser wasm', () => {
     go.run(wasm.instance);
   });
 
-  afterAll(() => {
-    go.exit(0);
-  });
-
   test('exported function should be defined', () => {
     expect(parseJSON).toBeDefined();
   });

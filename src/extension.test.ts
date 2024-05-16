@@ -29,7 +29,6 @@ xdescribe('extension', () => {
   });
 
   afterAll(() => {
-    go.exit(0);
     global.fetch = originalFetch;
   });
 

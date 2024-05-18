@@ -1,6 +1,6 @@
 {
   "name": "Modern JSON Formatter",
-  "description": "Modern JSON Formatter is a Chrome extension that helps you to view JSON in a more readable format.",
+  "description": "Format JSON in a modern way. With guaranteed order of keys, big numbers, expandable/collapsable properties and more.",
   "version": "0.0.0",
   "manifest_version": 3,
   "homepage_url": "https://github.com/evg4b/modern-json-formatter",

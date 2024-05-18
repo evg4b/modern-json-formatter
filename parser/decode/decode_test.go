@@ -171,6 +171,15 @@ func TestDecode(t *testing.T) {
 			},
 		})
 	})
+
+	t.Run("ignore comments", func(t *testing.T) {
+		actual, err := decode.Decode("{ \"key\": \"value\" } // comment")
+		require.NoError(t, err)
+
+		assert.Equal(t, tObject(
+			tProperty("key", tString("value")),
+		), actual)
+	})
 }
 
 type testCases struct {

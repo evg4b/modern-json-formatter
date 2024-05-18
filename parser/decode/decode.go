@@ -55,7 +55,7 @@ func decode(decoder *json.Decoder) (map[string]any, error) {
 			"value": token.(bool),
 		}, nil
 	default:
-		return nil, errors.New("invalid token")
+		return nil, errors.New("unknown token")
 	}
 }
 

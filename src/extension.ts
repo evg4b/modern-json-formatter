@@ -1,5 +1,6 @@
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
+import { buildErrorNode } from './dom/build-error-node';
 import { initParser } from './parser';
 import styles from './styles.scss';
 import { buildButtons } from './ui/buttons';
@@ -39,6 +40,9 @@ export const runExtension = async () => {
   const parsedJson = parseJSON(data.innerText);
   if (parsedJson.type === 'error') {
     console.error('Error parsing JSON:', parsedJson.error);
+    formatContainer.appendChild(
+      buildErrorNode(),
+    );
     return;
   }
 

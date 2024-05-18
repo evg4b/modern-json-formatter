@@ -7,6 +7,16 @@ jest.mock('./parser', () => ({
   initParser: jest.fn().mockReturnValueOnce(Promise.resolve()),
 }));
 
+function buildChromeJsonPage(json: string) {
+  document.body.innerHTML = ``;
+  const pre = document.createElement('pre');
+  pre.innerText = json;
+  document.body.appendChild(pre);
+  const container = document.createElement('div');
+  container.classList.add('json-formatter-container');
+  document.body.appendChild(container);
+}
+
 describe('extension', () => {
   const originalFetch = global.fetch;
   let go: Go;
@@ -32,19 +42,15 @@ describe('extension', () => {
     global.fetch = originalFetch;
   });
 
-  beforeEach(() => {
-    document.body.innerHTML = ``;
-    const pre = document.createElement('pre');
-    pre.innerText = `{"userId": 1,"id": 1,"title": "delectus aut autem","completed": false}`;
-    document.body.appendChild(pre);
-    const container = document.createElement('div');
-    container.classList.add('json-formatter-container');
-    document.body.appendChild(container);
-  });
+  describe('for valid json', () => {
+    beforeEach(() => {
+      buildChromeJsonPage(`{"userId": 1,"id": 1,"title": "delectus aut autem","completed": false}`);
+    });
 
-  test('should run', async () => {
-    await runExtension();
+    test('should render extension', async () => {
+      await runExtension();
 
-    expect(document.body.shadowRoot?.innerHTML).toMatchSnapshot();
+      expect(document.body.shadowRoot?.innerHTML).toMatchSnapshot();
+    });
   });
 });

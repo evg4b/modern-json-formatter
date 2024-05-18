@@ -21,7 +21,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "parser.wasm"
+        "parser.wasm",
+        "invalid.svg"
       ],
       "matches": [
         "<all_urls>"

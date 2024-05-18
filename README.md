@@ -35,7 +35,7 @@
 # Key features:
 
 - Fast parse and format JSON
-- Supports x64 numbers (integer and float)
+- Supports big numbers (includes x64 integer and float)
 - Guaranteed order of keys
 - Formatted and Raw view switcher
 - Array and Object expand/collapse

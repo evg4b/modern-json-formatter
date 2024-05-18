@@ -13,12 +13,15 @@ func ParseWrapper() js.Func {
 				"error": "Invalid arguments passed",
 			}
 		}
-		inputJSON := args[0].String()
-		pretty, err := decode.Decode(inputJSON)
+
+		jsonTree, err := decode.Decode(args[0].String())
 		if err != nil {
-			return errorResponse(err.Error())
+			return map[string]any{
+				"type":  "error",
+				"error": err.Error(),
+			}
 		}
 
-		return successResponse(pretty)
+		return jsonTree
 	})
 }

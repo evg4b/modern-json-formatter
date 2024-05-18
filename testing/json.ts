@@ -5,4 +5,3 @@ export const tNumber = (value: string): NumberNode => ({ type: 'number', value: 
 export const tArray = (...items: ParsedJSON[]): ArrayNode => ({ type: 'array', items });
 export const tObject = (...properties: PropertyNode[]): ObjectNode => ({ type: 'object', properties });
 export const tProperty = (key: string, value: ParsedJSON): PropertyNode => ({ key, value: value });
-export const tResponse = (value: ParsedJSON): SuccessParserResponse => ({ type: 'response', value: value });

@@ -43,6 +43,6 @@ export const runExtension = async () => {
   }
 
   formatContainer.appendChild(
-    buildDom(parsedJson.value),
+    buildDom(parsedJson),
   );
 };

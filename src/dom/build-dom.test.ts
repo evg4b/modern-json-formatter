@@ -193,7 +193,7 @@ describe('buildDom', () => {
         { name: 'null', input: tNull() },
       ];
 
-      test.each(table)('for %name', ({ input }) => {
+      test.each(table)('for $name', ({ input }) => {
         const dom = buildDom(input);
 
         expect(dom.querySelector('.toggle')).toBeNull();

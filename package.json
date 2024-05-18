@@ -2,6 +2,19 @@
   "name": "modern-json-formatter",
   "description": "Format JSON in a modern way with big numbers, expand/collapse values, and more",
   "version": "0.0.3",
+  "author": {
+    "name": "Evgeny Abramovich",
+    "email": "evg.abramovitch@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/evg4b/modern-json-formatter/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:evg4b/modern-json-formatter.git"
+  },
+  "homepage": "https://github.com/evg4b/modern-json-formatter",
+  "license": "MIT",
   "packageManager": "yarn@4.2.2",
   "scripts": {
     "build": "tsup",

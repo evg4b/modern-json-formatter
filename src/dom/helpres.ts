@@ -10,14 +10,10 @@ export const element = (options?: { content?: string, class?: string }) => {
   return span;
 };
 
-export const isValueExpandable = (value: ParsedJSON) =>
-  value.type === 'object' && value.properties.length
-  || value.type === 'array' && value.items.length;
+export const isValueExpandable = (value: ParsedJSON): boolean =>
+  value.type === 'object' && !!value.properties.length
+  || value.type === 'array' && !!value.items.length;
 
-export const isToogleElement = (element: EventTarget | null): element is HTMLElement  => {
+export const isToggleElement = (element: EventTarget | null): element is HTMLElement => {
   return element instanceof HTMLElement && element.classList.contains('toggle');
-}
-
-export const throws = (message?: string) => {
-  throw new Error(message ?? 'An error occurred');
-}
+};

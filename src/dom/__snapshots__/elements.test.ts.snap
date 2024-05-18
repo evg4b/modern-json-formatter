@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`elements bracket close 1`] = `
+<span
+  class="bracket bracket-close"
+>
+  }
+</span>
+`;
+
+exports[`elements bracket open 1`] = `
+<span
+  class="bracket bracket-open"
+>
+  {
+</span>
+`;
+
 exports[`elements colon 1`] = `
 <span
   class="colon"
@@ -20,6 +36,22 @@ exports[`elements ellipsis 1`] = `
 <span
   class="ellipsis"
 />
+`;
+
+exports[`elements square-bracket close 1`] = `
+<span
+  class="bracket square-bracket-close"
+>
+  ]
+</span>
+`;
+
+exports[`elements square-bracket open 1`] = `
+<span
+  class="bracket square-bracket-open"
+>
+  [
+</span>
 `;
 
 exports[`elements toggle 1`] = `

@@ -1,18 +1,13 @@
 import { buildArrayNode } from './build-array-node';
-import { buildBoolNode } from './build-boolean-node';
-import { buildNullNode } from './build-null-node';
-import { buildNumberNode } from './build-number-node';
 import { buildObjectNode } from './build-object-node';
-import { buildStringNode } from './build-string-node';
+import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
 import { toggle } from './elements';
-import { element, isToogleElement } from './helpres';
+import { element, isToggleElement, isValueExpandable } from './helpres';
 
 export const buildDom = (object: ParsedJSON): HTMLElement => {
   const root = element({ class: 'root' });
-  if (object.type === 'object' && object.properties.length) {
-    root.appendChild(toggle());
-    root.classList.add('padding');
-  } else if (object.type === 'array' && object.items.length) {
+
+  if (isValueExpandable(object)) {
     root.appendChild(toggle());
     root.classList.add('padding');
   }
@@ -20,11 +15,7 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
   root.appendChild(buildNode(object));
 
   root.addEventListener('click', ({ target }) => {
-    if (!isToogleElement(target)) {
-      return;
-    }
-
-    if ((target.parentNode instanceof HTMLElement)) {
+    if (isToggleElement(target) && (target.parentNode instanceof HTMLElement)) {
       target.parentNode.classList.toggle('collapsed');
     }
   });

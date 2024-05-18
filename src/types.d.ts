@@ -39,16 +39,12 @@ interface NullNode {
 
 type ParsedJSON = ObjectNode | ArrayNode | StringNode | NumberNode | BooleanNode | NullNode;
 
-interface ErrorParserResponse {
+interface ErrorNode {
   type: 'error';
   error: string;
 }
 
-interface SuccessParserResponse {
-  type: 'response';
-  value: ParsedJSON;
-}
 
-type ParserResponse = ErrorParserResponse | SuccessParserResponse;
+type ParserResponse = ParsedJSON | ErrorNode;
 
 declare function parseJSON(data: string): ParserResponse;

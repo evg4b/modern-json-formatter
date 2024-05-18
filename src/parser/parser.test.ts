@@ -1,7 +1,7 @@
 import './polifills';
 import fs from 'fs/promises';
 import '../../parser/wasm_exec.js';
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tResponse, tString } from '../../testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../../testing';
 
 describe('parser wasm', () => {
   let go: Go;
@@ -16,7 +16,7 @@ describe('parser wasm', () => {
     testCases.forEach(({ name, input, expected }) => {
       it(name, () => {
         const actual = parseJSON(input);
-        expect(actual).toEqual(tResponse(expected));
+        expect(actual).toEqual(expected);
       });
     });
   };
@@ -28,10 +28,6 @@ describe('parser wasm', () => {
     go.run(wasm.instance);
   });
 
-  afterAll(() => {
-    go.exit(0);
-  });
-
   test('exported function should be defined', () => {
     expect(parseJSON).toBeDefined();
   });
@@ -40,7 +36,7 @@ describe('parser wasm', () => {
     it('null', () => {
       const actual = parseJSON('null');
       expect(actual).toEqual(
-        tResponse(tNull()),
+        tNull(),
       );
     });
 

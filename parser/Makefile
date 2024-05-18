@@ -1,18 +1,18 @@
-default: clean build copy-exec-scripts
+default: clean build
 
 build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -o parser.wasm -v .
+	tinygo build -o parser.wasm -target wasm ./main.go
 
 copy-exec-scripts:
 	@echo "Copying exec scripts..."
-	cp $(shell go env GOROOT)/misc/wasm/wasm_exec.js .
+	rm -f wasm_exec.js
+	cp $(shell tinygo env TINYGOROOT)/targets/wasm_exec.js .
 
 clean:
 	@echo "Cleaning..."
 	rm -f parser.wasm
-	rm -f wasm_exec.js
 
 test:
 	@echo "Testing..."
-	go test -v ./core/...
+	go test -v ./decode/...

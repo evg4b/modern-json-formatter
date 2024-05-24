@@ -2,7 +2,7 @@ import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
 import { toggle } from './elements';
-import { element, isToggleElement, isValueExpandable } from './helpres';
+import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
 
 export const buildDom = (object: ParsedJSON): HTMLElement => {
   const root = element({ class: 'root' });
@@ -12,7 +12,10 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
     root.classList.add('padding');
   }
 
-  root.appendChild(buildNode(object));
+  root.append(
+    buildNode(object),
+    buildInfoNode(object, root) as unknown as string,
+  )
 
   root.addEventListener('click', ({ target }) => {
     if (isToggleElement(target) && (target.parentNode instanceof HTMLElement)) {

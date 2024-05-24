@@ -169,6 +169,15 @@ describe('buildDom', () => {
   it('should render valid JSON', () => {
     const result = buildDom(parsedJson);
 
+    const invisibleElements = [
+      ...result.querySelectorAll('.toggle') ?? [],
+      ...result.querySelectorAll('.ellipsis') ?? [],
+      ...result.querySelectorAll('.properties-count') ?? [],
+      ...result.querySelectorAll('.items-count') ?? [],
+    ]
+
+    invisibleElements.forEach((element) => element.remove());
+
     const text = result.textContent;
     assert(!!text, 'No text content found');
     const parsed = JSON.parse(text);

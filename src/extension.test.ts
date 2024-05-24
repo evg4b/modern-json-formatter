@@ -35,7 +35,7 @@ describe('extension', () => {
     const wasmBuffer = await readFile(resolve(__dirname, '../parser/parser.wasm'));
     go = new Go();
     const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
-    go.run(wasm.instance);
+    void go.run(wasm.instance);
   });
 
   afterAll(() => {

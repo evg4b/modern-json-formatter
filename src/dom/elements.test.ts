@@ -1,4 +1,4 @@
-import { bracket, colon, comma, ellipsis, squareBracket, toggle } from './elements';
+import { bracket, colon, comma, ellipsis, itemsCount, propertiesCount, squareBracket, toggle } from './elements';
 
 describe('elements', () => {
   test('toggle', () => {
@@ -44,4 +44,14 @@ describe('elements', () => {
       expect(element).toMatchSnapshot();
     });
   });
+
+  test('propertiesCount', () => {
+    const element = propertiesCount(5);
+    expect(element).toMatchSnapshot();
+  })
+
+  test('itemsCount', () => {
+    const element = itemsCount(5);
+    expect(element).toMatchSnapshot();
+  })
 });

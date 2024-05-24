@@ -1,5 +1,5 @@
 import { buildNode } from './build-dom';
-import { bracket, colon, comma, ellipsis, toggle } from './elements';
+import { bracket, colon, comma, ellipsis, propertiesCount, toggle } from './elements';
 import { element, isValueExpandable } from './helpres';
 
 export const buildObjectNode = (object: ObjectNode) => {
@@ -27,6 +27,9 @@ export const buildObjectNode = (object: ObjectNode) => {
     });
   }
   objectNode.appendChild(bracket.close());
+  if (object.properties.length) {
+    objectNode.appendChild(propertiesCount(object.properties.length));
+  }
 
   return objectNode;
 };

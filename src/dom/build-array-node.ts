@@ -1,5 +1,5 @@
 import { buildNode } from './build-dom';
-import { comma, ellipsis, squareBracket, toggle } from './elements';
+import { comma, ellipsis, itemsCount, squareBracket, toggle } from './elements';
 import { element, isValueExpandable } from './helpres';
 
 export const buildArrayNode = ({ items }: ArrayNode) => {
@@ -23,6 +23,9 @@ export const buildArrayNode = ({ items }: ArrayNode) => {
     });
   }
   arrayNode.appendChild(squareBracket.close());
+  if (items.length) {
+    arrayNode.appendChild(itemsCount(items.length));
+  }
 
   return arrayNode;
 };

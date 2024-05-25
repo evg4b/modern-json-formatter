@@ -243,7 +243,7 @@ describe('buildDom', () => {
           expected: 3,
         },
         {
-          name: 'empty with elements',
+          name: 'array with elements',
           input: tArray(
             tString('foo'),
           ),
@@ -313,6 +313,110 @@ describe('buildDom', () => {
 
         expect(dom.querySelector('.properties-count')).toBeNull();
         expect(dom.querySelector('.items-count')).toBeNull();
+      });
+    });
+
+    describe('should render info node', () => {
+      describe('properties count', () => {
+        const table: { name: string, input: ParsedJSON, expected: number }[] = [
+          {
+            name: 'object with properties',
+            input: tObject(
+              tProperty('foo', tString('bar')),
+            ),
+            expected: 1,
+          },
+          {
+            name: 'object with nested objects',
+            input: tObject(
+              tProperty('foo', tObject(
+                tProperty('bar', tObject(
+                  tProperty('baz', tString('baz')),
+                )),
+              )),
+            ),
+            expected: 3,
+          },
+          {
+            name: 'object with nested arrays',
+            input: tObject(
+              tProperty('foo', tObject(
+                tProperty('bar', tArray(
+                  tString('baz'),
+                  tString('qux'),
+                  tString('quux'),
+                )),
+              )),
+            ),
+            expected: 2,
+          },
+        ];
+
+        test.each(table)('for $name', ({ input, expected }) => {
+          const dom = buildDom(input);
+
+          const toggles = dom.querySelectorAll('.properties-count');
+
+          expect(toggles.length).toEqual(expected);
+        });
+      });
+
+      describe('items count', () => {
+        const table: { name: string, input: ParsedJSON, expected: number }[] = [
+          {
+            name: 'array with elements',
+            input: tArray(
+              tString('foo'),
+            ),
+            expected: 1,
+          },
+          {
+            name: 'array with objects',
+            input: tArray(
+              tObject(
+                tProperty('foo', tString('bar')),
+              ),
+            ),
+            expected: 1,
+          },
+          {
+            name: 'array with nested objects',
+            input: tArray(
+              tObject(
+                tProperty('foo', tObject(
+                  tProperty('bar', tObject(
+                    tProperty('baz', tString('baz')),
+                  )),
+                )),
+              ),
+            ),
+            expected: 1,
+          },
+          {
+            name: 'array with nested arrays',
+            input: tArray(
+              tArray(
+                tString('baz'),
+                tString('qux'),
+                tString('quux'),
+              ),
+              tArray(
+                tString('baz'),
+                tString('qux'),
+                tString('quux'),
+              ),
+            ),
+            expected: 3,
+          },
+        ];
+
+        test.each(table)('for $name', ({ input, expected }) => {
+          const dom = buildDom(input);
+
+          const toggles = dom.querySelectorAll('.items-count');
+
+          expect(toggles.length).toEqual(expected);
+        });
       });
     });
   });

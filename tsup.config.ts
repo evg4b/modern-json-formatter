@@ -8,6 +8,12 @@ const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
+const assets = (path: string) => copy({
+  resolveFrom: 'cwd',
+  assets: { from: [path], to: ['dist'] },
+  watch: !production,
+});
+
 export default defineConfig({
   entry: { main: 'src/main.ts' },
   splitting: false,
@@ -41,13 +47,7 @@ export default defineConfig({
       },
       watch: !production,
     }),
-    copy({
-      resolveFrom: 'cwd',
-      assets: {
-        from: ['assets/**/*'],
-        to: ['dist'],
-      },
-      watch: !production,
-    }),
+    assets('assets/*'),
+    production ? assets('assets/production/*') : assets('assets/debug/*'),
   ],
 });

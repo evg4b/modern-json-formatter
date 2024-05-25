@@ -38,7 +38,7 @@ exports[`elements ellipsis 1`] = `
 />
 `;
 
-exports[`elements itemsCount 1`] = `
+exports[`elements itemsCount for multiple elements 1`] = `
 <span
   class="items-count"
 >
@@ -46,11 +46,27 @@ exports[`elements itemsCount 1`] = `
 </span>
 `;
 
-exports[`elements propertiesCount 1`] = `
+exports[`elements itemsCount for single element 1`] = `
+<span
+  class="items-count"
+>
+  // 1 item
+</span>
+`;
+
+exports[`elements propertiesCount for multiple elements 1`] = `
 <span
   class="properties-count"
 >
   // 5 properties
+</span>
+`;
+
+exports[`elements propertiesCount for single element 1`] = `
+<span
+  class="properties-count"
+>
+  // 1 property
 </span>
 `;
 

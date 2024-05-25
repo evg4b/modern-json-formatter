@@ -45,13 +45,26 @@ describe('elements', () => {
     });
   });
 
-  test('propertiesCount', () => {
-    const element = propertiesCount(5);
-    expect(element).toMatchSnapshot();
-  })
+  describe('propertiesCount', () => {
+    test('for single element', () => {
+      const element = propertiesCount(1);
+      expect(element).toMatchSnapshot();
+    });
 
-  test('itemsCount', () => {
-    const element = itemsCount(5);
-    expect(element).toMatchSnapshot();
-  })
+    test('for multiple elements', () => {
+      const element = propertiesCount(5);
+      expect(element).toMatchSnapshot();
+    });
+  });
+
+  describe('itemsCount', () => {
+    test('for single element', () => {
+      const element = itemsCount(1);
+      expect(element).toMatchSnapshot();
+    });
+    test('for multiple elements', () => {
+      const element = itemsCount(5);
+      expect(element).toMatchSnapshot();
+    });
+  });
 });

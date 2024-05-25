@@ -12,10 +12,11 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
     root.classList.add('padding');
   }
 
-  root.append(
-    buildNode(object),
-    buildInfoNode(object, root) as unknown as string,
-  )
+  root.append(buildNode(object));
+  const infoNode = buildInfoNode(object);
+  if (infoNode) {
+    root.appendChild(infoNode);
+  }
 
   root.addEventListener('click', ({ target }) => {
     if (isToggleElement(target) && (target.parentNode instanceof HTMLElement)) {

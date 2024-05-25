@@ -174,7 +174,7 @@ describe('buildDom', () => {
       ...result.querySelectorAll('.ellipsis') ?? [],
       ...result.querySelectorAll('.properties-count') ?? [],
       ...result.querySelectorAll('.items-count') ?? [],
-    ]
+    ];
 
     invisibleElements.forEach((element) => element.remove());
 
@@ -295,6 +295,24 @@ describe('buildDom', () => {
         const toggles = dom.querySelectorAll('.toggle');
 
         expect(toggles.length).toEqual(expected);
+      });
+    });
+
+    describe('should not render info node', () => {
+      const table: { name: string, input: ParsedJSON }[] = [
+        { name: 'empty object', input: tObject() },
+        { name: 'empty array', input: tArray() },
+        { name: 'string', input: tString('foo') },
+        { name: 'number', input: tNumber('1') },
+        { name: 'bool', input: tBool(true) },
+        { name: 'null', input: tNull() },
+      ];
+
+      test.each(table)('for $name', ({ input }) => {
+        const dom = buildDom(input);
+
+        expect(dom.querySelector('.properties-count')).toBeNull();
+        expect(dom.querySelector('.items-count')).toBeNull();
       });
     });
   });

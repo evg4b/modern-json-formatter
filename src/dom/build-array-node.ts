@@ -20,7 +20,10 @@ export const buildArrayNode = ({ items }: ArrayNode) => {
       if (index !== lastIndex) {
         itemNode.appendChild(comma());
       }
-      buildInfoNode(item, itemNode);
+      const infoNode = buildInfoNode(item);
+      if (infoNode) {
+        itemNode.appendChild(infoNode);
+      }
     });
   }
   arrayNode.appendChild(squareBracket.close());

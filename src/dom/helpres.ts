@@ -20,13 +20,13 @@ export const isToggleElement = (element: EventTarget | null): element is HTMLEle
   return element instanceof HTMLElement && element.classList.contains('toggle');
 };
 
-export const buildInfoNode = (value: ParsedJSON, host: HTMLSpanElement): HTMLSpanElement | null => {
+export const buildInfoNode = (value: ParsedJSON): HTMLSpanElement | null => {
   if (isValueExpandable(value)) {
     switch (value.type) {
       case 'array':
         return itemsCount(value.items.length);
       case 'object':
-        return  propertiesCount(value.properties.length);
+        return propertiesCount(value.properties.length);
       default:
         throw new Error('Unknown type');
     }

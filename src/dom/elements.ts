@@ -12,3 +12,11 @@ export const squareBracket = {
   open: () => element({ content: '[', class: 'bracket square-bracket-open' }),
   close: () => element({ content: ']', class: 'bracket square-bracket-close' }),
 };
+export const propertiesCount = (count: number) => element({
+  content: `// ${ count } propert${ count === 1 ? 'y' : 'ies' }`,
+  class: 'properties-count',
+});
+export const itemsCount = (count: number) => element({
+  content: `// ${ count } item${ count === 1 ? '' : 's' }`,
+  class: 'items-count',
+});

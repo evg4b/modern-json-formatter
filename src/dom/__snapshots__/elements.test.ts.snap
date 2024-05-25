@@ -38,6 +38,38 @@ exports[`elements ellipsis 1`] = `
 />
 `;
 
+exports[`elements itemsCount for multiple elements 1`] = `
+<span
+  class="items-count"
+>
+  // 5 items
+</span>
+`;
+
+exports[`elements itemsCount for single element 1`] = `
+<span
+  class="items-count"
+>
+  // 1 item
+</span>
+`;
+
+exports[`elements propertiesCount for multiple elements 1`] = `
+<span
+  class="properties-count"
+>
+  // 5 properties
+</span>
+`;
+
+exports[`elements propertiesCount for single element 1`] = `
+<span
+  class="properties-count"
+>
+  // 1 property
+</span>
+`;
+
 exports[`elements square-bracket close 1`] = `
 <span
   class="bracket square-bracket-close"

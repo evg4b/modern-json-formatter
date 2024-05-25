@@ -1,6 +1,6 @@
 import { buildNode } from './build-dom';
 import { comma, ellipsis, squareBracket, toggle } from './elements';
-import { element, isValueExpandable } from './helpres';
+import { buildInfoNode, element, isValueExpandable } from './helpres';
 
 export const buildArrayNode = ({ items }: ArrayNode) => {
   const arrayNode = element({ class: 'array' });
@@ -19,6 +19,10 @@ export const buildArrayNode = ({ items }: ArrayNode) => {
       itemNode.appendChild(buildNode(item));
       if (index !== lastIndex) {
         itemNode.appendChild(comma());
+      }
+      const infoNode = buildInfoNode(item);
+      if (infoNode) {
+        itemNode.appendChild(infoNode);
       }
     });
   }

@@ -1,0 +1,20 @@
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john-doe@gamil.com",
+  "avatar": {
+    "url": "https://www.gravatar.com/avatar/00000000000000000000000000000x",
+    "type": "gravatar",
+    "size": "200x200"
+  },
+  "roles": [
+    "admin",
+    "manager",
+    "developer"
+  ],
+  "permissions": [
+    "read",
+    "write",
+    "delete"
+  ]
+}

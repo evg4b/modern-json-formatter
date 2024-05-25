@@ -9,6 +9,7 @@ export default tseslint.config(
       'dist/',
       'parser/',
       'jest.config.js',
+      'media_data/',
     ],
   },
   eslint.configs.recommended,

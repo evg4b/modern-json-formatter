@@ -33,6 +33,10 @@
     "*://*/*",
     "<all_urls>"
   ],
+  "background": {
+    "service_worker": "worker.js",
+    "type": "module"
+  },
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",

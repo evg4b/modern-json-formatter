@@ -15,7 +15,10 @@ const assets = (path: string) => copy({
 });
 
 export default defineConfig({
-  entry: { main: 'src/main.ts' },
+  entry: {
+    main: 'src/main.ts',
+    worker: 'src/worker.ts',
+  },
   splitting: false,
   sourcemap: !production,
   cjsInterop: true,

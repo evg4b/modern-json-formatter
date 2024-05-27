@@ -25,6 +25,12 @@ export const runExtension = async () => {
 
   const { queryButton, queryInput, rawButton, formatButton } = buildButtons(shadow);
 
+  queryInput.addEventListener('input', async () => {
+    console.log('queryInput.value:', queryInput.value);
+    const response = await chrome.runtime.sendMessage({ greeting: queryInput.value });
+    console.log('response:', response);
+  });
+
   rawButton.addEventListener('click', () => {
     rootContainer.classList.remove('formatted');
     rootContainer.classList.add('raw');

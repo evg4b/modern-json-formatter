@@ -23,14 +23,22 @@ export const runExtension = async () => {
   const { rootContainer, rawContainer, formatContainer } = buildContainers(shadow);
   rawContainer.appendChild(data);
 
-  const { rawButton, formatButton } = buildButtons(shadow);
+  const { queryButton, queryInput, rawButton, formatButton } = buildButtons(shadow);
 
   rawButton.addEventListener('click', () => {
     rootContainer.classList.remove('formatted');
     rootContainer.classList.add('raw');
+    queryInput.style.display = 'none';
   });
 
   formatButton.addEventListener('click', () => {
+    rootContainer.classList.remove('raw');
+    rootContainer.classList.add('formatted');
+    queryInput.style.display = 'none';
+  });
+
+  queryButton.addEventListener('click', () => {
+    queryInput.style.display = 'block';
     rootContainer.classList.remove('raw');
     rootContainer.classList.add('formatted');
   });

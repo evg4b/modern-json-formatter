@@ -8,10 +8,24 @@ export const buildButtons = (root: ShadowRoot) => {
   const rawButton = document.createElement('button');
   rawButton.textContent = 'Raw';
 
-  container.appendChild(formatButton);
-  container.appendChild(rawButton);
+  const queryButton = document.createElement('button');
+  queryButton.textContent = 'Query';
 
-  const buttons = [formatButton, rawButton];
+  const queryInput = document.createElement('input');
+  queryInput.type = 'text';
+  queryInput.placeholder = 'Enter query here...';
+  queryInput.className = 'query-input';
+  queryInput.style.display = 'none';
+
+  container.append(
+    queryInput,
+    queryButton,
+    formatButton,
+    rawButton,
+  );
+
+
+  const buttons = [queryButton, formatButton, rawButton];
 
   container.addEventListener('click', (event) => {
     if (event.target instanceof HTMLButtonElement) {
@@ -28,5 +42,5 @@ export const buildButtons = (root: ShadowRoot) => {
 
   root.appendChild(container);
 
-  return { formatButton, rawButton };
+  return { queryInput, queryButton, formatButton, rawButton };
 };

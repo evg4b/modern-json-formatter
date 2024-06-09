@@ -51,5 +51,8 @@
   },
   "workspaces": [
     "parser/**/*"
-  ]
+  ],
+  "dependencies": {
+    "@evg4b/jq-wasm": "^0.0.1"
+  }
 }

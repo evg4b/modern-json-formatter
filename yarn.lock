@@ -780,6 +780,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@evg4b/jq-wasm@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@evg4b/jq-wasm@npm:0.0.1"
+  checksum: 10c0/22aa092846b2ef2fa8ed121574ce90632ea3666aecce64c344d9bb74d1cd1cf5a65e2fd6a1baa9c09ab2da8968928d774b691a0aab7c39d3c62c9fe827e49fe3
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.13.0":
   version: 0.13.0
   resolution: "@humanwhocodes/config-array@npm:0.13.0"
@@ -4469,6 +4476,7 @@ __metadata:
   resolution: "modern-json-formatter@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.3.0"
+    "@evg4b/jq-wasm": "npm:^0.0.1"
     "@jest/globals": "npm:^29.7.0"
     "@jgoz/esbuild-plugin-livereload": "npm:^2.1.0"
     "@types/chrome": "npm:^0.0.268"

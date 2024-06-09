@@ -27,7 +27,10 @@ export const runExtension = async () => {
 
   queryInput.addEventListener('input', async () => {
     console.log('queryInput.value:', queryInput.value);
-    const response = await chrome.runtime.sendMessage({ greeting: queryInput.value });
+    const response = await chrome.runtime.sendMessage({
+      json: data.innerText,
+      filter: queryInput.value
+    });
     console.log('response:', response);
   });
 

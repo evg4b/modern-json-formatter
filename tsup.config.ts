@@ -30,6 +30,7 @@ export default defineConfig({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
+  noExternal: ['@evg4b/jq-wasm'],
   esbuildPlugins: [
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, description }],
@@ -47,6 +48,14 @@ export default defineConfig({
       assets: {
         from: ['parser/parser.wasm'],
         to: ['dist/parser.wasm'],
+      },
+      watch: !production,
+    }),
+    copy({
+      resolveFrom: 'cwd',
+      assets: {
+        from: ['node_modules/@evg4b/jq-wasm/jq.wasm'],
+        to: ['dist/jq.wasm'],
       },
       watch: !production,
     }),

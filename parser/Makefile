@@ -1,13 +1,19 @@
-default: clean build
+default: clean build optimize copy-exec-scripts
 
 build:
 	@echo "Building wasm..."
-	tinygo build -o parser.wasm -target wasm ./main.go
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o parser.wasm
+
+optimize:
+	@echo "Optimizing wasm..."
+	cp parser.wasm parser.wasm.bak
+	wasm-opt --enable-bulk-memory -Oz -o parser.wasm ./parser.wasm.bak
+	rm -f parser.wasm.bak
 
 copy-exec-scripts:
 	@echo "Copying exec scripts..."
 	rm -f wasm_exec.js
-	cp $(shell tinygo env TINYGOROOT)/targets/wasm_exec.js .
+	cp "$(shell go env GOROOT)/misc/wasm/wasm_exec.js" .
 
 clean:
 	@echo "Cleaning..."

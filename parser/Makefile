@@ -2,7 +2,7 @@ default: clean build
 
 build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -o parser.wasm
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o parser.wasm
 
 copy-exec-scripts:
 	@echo "Copying exec scripts..."

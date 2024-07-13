@@ -11,6 +11,8 @@ export const runExtension = async () => {
     return;
   }
 
+  const parserLoaded = initParser();
+
   const shadow = document.body.attachShadow({ mode: 'open' });
   const styleNode = document.createElement('style');
   styleNode.textContent = styles;
@@ -35,7 +37,7 @@ export const runExtension = async () => {
     rootContainer.classList.add('formatted');
   });
 
-  await initParser();
+  await parserLoaded;
 
   const parsedJson = parseJSON(data.innerText);
   if (parsedJson.type === 'error') {

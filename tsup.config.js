@@ -39,14 +39,8 @@ export default defineConfig({
       sourceMap: !production,
       sourceMapIncludeSources: !production,
     }),
-    copy({
-      resolveFrom: 'cwd',
-      assets: {
-        from: ['packages/tokenizer/tokenizer.wasm'],
-        to: ['dist/tokenizer.wasm'],
-      },
-      watch: !production,
-    }),
+    assets('packages/tokenizer/*.wasm'),
+    assets('packages/jq/*.wasm'),
     assets('assets/*'),
     production
       ? assets('assets/production/*')

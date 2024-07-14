@@ -20,7 +20,7 @@
       "@jq": [
         "packages/jq"
       ]
-    }
+    },
   },
   "include": [
     "packages/**/*ts",

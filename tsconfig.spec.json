@@ -7,13 +7,22 @@
     "types": ["jest", "node", "golang-wasm-exec"],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@tokenizer": [
+        "packages/tokenizer"
+      ],
+      "@jq": [
+        "packages/jq"
+      ]
+    }
   },
   "include": [
-    "src/**/*.test.ts",
-    "tokenizer/**/*.test.ts",
-    "testing/**/*.ts",
+    "packages/**/*ts",
+    "packages/*.d.ts",
+    "src/**/*.ts",
     "src/types.d.ts",
+    "testing/**/*.ts",
     "node_modules/@types/chrome/index.d.ts"
   ]
 }

@@ -23,8 +23,13 @@ module.exports = {
     '!tokenizer/**/*.spec.ts',
     '!tokenizer/tests/**/*',
   ],
-  setupFiles: ['<rootDir>/src/jest.setup.ts'],
+  moduleDirectories: ['node_modules', 'src'],
+  setupFiles: ['<rootDir>/jest.setup.ts'],
   verbose: true,
+  moduleNameMapper: {
+    '^@jq/(.*)$': '<rootDir>packages/jq/$1',
+    '^@tokenizer/(.*)$': '<rootDir>packages/tokenizer/$1',
+  },
   transform: {
     '^.+\\.[tj]sx?$': [
       'ts-jest',

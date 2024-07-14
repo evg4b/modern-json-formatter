@@ -15,7 +15,7 @@ describe('parser wasm', () => {
   const runTestCases = (testCases: TestCase[]) => {
     testCases.forEach(({ name, input, expected }) => {
       it(name, () => {
-        const actual = parseJSON(input);
+        const actual = tokenizerJSON(input);
         expect(actual).toEqual(expected);
       });
     });
@@ -29,12 +29,12 @@ describe('parser wasm', () => {
   });
 
   test('exported function should be defined', () => {
-    expect(parseJSON).toBeDefined();
+    expect(tokenizerJSON).toBeDefined();
   });
 
   describe('primitives', () => {
     it('null', () => {
-      const actual = parseJSON('null');
+      const actual = tokenizerJSON('null');
       expect(actual).toEqual(
         tNull(),
       );

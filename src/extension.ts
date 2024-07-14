@@ -39,7 +39,7 @@ export const runExtension = async () => {
 
   await parserLoaded;
 
-  const parsedJson = parseJSON(data.innerText);
+  const parsedJson = tokenizerJSON(data.innerText);
   if (parsedJson.type === 'error') {
     console.error('Error parsing JSON:', parsedJson.error);
     formatContainer.appendChild(

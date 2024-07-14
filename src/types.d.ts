@@ -47,4 +47,4 @@ interface ErrorNode {
 
 type ParserResponse = ParsedJSON | ErrorNode;
 
-declare function parseJSON(data: string): ParserResponse;
+declare function tokenizerJSON(data: string): ParserResponse;

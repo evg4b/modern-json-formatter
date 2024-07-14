@@ -1,7 +1,7 @@
-package decode_test
+package tokenizer_test
 
 import (
-	"github.com/evg4b/modern-json-formatter/parser/decode"
+	"github.com/evg4b/modern-json-formatter/parser/tokenizer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -173,7 +173,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("ignore comments", func(t *testing.T) {
-		actual, err := decode.Decode("{ \"key\": \"value\" } // comment")
+		actual, err := tokenizer.Tokenize("{ \"key\": \"value\" } // comment")
 		require.NoError(t, err)
 
 		assert.Equal(t, tObject(
@@ -191,7 +191,7 @@ type testCases struct {
 func runTestCasesDecode(t *testing.T, tests []testCases) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := decode.Decode(tt.input)
+			got, err := tokenizer.Tokenize(tt.input)
 			require.NoError(t, err)
 
 			assert.Equal(t, tt.expected, got)

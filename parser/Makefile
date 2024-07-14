@@ -1,14 +1,17 @@
 default: clean build optimize copy-exec-scripts
 
+WASM_FILE=parser.wasm
+WASM_FILE_BAK=${WASM_FILE}.bak
+
 build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o parser.wasm
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${WASM_FILE}
 
 optimize:
 	@echo "Optimizing wasm..."
-	cp parser.wasm parser.wasm.bak
-	wasm-opt --enable-bulk-memory -Oz -o parser.wasm ./parser.wasm.bak
-	rm -f parser.wasm.bak
+	cp ${WASM_FILE} ${WASM_FILE_BAK}
+	wasm-opt --enable-bulk-memory -Oz -o ${WASM_FILE} ${WASM_FILE_BAK}
+	rm -f ${WASM_FILE_BAK}
 
 copy-exec-scripts:
 	@echo "Copying exec scripts..."
@@ -17,8 +20,8 @@ copy-exec-scripts:
 
 clean:
 	@echo "Cleaning..."
-	rm -f parser.wasm
+	rm -f ${WASM_FILE}
 
 test:
 	@echo "Testing..."
-	go test -v ./decode/...
+	go test -v tokenizer/...

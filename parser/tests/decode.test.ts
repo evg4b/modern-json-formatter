@@ -3,14 +3,14 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadWasm } from './load-wasm';
 
-declare function parseJSON(data: string): unknown;
+declare function tokenizerJSON(data: string): unknown;
 
 describe('parser.wasm', () => {
   loadWasm();
 
 
   test('should be defined', () => {
-    expect(parseJSON).toBeDefined();
+    expect(tokenizerJSON).toBeDefined();
   });
 
   describe('parse json', () => {
@@ -26,7 +26,8 @@ describe('parser.wasm', () => {
     const testCases = jsonFiles.map((file) => ({ file }));
     test.each(testCases)('$file', async ({ file }) => {
       const fileData = await readFile(resolve(__dirname, 'test-cases', file), 'utf-8');
-      const parsed = parseJSON(fileData);
+      const parsed = tokenizerJSON(fileData);
+
       expect(parsed).toMatchSnapshot();
     });
   });
@@ -40,7 +41,8 @@ describe('parser.wasm', () => {
     const testCases = jsonFiles.map((file) => ({ file }));
     test.each(testCases)('$file', async ({ file }) => {
       const fileData = await readFile(resolve(__dirname, 'test-cases', file), 'utf-8');
-      const parsed = parseJSON(fileData);
+      const parsed = tokenizerJSON(fileData);
+
       expect(parsed).toMatchSnapshot();
     });
   });

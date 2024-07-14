@@ -10,6 +10,7 @@ export default tseslint.config(
       'tokenizer/',
       'jest.config.js',
       'media_data/',
+      'tsup.config.js',
     ],
   },
   eslint.configs.recommended,

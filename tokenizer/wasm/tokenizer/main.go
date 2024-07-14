@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"github.com/evg4b/modern-json-formatter/tokenizer/helpers"
 	"github.com/evg4b/modern-json-formatter/tokenizer/pkg/tokenizer"
 	"syscall/js"
 )
@@ -12,21 +13,14 @@ func main() {
 	<-make(chan struct{})
 }
 
-func wrapError(err error) js.Value {
-	return js.ValueOf(map[string]any{
-		"type":  "error",
-		"error": err.Error(),
-	})
-}
-
 func wrapper(tokenize func(input string) (map[string]any, error)) js.Func {
 	return js.FuncOf(func(_ js.Value, args []js.Value) any {
 		if len(args) != 1 {
-			return wrapError(errors.New("invalid arguments passed"))
+			return helpers.WrapError(errors.New("invalid arguments passed"))
 		}
 
 		if jsonTree, err := tokenize(args[0].String()); err != nil {
-			return wrapError(err)
+			return helpers.WrapError(err)
 		} else {
 			return js.ValueOf(jsonTree)
 		}

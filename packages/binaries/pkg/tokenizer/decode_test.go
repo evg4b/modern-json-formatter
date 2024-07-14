@@ -1,7 +1,7 @@
 package tokenizer_test
 
 import (
-	"github.com/evg4b/modern-json-formatter/tokenizer/pkg/tokenizer"
+	"binaries/pkg/tokenizer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"

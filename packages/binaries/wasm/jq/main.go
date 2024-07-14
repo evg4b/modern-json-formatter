@@ -1,8 +1,8 @@
 package main
 
 import (
+	"binaries/helpers"
 	"errors"
-	"github.com/evg4b/modern-json-formatter/tokenizer/helpers"
 	"syscall/js"
 )
 

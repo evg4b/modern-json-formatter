@@ -1,4 +1,4 @@
-import '../wasm_exec.js';
+import '../../binaries/wasm_exec.js';
 import { readFile } from 'node:fs/promises';
 
 export const loadWasm = async (file: string) => {

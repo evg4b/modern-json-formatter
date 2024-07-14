@@ -7,7 +7,7 @@ export default tseslint.config(
       '**/node_modules/',
       '.git/',
       'dist/',
-      'parser/',
+      'tokenizer/',
       'jest.config.js',
       'media_data/',
     ],

@@ -11,7 +11,7 @@
   },
   "include": [
     "src/**/*.test.ts",
-    "parser/**/*.test.ts",
+    "tokenizer/**/*.test.ts",
     "testing/**/*.ts",
     "src/types.d.ts",
     "node_modules/@types/chrome/index.d.ts"

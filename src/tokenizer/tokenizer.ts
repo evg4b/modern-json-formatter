@@ -1,7 +1,7 @@
-import '../../parser/wasm_exec.js';
+import '../../tokenizer/wasm_exec.js';
 
 const loadWasm = async (go: Go) => {
-  const wasmUrl = chrome.runtime.getURL('parser.wasm');
+  const wasmUrl = chrome.runtime.getURL('tokenizer.wasm');
   return 'instantiateStreaming' in WebAssembly
     ? WebAssembly.instantiateStreaming(fetch(wasmUrl), go.importObject)
     : fetch(wasmUrl).then(resp => resp.arrayBuffer())

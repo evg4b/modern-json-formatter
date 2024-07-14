@@ -21,7 +21,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "parser.wasm",
+        "tokenizer.wasm",
         "invalid.svg"
       ],
       "matches": [

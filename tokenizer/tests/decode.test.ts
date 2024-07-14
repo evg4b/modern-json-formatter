@@ -5,7 +5,7 @@ import { loadWasm } from './load-wasm';
 
 declare function tokenizerJSON(data: string): unknown;
 
-describe('parser.wasm', () => {
+describe('tokenizer.wasm', () => {
   loadWasm();
 
 

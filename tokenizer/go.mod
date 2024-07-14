@@ -1,4 +1,4 @@
-module github.com/evg4b/modern-json-formatter/parser
+module github.com/evg4b/modern-json-formatter/tokenizer
 
 go 1.22.2
 

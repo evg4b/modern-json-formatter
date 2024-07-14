@@ -1,6 +1,6 @@
 default: clean build optimize copy-exec-scripts
 
-WASM_FILE=parser.wasm
+WASM_FILE=tokenizer.wasm
 WASM_FILE_BAK=${WASM_FILE}.bak
 
 build:
@@ -24,4 +24,4 @@ clean:
 
 test:
 	@echo "Testing..."
-	go test -v tokenizer/...
+	go test -v ./tokenizer/...

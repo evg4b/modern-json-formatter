@@ -2,7 +2,7 @@ package main
 
 import (
 	"errors"
-	"github.com/evg4b/modern-json-formatter/parser/tokenizer"
+	"github.com/evg4b/modern-json-formatter/tokenizer/tokenizer"
 	"syscall/js"
 )
 

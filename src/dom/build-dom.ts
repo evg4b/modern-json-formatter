@@ -4,7 +4,7 @@ import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from '
 import { toggle } from './elements';
 import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
 
-export const buildDom = (object: ParsedJSON): HTMLElement => {
+export const buildDom = (object: TokenNode): HTMLElement => {
   const root = element({ class: 'root' });
 
   if (isValueExpandable(object)) {
@@ -28,7 +28,7 @@ export const buildDom = (object: ParsedJSON): HTMLElement => {
 };
 
 
-export const buildNode = (object: ParsedJSON): HTMLElement => {
+export const buildNode = (object: TokenNode): HTMLElement => {
   switch (object.type) {
     case  'string':
       return buildStringNode(object);

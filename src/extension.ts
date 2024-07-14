@@ -1,7 +1,7 @@
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
-import { initParser } from './parser';
+import { initParser } from './tokenizer';
 import styles from './styles.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';

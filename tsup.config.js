@@ -8,7 +8,7 @@ const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
-const assets = (path: string) => copy({
+const assets = path => copy({
   resolveFrom: 'cwd',
   assets: { from: [path], to: ['dist'] },
   watch: !production,
@@ -42,12 +42,14 @@ export default defineConfig({
     copy({
       resolveFrom: 'cwd',
       assets: {
-        from: ['parser/parser.wasm'],
-        to: ['dist/parser.wasm'],
+        from: ['tokenizer/tokenizer.wasm'],
+        to: ['dist/tokenizer.wasm'],
       },
       watch: !production,
     }),
     assets('assets/*'),
-    production ? assets('assets/production/*') : assets('assets/debug/*'),
+    production
+      ? assets('assets/production/*')
+      : assets('assets/debug/*'),
   ],
 });

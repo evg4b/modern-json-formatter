@@ -1,15 +1,15 @@
 import './polifills';
 import fs from 'fs/promises';
-import '../../parser/wasm_exec.js';
+import '../../tokenizer/wasm_exec.js';
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../../testing';
 
-describe('parser wasm', () => {
+describe('tokenizer wasm', () => {
   let go: Go;
 
   interface TestCase {
     name: string;
     input: string;
-    expected: ParsedJSON;
+    expected: TokenNode;
   }
 
   const runTestCases = (testCases: TestCase[]) => {
@@ -22,7 +22,7 @@ describe('parser wasm', () => {
   };
 
   beforeAll(async () => {
-    const wasmBuffer = await fs.readFile('parser/parser.wasm');
+    const wasmBuffer = await fs.readFile('tokenizer/tokenizer.wasm');
     go = new Go();
     const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     go.run(wasm.instance);

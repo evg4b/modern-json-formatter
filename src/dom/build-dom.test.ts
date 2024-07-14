@@ -3,7 +3,7 @@ import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../.
 import { buildDom } from './build-dom';
 
 describe('buildDom', () => {
-  const parsedJson: ParsedJSON = {
+  const parsedJson: TokenNode = {
     'type': 'object',
     'properties': [{
       'key': 'links',
@@ -186,14 +186,14 @@ describe('buildDom', () => {
   });
 
   it('should throw error for invalid type', () => {
-    const invalidJson = { ...parsedJson, type: 'invalid' } as unknown as ParsedJSON;
+    const invalidJson = { ...parsedJson, type: 'invalid' } as unknown as TokenNode;
 
     expect(() => buildDom(invalidJson)).toThrow('Unknown type');
   });
 
   describe('expand/collapse', () => {
     describe('should not render toggle', () => {
-      const table: { name: string, input: ParsedJSON }[] = [
+      const table: { name: string, input: TokenNode }[] = [
         { name: 'empty object', input: tObject() },
         { name: 'empty array', input: tArray() },
         { name: 'string', input: tString('foo') },
@@ -210,7 +210,7 @@ describe('buildDom', () => {
     });
 
     describe('should render toggle', () => {
-      const table: { name: string, input: ParsedJSON, expected: number }[] = [
+      const table: { name: string, input: TokenNode, expected: number }[] = [
         {
           name: 'object with properties',
           input: tObject(
@@ -299,7 +299,7 @@ describe('buildDom', () => {
     });
 
     describe('should not render info node', () => {
-      const table: { name: string, input: ParsedJSON }[] = [
+      const table: { name: string, input: TokenNode }[] = [
         { name: 'empty object', input: tObject() },
         { name: 'empty array', input: tArray() },
         { name: 'string', input: tString('foo') },
@@ -318,7 +318,7 @@ describe('buildDom', () => {
 
     describe('should render info node', () => {
       describe('properties count', () => {
-        const table: { name: string, input: ParsedJSON, expected: number }[] = [
+        const table: { name: string, input: TokenNode, expected: number }[] = [
           {
             name: 'object with properties',
             input: tObject(
@@ -362,7 +362,7 @@ describe('buildDom', () => {
       });
 
       describe('items count', () => {
-        const table: { name: string, input: ParsedJSON, expected: number }[] = [
+        const table: { name: string, input: TokenNode, expected: number }[] = [
           {
             name: 'array with elements',
             input: tArray(

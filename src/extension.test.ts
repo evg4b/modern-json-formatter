@@ -1,9 +1,9 @@
 import { readFile } from 'fs/promises';
 import { resolve } from 'node:path';
 import { runExtension } from './extension';
-import '../parser/wasm_exec.js';
+import '../tokenizer/wasm_exec.js';
 
-jest.mock('./parser', () => ({
+jest.mock('./tokenizer', () => ({
   initParser: jest.fn().mockReturnValueOnce(Promise.resolve()),
 }));
 
@@ -25,14 +25,14 @@ describe('extension', () => {
     Object.assign(global, {
       chrome: {
         runtime: {
-          getURL: jest.fn(() => 'parser.wasm'),
+          getURL: jest.fn(() => 'tokenizer.wasm'),
         },
       },
     });
   });
 
   beforeAll(async () => {
-    const wasmBuffer = await readFile(resolve(__dirname, '../parser/parser.wasm'));
+    const wasmBuffer = await readFile(resolve(__dirname, '../tokenizer/tokenizer.wasm'));
     go = new Go();
     const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     void go.run(wasm.instance);

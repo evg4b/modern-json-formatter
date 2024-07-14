@@ -6,7 +6,7 @@ export const loadWasm = async () => {
   const go: Go = new Go();
 
   beforeAll(async () => {
-    const wasmBuffer = await readFile(resolve(__dirname, '../parser.wasm'));
+    const wasmBuffer = await readFile(resolve(__dirname, '../tokenizer.wasm'));
     expect(wasmBuffer.length).toBeGreaterThan(0);
     const wasm = await WebAssembly.instantiate(wasmBuffer, go.importObject);
     go.run(wasm.instance);

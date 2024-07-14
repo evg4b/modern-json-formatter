@@ -12,7 +12,7 @@ export const element = (options?: { content?: string, class?: string }) => {
   return span;
 };
 
-export const isValueExpandable = (value: ParsedJSON): value is ObjectNode | ArrayNode =>
+export const isValueExpandable = (value: TokenNode): value is ObjectNode | ArrayNode =>
   value.type === 'object' && !!value.properties.length
   || value.type === 'array' && !!value.items.length;
 
@@ -20,7 +20,7 @@ export const isToggleElement = (element: EventTarget | null): element is HTMLEle
   return element instanceof HTMLElement && element.classList.contains('toggle');
 };
 
-export const buildInfoNode = (value: ParsedJSON): HTMLSpanElement | null => {
+export const buildInfoNode = (value: TokenNode): HTMLSpanElement | null => {
   if (isValueExpandable(value)) {
     switch (value.type) {
       case 'array':

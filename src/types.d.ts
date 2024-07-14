@@ -5,7 +5,7 @@ declare module '*.scss' {
 
 interface PropertyNode {
   key: string;
-  value: ParsedJSON;
+  value: TokenNode;
 }
 
 interface ObjectNode {
@@ -15,7 +15,7 @@ interface ObjectNode {
 
 interface ArrayNode {
   type: 'array';
-  items: ParsedJSON[];
+  items: TokenNode[];
 }
 
 interface StringNode {
@@ -37,7 +37,7 @@ interface NullNode {
   type: 'null';
 }
 
-type ParsedJSON = ObjectNode | ArrayNode | StringNode | NumberNode | BooleanNode | NullNode;
+type TokenNode = ObjectNode | ArrayNode | StringNode | NumberNode | BooleanNode | NullNode;
 
 interface ErrorNode {
   type: 'error';
@@ -45,6 +45,6 @@ interface ErrorNode {
 }
 
 
-type ParserResponse = ParsedJSON | ErrorNode;
+type TokenizerResponse = TokenNode | ErrorNode;
 
-declare function parseJSON(data: string): ParserResponse;
+declare function tokenizerJSON(data: string): TokenizerResponse;

@@ -130,5 +130,5 @@ dist
 .pnp.*
 .idea
 .DS_Store
-parser/test-report.out
-parser/coverage.out
+tokenizer/test-report.out
+tokenizer/coverage.out

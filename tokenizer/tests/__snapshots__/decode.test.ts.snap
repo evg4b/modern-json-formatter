@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`parser.wasm parse json negative-test-case-1.json 1`] = `
+exports[`tokenizer.wasm parse json negative-test-case-1.json 1`] = `
 {
   "error": "invalid character '}' after object key",
   "type": "error",
 }
 `;
 
-exports[`parser.wasm parse json negative-test-case-2.json 1`] = `
+exports[`tokenizer.wasm parse json negative-test-case-2.json 1`] = `
 {
   "error": "invalid character '}' looking for beginning of value",
   "type": "error",
 }
 `;
 
-exports[`parser.wasm parse json test-case-1.json 1`] = `
+exports[`tokenizer.wasm parse json test-case-1.json 1`] = `
 {
   "items": [
     {
@@ -6622,7 +6622,7 @@ exports[`parser.wasm parse json test-case-1.json 1`] = `
 }
 `;
 
-exports[`parser.wasm parse json test-case-2.json 1`] = `
+exports[`tokenizer.wasm parse json test-case-2.json 1`] = `
 {
   "properties": [
     {
@@ -6839,7 +6839,7 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
 }
 `;
 
-exports[`parser.wasm parse json test-case-3.json 1`] = `
+exports[`tokenizer.wasm parse json test-case-3.json 1`] = `
 {
   "items": [
     {
@@ -7062,21 +7062,21 @@ voluptates magni quo et",
 }
 `;
 
-exports[`parser.wasm parse json test-case-4.json 1`] = `
+exports[`tokenizer.wasm parse json test-case-4.json 1`] = `
 {
   "properties": [],
   "type": "object",
 }
 `;
 
-exports[`parser.wasm parse json test-case-5.json 1`] = `
+exports[`tokenizer.wasm parse json test-case-5.json 1`] = `
 {
   "items": [],
   "type": "array",
 }
 `;
 
-exports[`parser.wasm parse json test-case-6.json 1`] = `
+exports[`tokenizer.wasm parse json test-case-6.json 1`] = `
 {
   "items": [
     {

@@ -1,15 +1,15 @@
-package decode_test
+package tokenizer_test
 
 import (
-	"github.com/evg4b/modern-json-formatter/parser/decode"
+	"github.com/evg4b/modern-json-formatter/tokenizer/tokenizer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func TestDecode(t *testing.T) {
+func TestTokenizer(t *testing.T) {
 	t.Run("strings parsing", func(t *testing.T) {
-		runTestCasesDecode(t, []testCases{
+		runTestCasesTokenizer(t, []testCases{
 			{
 				name:     "empty string",
 				input:    `""'`,
@@ -24,7 +24,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("numbers parsing", func(t *testing.T) {
-		runTestCasesDecode(t, []testCases{
+		runTestCasesTokenizer(t, []testCases{
 			{
 				name:     "number",
 				input:    "1",
@@ -44,7 +44,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("null parsing", func(t *testing.T) {
-		runTestCasesDecode(t, []testCases{
+		runTestCasesTokenizer(t, []testCases{
 			{
 				name:     "null",
 				input:    "null",
@@ -54,7 +54,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("boolean parsing", func(t *testing.T) {
-		runTestCasesDecode(t, []testCases{
+		runTestCasesTokenizer(t, []testCases{
 			{
 				name:     "true",
 				input:    "true",
@@ -69,7 +69,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("object parsing", func(t *testing.T) {
-		runTestCasesDecode(t, []testCases{
+		runTestCasesTokenizer(t, []testCases{
 			{
 				name:     "empty object",
 				input:    "{}",
@@ -102,7 +102,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("array parsing", func(t *testing.T) {
-		runTestCasesDecode(t, []testCases{
+		runTestCasesTokenizer(t, []testCases{
 			{
 				name:     "empty array",
 				input:    "[]",
@@ -173,7 +173,7 @@ func TestDecode(t *testing.T) {
 	})
 
 	t.Run("ignore comments", func(t *testing.T) {
-		actual, err := decode.Decode("{ \"key\": \"value\" } // comment")
+		actual, err := tokenizer.Tokenize("{ \"key\": \"value\" } // comment")
 		require.NoError(t, err)
 
 		assert.Equal(t, tObject(
@@ -188,10 +188,10 @@ type testCases struct {
 	expected map[string]any
 }
 
-func runTestCasesDecode(t *testing.T, tests []testCases) {
+func runTestCasesTokenizer(t *testing.T, tests []testCases) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := decode.Decode(tt.input)
+			got, err := tokenizer.Tokenize(tt.input)
 			require.NoError(t, err)
 
 			assert.Equal(t, tt.expected, got)

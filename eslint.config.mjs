@@ -7,11 +7,10 @@ export default tseslint.config(
       '**/node_modules/',
       '.git/',
       'dist/',
-      'tokenizer/',
       'jest.config.js',
       'media_data/',
       'tsup.config.js',
-      'packages/binaries/wasm_exec.js'
+      'packages/wasm_exec.js'
     ],
   },
   eslint.configs.recommended,

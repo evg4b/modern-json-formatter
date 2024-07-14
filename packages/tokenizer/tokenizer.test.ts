@@ -3,7 +3,9 @@
 //
 //
 describe('tokenizer wasm', () => {
-  it('z', () => {});
+  it('z', () => {
+    expect(1).toBe(1);
+  });
 //   let go: Go;
 //
 //   interface TestCase {

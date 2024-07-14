@@ -1,7 +1,9 @@
 import { describe } from '@jest/globals';
 
 describe('tokenizer.wasm', () => {
-  it('z', () => {});
+  it('z', () => {
+    expect(1).toBe(1);
+  });
   // loadWasm(resolve(__dirname, '../tokenizer.wasm'));
   //
   // test('should be defined', () => {

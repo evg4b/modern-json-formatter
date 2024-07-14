@@ -2,8 +2,8 @@ default: tokenizer jq exec-scripts
 
 exec-scripts:
 	@echo "Copying exec scripts..."
-	rm -f wasm_exec.js
-	cp "$(shell go env GOROOT)/misc/wasm/wasm_exec.js" .
+	rm -f ../wasm_exec.js
+	cp "$(shell go env GOROOT)/misc/wasm/wasm_exec.js" ./..
 
 # Tokenizer
 

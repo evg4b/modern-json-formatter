@@ -11,6 +11,7 @@ export default tseslint.config(
       'jest.config.js',
       'media_data/',
       'tsup.config.js',
+      'packages/binaries/wasm_exec.js'
     ],
   },
   eslint.configs.recommended,

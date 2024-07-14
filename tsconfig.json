@@ -9,18 +9,13 @@
       "chrome",
       "golang-wasm-exec"
     ],
+    "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "@tokenizer/*": [
-        "packages/tokenizer/*"
-      ],
       "@tokenizer": [
         "packages/tokenizer"
-      ],
-      "@jq/*": [
-        "packages/jq/"
       ],
       "@jq": [
         "packages/jq"
@@ -28,12 +23,9 @@
     }
   },
   "include": [
-    "packages/tokenizer/**/*.ts",
-    "packages/jq/**/*.ts",
+    "packages/**/*ts",
+    "packages/*.d.ts",
     "src/**/*.ts",
-
-    "packages/tokenizer/**/types.d.ts",
-    "packages/jq/**/types.d.ts",
     "src/types.d.ts"
   ],
   "exclude": [

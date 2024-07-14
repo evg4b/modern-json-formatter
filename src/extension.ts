@@ -1,17 +1,16 @@
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
-import { initParser } from './tokenizer';
-import styles from './styles.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
+import styles from './styles.scss';
 
 export const runExtension = async () => {
   if (!document.querySelector('pre + .json-formatter-container')) {
     return;
   }
 
-  const parserLoaded = initParser();
+  const { tokenize } = await import('@tokenizer');
 
   const shadow = document.body.attachShadow({ mode: 'open' });
   const styleNode = document.createElement('style');
@@ -37,9 +36,7 @@ export const runExtension = async () => {
     rootContainer.classList.add('formatted');
   });
 
-  await parserLoaded;
-
-  const parsedJson = tokenizerJSON(data.innerText);
+  const parsedJson = await tokenize(data.innerText);
   if (parsedJson.type === 'error') {
     console.error('Error parsing JSON:', parsedJson.error);
     formatContainer.appendChild(

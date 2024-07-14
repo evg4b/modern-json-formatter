@@ -13,7 +13,7 @@ describe('tokenizer.wasm', () => {
   });
 
   describe('parse json', () => {
-    let jsonFiles: string[] = [
+    const jsonFiles: string[] = [
       'test-case-1.json',
       'test-case-2.json',
       'test-case-3.json',
@@ -32,7 +32,7 @@ describe('tokenizer.wasm', () => {
   });
 
   describe('parse json', () => {
-    let jsonFiles: string[] = [
+    const jsonFiles: string[] = [
       'negative-test-case-1.json',
       'negative-test-case-2.json',
     ];

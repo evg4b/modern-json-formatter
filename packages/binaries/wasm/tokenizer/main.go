@@ -9,7 +9,7 @@ import (
 
 func main() {
 	window := js.Global()
-	window.Set("tokenizerJSON", wrapper(tokenizer.Tokenize))
+	window.Set("___tokenizeJSON", wrapper(tokenizer.Tokenize))
 	<-make(chan struct{})
 }
 

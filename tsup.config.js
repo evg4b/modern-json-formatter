@@ -42,7 +42,7 @@ export default defineConfig({
     copy({
       resolveFrom: 'cwd',
       assets: {
-        from: ['tokenizer/tokenizer.wasm'],
+        from: ['packages/tokenizer/tokenizer.wasm'],
         to: ['dist/tokenizer.wasm'],
       },
       watch: !production,

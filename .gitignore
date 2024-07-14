@@ -132,3 +132,5 @@ dist
 .DS_Store
 tokenizer/test-report.out
 tokenizer/coverage.out
+packages/binaries/jq.wasm
+packages/binaries/tokenizer.wasm

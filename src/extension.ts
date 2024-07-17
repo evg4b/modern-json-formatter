@@ -48,4 +48,9 @@ export const runExtension = async () => {
   formatContainer.appendChild(
     buildDom(parsedJson),
   );
+
+  const { jq } = await import('@jq');
+
+  const info = await jq(data.innerText, '.');
+  console.log('jq info:', info);
 };

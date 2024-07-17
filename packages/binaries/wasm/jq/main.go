@@ -8,7 +8,7 @@ import (
 
 func main() {
 	window := js.Global()
-	window.Set("jq", wrapper(func(input string, query string) (map[string]any, error) {
+	window.Set("___jq", wrapper(func(input string, query string) (map[string]any, error) {
 		return map[string]any{"input": input, "query": query}, nil
 	}))
 	<-make(chan struct{})

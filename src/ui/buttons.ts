@@ -5,13 +5,17 @@ export const buildButtons = (root: ShadowRoot) => {
   formatButton.textContent = 'Formatted';
   formatButton.classList.add('active');
 
+  const queryButton = document.createElement('button');
+  queryButton.textContent = 'Query';
+  container.appendChild(queryButton);
+
   const rawButton = document.createElement('button');
   rawButton.textContent = 'Raw';
 
   container.appendChild(formatButton);
   container.appendChild(rawButton);
 
-  const buttons = [formatButton, rawButton];
+  const buttons = [formatButton, rawButton, queryButton];
 
   container.addEventListener('click', (event) => {
     if (event.target instanceof HTMLButtonElement) {
@@ -28,5 +32,5 @@ export const buildButtons = (root: ShadowRoot) => {
 
   root.appendChild(container);
 
-  return { formatButton, rawButton };
+  return { queryButton, formatButton, rawButton };
 };

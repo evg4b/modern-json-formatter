@@ -1,6 +1,7 @@
 package tokenizer
 
 import (
+	"binaries/pkg/tokens"
 	"encoding/json"
 	"errors"
 	"io"
@@ -52,13 +53,13 @@ func tokenize(decoder *json.Decoder) (map[string]any, error) {
 		}
 
 	case string:
-		return stringNode(token), nil
+		return tokens.StringNode(token), nil
 	case json.Number:
-		return numberNode(token), nil
+		return tokens.NumberNode(token), nil
 	case nil:
-		return nullNode(), nil
+		return tokens.NullNode(), nil
 	case bool:
-		return boolNode(token), nil
+		return tokens.BoolNode(token), nil
 	default:
 		return nil, errors.New("unknown token")
 	}

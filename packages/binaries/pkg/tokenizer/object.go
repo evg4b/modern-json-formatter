@@ -1,6 +1,7 @@
 package tokenizer
 
 import (
+	"binaries/pkg/tokens"
 	"encoding/json"
 )
 
@@ -14,13 +15,10 @@ func decodeObject(decoder *json.Decoder) (map[string]any, error) {
 			if value, err := tokenize(decoder); err != nil {
 				return nil, err
 			} else {
-				properties = append(properties, map[string]any{
-					"key":   key.(string),
-					"value": value,
-				})
+				properties = append(properties, tokens.PropertyNode(key.(string), value))
 			}
 		}
 	}
 
-	return objectNode(properties), nil
+	return tokens.ObjectNode(properties), nil
 }

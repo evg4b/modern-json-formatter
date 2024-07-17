@@ -1,9 +1,9 @@
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
+import styles from './styles.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
-import styles from './styles.scss';
 
 export const runExtension = async () => {
   if (!document.querySelector('pre + .json-formatter-container')) {
@@ -24,7 +24,7 @@ export const runExtension = async () => {
   const { rootContainer, rawContainer, formatContainer } = buildContainers(shadow);
   rawContainer.appendChild(data);
 
-  const { rawButton, formatButton } = buildButtons(shadow);
+  const { rawButton, queryButton, formatButton } = buildButtons(shadow);
 
   rawButton.addEventListener('click', () => {
     rootContainer.classList.remove('formatted');
@@ -34,6 +34,18 @@ export const runExtension = async () => {
   formatButton.addEventListener('click', () => {
     rootContainer.classList.remove('raw');
     rootContainer.classList.add('formatted');
+  });
+
+  queryButton.addEventListener('click', async () => {
+    const { jq } = await import('@jq');
+
+    const info = await jq(data.innerText, '.');
+    formatContainer.innerHTML = '';
+    formatContainer.appendChild(
+      info.type === 'error'
+        ? buildErrorNode()
+        : buildDom(info),
+    );
   });
 
   const parsedJson = await tokenize(data.innerText);
@@ -48,9 +60,4 @@ export const runExtension = async () => {
   formatContainer.appendChild(
     buildDom(parsedJson),
   );
-
-  const { jq } = await import('@jq');
-
-  const info = await jq(data.innerText, '.');
-  console.log('jq info:', info);
 };

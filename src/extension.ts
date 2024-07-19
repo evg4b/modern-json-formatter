@@ -28,19 +28,23 @@ export const runExtension = async () => {
 
   const response = await tokenize(data.innerText);
 
+  queryInput.style.display = 'none';
   rawButton.addEventListener('click', () => {
     rootContainer.classList.remove('formatted', 'query');
     rootContainer.classList.add('raw');
+    queryInput.style.display = 'none';
   });
 
   formatButton.addEventListener('click', () => {
     rootContainer.classList.remove('raw', 'query');
     rootContainer.classList.add('formatted');
+    queryInput.style.display = 'none';
   });
 
   queryButton.addEventListener('click', async () => {
     rootContainer.classList.remove('raw', 'formatted');
     rootContainer.classList.add('query');
+    queryInput.style.display = 'inline-block';
 
     queryContainer.innerHTML = '...';
   });
@@ -52,7 +56,7 @@ export const runExtension = async () => {
 
     const { jq } = await import('@jq');
 
-    const info = await jq(data.innerText, '.');
+    const info = await jq(data.innerText, queryInput.value);
     queryContainer.innerHTML = '';
     queryContainer.appendChild(
       prepareResponse(info),

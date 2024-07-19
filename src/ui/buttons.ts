@@ -1,26 +1,24 @@
+import { throws } from '../helpres';
+
 export const buildButtons = (root: ShadowRoot) => {
-  const container = document.createElement('div');
-  container.className = 'button-container';
+  const toolbox = document.createElement('div');
+  toolbox.innerHTML = `
+    <div class="toolbox-container">
+        <input type="text" class="toolbox-input" placeholder="JQ Query">
+        <div class="button-container">
+            <button class="query-button">Query</button>
+            <button class="formatted-button active">Formatted</button>
+            <button class="raw-button">Raw</button>
+        </div>
+    </div>
+  `;
 
-  const formatButton = document.createElement('button');
-  formatButton.textContent = 'Formatted';
-  formatButton.classList.add('active');
+  const container = toolbox.querySelector('.button-container') ?? throws('No button container found');
 
-  const queryButton = document.createElement('button');
-  queryButton.textContent = 'Query';
-
-  const rawButton = document.createElement('button');
-  rawButton.textContent = 'Raw';
-
-  const queryInput = document.createElement('input');
-  queryInput.type = 'text';
-  queryInput.placeholder = 'JQ Query';
-  queryInput.className = 'jq-query-input';
-
-  container.appendChild(queryInput);
-  container.appendChild(queryButton);
-  container.appendChild(formatButton);
-  container.appendChild(rawButton);
+  const formatButton = toolbox.querySelector('.formatted-button') ?? throws('No formatted button found');
+  const queryButton = toolbox.querySelector('.query-button') ?? throws('No query button found');
+  const queryInput = toolbox.querySelector('input') ?? throws('No input found');
+  const rawButton = toolbox.querySelector('.raw-button') ?? throws('No raw button found');
 
   const buttons = [formatButton, rawButton, queryButton];
 
@@ -37,7 +35,7 @@ export const buildButtons = (root: ShadowRoot) => {
     }
   });
 
-  root.appendChild(container);
+  root.appendChild(toolbox);
 
   return {
     queryButton,

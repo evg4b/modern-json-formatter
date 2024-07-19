@@ -1,4 +1,3 @@
-import * as querystring from 'node:querystring';
 import { importWasm } from '../shared';
 
 const go = new Go();

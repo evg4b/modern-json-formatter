@@ -79,7 +79,7 @@ $indentation: 30px;
     }
   }
 
-  .button-container {
+  .toolbox-container {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
@@ -87,6 +87,11 @@ $indentation: 30px;
     top: 15px;
     right: 30px;
   }
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
 }
 
 pre {
@@ -221,7 +226,9 @@ pre {
   padding: 0 7px 0 0;
 }
 
-.button-container {
+.toolbox-container {
+  gap: 10px;
+
   button {
     &:first-child {
       border-bottom-left-radius: 5px;

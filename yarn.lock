@@ -929,15 +929,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jgoz/esbuild-plugin-livereload@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@jgoz/esbuild-plugin-livereload@npm:2.1.1"
-  peerDependencies:
-    esbuild: 0.20.x || 0.21.x || 0.22.x || 0.23.x
-  checksum: 10c0/2ed55edb32490c954ce38c5c0cc1455f63de2433c5548f947acee9603503d898b0daa72e6e7373cb87c76a5dfab9276cc65d140646e11967fc8736344a51fa00
-  languageName: node
-  linkType: hard
-
 "@jridgewell/gen-mapping@npm:^0.3.2, @jridgewell/gen-mapping@npm:^0.3.5":
   version: 0.3.5
   resolution: "@jridgewell/gen-mapping@npm:0.3.5"
@@ -4336,7 +4327,6 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.8.0"
     "@jest/globals": "npm:^29.7.0"
-    "@jgoz/esbuild-plugin-livereload": "npm:^2.1.1"
     "@types/chrome": "npm:^0.0.269"
     "@types/golang-wasm-exec": "npm:^1.15.2"
     "@types/jest": "npm:^29.5.12"

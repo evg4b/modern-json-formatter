@@ -16,18 +16,26 @@ func PropertyNode(key string, value any) map[string]any {
 	}
 }
 
-func StringNode(token json.Token) map[string]any {
+func StringToken(token json.Token) map[string]any {
+	return StringNode(token.(string))
+}
+
+func StringNode(token string) map[string]any {
 	return map[string]any{
 		"type":  "string",
 		"value": token,
 	}
 }
 
-func NumberNode(token json.Token) map[string]any {
+func NumberToken(token json.Token) map[string]any {
 	number := token.(json.Number)
+	return NumberNode(number.String())
+}
+
+func NumberNode(token string) map[string]any {
 	return map[string]any{
 		"type":  "number",
-		"value": number.String(),
+		"value": token,
 	}
 }
 
@@ -37,12 +45,17 @@ func NullNode() map[string]any {
 	}
 }
 
-func BoolNode(token json.Token) map[string]any {
+func BoolToken(token json.Token) map[string]any {
+	return BoolNode(token.(bool))
+}
+
+func BoolNode(token bool) map[string]any {
 	return map[string]any{
 		"type":  "bool",
-		"value": token.(bool),
+		"value": token,
 	}
 }
+
 func ErrorNode(token json.Token) map[string]any {
 	return map[string]any{
 		"type":  "bool",

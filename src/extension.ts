@@ -21,43 +21,55 @@ export const runExtension = async () => {
   const data = document.querySelector<HTMLPreElement>('body > pre');
   isNotNull(data, 'No data found');
 
-  const { rootContainer, rawContainer, formatContainer } = buildContainers(shadow);
+  const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadow);
   rawContainer.appendChild(data);
 
-  const { rawButton, queryButton, formatButton } = buildButtons(shadow);
+  const { rawButton, queryButton, formatButton, queryInput } = buildButtons(shadow);
+
+  const response = await tokenize(data.innerText);
 
   rawButton.addEventListener('click', () => {
-    rootContainer.classList.remove('formatted');
+    rootContainer.classList.remove('formatted', 'query');
     rootContainer.classList.add('raw');
   });
 
   formatButton.addEventListener('click', () => {
-    rootContainer.classList.remove('raw');
+    rootContainer.classList.remove('raw', 'query');
     rootContainer.classList.add('formatted');
   });
 
   queryButton.addEventListener('click', async () => {
+    rootContainer.classList.remove('raw', 'formatted');
+    rootContainer.classList.add('query');
+
+    queryContainer.innerHTML = '...';
+  });
+
+  queryInput.addEventListener('keydown', async (event) => {
+    if (event.key !== 'Enter') {
+      return;
+    }
+
     const { jq } = await import('@jq');
 
     const info = await jq(data.innerText, '.');
-    formatContainer.innerHTML = '';
-    formatContainer.appendChild(
-      info.type === 'error'
-        ? buildErrorNode()
-        : buildDom(info),
+    queryContainer.innerHTML = '';
+    queryContainer.appendChild(
+      prepareResponse(info),
     );
   });
 
-  const parsedJson = await tokenize(data.innerText);
-  if (parsedJson.type === 'error') {
-    console.error('Error parsing JSON:', parsedJson.error);
-    formatContainer.appendChild(
-      buildErrorNode(),
-    );
-    return;
+  formatContainer.appendChild(
+    prepareResponse(response),
+  );
+};
+
+const prepareResponse = (response: TokenizerResponse): HTMLElement => {
+  if (response.type === 'error') {
+    console.error('Error parsing JSON:', response.error);
+
+    return buildErrorNode();
   }
 
-  formatContainer.appendChild(
-    buildDom(parsedJson),
-  );
+  return buildDom(response);
 };

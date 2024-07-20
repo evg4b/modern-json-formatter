@@ -1,3 +1,4 @@
+import { t } from '../helpres';
 import { element } from './helpres';
 
 export const toggle = () => element({ class: 'toggle' });
@@ -13,10 +14,10 @@ export const squareBracket = {
   close: () => element({ content: ']', class: 'bracket square-bracket-close' }),
 };
 export const propertiesCount = (count: number) => element({
-  content: `// ${ count } propert${ count === 1 ? 'y' : 'ies' }`,
+  content: `// ${ t('json_viewer_properties', count.toString()) }`,
   class: 'properties-count',
 });
 export const itemsCount = (count: number) => element({
-  content: `// ${ count } item${ count === 1 ? '' : 's' }`,
+  content: `// ${ t('json_viewer_items', count.toString()) }`,
   class: 'items-count',
 });

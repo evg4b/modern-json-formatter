@@ -1,24 +1,24 @@
 {
   "toolbox_raw": {
-    "message": "Raw"
+    "message": "原始"
   },
   "toolbox_formatted": {
-    "message": "Formatted"
+    "message": "格式化"
   },
   "error_invalid_json_title": {
-    "message": "Invalid json file."
+    "message": "无效的 JSON 文件。"
   },
   "error_invalid_json_message": {
-    "message": "Please, check the file and try again."
+    "message": "请检查文件并重试。"
   },
   "json_viewer_properties": {
-    "message": "$count$ properties",
+    "message": "$count$ 属性",
     "placeholders": {
       "count": {"content": "$1"}
     }
   },
   "json_viewer_items": {
-    "message": "$count$ items",
+    "message": "$count$ 项目",
     "placeholders": {
       "count": {"content": "$1"}
     }

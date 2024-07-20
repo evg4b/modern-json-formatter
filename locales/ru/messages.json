@@ -10,5 +10,17 @@
   },
   "error_invalid_json_message": {
     "message": "Пожалуйста, проверьте файл и попробуйте снова."
+  },
+  "json_viewer_properties": {
+    "message": "$count$ свойство(в)",
+    "placeholders": {
+      "count": {"content": "$1"}
+    }
+  },
+  "json_viewer_items": {
+    "message": "$count$ элемент(ов)",
+    "placeholders": {
+      "count": {"content": "$1"}
+    }
   }
 }

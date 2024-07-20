@@ -1,12 +1,15 @@
+import { t } from '../helpres';
+
 export const buildButtons = (root: ShadowRoot) => {
   const container = document.createElement('div');
   container.className = 'button-container';
   const formatButton = document.createElement('button');
-  formatButton.textContent = 'Formatted';
+
+  formatButton.textContent = t('toolbox_formatted');
   formatButton.classList.add('active');
 
   const rawButton = document.createElement('button');
-  rawButton.textContent = 'Raw';
+  rawButton.textContent = t('toolbox_raw');
 
   container.appendChild(formatButton);
   container.appendChild(rawButton);

@@ -1,0 +1,14 @@
+{
+  "toolbox_raw": {
+    "message": "Оригинал"
+  },
+  "toolbox_formatted": {
+    "message": "Форматированный"
+  },
+  "error_invalid_json_title": {
+    "message": "Неверный json файл."
+  },
+  "error_invalid_json_message": {
+    "message": "Пожалуйста, проверьте файл и попробуйте снова."
+  }
+}

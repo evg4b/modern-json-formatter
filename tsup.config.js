@@ -3,14 +3,15 @@ import jsonMerge from 'esbuild-plugin-json-merge';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
+import filepath from 'path'
 
 const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
-const assets = path => copy({
+const assets = (path, dist) => copy({
   resolveFrom: 'cwd',
-  assets: { from: [path], to: ['dist'] },
+  assets: { from: [path], to: [filepath.join('dist', ...(dist ? [dist] : []))] },
   watch: !production,
 });
 
@@ -48,6 +49,7 @@ export default defineConfig({
       watch: !production,
     }),
     assets('assets/*'),
+    assets('locales/**/*', '_locales'),
     production
       ? assets('assets/production/*')
       : assets('assets/debug/*'),

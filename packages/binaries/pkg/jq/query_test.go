@@ -22,16 +22,58 @@ func TestQuery(t *testing.T) {
 			expected: tokens.StringNode("value"),
 		},
 		{
-			name:     "number",
-			json:     `{"key": 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999.999999999999999999999999999999999999999999999999999999999999999999999999999}`,
+			name:     "int number",
+			json:     `{"key": 1}`,
 			query:    ".key",
-			expected: tokens.NumberNode("999"),
+			expected: tokens.NumberNode("1"),
+		},
+		{
+			name:     "float number",
+			json:     `{"key": 456.456}`,
+			query:    ".key",
+			expected: tokens.NumberNode("456.456"),
 		},
 		{
 			name:     "null",
 			json:     `{"key": null}`,
 			query:    ".key",
 			expected: tokens.NullNode(),
+		},
+		{
+			name:     "bool",
+			json:     `{"key": true}`,
+			query:    ".key",
+			expected: tokens.BoolNode(true),
+		},
+		{
+			name:     "uint64",
+			json:     `{ "key": 18446744073709551616 }`,
+			query:    ".key",
+			expected: tokens.NumberNode("18446744073709551616"),
+		},
+		{
+			name:     "big int",
+			json:     `{ "key": 18446744073709551333616 }`,
+			query:    ".key",
+			expected: tokens.NumberNode("18446744073709551333616"),
+		},
+		{
+			name:  "array",
+			json:  `{"key": [1, 2, 3]}`,
+			query: ".key",
+			expected: tokens.ArrayNode(
+				tokens.NumberNode("1"),
+				tokens.NumberNode("2"),
+				tokens.NumberNode("3"),
+			),
+		},
+		{
+			name:  "object",
+			json:  `{"key": {"subkey": "value"}}`,
+			query: ".key",
+			expected: tokens.ObjectNode(
+				tokens.PropertyNode("subkey", tokens.StringNode("value")),
+			),
 		},
 	}
 	for _, testCase := range cases {

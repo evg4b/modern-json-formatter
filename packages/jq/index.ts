@@ -1,9 +1,10 @@
 import { importWasm } from '../shared';
 
-const go = new Go();
+let go = new Go();
 
 export const jq = async (data: string, query: string): Promise<TokenizerResponse> => {
-  if (!('___jq' in window)) {
+  if (!('___jq' in window) || go.exited) {
+    go = new Go();
     await importWasm(go, 'jq.wasm');
   }
 

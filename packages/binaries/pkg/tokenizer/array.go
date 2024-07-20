@@ -1,6 +1,7 @@
 package tokenizer
 
 import (
+	"binaries/pkg/tokens"
 	"encoding/json"
 )
 
@@ -16,8 +17,5 @@ func decodeArray(decoder *json.Decoder) (map[string]any, error) {
 		items = append(items, item)
 	}
 
-	return map[string]any{
-		"type":  "array",
-		"items": items,
-	}, nil
+	return tokens.ArrayNode(items), nil
 }

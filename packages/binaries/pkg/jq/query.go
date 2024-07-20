@@ -68,7 +68,7 @@ func transform(v any) any {
 			mapped[i] = transform(item)
 		}
 
-		return tokens.ArrayNode(mapped...)
+		return tokens.ArrayNode(mapped)
 	case map[string]any:
 		properties := v.(map[string]any)
 		mapped := make([]any, 0, len(properties))
@@ -76,7 +76,7 @@ func transform(v any) any {
 			mapped = append(mapped, tokens.PropertyNode(key, transform(value)))
 		}
 
-		return tokens.ObjectNode(mapped...)
+		return tokens.ObjectNode(mapped)
 	default:
 		panic("unexpected type")
 	}

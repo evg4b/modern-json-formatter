@@ -2,14 +2,14 @@ package tokens
 
 import "encoding/json"
 
-func ArrayNode(elements ...any) map[string]any {
+func ArrayNode(items []any) map[string]any {
 	return map[string]any{
-		"type":     "array",
-		"elements": elements,
+		"type":  "array",
+		"items": items,
 	}
 }
 
-func ObjectNode(properties ...any) map[string]any {
+func ObjectNode(properties []any) map[string]any {
 	return map[string]any{
 		"type":       "object",
 		"properties": properties,

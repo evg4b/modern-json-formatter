@@ -47,3 +47,11 @@
 - We do not collect or store your personal or sensitive data.
 - We do not transmit personal or sensitive data.
 - We do not collect or transmit non-personally identifiable information.
+
+# Locales:
+
+| Locale | Name             | Source   |
+|--------|------------------|----------|
+| en     | English          | Native   |
+| ru     | Russian          | Native   |
+| cn     | Standard Chinese | Chat GPT |

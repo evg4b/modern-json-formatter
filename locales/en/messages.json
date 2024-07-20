@@ -1,0 +1,26 @@
+{
+  "toolbox_raw": {
+    "message": "Raw"
+  },
+  "toolbox_formatted": {
+    "message": "Formatted"
+  },
+  "error_invalid_json_title": {
+    "message": "Invalid json file."
+  },
+  "error_invalid_json_message": {
+    "message": "Please, check the file and try again."
+  },
+  "json_viewer_properties": {
+    "message": "$count$ properties",
+    "placeholders": {
+      "count": {"content": "$1"}
+    }
+  },
+  "json_viewer_items": {
+    "message": "$count$ items",
+    "placeholders": {
+      "count": {"content": "$1"}
+    }
+  }
+}

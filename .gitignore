@@ -136,3 +136,4 @@ packages/binaries/jq.wasm
 packages/binaries/tokenizer.wasm
 packages/binaries/test-report.out
 packages/binaries/coverage.out
+extention.zip

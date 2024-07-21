@@ -20,6 +20,8 @@ export default defineConfig({
   sourcemap: !production,
   cjsInterop: true,
   target: 'es2020',
+  tsconfig: 'tsconfig.ext.json',
+  platform: 'browser',
   clean: true,
   bundle: true,
   treeshake: true,

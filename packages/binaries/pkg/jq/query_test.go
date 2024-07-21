@@ -61,19 +61,19 @@ func TestQuery(t *testing.T) {
 			name:  "array",
 			json:  `{"key": [1, 2, 3]}`,
 			query: ".key",
-			expected: tokens.ArrayNode(
+			expected: tokens.ArrayNode([]any{
 				tokens.NumberNode("1"),
 				tokens.NumberNode("2"),
 				tokens.NumberNode("3"),
-			),
+			}),
 		},
 		{
 			name:  "object",
 			json:  `{"key": {"subkey": "value"}}`,
 			query: ".key",
-			expected: tokens.ObjectNode(
+			expected: tokens.ObjectNode([]any{
 				tokens.PropertyNode("subkey", tokens.StringNode("value")),
-			),
+			}),
 		},
 	}
 	for _, testCase := range cases {

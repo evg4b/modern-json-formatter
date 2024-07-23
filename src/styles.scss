@@ -86,6 +86,11 @@ $indentation: 30px;
     position: fixed;
     top: 15px;
     right: 30px;
+
+    input {
+      min-width: 200px;
+      width: 30vw;
+    }
   }
 }
 

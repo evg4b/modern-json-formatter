@@ -15,10 +15,14 @@ export const buildButtons = (root: ShadowRoot) => {
 
   const container = toolbox.querySelector('.button-container') ?? throws('No button container found');
 
-  const formatButton = toolbox.querySelector('.formatted-button') ?? throws('No formatted button found');
-  const queryButton = toolbox.querySelector('.query-button') ?? throws('No query button found');
-  const queryInput = toolbox.querySelector('input') ?? throws('No input found');
-  const rawButton = toolbox.querySelector('.raw-button') ?? throws('No raw button found');
+  const formatButton = toolbox.querySelector<HTMLButtonElement>('.formatted-button')
+    ?? throws('No formatted button found');
+  const queryButton = toolbox.querySelector<HTMLButtonElement>('.query-button')
+    ?? throws('No query button found');
+  const rawButton = toolbox.querySelector<HTMLButtonElement>('.raw-button')
+    ?? throws('No raw button found');
+  const queryInput = toolbox.querySelector<HTMLInputElement>('input')
+    ?? throws('No input found');
 
   const buttons = [formatButton, rawButton, queryButton];
 

@@ -63,9 +63,9 @@ func BoolNode(token bool) map[string]any {
 	}
 }
 
-func ErrorNode(token json.Token) map[string]any {
+func ErrorNode(err error) map[string]any {
 	return map[string]any{
-		"type":  "bool",
-		"value": token.(bool),
+		"type":  "error",
+		"error": err.Error(),
 	}
 }

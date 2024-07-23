@@ -75,6 +75,28 @@ func TestQuery(t *testing.T) {
 				tokens.PropertyNode("subkey", tokens.StringNode("value")),
 			}),
 		},
+		{
+			name:  "nested object",
+			json:  `{"key": {"subkey": {"subsubkey": "value"}}}`,
+			query: ".key",
+			expected: tokens.ObjectNode([]any{
+				tokens.PropertyNode("subkey",
+					tokens.ObjectNode([]any{
+						tokens.PropertyNode("subsubkey", tokens.StringNode("value")),
+					}),
+				),
+			}),
+		},
+		{
+			name:  "nested array",
+			json:  `[[[1, 2, 3]]]`,
+			query: ".[0][0]",
+			expected: tokens.ArrayNode([]any{
+				tokens.NumberNode("1"),
+				tokens.NumberNode("2"),
+				tokens.NumberNode("3"),
+			}),
+		},
 	}
 	for _, testCase := range cases {
 		t.Run(testCase.name, func(t *testing.T) {

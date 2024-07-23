@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "esnext",
     "esModuleInterop": true,
     "allowJs": false,
     "types": [
@@ -20,5 +19,13 @@
         "packages/jq"
       ]
     }
-  }
+  },
+  "references": [
+    {
+      "path": "./tsconfig.ext.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

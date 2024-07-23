@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
+    "allowJs": true,
     "types": [
       "jest",
       "node",
@@ -10,9 +11,9 @@
     ]
   },
   "include": [
-    "packages/**/*ts",
-    "packages/*.d.ts",
-    "src/**/*.ts",
+    "packages/**/*.test.ts",
+    "packages/**/*.d.ts",
+    "src/**/*.test.ts",
     "src/**/*.d.ts",
     "testing/**/*.ts",
     "node_modules/@types/chrome/index.d.ts"

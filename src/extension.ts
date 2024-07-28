@@ -64,15 +64,18 @@ export const runExtension = async () => {
   });
 
   formatContainer.appendChild(
-    prepareResponse(response),
+    prepareResponse(response, 'Invalid JQ Query.'),
   );
 };
 
-const prepareResponse = (response: TokenizerResponse): HTMLElement => {
+const prepareResponse = (response: TokenizerResponse, errorHeader?: string): HTMLElement => {
   if (response.type === 'error') {
     console.error('Error parsing JSON:', response.error);
 
-    return buildErrorNode();
+    return buildErrorNode(
+      errorHeader ?? 'Invalid JSON file.',
+      response.error ?? 'Please check the file and try again.',
+    );
   }
 
   return buildDom(response);

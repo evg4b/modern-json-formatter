@@ -1,7 +1,7 @@
 import { itemsCount, propertiesCount } from './elements';
 
 export const element = (options?: { content?: string, class?: string, block?: boolean }) => {
-  const span = document.createElement(!!options?.block ? 'div' : 'span');
+  const span = document.createElement(!options?.block ? 'span' : 'div');
   if (options?.content) {
     span.appendChild(document.createTextNode(options.content));
   }

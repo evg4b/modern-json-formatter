@@ -1,5 +1,7 @@
 default: tokenizer jq exec-script
 
+test: tokenizer-test jq-test
+
 exec-script:
 	@echo "Copying exec scripts..."
 	rm -f ../wasm_exec.js
@@ -56,6 +58,10 @@ jq-optimize:
 jq-clean:
 	@echo "Cleaning..."
 	rm -f ${JQ_FILE} ${JQ_FILE_BAK}
+
+jq-test:
+	@echo "Testing..."
+	go test -v ./pkg/jq/...
 
 jq-copy:
 	@echo "Copying to dist..."

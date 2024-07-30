@@ -55,11 +55,11 @@ func tokenize(decoder *json.Decoder) (map[string]any, error) {
 	case string:
 		return tokens.StringToken(token), nil
 	case json.Number:
-		return tokens.NumberToken(token), nil
+		return tokens.NumberNode(token.(json.Number).String()), nil
 	case nil:
 		return tokens.NullNode(), nil
 	case bool:
-		return tokens.BoolToken(token), nil
+		return tokens.BoolNode(token.(bool)), nil
 	default:
 		return nil, errors.New("unknown token")
 	}

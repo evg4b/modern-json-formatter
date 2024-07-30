@@ -3,9 +3,9 @@ package jq
 import (
 	"binaries/pkg/tokens"
 	"encoding/json"
-	"strings"
-
+	"errors"
 	"github.com/itchyny/gojq"
+	"strings"
 )
 
 func Query(jsonString string, queryString string) (any, error) {
@@ -22,28 +22,29 @@ func Query(jsonString string, queryString string) (any, error) {
 		return nil, err
 	}
 
-	restsSet := make([]any, 0, 10)
+	results := make([]any, 0, 10)
 
-	iter := query.Run(data)
+	iterator := query.Run(data)
 	for {
-		v, ok := iter.Next()
+		v, ok := iterator.Next()
 		if !ok {
 			break
 		}
 		if err, ok := v.(error); ok {
-			if err, ok := err.(*gojq.HaltError); ok && err.Value() == nil {
+			var haltError *gojq.HaltError
+			if errors.As(err, &haltError) && haltError.Value() == nil {
 				break
 			}
 
 			return nil, err
 		}
 
-		restsSet = append(restsSet, normalise(v))
+		results = append(results, normalise(v))
 	}
 
-	if len(restsSet) == 1 {
-		return restsSet[0], nil
+	if len(results) == 1 {
+		return results[0], nil
 	}
 
-	return tokens.ArrayNode(restsSet), nil
+	return tokens.TupleNode(results), nil
 }

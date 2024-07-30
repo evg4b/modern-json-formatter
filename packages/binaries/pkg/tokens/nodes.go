@@ -2,6 +2,13 @@ package tokens
 
 import "encoding/json"
 
+func TupleNode(items []any) map[string]any {
+	return map[string]any{
+		"type":  "tuple",
+		"items": items,
+	}
+}
+
 func ArrayNode(items []any) map[string]any {
 	return map[string]any{
 		"type":  "array",
@@ -34,11 +41,6 @@ func StringNode(token string) map[string]any {
 	}
 }
 
-func NumberToken(token json.Token) map[string]any {
-	number := token.(json.Number)
-	return NumberNode(number.String())
-}
-
 func NumberNode(token string) map[string]any {
 	return map[string]any{
 		"type":  "number",
@@ -50,10 +52,6 @@ func NullNode() map[string]any {
 	return map[string]any{
 		"type": "null",
 	}
-}
-
-func BoolToken(token json.Token) map[string]any {
-	return BoolNode(token.(bool))
 }
 
 func BoolNode(token bool) map[string]any {

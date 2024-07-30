@@ -1,4 +1,4 @@
-# WASM json tokenizer
+# WASMs for modern-json-formatter 
 
 Custom json tokenizer written in GO and compiled to WASM.
 

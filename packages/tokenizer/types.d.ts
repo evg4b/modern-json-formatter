@@ -13,6 +13,11 @@ interface ArrayNode {
   items: TokenNode[];
 }
 
+interface TupleNode {
+  type: 'tuple';
+  items: TokenNode[];
+}
+
 interface StringNode {
   type: 'string';
   value: string;
@@ -36,9 +41,10 @@ type TokenNode = ObjectNode | ArrayNode | StringNode | NumberNode | BooleanNode 
 
 interface ErrorNode {
   type: 'error';
+  scope: 'jq' | 'tokenizer';
   error: string;
 }
 
-type TokenizerResponse = TokenNode | ErrorNode;
+type TokenizerResponse = TokenNode | TupleNode | ErrorNode;
 
 declare function ___tokenizeJSON(data: string): TokenizerResponse;

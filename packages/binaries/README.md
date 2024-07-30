@@ -64,3 +64,16 @@ Array schema:
   ]
 }
 ```
+
+Tuple schema:
+
+```js
+{
+  type: "tuple",
+  items: [
+    // inner value...
+    // inner value...
+    // inner value...
+  ]
+}
+```

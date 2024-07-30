@@ -4,7 +4,7 @@ export const buildButtons = (root: ShadowRoot) => {
   const toolbox = document.createElement('div');
   toolbox.innerHTML = `
     <div class="toolbox-container">
-        <input type="text" class="toolbox-input" placeholder="JQ Query">
+        <input type="text" style="display: none" class="toolbox-input" placeholder="JQ Query">
         <div class="button-container">
             <button class="query-button">Query</button>
             <button class="formatted-button active">Formatted</button>

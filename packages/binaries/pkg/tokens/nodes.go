@@ -61,9 +61,10 @@ func BoolNode(token bool) map[string]any {
 	}
 }
 
-func ErrorNode(err error) map[string]any {
+func ErrorNode(scope string, err error) map[string]any {
 	return map[string]any{
 		"type":  "error",
+		"scope": scope,
 		"error": err.Error(),
 	}
 }

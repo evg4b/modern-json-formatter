@@ -4,7 +4,15 @@ import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from '
 import { toggle } from './elements';
 import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
 
-export const buildDom = (object: TokenNode): HTMLElement => {
+export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
+  if (object.type === 'tuple') {
+    const container = element({ class: 'tuple', block: true });
+    object.items.forEach((item) => {
+      container.appendChild(buildDom(item));
+    });
+    return container;
+  }
+
   const root = element({ class: 'root' });
 
   if (isValueExpandable(object)) {

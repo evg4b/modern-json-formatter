@@ -45,8 +45,6 @@ export const runExtension = async () => {
     rootContainer.classList.remove('raw', 'formatted');
     rootContainer.classList.add('query');
     queryInput.style.display = 'inline-block';
-
-    queryContainer.innerHTML = '...';
   });
 
   queryInput.addEventListener('keydown', async (event) => {
@@ -64,19 +62,17 @@ export const runExtension = async () => {
   });
 
   formatContainer.appendChild(
-    prepareResponse(response, 'Invalid JQ Query.'),
+    prepareResponse(response),
   );
 };
 
-const prepareResponse = (response: TokenizerResponse, errorHeader?: string): HTMLElement => {
-  if (response.type === 'error') {
-    console.error('Error parsing JSON:', response.error);
-
-    return buildErrorNode(
-      errorHeader ?? 'Invalid JSON file.',
+const prepareResponse = (response: TokenizerResponse): HTMLElement => {
+  return response.type === 'error'
+    ? buildErrorNode(
+      response.scope === 'tokenizer' ? 'Invalid JSON file.' : 'Invalid JQ Query.',
       response.error ?? 'Please check the file and try again.',
-    );
-  }
-
-  return buildDom(response);
+    )
+    : buildDom(response);
 };
+
+

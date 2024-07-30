@@ -3,7 +3,7 @@ import { chromeMockAfter, chromeMockBefore, tNumber, tObject, tProperty } from '
 import { tokenize } from './index';
 
 jest.mock('../shared/wasm_helpers.ts', () => ({
-  loadWasm: (_: string, imports: any) => {
+  loadWasm: (_: string, imports: WebAssembly.Imports) => {
     const data = readFileSync('packages/tokenizer/tokenizer.wasm');
     return WebAssembly.instantiate(data, imports);
   },

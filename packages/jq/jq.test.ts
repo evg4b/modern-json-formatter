@@ -3,7 +3,7 @@ import { chromeMockAfter, chromeMockBefore, tNumber } from '../../testing';
 import { jq } from './index';
 
 jest.mock('../shared/wasm_helpers.ts', () => ({
-  loadWasm: (_: string, imports: any) => {
+  loadWasm: (_: string, imports: WebAssembly.Imports) => {
     const data = readFileSync('packages/jq/jq.wasm');
     return WebAssembly.instantiate(data, imports);
   },

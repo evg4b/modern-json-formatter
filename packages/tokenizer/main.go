@@ -1,9 +1,9 @@
 package main
 
 import (
-	"binaries/pkg/tokenizer"
-	"binaries/pkg/tokens"
 	"errors"
+	"packages/pkg/tokenizer"
+	"packages/pkg/tokens"
 	"syscall/js"
 )
 

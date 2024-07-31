@@ -1,9 +1,9 @@
 package main
 
 import (
-	"binaries/pkg/jq"
-	"binaries/pkg/tokens"
 	"errors"
+	"packages/pkg/jq"
+	"packages/pkg/tokens"
 	"syscall/js"
 )
 

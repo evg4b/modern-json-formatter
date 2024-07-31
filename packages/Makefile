@@ -4,20 +4,19 @@ test: tokenizer-test jq-test
 
 exec-script:
 	@echo "Copying exec scripts..."
-	rm -f ../wasm_exec.js
-	cp "$(shell go env GOROOT)/misc/wasm/wasm_exec.js" ./..
+	rm -f ./wasm_exec.js
+	cp "$(shell go env GOROOT)/misc/wasm/wasm_exec.js" .
 
 # Tokenizer
 
-tokenizer: tokenizer-clean tokenizer-build tokenizer-optimize tokenizer-copy
+tokenizer: tokenizer-clean tokenizer-build tokenizer-optimize
 
-TOKENIZER_FILE=tokenizer.wasm
+TOKENIZER_FILE=tokenizer/tokenizer.wasm
 TOKENIZER_FILE_BAK=${TOKENIZER_FILE}.bak
-TOKENIZER_DIST=../tokenizer
 
 tokenizer-build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${TOKENIZER_FILE} ./wasm/tokenizer
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${TOKENIZER_FILE} ./tokenizer
 
 tokenizer-optimize:
 	@echo "Optimizing wasm..."
@@ -33,21 +32,16 @@ tokenizer-test:
 	@echo "Testing..."
 	go test -v ./tokenizer/...
 
-tokenizer-copy:
-	@echo "Copying to dist..."
-	cp ${TOKENIZER_FILE} ${TOKENIZER_DIST}
-
 # JQ
 
-jq: jq-clean jq-build jq-optimize jq-copy
+jq: jq-clean jq-build jq-optimize
 
-JQ_FILE=jq.wasm
+JQ_FILE=jq/jq.wasm
 JQ_FILE_BAK=${TOKENIZER_FILE}.bak
-JQ_DIST=../jq
 
 jq-build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${JQ_FILE} ./wasm/jq
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${JQ_FILE} ./jq
 
 jq-optimize:
 	@echo "Optimizing wasm..."
@@ -62,7 +56,3 @@ jq-clean:
 jq-test:
 	@echo "Testing..."
 	go test -v ./pkg/jq/...
-
-jq-copy:
-	@echo "Copying to dist..."
-	cp ${JQ_FILE} ${JQ_DIST}

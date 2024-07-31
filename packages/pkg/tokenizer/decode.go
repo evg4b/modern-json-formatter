@@ -1,10 +1,10 @@
 package tokenizer
 
 import (
-	"binaries/pkg/tokens"
 	"encoding/json"
 	"errors"
 	"io"
+	"packages/pkg/tokens"
 	"strings"
 )
 

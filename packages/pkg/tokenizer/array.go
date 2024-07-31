@@ -1,8 +1,8 @@
 package tokenizer
 
 import (
-	"binaries/pkg/tokens"
 	"encoding/json"
+	"packages/pkg/tokens"
 )
 
 func decodeArray(decoder *json.Decoder) (map[string]any, error) {

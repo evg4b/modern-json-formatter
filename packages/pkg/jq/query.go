@@ -1,10 +1,10 @@
 package jq
 
 import (
-	"binaries/pkg/tokens"
 	"encoding/json"
 	"errors"
 	"github.com/itchyny/gojq"
+	"packages/pkg/tokens"
 	"strings"
 )
 

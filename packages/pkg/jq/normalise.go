@@ -1,8 +1,8 @@
 package jq
 
 import (
-	"binaries/pkg/tokens"
 	"math/big"
+	"packages/pkg/tokens"
 	"strconv"
 )
 

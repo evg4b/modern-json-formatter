@@ -5,7 +5,7 @@ build-extension:
 
 build-packages:
 	@echo "Building wasms..."
-	cd packages/binaries && $(MAKE)
+	cd packages && $(MAKE)
 
 pack-extension:
 	cd ./dist && zip -r -X ../extention.zip *

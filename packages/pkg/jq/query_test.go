@@ -1,10 +1,10 @@
 package jq_test
 
 import (
-	"binaries/pkg/jq"
-	"binaries/pkg/tokens"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"packages/pkg/jq"
+	"packages/pkg/tokens"
 	"testing"
 )
 

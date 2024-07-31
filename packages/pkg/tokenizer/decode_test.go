@@ -1,9 +1,9 @@
 package tokenizer_test
 
 import (
-	"binaries/pkg/tokenizer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"packages/pkg/tokenizer"
 	"testing"
 )
 

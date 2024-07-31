@@ -130,10 +130,6 @@ dist
 .pnp.*
 .idea
 .DS_Store
-tokenizer/test-report.out
-tokenizer/coverage.out
-packages/binaries/jq.wasm
-packages/binaries/tokenizer.wasm
-packages/binaries/test-report.out
-packages/binaries/coverage.out
 extention.zip
+packages/coverage.out
+packages/test-report.out

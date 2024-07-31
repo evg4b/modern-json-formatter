@@ -29,7 +29,8 @@ jobs:
 
       - name: Test GO code
         working-directory: ./packages
-        run: go test -v -timeout 1m -race -coverprofile=coverage.out -json ./pkg/... > test-report.out
+        run: GOOS=js GOARCH=wasm go test -v -timeout 1m -coverprofile=coverage.out ./...
+#        -json ./... > test-report.out
 
       - name: Use Node.js
         uses: actions/setup-node@v3

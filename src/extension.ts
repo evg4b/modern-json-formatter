@@ -1,3 +1,4 @@
+import { TokenizerResponse } from '@packages/tokenizer';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
@@ -10,11 +11,14 @@ export const runExtension = async () => {
     return;
   }
 
-  const { tokenize } = await import('@tokenizer');
+  const { tokenize } = await import('@packages/tokenizer');
 
   const shadow = document.body.attachShadow({ mode: 'open' });
   const styleNode = document.createElement('style');
   styleNode.textContent = styles;
+  styleNode.setAttribute('type', 'text/css');
+  styleNode.setAttribute('rel', 'stylesheet');
+  styleNode.setAttribute('role', 'presentation');
 
   shadow.appendChild(styleNode);
 
@@ -52,7 +56,7 @@ export const runExtension = async () => {
       return;
     }
 
-    const { jq } = await import('@jq');
+    const { jq } = await import('@packages/jq');
 
     const info = await jq(data.innerText, queryInput.value);
     queryContainer.innerHTML = '';

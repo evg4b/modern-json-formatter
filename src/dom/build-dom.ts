@@ -1,3 +1,4 @@
+import { TokenNode, TupleNode } from '@packages/tokenizer';
 import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
@@ -34,7 +35,6 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
 
   return root;
 };
-
 
 export const buildNode = (object: TokenNode): HTMLElement => {
   switch (object.type) {

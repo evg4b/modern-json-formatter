@@ -37,6 +37,7 @@ export default defineConfig({
     sassPlugin({
       type: 'css-text',
       style: 'compressed',
+      syntax: 'scss',
       verbose: true,
       sourceMap: !production,
       sourceMapIncludeSources: !production,

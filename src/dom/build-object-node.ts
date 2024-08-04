@@ -1,7 +1,7 @@
+import { ObjectNode } from '@packages/tokenizer';
 import { buildNode } from './build-dom';
 import { bracket, colon, comma, ellipsis, toggle } from './elements';
 import { buildInfoNode, element, isValueExpandable } from './helpres';
-
 
 export const buildObjectNode = (object: ObjectNode) => {
   const objectNode = element({ class: 'object' });

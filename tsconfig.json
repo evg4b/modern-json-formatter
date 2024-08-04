@@ -2,8 +2,9 @@
   "compilerOptions": {
     "target": "es2020",
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "allowJs": false,
+    "module": "esnext",
     "types": [
       "node",
       "chrome",
@@ -12,13 +13,10 @@
     "baseUrl": ".",
     "strict": true,
     "skipLibCheck": true,
+    "sourceRoot": ".",
+    "strictNullChecks": false,
     "paths": {
-      "@tokenizer": [
-        "packages/tokenizer"
-      ],
-      "@jq": [
-        "packages/jq"
-      ]
+      "@packages/*": ["packages/*"]
     }
   },
   "references": [

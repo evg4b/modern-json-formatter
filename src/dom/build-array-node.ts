@@ -1,3 +1,4 @@
+import { ArrayNode } from '@packages/tokenizer';
 import { buildNode } from './build-dom';
 import { comma, ellipsis, squareBracket, toggle } from './elements';
 import { buildInfoNode, element, isValueExpandable } from './helpres';

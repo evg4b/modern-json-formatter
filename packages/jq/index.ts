@@ -1,3 +1,4 @@
+import { TokenizerResponse } from '@packages/tokenizer';
 import { importWasm } from '../shared';
 
 let go = new Go();

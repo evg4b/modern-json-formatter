@@ -1,4 +1,5 @@
 import { importWasm } from '../shared';
+import { TokenizerResponse } from './models';
 
 let go = new Go();
 

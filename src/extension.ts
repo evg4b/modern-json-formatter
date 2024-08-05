@@ -1,4 +1,4 @@
-import { TokenizerResponse } from '@packages/tokenizer';
+import { ErrorNode, TokenizerResponse } from '@packages/tokenizer';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
@@ -72,11 +72,14 @@ export const runExtension = async () => {
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
   return response.type === 'error'
-    ? buildErrorNode(
-      response.scope === 'tokenizer' ? 'Invalid JSON file.' : 'Invalid JQ Query.',
-      response.error ?? 'Please check the file and try again.',
-    )
+    ? buildErrorNode(extractHeader(response), extractLines(response))
     : buildDom(response);
 };
+
+const extractLines = (response: ErrorNode) => response.error ?? 'Please check the file and try again.';
+
+const extractHeader = (response: ErrorNode): string => response.scope === 'tokenizer'
+  ? 'Invalid JSON file.'
+  : 'Invalid JQ Query.';
 
 

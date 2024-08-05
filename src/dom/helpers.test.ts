@@ -1,6 +1,6 @@
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../../testing';
 import { colon, toggle } from './elements';
-import { element, isToggleElement, isValueExpandable } from './helpres';
+import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
 
 describe('dom helpers', () => {
   describe('isValueExpandable', () => {
@@ -59,6 +59,46 @@ describe('dom helpers', () => {
 
     test('should create element with content and class', () => {
       expect(element({ content: 'demo', class: 'demo' })).toMatchSnapshot();
+    });
+  });
+
+  describe('buildInfoNode', () => {
+    describe('should return null for', () => {
+      const testCases = [
+        { name: 'number node', node: tNumber('123') },
+        { name: 'string node', node: tString('test') },
+        { name: 'null node', node: tNull() },
+        { name: 'boolean node', node: tBool(true) },
+        { name: 'empty object node', node: tObject() },
+        { name: 'empty array node', node: tArray() },
+      ];
+      test.each(testCases)('$name', ({ node }) => {
+        const infoElement = buildInfoNode(node);
+
+        expect(infoElement).toBeNull();
+      });
+    });
+
+    describe('should return properties count element for', () => {
+      test('object node', () => {
+        const node = tObject(
+          tProperty('demo', tBool(true)),
+          tProperty('test', tString('demo')),
+        );
+        const infoElement = buildInfoNode(node);
+
+        expect(infoElement).toMatchSnapshot();
+      });
+
+      test('array node', () => {
+        const node = tArray(
+          tString('demo'),
+          tString('test'),
+        );
+        const infoElement = buildInfoNode(node);
+
+        expect(infoElement).toMatchSnapshot();
+      });
     });
   });
 });

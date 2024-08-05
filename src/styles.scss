@@ -35,6 +35,10 @@ $indentation: 30px;
     & > .formatted-json-container {
       display: block;
     }
+
+    & > .query-json-container {
+      display: none;
+    }
   }
 
   & > .root-container.raw {
@@ -44,6 +48,24 @@ $indentation: 30px;
 
     & > .formatted-json-container {
       display: none;
+    }
+
+    & > .query-json-container {
+      display: none;
+    }
+  }
+
+  & > .root-container.query {
+    & > .raw-json-container {
+      display: none;
+    }
+
+    & > .formatted-json-container {
+      display: none;
+    }
+
+    & > .query-json-container {
+      display: block;
     }
   }
 
@@ -57,14 +79,24 @@ $indentation: 30px;
     }
   }
 
-  .button-container {
+  .toolbox-container {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
     position: fixed;
     top: 15px;
     right: 30px;
+
+    input {
+      min-width: 200px;
+      width: 30vw;
+    }
   }
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
 }
 
 pre {
@@ -98,7 +130,7 @@ pre {
           .ellipsis {
             display: inline;
           }
-          
+
           & > .items-count,
           & > .properties-count {
             display: inline;
@@ -199,7 +231,9 @@ pre {
   padding: 0 7px 0 0;
 }
 
-.button-container {
+.toolbox-container {
+  gap: 10px;
+
   button {
     &:first-child {
       border-bottom-left-radius: 5px;

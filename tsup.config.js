@@ -20,6 +20,8 @@ export default defineConfig({
   sourcemap: !production,
   cjsInterop: true,
   target: 'es2020',
+  tsconfig: 'tsconfig.ext.json',
+  platform: 'browser',
   clean: true,
   bundle: true,
   treeshake: true,
@@ -35,18 +37,13 @@ export default defineConfig({
     sassPlugin({
       type: 'css-text',
       style: 'compressed',
+      syntax: 'scss',
       verbose: true,
       sourceMap: !production,
       sourceMapIncludeSources: !production,
     }),
-    copy({
-      resolveFrom: 'cwd',
-      assets: {
-        from: ['tokenizer/tokenizer.wasm'],
-        to: ['dist/tokenizer.wasm'],
-      },
-      watch: !production,
-    }),
+    assets('packages/tokenizer/*.wasm'),
+    assets('packages/jq/*.wasm'),
     assets('assets/*'),
     production
       ? assets('assets/production/*')

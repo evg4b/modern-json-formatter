@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`dom helpers buildInfoNode should return properties count element for array node 1`] = `
+<span
+  class="items-count"
+>
+  // 2 items
+</span>
+`;
+
+exports[`dom helpers buildInfoNode should return properties count element for object node 1`] = `
+<span
+  class="properties-count"
+>
+  // 2 properties
+</span>
+`;
+
 exports[`dom helpers element should create element with class 1`] = `
 <span
   class="demo"

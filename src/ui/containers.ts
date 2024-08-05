@@ -10,7 +10,11 @@ export const buildContainers = (root: ShadowRoot) => {
   rawContainer.className = 'raw-json-container';
   rootContainer.appendChild(rawContainer);
 
+  const queryContainer = document.createElement('div');
+  queryContainer.className = 'query-json-container';
+  rootContainer.appendChild(queryContainer);
+
   root.appendChild(rootContainer);
 
-  return { rootContainer, formatContainer, rawContainer };
+  return { rootContainer, formatContainer, rawContainer, queryContainer };
 };

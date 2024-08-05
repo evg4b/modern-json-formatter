@@ -130,5 +130,6 @@ dist
 .pnp.*
 .idea
 .DS_Store
-tokenizer/test-report.out
-tokenizer/coverage.out
+extention.zip
+packages/coverage.out
+packages/test-report.out

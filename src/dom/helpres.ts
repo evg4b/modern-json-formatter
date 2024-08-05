@@ -1,7 +1,8 @@
+import { ArrayNode, ObjectNode, TokenNode } from '@packages/tokenizer';
 import { itemsCount, propertiesCount } from './elements';
 
-export const element = (options?: { content?: string, class?: string }) => {
-  const span = document.createElement('span');
+export const element = (options?: { content?: string, class?: string, block?: boolean }) => {
+  const span = document.createElement(!options?.block ? 'span' : 'div');
   if (options?.content) {
     span.appendChild(document.createTextNode(options.content));
   }

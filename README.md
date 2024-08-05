@@ -37,6 +37,7 @@
 - Fast parse and format JSON
 - Supports big numbers (includes x64 integer and float)
 - Guaranteed order of keys
+- JQ expression support
 - Formatted and Raw view switcher
 - Array and Object expand/collapse
 - Safe for selecting and copying JSON

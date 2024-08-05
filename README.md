@@ -5,7 +5,7 @@
 </p>
 <h1 align="center">Modern JSON Formatter</h1>
 <p align="center">
-  Format JSON in a modern way. With guaranteed order of keys, big numbers, expandable/collapsable properties and more. 
+  Format JSON in a modern way. With guaranteed order of keys, big numbers, jq queries, expandable/collapsable properties and more. 
 </p>
 <p align="center">
     <a href="https://github.com/evg4b/modern-json-formatter/actions/workflows/ci.yml?query=branch%3Amain">
@@ -41,7 +41,6 @@
 - Formatted and Raw view switcher
 - Array and Object expand/collapse
 - Safe for selecting and copying JSON
-- Chrome DevTools theme
 
 # Privacy policy:
 

@@ -18,7 +18,7 @@ TOKENIZER_FILE_BAK=${TOKENIZER_FILE}.bak
 
 tokenizer-build:
 	@echo "Building wasm..."
-	go build -trimpath -ldflags="-s -w -buildid=" -o ${TOKENIZER_FILE} ./tokenizer
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${TOKENIZER_FILE} ./tokenizer
 
 tokenizer-optimize:
 	@echo "Optimizing wasm..."
@@ -39,7 +39,7 @@ JQ_FILE_BAK=${TOKENIZER_FILE}.bak
 
 jq-build:
 	@echo "Building wasm..."
-	go build -trimpath -ldflags="-s -w -buildid=" -o ${JQ_FILE} ./jq
+	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${JQ_FILE} ./jq
 
 jq-optimize:
 	@echo "Optimizing wasm..."

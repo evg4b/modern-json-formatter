@@ -1,14 +1,20 @@
 package tokenizer
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/marcozac/go-jsonc"
 	"packages/pkg/tokens"
-	"strings"
 )
 
 func Tokenize(input string) (map[string]any, error) {
-	decoder := json.NewDecoder(strings.NewReader(input))
+	sanitizedData, err := jsonc.Sanitize([]byte(input))
+	if err != nil {
+		return nil, err
+	}
+
+	decoder := json.NewDecoder(bytes.NewReader(sanitizedData))
 	decoder.UseNumber()
 
 	return tokenize(decoder)

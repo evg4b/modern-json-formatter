@@ -174,7 +174,9 @@ func TestTokenizer(t *testing.T) {
 	})
 
 	t.Run("ignore comments", func(t *testing.T) {
-		actual, err := tokenizer.Tokenize("{ \"key\": \"value\" } // comment")
+		actual, err := tokenizer.Tokenize(`{
+			"key": "value" // comment
+		}`)
 		require.NoError(t, err)
 
 		assert.Equal(t, tObject(

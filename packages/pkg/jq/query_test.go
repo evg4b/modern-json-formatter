@@ -135,6 +135,15 @@ func TestQuery(t *testing.T) {
 				}),
 			}),
 		},
+		{
+			name: "json with comments",
+			json: `{
+				"key": "value", // comment
+				"key2": "value2" // comment
+			}`,
+			query:    ".key",
+			expected: tokens.StringNode("value"),
+		},
 	}
 	for _, testCase := range cases {
 		t.Run(testCase.name, func(t *testing.T) {

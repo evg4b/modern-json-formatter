@@ -3,7 +3,6 @@ package tokenizer
 import (
 	"encoding/json"
 	"errors"
-	"io"
 	"packages/pkg/tokens"
 	"strings"
 )
@@ -18,9 +17,7 @@ func Tokenize(input string) (map[string]any, error) {
 func tokenize(decoder *json.Decoder) (map[string]any, error) {
 	token, err := decoder.Token()
 	if err != nil {
-		if err == io.EOF {
-			return nil, io.EOF
-		}
+		return nil, err
 	}
 
 	switch token.(type) {

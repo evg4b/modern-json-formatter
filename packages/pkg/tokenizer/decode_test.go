@@ -3,6 +3,7 @@ package tokenizer_test
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"io"
 	"packages/pkg/tokenizer"
 	"testing"
 )
@@ -179,6 +180,15 @@ func TestTokenizer(t *testing.T) {
 		assert.Equal(t, tObject(
 			tProperty("key", tString("value")),
 		), actual)
+	})
+
+	t.Run("return error for", func(t *testing.T) {
+		t.Run("empty input", func(t *testing.T) {
+			got, err := tokenizer.Tokenize("")
+
+			assert.Nil(t, got)
+			assert.Equal(t, io.EOF, err)
+		})
 	})
 }
 

@@ -1,6 +1,8 @@
 default: tokenizer jq exec-script
 
-test: tokenizer-test jq-test
+test:
+	@echo "Testing..."
+	go test -v ./pkg/...
 
 exec-script:
 	@echo "Copying exec scripts..."
@@ -16,7 +18,7 @@ TOKENIZER_FILE_BAK=${TOKENIZER_FILE}.bak
 
 tokenizer-build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${TOKENIZER_FILE} ./tokenizer
+	go build -trimpath -ldflags="-s -w -buildid=" -o ${TOKENIZER_FILE} ./tokenizer
 
 tokenizer-optimize:
 	@echo "Optimizing wasm..."
@@ -28,10 +30,6 @@ tokenizer-clean:
 	@echo "Cleaning..."
 	rm -f ${TOKENIZER_FILE} ${TOKENIZER_FILE_BAK}
 
-tokenizer-test:
-	@echo "Testing..."
-	go test -v ./tokenizer/...
-
 # JQ
 
 jq: jq-clean jq-build jq-optimize
@@ -41,7 +39,7 @@ JQ_FILE_BAK=${TOKENIZER_FILE}.bak
 
 jq-build:
 	@echo "Building wasm..."
-	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${JQ_FILE} ./jq
+	go build -trimpath -ldflags="-s -w -buildid=" -o ${JQ_FILE} ./jq
 
 jq-optimize:
 	@echo "Optimizing wasm..."
@@ -52,7 +50,3 @@ jq-optimize:
 jq-clean:
 	@echo "Cleaning..."
 	rm -f ${JQ_FILE} ${JQ_FILE_BAK}
-
-jq-test:
-	@echo "Testing..."
-	go test -v ./pkg/jq/...

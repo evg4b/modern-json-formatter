@@ -97,6 +97,44 @@ func TestQuery(t *testing.T) {
 				tokens.NumberNode("3"),
 			}),
 		},
+		{
+			name:  "tuple",
+			json:  `[1, 2, 3]`,
+			query: ".[]",
+			expected: tokens.TupleNode([]any{
+				tokens.NumberNode("1"),
+				tokens.NumberNode("2"),
+				tokens.NumberNode("3"),
+			}),
+		},
+		{
+			name:  "tuple with object",
+			json:  `[{"key": "value"}, {"key2": "value2"}]`,
+			query: ".[]",
+			expected: tokens.TupleNode([]any{
+				tokens.ObjectNode([]any{
+					tokens.PropertyNode("key", tokens.StringNode("value")),
+				}),
+				tokens.ObjectNode([]any{
+					tokens.PropertyNode("key2", tokens.StringNode("value2")),
+				}),
+			}),
+		},
+		{
+			name:  "tuple with array",
+			json:  `[[1, 2], [3, 4]]`,
+			query: ".[]",
+			expected: tokens.TupleNode([]any{
+				tokens.ArrayNode([]any{
+					tokens.NumberNode("1"),
+					tokens.NumberNode("2"),
+				}),
+				tokens.ArrayNode([]any{
+					tokens.NumberNode("3"),
+					tokens.NumberNode("4"),
+				}),
+			}),
+		},
 	}
 	for _, testCase := range cases {
 		t.Run(testCase.name, func(t *testing.T) {

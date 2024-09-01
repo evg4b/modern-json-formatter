@@ -47,3 +47,14 @@
 - We do not collect or store your personal or sensitive data.
 - We do not transmit personal or sensitive data.
 - We do not collect or transmit non-personally identifiable information.
+
+# Browser compatibility:
+
+|                                                                                                                  | Browser name   | Support |
+|------------------------------------------------------------------------------------------------------------------|----------------|---------|
+| <img src="https://www.google.com/chrome/static/images/chrome-logo.svg" height="30px">                            | Google Chrome  | ✅       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Chromium_Logo.svg" height="30px">                  | Chromium       | ✅       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Opera_2015_icon.svg" height="30px">                | Opera          | ✅       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" height="30px">            | Brave          | ✅       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Arc_%28browser%29_logo.svg" height="30px">         | Arc Browser    | ✅       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Microsoft_Edge_logo_%282019%29.png" height="30px"> | Microsoft Edge | ❌       |

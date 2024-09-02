@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -6,6 +7,23 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // import dotenv from 'dotenv';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+const pathToExtension = path.join(__dirname, 'dist');
+
+const patchBrowser = (name: keyof typeof devices, channel?: 'msedge' | 'chrome') => {
+  const browser = devices[name];
+  return {
+    ...browser,
+    channel,
+    launchOptions: {
+      args: [
+        `--load-extension=${ pathToExtension }`,
+        `--disable-extensions-except=${ pathToExtension }`,
+      ],
+      ignoreDefaultArgs: ['--disable-component-extensions-with-background-pages'],
+    },
+  };
+};
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -29,23 +47,14 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    headless: false,
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'Chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    /* Test against branded browsers. */
-    {
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    },
-    {
-      name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+      name: 'Chrome Extension',
+      use: patchBrowser('Desktop Chrome'),
     },
   ],
 

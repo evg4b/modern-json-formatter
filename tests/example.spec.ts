@@ -1,18 +1,38 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from './fixtures';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test('open extinction', async ({ page, testInfo, expectRequest }) => {
+  await page.route('https://text.dev/api', route => route.fulfill({
+    json: [{ name: 'Strawberry', id: 21 }],
+  }));
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+  expectRequest('jq.wasm');
+
+  await page.goto('https://text.dev/api');
+
+  expect(page.getByText('Strawberry')).toBeDefined();
+
+  await testInfo.attach('screenshot', {
+    body: await page.screenshot(),
+    contentType: 'image/ png',
+  });
+
+  await page.waitForLoadState('networkidle');
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test('s extinction', async ({ page }) => {
+  await page.route('https://text.dev/api', route => route.fulfill({
+    body: 'Hello, world!',
+    contentType: 'text/plain',
+  }));
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+  await page.goto('https://text.dev/api');
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+  page.on('request', request => {
+    const url = request.url();
+    if (url.includes('jq.wasm') || url.includes('tokenizer.wasm')) {
+      test.fail();
+    }
+  });
+
+  await page.waitForLoadState('networkidle');
 });

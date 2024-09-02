@@ -133,3 +133,7 @@ dist
 extention.zip
 packages/coverage.out
 packages/test-report.out
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

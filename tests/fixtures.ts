@@ -6,7 +6,7 @@ export const test = base.extend<{ testInfo: TestInfo, expectRequest: (url: strin
   context: async ({}, use) => {
     const pathToExtension = path.join(__dirname, '../dist');
     const context = await chromium.launchPersistentContext('', {
-      headless: false,
+      headless: true,
       args: [
         `--disable-extensions-except=${ pathToExtension }`,
         `--load-extension=${ pathToExtension }`,

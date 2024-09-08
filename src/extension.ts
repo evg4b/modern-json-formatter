@@ -2,12 +2,13 @@ import { ErrorNode, TokenizerResponse } from '@packages/tokenizer';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
+import { detectJson, getJsonSelector } from './json-detector/detect';
 import styles from './styles.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
 
 export const runExtension = async () => {
-  if (!document.querySelector('pre + .json-formatter-container')) {
+  if (!await detectJson()) {
     return;
   }
 
@@ -22,7 +23,7 @@ export const runExtension = async () => {
 
   shadow.appendChild(styleNode);
 
-  const data = document.querySelector<HTMLPreElement>('body > pre');
+  const data = document.querySelector<HTMLPreElement>(getJsonSelector());
   isNotNull(data, 'No data found');
 
   const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadow);

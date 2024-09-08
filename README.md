@@ -56,5 +56,6 @@
 | <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Chromium_Logo.svg" height="30px">                  | Chromium       | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Opera_2015_icon.svg" height="30px">                | Opera          | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" height="30px">            | Brave          | ✅       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Yandex_Browser_logo.svg" height="30px">            | Yandex Browser | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Arc_%28browser%29_logo.svg" height="30px">         | Arc Browser    | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Microsoft_Edge_logo_%282019%29.png" height="30px"> | Microsoft Edge | ❌       |

@@ -14,8 +14,18 @@
     <a href="https://github.com/evg4b/modern-json-formatter/blob/main/LICENSE">
         <img src="https://img.shields.io/github/license/evg4b/modern-json-formatter" alt="License" />
     </a>
+    <a href="https://github.com/evg4b/modern-json-formatter/releases/latest">
+        <img src="https://img.shields.io/github/v/release/evg4b/modern-json-formatter" alt="GitHub Release Version">
+    </a>
+    <br>
     <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img src="https://img.shields.io/chrome-web-store/v/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome" alt="Chrome Web Store Version">
+        <img src="https://img.shields.io/chrome-web-store/v/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff" alt="Chrome Web Store Version">
+    </a>
+    <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
+        <img alt="Chrome Web Store Rating" src="https://img.shields.io/chrome-web-store/rating/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff">
+    </a>
+    <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
+        <img alt="Chrome Web Store Users" src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff">
     </a>
     <br>
     <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
@@ -59,6 +69,9 @@
 | <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Yandex_Browser_logo.svg" height="30px">            | Yandex Browser | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Arc_%28browser%29_logo.svg" height="30px">         | Arc Browser    | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Microsoft_Edge_logo_%282019%29.png" height="30px"> | Microsoft Edge | ❌       |
+
+If you can't find your browser in the list, please try to install the extension and if it doesn't work,
+[create a request for browser support](https://github.com/evg4b/modern-json-formatter/issues/new?title=Browser%20support%20request&body=%23%20Browser%20Support%20Request%0A%0ABrowser%20Details%3A%0A-%20Name%3A%20____%20%5Be.g.%2C%20Firefox%5D%0A-%20Version%20*(optional)*%3A%20____%20%5Be.g.%2C%20114.0%5D%0A-%20Platform%20*(optional)*%3A%20____%20%5Be.g.%2C%20Windows%5D%0A%0AAdditional%20Info%3A%0A-%20Link%20to%20the%20browser%20website%3A%20____).
 
 # Support the project:
 

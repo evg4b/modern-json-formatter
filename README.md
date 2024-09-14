@@ -59,3 +59,7 @@
 | <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Yandex_Browser_logo.svg" height="30px">            | Yandex Browser | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Arc_%28browser%29_logo.svg" height="30px">         | Arc Browser    | ✅       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Microsoft_Edge_logo_%282019%29.png" height="30px"> | Microsoft Edge | ❌       |
+
+# Support the project:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0SWTP3)

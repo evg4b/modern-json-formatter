@@ -12,10 +12,10 @@
         <img src="https://img.shields.io/github/actions/workflow/status/evg4b/modern-json-formatter/ci.yml?branch=main&logo=github" alt="GitHub Actions Workflow Status" />
     </a>
     <a href="https://github.com/evg4b/modern-json-formatter/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/evg4b/modern-json-formatter" alt="License" />
+        <img src="https://img.shields.io/github/license/evg4b/modern-json-formatter?logo=github" alt="License" />
     </a>
     <a href="https://github.com/evg4b/modern-json-formatter/releases/latest">
-        <img src="https://img.shields.io/github/v/release/evg4b/modern-json-formatter" alt="GitHub Release Version">
+        <img src="https://img.shields.io/github/v/release/evg4b/modern-json-formatter?logo=github" alt="GitHub Release Version">
     </a>
     <br>
     <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
@@ -28,9 +28,6 @@
         <img alt="Chrome Web Store Users" src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff">
     </a>
     <br>
-    <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=ncloc" alt="Lines of Code" />
-    </a>
     <a href="https://sonarcloud.io/project/overview?id=evg4b_modern-json-formatter">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=alert_status" alt="Quality Gate Status">    
     </a>
@@ -39,6 +36,9 @@
     </a>
     <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=security_rating" alt="Security Rating" />
+    </a>
+    <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=ncloc" alt="Lines of Code" />
     </a>
 </p>
 

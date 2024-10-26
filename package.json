@@ -24,6 +24,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@chialab/esbuild-plugin-html": "^0.18.2",
     "@eslint/js": "^9.13.0",
     "@jest/globals": "^29.7.0",
     "@types/chrome": "^0.0.279",

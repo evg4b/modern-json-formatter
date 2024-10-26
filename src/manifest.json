@@ -23,7 +23,8 @@
       "resources": [
         "tokenizer.wasm",
         "jq.wasm",
-        "invalid.svg"
+        "invalid.svg",
+        "js-faq.html"
       ],
       "matches": [
         "<all_urls>"

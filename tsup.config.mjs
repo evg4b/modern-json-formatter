@@ -3,6 +3,7 @@ import jsonMerge from 'esbuild-plugin-json-merge';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
+import htmlPlugin from '@chialab/esbuild-plugin-html';
 
 const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
@@ -15,7 +16,10 @@ const assets = path => copy({
 });
 
 export default defineConfig({
-  entry: { main: 'src/main.ts' },
+  entry: {
+    main: 'src/main.ts',
+    'js-faq': 'src/js-faq/js-faq.html',
+  },
   splitting: false,
   sourcemap: !production,
   cjsInterop: true,
@@ -30,12 +34,24 @@ export default defineConfig({
   minifyIdentifiers: production,
   minifySyntax: production,
   esbuildPlugins: [
+    htmlPlugin({
+      modulesTarget: 'es2020',
+    }),
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, description }],
       outfile: 'manifest.json',
     }),
     sassPlugin({
       type: 'css-text',
+      style: 'compressed',
+      syntax: 'scss',
+      verbose: true,
+      sourceMap: !production,
+      sourceMapIncludeSources: !production,
+      filter: /styles.scss$/,
+    }),
+    sassPlugin({
+      type: 'css',
       style: 'compressed',
       syntax: 'scss',
       verbose: true,

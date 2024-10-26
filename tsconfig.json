@@ -14,7 +14,7 @@
     "strict": true,
     "skipLibCheck": true,
     "sourceRoot": ".",
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "paths": {
       "@packages/*": ["packages/*"]
     }

@@ -5,7 +5,7 @@ describe('error-node', () => {
     Object.assign(global, {
       chrome: {
         runtime: {
-          getURL: jest.fn((a) => a),
+          getURL: jest.fn((a: string) => a),
         },
       },
     });

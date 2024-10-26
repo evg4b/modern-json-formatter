@@ -9,5 +9,6 @@ export const jq = async (data: string, query: string): Promise<TokenizerResponse
     await importWasm(go, 'jq.wasm');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return window.___jq(data, query);
 };

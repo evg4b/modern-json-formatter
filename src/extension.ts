@@ -46,24 +46,23 @@ export const runExtension = async () => {
     queryInput.style.display = 'none';
   });
 
-  queryButton.addEventListener('click', async () => {
+  queryButton.addEventListener('click', () => {
     rootContainer.classList.remove('raw', 'formatted');
     rootContainer.classList.add('query');
     queryInput.style.display = 'inline-block';
   });
 
-  queryInput.addEventListener('keydown', async (event) => {
-    if (event.key !== 'Enter') {
-      return;
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  queryInput.addEventListener('keydown', async event => {
+    if (event.key === 'Enter') {
+      const { jq } = await import('@packages/jq');
+
+      const info = await jq(data.innerText, queryInput.value);
+      queryContainer.innerHTML = '';
+      queryContainer.appendChild(
+        prepareResponse(info),
+      );
     }
-
-    const { jq } = await import('@packages/jq');
-
-    const info = await jq(data.innerText, queryInput.value);
-    queryContainer.innerHTML = '';
-    queryContainer.appendChild(
-      prepareResponse(info),
-    );
   });
 
   formatContainer.appendChild(
@@ -77,7 +76,7 @@ const prepareResponse = (response: TokenizerResponse): HTMLElement => {
     : buildDom(response);
 };
 
-const extractLines = (response: ErrorNode) => response.error ?? 'Please check the file and try again.';
+const extractLines = (response: ErrorNode) => response.error;
 
 const extractHeader = (response: ErrorNode): string => response.scope === 'tokenizer'
   ? 'Invalid JSON file.'

@@ -38,28 +38,39 @@ html, body {
     }
   }
 
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 
-    & > li > a {
-      padding: 5px 5px;
-      background: #5dd9ff;
-      border-radius: 5px;
+  .item {
+    background: #7dadf9;
+    border-radius: 5px;
+    padding: 5px 10px;
+
+    a,
+    a:hover {
+      text-decoration: none;
     }
 
-    ul {
-      padding-left: 15px;
-
-      li {
-        padding: 5px 5px;
-        background: #5dd9ff;
-        border-radius: 5px;
-      }
+    &:hover {
+      background: red;
     }
+  }
 
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 
+    //background: #6e6e6e;
+  }
+
+  .children.section {
+    margin-left: 15px;
+  }
+
+  a.active {
+    background: greenyellow;
   }
 }
 
@@ -67,4 +78,10 @@ main {
   display: flex;
   flex-direction: column;
   padding: var(--v-padding) var(--h-padding) var(--v-padding) calc(var(--sidebar-width) + var(--h-padding));
+}
+
+code {
+  background: #c4b7ff;
+  padding: 1px 3px;
+  border-radius: 3px;
 }

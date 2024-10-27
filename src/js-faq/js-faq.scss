@@ -1,9 +1,70 @@
+:root {
+  --sidebar-width: 25%;
+  --v-padding: 15px;
+  --h-padding: 20px;
+}
+
+
 html, body {
-  padding: 0;
+  font-size: 15px;
   margin: 0;
-  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.sidebar {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  padding: var(--v-padding) var(--h-padding);
+  position: fixed;
+  overflow-y: scroll;
+
+  .sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-input: none;
+    user-select: none;
+
+    img {
+      width: 60%;
+      max-width: 80px;
+      user-input: none;
+      user-select: none;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    & > li > a {
+      padding: 5px 5px;
+      background: #5dd9ff;
+      border-radius: 5px;
+    }
+
+    ul {
+      padding-left: 15px;
+
+      li {
+        padding: 5px 5px;
+        background: #5dd9ff;
+        border-radius: 5px;
+      }
+    }
+
+
+  }
 }
 
 main {
-  margin: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--v-padding) var(--h-padding) var(--v-padding) calc(var(--sidebar-width) + var(--h-padding));
 }

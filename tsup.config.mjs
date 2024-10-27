@@ -18,7 +18,7 @@ const assets = path => copy({
 export default defineConfig({
   entry: {
     main: 'src/main.ts',
-    'js-faq': 'src/js-faq/js-faq.html',
+    'faq': 'src/faq/faq.html',
   },
   splitting: false,
   sourcemap: !production,

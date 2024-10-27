@@ -24,7 +24,7 @@
         "tokenizer.wasm",
         "jq.wasm",
         "invalid.svg",
-        "js-faq.html"
+        "faq.html"
       ],
       "matches": [
         "<all_urls>"

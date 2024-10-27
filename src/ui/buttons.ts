@@ -6,7 +6,7 @@ export const buildButtons = (root: ShadowRoot) => {
   toolbox.innerHTML = `
     <div class="toolbox-container">
         <input type="text" style="display: none" class="toolbox-input" placeholder="JQ Query">
-        <a href="${getURL('js-faq.html')}">
+        <a href="${getURL('faq.html')}">
             Docs
         </a>
         <div class="button-container">

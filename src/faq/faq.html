@@ -10,475 +10,176 @@
 <div class="sidebar">
     <div>
         <div class="section">
-            <div class="item">
-                <a href="#basic-filters">Basic filters</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#identity">Identity: .</a>
-                </div>
-                <div class="item">
-                    <a href="#object-identifier-index">Object Identifier-Index: .foo, .foo.bar</a>
-                </div>
-                <div class="item">
-                    <a href="#optional-object-identifier-index">Optional Object Identifier-Index: .foo?</a>
-                </div>
-                <div class="item">
-                    <a href="#object-index">Object Index: .[&lt;string&gt;]</a>
-                </div>
-                <div class="item">
-                    <a href="#array-index">Array Index: .[&lt;number&gt;]</a>
-                </div>
-                <div class="item">
-                    <a href="#array-string-slice">Array/String Slice: .[&lt;number&gt;:&lt;number&gt;]</a>
-                </div>
-                <div class="item">
-                    <a href="#array-object-value-iterator">Array/Object Value Iterator: .[]</a>
-                </div>
-                <div class="item">
-                    <a href="#.[]?">.[]?</a>
-                </div>
-                <div class="item">
-                    <a href="#comma">Comma: ,</a>
-                </div>
-                <div class="item">
-                    <a href="#pipe">Pipe: |</a>
-                </div>
-                <div class="item">
-                    <a href="#parenthesis">Parenthesis</a>
-                </div>
+            <a href="#basic-filters" class="item">Basic filters</a>
+            <div class="children section"><a href="#identity" class="item">Identity: .</a>
+                <a href="#object-identifier-index" class="item">Object Identifier-Index: .foo, .foo.bar</a>
+                <a href="#optional-object-identifier-index" class="item">Optional Object Identifier-Index: .foo?</a>
+                <a href="#object-index" class="item">Object Index: .[&lt;string&gt;]</a>
+                <a href="#array-index" class="item">Array Index: .[&lt;number&gt;]</a>
+                <a href="#array-string-slice" class="item">Array/String Slice: .[&lt;number&gt;:&lt;number&gt;]</a>
+                <a href="#array-object-value-iterator" class="item">Array/Object Value Iterator: .[]</a>
+                <a href="#.[]?" class="item">.[]?</a>
+                <a href="#comma" class="item">Comma: ,</a>
+                <a href="#pipe" class="item">Pipe: |</a>
+                <a href="#parenthesis" class="item">Parenthesis</a></div>
+        </div>
+        <div class="section">
+            <a href="#types-and-values" class="item">Types and Values</a>
+            <div class="children section"><a href="#array-construction" class="item">Array construction: []</a>
+                <a href="#object-construction" class="item">Object Construction: {}</a>
+                <a href="#recursive-descent" class="item">Recursive Descent: ..</a></div>
+        </div>
+        <div class="section">
+            <a href="#builtin-operators-and-functions" class="item">Builtin operators and functions</a>
+            <div class="children section"><a href="#addition" class="item">Addition: +</a>
+                <a href="#subtraction" class="item">Subtraction: -</a>
+                <a href="#multiplication-division-modulo" class="item">Multiplication, division, modulo: *, /, %</a>
+                <a href="#abs" class="item">abs</a>
+                <a href="#length" class="item">length</a>
+                <a href="#utf8bytelength" class="item">utf8bytelength</a>
+                <a href="#keys-keys_unsorted" class="item">keys, keys_unsorted</a>
+                <a href="#has" class="item">has(key)</a>
+                <a href="#in" class="item">in</a>
+                <a href="#map-map_values" class="item">map(f), map_values(f)</a>
+                <a href="#pick" class="item">pick(pathexps)</a>
+                <a href="#path" class="item">path(path_expression)</a>
+                <a href="#del" class="item">del(path_expression)</a>
+                <a href="#getpath" class="item">getpath(PATHS)</a>
+                <a href="#setpath" class="item">setpath(PATHS; VALUE)</a>
+                <a href="#delpaths" class="item">delpaths(PATHS)</a>
+                <a href="#to_entries-from_entries-with_entries" class="item">to_entries, from_entries,
+                    with_entries(f)</a>
+                <a href="#select" class="item">select(boolean_expression)</a>
+                <a href="#arrays-objects-iterables-booleans-numbers-normals-finites-strings-nulls-values-scalars"
+                   class="item">arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values,
+                    scalars</a>
+                <a href="#empty" class="item">empty</a>
+                <a href="#error" class="item">error, error(message)</a>
+                <a href="#halt" class="item">halt</a>
+                <a href="#halt_error" class="item">halt_error, halt_error(exit_code)</a>
+                <a href="#$__loc__" class="item">$__loc__</a>
+                <a href="#paths" class="item">paths, paths(node_filter)</a>
+                <a href="#add" class="item">add</a>
+                <a href="#any" class="item">any, any(condition), any(generator; condition)</a>
+                <a href="#all" class="item">all, all(condition), all(generator; condition)</a>
+                <a href="#flatten" class="item">flatten, flatten(depth)</a>
+                <a href="#range" class="item">range(upto), range(from; upto), range(from; upto; by)</a>
+                <a href="#floor" class="item">floor</a>
+                <a href="#sqrt" class="item">sqrt</a>
+                <a href="#tonumber" class="item">tonumber</a>
+                <a href="#tostring" class="item">tostring</a>
+                <a href="#type" class="item">type</a>
+                <a href="#infinite-nan-isinfinite-isnan-isfinite-isnormal" class="item">infinite, nan, isinfinite,
+                    isnan, isfinite, isnormal</a>
+                <a href="#sort-sort_by" class="item">sort, sort_by(path_expression)</a>
+                <a href="#group_by" class="item">group_by(path_expression)</a>
+                <a href="#min-max-min_by-max_by" class="item">min, max, min_by(path_exp), max_by(path_exp)</a>
+                <a href="#unique-unique_by" class="item">unique, unique_by(path_exp)</a>
+                <a href="#reverse" class="item">reverse</a>
+                <a href="#contains" class="item">contains(element)</a>
+                <a href="#indices" class="item">indices(s)</a>
+                <a href="#index-rindex" class="item">index(s), rindex(s)</a>
+                <a href="#inside" class="item">inside</a>
+                <a href="#startswith" class="item">startswith(str)</a>
+                <a href="#endswith" class="item">endswith(str)</a>
+                <a href="#combinations" class="item">combinations, combinations(n)</a>
+                <a href="#ltrimstr" class="item">ltrimstr(str)</a>
+                <a href="#rtrimstr" class="item">rtrimstr(str)</a>
+                <a href="#explode" class="item">explode</a>
+                <a href="#implode" class="item">implode</a>
+                <a href="#split-1" class="item">split(str)</a>
+                <a href="#join" class="item">join(str)</a>
+                <a href="#ascii_downcase-ascii_upcase" class="item">ascii_downcase, ascii_upcase</a>
+                <a href="#while" class="item">while(cond; update)</a>
+                <a href="#repeat" class="item">repeat(exp)</a>
+                <a href="#until" class="item">until(cond; next)</a>
+                <a href="#recurse" class="item">recurse(f), recurse, recurse(f; condition)</a>
+                <a href="#walk" class="item">walk(f)</a>
+                <a href="#$jq_build_configuration" class="item">$JQ_BUILD_CONFIGURATION</a>
+                <a href="#$env-env" class="item">$ENV, env</a>
+                <a href="#transpose" class="item">transpose</a>
+                <a href="#bsearch" class="item">bsearch(x)</a>
+                <a href="#string-interpolation" class="item">String interpolation: \(exp)</a>
+                <a href="#convert-to-from-json" class="item">Convert to/from JSON</a>
+                <a href="#format-strings-and-escaping" class="item">Format strings and escaping</a>
+                <a href="#dates" class="item">Dates</a>
+                <a href="#sql-style-operators" class="item">SQL-Style Operators</a>
+                <a href="#builtins" class="item">builtins</a></div>
+        </div>
+        <div class="section">
+            <a href="#conditionals-and-comparisons" class="item">Conditionals and Comparisons</a>
+            <div class="children section"><a href="#==-!=" class="item">==, !=</a>
+                <a href="#if-then-else-end" class="item">if-then-else-end</a>
+                <a href="#>->=-<=-<" class="item">&gt;, &gt;=, &lt;=, &lt;</a>
+                <a href="#and-or-not" class="item">and, or, not</a>
+                <a href="#alternative-operator" class="item">Alternative operator: //</a>
+                <a href="#try-catch" class="item">try-catch</a>
+                <a href="#breaking-out-of-control-structures" class="item">Breaking out of control structures</a>
+                <a href="#error-suppression-optional-operator" class="item">Error Suppression / Optional Operator: ?</a>
             </div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#types-and-values">Types and Values</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#array-construction">Array construction: []</a>
-                </div>
-                <div class="item">
-                    <a href="#object-construction">Object Construction: {}</a>
-                </div>
-                <div class="item">
-                    <a href="#recursive-descent">Recursive Descent: ..</a>
-                </div>
-            </div>
+            <a href="#regular-expressions" class="item">Regular expressions</a>
+            <div class="children section"><a href="#test" class="item">test(val), test(regex; flags)</a>
+                <a href="#match" class="item">match(val), match(regex; flags)</a>
+                <a href="#capture" class="item">capture(val), capture(regex; flags)</a>
+                <a href="#scan" class="item">scan(regex), scan(regex; flags)</a>
+                <a href="#split-2" class="item">split(regex; flags)</a>
+                <a href="#splits" class="item">splits(regex), splits(regex; flags)</a>
+                <a href="#sub" class="item">sub(regex; tostring), sub(regex; tostring; flags)</a>
+                <a href="#gsub" class="item">gsub(regex; tostring), gsub(regex; tostring; flags)</a></div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#builtin-operators-and-functions">Builtin operators and functions</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#addition">Addition: +</a>
-                </div>
-                <div class="item">
-                    <a href="#subtraction">Subtraction: -</a>
-                </div>
-                <div class="item">
-                    <a href="#multiplication-division-modulo">Multiplication, division, modulo: *, /, %</a>
-                </div>
-                <div class="item">
-                    <a href="#abs">abs</a>
-                </div>
-                <div class="item">
-                    <a href="#length">length</a>
-                </div>
-                <div class="item">
-                    <a href="#utf8bytelength">utf8bytelength</a>
-                </div>
-                <div class="item">
-                    <a href="#keys-keys_unsorted">keys, keys_unsorted</a>
-                </div>
-                <div class="item">
-                    <a href="#has">has(key)</a>
-                </div>
-                <div class="item">
-                    <a href="#in">in</a>
-                </div>
-                <div class="item">
-                    <a href="#map-map_values">map(f), map_values(f)</a>
-                </div>
-                <div class="item">
-                    <a href="#pick">pick(pathexps)</a>
-                </div>
-                <div class="item">
-                    <a href="#path">path(path_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#del">del(path_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#getpath">getpath(PATHS)</a>
-                </div>
-                <div class="item">
-                    <a href="#setpath">setpath(PATHS; VALUE)</a>
-                </div>
-                <div class="item">
-                    <a href="#delpaths">delpaths(PATHS)</a>
-                </div>
-                <div class="item">
-                    <a href="#to_entries-from_entries-with_entries">to_entries, from_entries, with_entries(f)</a>
-                </div>
-                <div class="item">
-                    <a href="#select">select(boolean_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#arrays-objects-iterables-booleans-numbers-normals-finites-strings-nulls-values-scalars">arrays,
-                        objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars</a>
-                </div>
-                <div class="item">
-                    <a href="#empty">empty</a>
-                </div>
-                <div class="item">
-                    <a href="#error">error, error(message)</a>
-                </div>
-                <div class="item">
-                    <a href="#halt">halt</a>
-                </div>
-                <div class="item">
-                    <a href="#halt_error">halt_error, halt_error(exit_code)</a>
-                </div>
-                <div class="item">
-                    <a href="#$__loc__">$__loc__</a>
-                </div>
-                <div class="item">
-                    <a href="#paths">paths, paths(node_filter)</a>
-                </div>
-                <div class="item">
-                    <a href="#add">add</a>
-                </div>
-                <div class="item">
-                    <a href="#any">any, any(condition), any(generator; condition)</a>
-                </div>
-                <div class="item">
-                    <a href="#all">all, all(condition), all(generator; condition)</a>
-                </div>
-                <div class="item">
-                    <a href="#flatten">flatten, flatten(depth)</a>
-                </div>
-                <div class="item">
-                    <a href="#range">range(upto), range(from; upto), range(from; upto; by)</a>
-                </div>
-                <div class="item">
-                    <a href="#floor">floor</a>
-                </div>
-                <div class="item">
-                    <a href="#sqrt">sqrt</a>
-                </div>
-                <div class="item">
-                    <a href="#tonumber">tonumber</a>
-                </div>
-                <div class="item">
-                    <a href="#tostring">tostring</a>
-                </div>
-                <div class="item">
-                    <a href="#type">type</a>
-                </div>
-                <div class="item">
-                    <a href="#infinite-nan-isinfinite-isnan-isfinite-isnormal">infinite, nan, isinfinite, isnan,
-                        isfinite, isnormal</a>
-                </div>
-                <div class="item">
-                    <a href="#sort-sort_by">sort, sort_by(path_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#group_by">group_by(path_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#min-max-min_by-max_by">min, max, min_by(path_exp), max_by(path_exp)</a>
-                </div>
-                <div class="item">
-                    <a href="#unique-unique_by">unique, unique_by(path_exp)</a>
-                </div>
-                <div class="item">
-                    <a href="#reverse">reverse</a>
-                </div>
-                <div class="item">
-                    <a href="#contains">contains(element)</a>
-                </div>
-                <div class="item">
-                    <a href="#indices">indices(s)</a>
-                </div>
-                <div class="item">
-                    <a href="#index-rindex">index(s), rindex(s)</a>
-                </div>
-                <div class="item">
-                    <a href="#inside">inside</a>
-                </div>
-                <div class="item">
-                    <a href="#startswith">startswith(str)</a>
-                </div>
-                <div class="item">
-                    <a href="#endswith">endswith(str)</a>
-                </div>
-                <div class="item">
-                    <a href="#combinations">combinations, combinations(n)</a>
-                </div>
-                <div class="item">
-                    <a href="#ltrimstr">ltrimstr(str)</a>
-                </div>
-                <div class="item">
-                    <a href="#rtrimstr">rtrimstr(str)</a>
-                </div>
-                <div class="item">
-                    <a href="#explode">explode</a>
-                </div>
-                <div class="item">
-                    <a href="#implode">implode</a>
-                </div>
-                <div class="item">
-                    <a href="#split-1">split(str)</a>
-                </div>
-                <div class="item">
-                    <a href="#join">join(str)</a>
-                </div>
-                <div class="item">
-                    <a href="#ascii_downcase-ascii_upcase">ascii_downcase, ascii_upcase</a>
-                </div>
-                <div class="item">
-                    <a href="#while">while(cond; update)</a>
-                </div>
-                <div class="item">
-                    <a href="#repeat">repeat(exp)</a>
-                </div>
-                <div class="item">
-                    <a href="#until">until(cond; next)</a>
-                </div>
-                <div class="item">
-                    <a href="#recurse">recurse(f), recurse, recurse(f; condition)</a>
-                </div>
-                <div class="item">
-                    <a href="#walk">walk(f)</a>
-                </div>
-                <div class="item">
-                    <a href="#$jq_build_configuration">$JQ_BUILD_CONFIGURATION</a>
-                </div>
-                <div class="item">
-                    <a href="#$env-env">$ENV, env</a>
-                </div>
-                <div class="item">
-                    <a href="#transpose">transpose</a>
-                </div>
-                <div class="item">
-                    <a href="#bsearch">bsearch(x)</a>
-                </div>
-                <div class="item">
-                    <a href="#string-interpolation">String interpolation: \(exp)</a>
-                </div>
-                <div class="item">
-                    <a href="#convert-to-from-json">Convert to/from JSON</a>
-                </div>
-                <div class="item">
-                    <a href="#format-strings-and-escaping">Format strings and escaping</a>
-                </div>
-                <div class="item">
-                    <a href="#dates">Dates</a>
-                </div>
-                <div class="item">
-                    <a href="#sql-style-operators">SQL-Style Operators</a>
-                </div>
-                <div class="item">
-                    <a href="#builtins">builtins</a>
-                </div>
-            </div>
+            <a href="#advanced-features" class="item">Advanced features</a>
+            <div class="children section"><a href="#variable-symbolic-binding-operator" class="item">Variable / Symbolic
+                Binding Operator: ... as $identifier | ...</a>
+                <a href="#destructuring-alternative-operator" class="item">Destructuring Alternative Operator: ?//</a>
+                <a href="#defining-functions" class="item">Defining Functions</a>
+                <a href="#scoping" class="item">Scoping</a>
+                <a href="#isempty" class="item">isempty(exp)</a>
+                <a href="#limit" class="item">limit(n; exp)</a>
+                <a href="#first-last-nth-2" class="item">first(expr), last(expr), nth(n; expr)</a>
+                <a href="#first-last-nth-1" class="item">first, last, nth(n)</a>
+                <a href="#reduce" class="item">reduce</a>
+                <a href="#foreach" class="item">foreach</a>
+                <a href="#recursion" class="item">Recursion</a>
+                <a href="#generators-and-iterators" class="item">Generators and iterators</a></div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#conditionals-and-comparisons">Conditionals and Comparisons</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#==-!=">==, !=</a>
-                </div>
-                <div class="item">
-                    <a href="#if-then-else-end">if-then-else-end</a>
-                </div>
-                <div class="item">
-                    <a href="#>->=-<=-<">&gt;, &gt;=, &lt;=, &lt;</a>
-                </div>
-                <div class="item">
-                    <a href="#and-or-not">and, or, not</a>
-                </div>
-                <div class="item">
-                    <a href="#alternative-operator">Alternative operator: //</a>
-                </div>
-                <div class="item">
-                    <a href="#try-catch">try-catch</a>
-                </div>
-                <div class="item">
-                    <a href="#breaking-out-of-control-structures">Breaking out of control structures</a>
-                </div>
-                <div class="item">
-                    <a href="#error-suppression-optional-operator">Error Suppression / Optional Operator: ?</a>
-                </div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="item">
-                <a href="#regular-expressions">Regular expressions</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#test">test(val), test(regex; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#match">match(val), match(regex; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#capture">capture(val), capture(regex; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#scan">scan(regex), scan(regex; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#split-2">split(regex; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#splits">splits(regex), splits(regex; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#sub">sub(regex; tostring), sub(regex; tostring; flags)</a>
-                </div>
-                <div class="item">
-                    <a href="#gsub">gsub(regex; tostring), gsub(regex; tostring; flags)</a>
-                </div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="item">
-                <a href="#advanced-features">Advanced features</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#variable-symbolic-binding-operator">Variable / Symbolic Binding Operator: ... as
-                        $identifier | ...</a>
-                </div>
-                <div class="item">
-                    <a href="#destructuring-alternative-operator">Destructuring Alternative Operator: ?//</a>
-                </div>
-                <div class="item">
-                    <a href="#defining-functions">Defining Functions</a>
-                </div>
-                <div class="item">
-                    <a href="#scoping">Scoping</a>
-                </div>
-                <div class="item">
-                    <a href="#isempty">isempty(exp)</a>
-                </div>
-                <div class="item">
-                    <a href="#limit">limit(n; exp)</a>
-                </div>
-                <div class="item">
-                    <a href="#first-last-nth-2">first(expr), last(expr), nth(n; expr)</a>
-                </div>
-                <div class="item">
-                    <a href="#first-last-nth-1">first, last, nth(n)</a>
-                </div>
-                <div class="item">
-                    <a href="#reduce">reduce</a>
-                </div>
-                <div class="item">
-                    <a href="#foreach">foreach</a>
-                </div>
-                <div class="item">
-                    <a href="#recursion">Recursion</a>
-                </div>
-                <div class="item">
-                    <a href="#generators-and-iterators">Generators and iterators</a>
-                </div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="item">
-                <a href="#math">Math</a>
-            </div>
+            <a href="#math" class="item">Math</a>
             <div class="children section"></div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#io">I/O</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#input">input</a>
-                </div>
-                <div class="item">
-                    <a href="#inputs">inputs</a>
-                </div>
-                <div class="item">
-                    <a href="#debug">debug, debug(msgs)</a>
-                </div>
-                <div class="item">
-                    <a href="#stderr">stderr</a>
-                </div>
-                <div class="item">
-                    <a href="#input_filename">input_filename</a>
-                </div>
-                <div class="item">
-                    <a href="#input_line_number">input_line_number</a>
-                </div>
-            </div>
+            <a href="#io" class="item">I/O</a>
+            <div class="children section"><a href="#input" class="item">input</a>
+                <a href="#inputs" class="item">inputs</a>
+                <a href="#debug" class="item">debug, debug(msgs)</a>
+                <a href="#stderr" class="item">stderr</a>
+                <a href="#input_filename" class="item">input_filename</a>
+                <a href="#input_line_number" class="item">input_line_number</a></div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#streaming">Streaming</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#truncate_stream">truncate_stream(stream_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#fromstream">fromstream(stream_expression)</a>
-                </div>
-                <div class="item">
-                    <a href="#tostream">tostream</a>
-                </div>
-            </div>
+            <a href="#streaming" class="item">Streaming</a>
+            <div class="children section"><a href="#truncate_stream" class="item">truncate_stream(stream_expression)</a>
+                <a href="#fromstream" class="item">fromstream(stream_expression)</a>
+                <a href="#tostream" class="item">tostream</a></div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#assignment">Assignment</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#update-assignment">Update-assignment: |=</a>
-                </div>
-                <div class="item">
-                    <a href="#arithmetic-update-assignment">Arithmetic update-assignment: +=, -=, *=, /=, %=, //=</a>
-                </div>
-                <div class="item">
-                    <a href="#plain-assignment">Plain assignment: =</a>
-                </div>
-                <div class="item">
-                    <a href="#complex-assignments">Complex assignments</a>
-                </div>
-            </div>
+            <a href="#assignment" class="item">Assignment</a>
+            <div class="children section"><a href="#update-assignment" class="item">Update-assignment: |=</a>
+                <a href="#arithmetic-update-assignment" class="item">Arithmetic update-assignment: +=, -=, *=, /=, %=,
+                    //=</a>
+                <a href="#plain-assignment" class="item">Plain assignment: =</a>
+                <a href="#complex-assignments" class="item">Complex assignments</a></div>
         </div>
         <div class="section">
-            <div class="item">
-                <a href="#modules">Modules</a>
-            </div>
-            <div class="children section">
-                <div class="item">
-                    <a href="#import-relativepathstring-as-name">import RelativePathString as NAME
-                        [&lt;metadata&gt;];</a>
-                </div>
-                <div class="item">
-                    <a href="#include-relativepathstring">include RelativePathString [&lt;metadata&gt;];</a>
-                </div>
-                <div class="item">
-                    <a href="#import-relativepathstring-as-$name">import RelativePathString as $NAME
-                        [&lt;metadata&gt;];</a>
-                </div>
-                <div class="item">
-                    <a href="#module-<metadata>">module &lt;metadata&gt;;</a>
-                </div>
-                <div class="item">
-                    <a href="#modulemeta">modulemeta</a>
-                </div>
-            </div>
+            <a href="#modules" class="item">Modules</a>
+            <div class="children section"><a href="#import-relativepathstring-as-name" class="item">import
+                RelativePathString as NAME [&lt;metadata&gt;];</a>
+                <a href="#include-relativepathstring" class="item">include RelativePathString [&lt;metadata&gt;];</a>
+                <a href="#import-relativepathstring-as-$name" class="item">import RelativePathString as $NAME [&lt;metadata&gt;];</a>
+                <a href="#module-<metadata>" class="item">module &lt;metadata&gt;;</a>
+                <a href="#modulemeta" class="item">modulemeta</a></div>
         </div>
     </div>
 </div>
@@ -573,7 +274,6 @@
                             <th>Output</th>
                             <td class="font-monospace">"Hello, world!"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -590,7 +290,6 @@
                             <th>Output</th>
                             <td class="font-monospace">0.12345678901234567890123456789</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -607,7 +306,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[12345678909876543212345,"12345678909876543212345"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -624,7 +322,6 @@
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -641,7 +338,6 @@
                             <th>Output</th>
                             <td class="font-monospace">"[[1,true],[1.000,true],[1.0,true],[1.00,true]]"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -660,7 +356,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[true, false]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -710,7 +405,6 @@
                             <th>Output</th>
                             <td class="font-monospace">42</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -727,7 +421,6 @@
                             <th>Output</th>
                             <td class="font-monospace">null</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -744,7 +437,6 @@
                             <th>Output</th>
                             <td class="font-monospace">42</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -782,7 +474,6 @@
                             <th>Output</th>
                             <td class="font-monospace">42</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -799,7 +490,6 @@
                             <th>Output</th>
                             <td class="font-monospace">null</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -816,7 +506,6 @@
                             <th>Output</th>
                             <td class="font-monospace">42</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -833,7 +522,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -886,7 +574,6 @@
                             <th>Output</th>
                             <td class="font-monospace">{"name":"JSON", "good":true}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -903,7 +590,6 @@
                             <th>Output</th>
                             <td class="font-monospace">null</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -920,7 +606,6 @@
                             <th>Output</th>
                             <td class="font-monospace">2</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -964,7 +649,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["c", "d"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -981,7 +665,6 @@
                             <th>Output</th>
                             <td class="font-monospace">"cd"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -998,7 +681,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["a", "b", "c"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1015,7 +697,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["d", "e"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1065,7 +746,6 @@
                             <th></th>
                             <td class="font-monospace">{"name":"XML", "good":false}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1082,7 +762,6 @@
                             <th>Output</th>
                             <td class="fst-italic">none</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1107,7 +786,6 @@
                             <th></th>
                             <td class="font-monospace">3</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1128,7 +806,6 @@
                             <th></th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1186,7 +863,6 @@
                             <th></th>
                             <td class="font-monospace">"something else"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1211,7 +887,6 @@
                             <th></th>
                             <td class="font-monospace">"wikiflow"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1232,7 +907,6 @@
                             <th></th>
                             <td class="font-monospace">"c"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1284,7 +958,6 @@
                             <th></th>
                             <td class="font-monospace">"XML"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1321,7 +994,6 @@
                             <th>Output</th>
                             <td class="font-monospace">15</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1395,7 +1067,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["stedolan", "jq", "wikiflow"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1412,7 +1083,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[2, 4, 6]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1503,7 +1173,6 @@
                             <th></th>
                             <td class="font-monospace">{"user":"stedolan", "title": "More JQ"}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1520,7 +1189,6 @@
                             <th>Output</th>
                             <td class="font-monospace">{"stedolan": ["JQ Primer", "More JQ"]}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1565,7 +1233,6 @@
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1643,7 +1310,6 @@
                             <th>Output</th>
                             <td class="font-monospace">8</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1660,7 +1326,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[1,2,3,4]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1677,7 +1342,6 @@
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1694,7 +1358,6 @@
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1711,7 +1374,6 @@
                             <th>Output</th>
                             <td class="font-monospace">{"a": 42, "b": 2, "c": 3}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1749,7 +1411,6 @@
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1766,7 +1427,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["json"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1812,7 +1472,6 @@
                             <th>Output</th>
                             <td class="font-monospace">6</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1829,7 +1488,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["a","b,c,d","e"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1846,7 +1504,6 @@
                             <th>Output</th>
                             <td class="font-monospace">{"k": {"a": 0, "b": 2, "c": 3}}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -1867,7 +1524,6 @@
                             <th></th>
                             <td class="font-monospace">-1</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1909,7 +1565,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[10,1.1,1e-1]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -1984,7 +1639,6 @@
                             <th></th>
                             <td class="font-monospace">5</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2021,7 +1675,6 @@
                             <th>Output</th>
                             <td class="font-monospace">2</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2069,7 +1722,6 @@
                             <th>Output</th>
                             <td class="font-monospace">["Foo", "abc", "abcd"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2086,7 +1738,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[0,1,2]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2127,7 +1778,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[true, false]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2144,7 +1794,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[false, true]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2187,7 +1836,6 @@
                             <th></th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2204,7 +1852,6 @@
                             <th>Output</th>
                             <td class="font-monospace">[false, true]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2276,7 +1923,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[2,3,4]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2293,7 +1939,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"a": 2, "b": 3, "c": 4}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2310,7 +1955,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,1,2,2]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2327,7 +1971,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"b":true}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2367,7 +2010,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"a":1,"b":{"c":2},"x":null}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2384,7 +2026,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,null,3]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2436,7 +2077,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["a",0,"b"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2453,7 +2093,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[[],["a"],["a",0],["a",0,"b"]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2490,7 +2129,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"bar": 9001, "baz": 42}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2507,7 +2145,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["foo"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2544,7 +2181,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">null</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2561,7 +2197,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[0, 1]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2599,7 +2234,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"a": {"b": 1}}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2616,7 +2250,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"a": {"b": 1}}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2633,7 +2266,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[{"a":1}]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2672,7 +2304,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"a":{},"x":{"y":2}}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2718,7 +2349,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[{"key":"a", "value":1}, {"key":"b", "value":2}]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2735,7 +2365,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"a": 1, "b": 2}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2752,7 +2381,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"KEY_a": 1, "KEY_b": 2}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2794,7 +2422,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[5,3,7]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2811,7 +2438,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"id": "second", "val": 2}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2854,7 +2480,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2895,7 +2520,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">2</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2912,7 +2536,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,2,3]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -2950,7 +2573,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"error message"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -2967,7 +2589,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"invalid value: 42"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3028,7 +2649,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"{\"file\":\"&lt;top-level&gt;\",\"line\":1}"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3070,7 +2690,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[[0],[1],[1,0],[1,1],[1,1,"a"]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3087,7 +2706,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[[0],[1,1,"a"]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3128,7 +2746,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"abc"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3145,7 +2762,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">6</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3162,7 +2778,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">null</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3206,7 +2821,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3223,7 +2837,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3240,7 +2853,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3284,7 +2896,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3301,7 +2912,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3318,7 +2928,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3360,7 +2969,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1, 2, 3]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3377,7 +2985,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1, 2, [3]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3394,7 +3001,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3411,7 +3017,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[{"foo": "bar"}, {"foo": "baz"}]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3461,7 +3066,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">3</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3478,7 +3082,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[2,3]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3495,7 +3098,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[0,1,2,3]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3512,7 +3114,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[0,3,6,9]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3529,7 +3130,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3546,7 +3146,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[0,-1,-2,-3,-4]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3582,7 +3181,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">3</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3618,7 +3216,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">3</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3660,7 +3257,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3706,7 +3302,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">"[1]"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3744,7 +3339,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["number", "boolean", "array", "object", "null", "string"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3795,7 +3389,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3816,7 +3409,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">"number"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3873,7 +3465,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[null,3,6,8]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3892,7 +3483,6 @@ map_values(empty) #=&gt;  []
                             <td class="font-monospace">[{"foo":2, "bar":1}, {"foo":3, "bar":10}, {"foo":4, "bar":10}]
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -3913,7 +3503,6 @@ map_values(empty) #=&gt;  []
                                 {"foo":4, "bar":10}]
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -3959,7 +3548,6 @@ map_values(empty) #=&gt;  []
                                 "bar":100}]]
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4000,7 +3588,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">2</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4017,7 +3604,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">{"foo":2, "bar":3}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4060,7 +3646,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,2,3,5]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4079,7 +3664,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[{"foo": 1, "bar": 2}, {"foo": 4, "bar": 5}]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4096,7 +3680,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["bacon", "chunky", "asparagus"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4132,7 +3715,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[4,3,2,1]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4175,7 +3757,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4192,7 +3773,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4209,7 +3789,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4226,7 +3805,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4243,7 +3821,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4282,7 +3859,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[3,7,12]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4299,7 +3875,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,3,5]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4316,7 +3891,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,8]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4354,7 +3928,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">3</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4371,7 +3944,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4388,7 +3960,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4405,7 +3976,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">12</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4422,7 +3992,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">5</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4439,7 +4008,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">8</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4477,7 +4045,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4494,7 +4061,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4511,7 +4077,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4528,7 +4093,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4545,7 +4109,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4581,7 +4144,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[false, true, false, true, false]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4617,7 +4179,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[false, true]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4668,7 +4229,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">[2, 4]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4697,7 +4257,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">[1, 1]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4734,7 +4293,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["fo","","barfoo","bar","afoo"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4771,7 +4329,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["fo","","bar","foobar","foob"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4808,7 +4365,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[102,111,111,98,97,114]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4844,7 +4400,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"ABC"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4882,7 +4437,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["a","b,c,d","e",""]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4924,7 +4478,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"a, b,c,d, e"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -4941,7 +4494,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"a 1 2.3 true false"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -4979,7 +4531,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"USEFUL BUT NOT FOR é"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5020,7 +4571,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,2,4,8,16,32,64]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5061,7 +4611,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[2]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5104,7 +4653,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">24</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5183,7 +4731,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">{"foo":[]}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5212,7 +4759,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5237,7 +4783,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">16</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5283,7 +4828,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[[1,4,7],[2,5,8],[3,6,9]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5302,7 +4846,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[{"a":{"b":2}}]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5358,7 +4901,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"less"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5375,7 +4917,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"less"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5412,7 +4953,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[[1,2],[null,3]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5456,7 +4996,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">0</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5473,7 +5012,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">-1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5492,7 +5030,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,2,3,4]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5531,7 +5068,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"The input was 42, which is one less than 43"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5571,7 +5107,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["1","foo","[\"foo\"]"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5588,7 +5123,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">["1","\"foo\"","[\"foo\"]"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5605,7 +5139,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[1,"foo",["foo"]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5711,7 +5244,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"This works if x &amp;lt; y"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5728,7 +5260,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"echo 'O'\\''Hara'\\''s Ale'"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5745,7 +5276,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"VGhpcyBpcyBhIG1lc3NhZ2U="</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5762,7 +5292,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"This is a message"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5847,7 +5376,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">1425599507</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5864,7 +5392,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[2015,2,5,23,51,47,4,63]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5881,7 +5408,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">1425599507</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -5982,7 +5508,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -5999,7 +5524,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6028,7 +5552,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6087,7 +5610,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"many"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6128,7 +5650,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6180,7 +5701,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6201,7 +5721,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6230,7 +5749,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6247,7 +5765,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[false, true]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6313,7 +5830,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">42</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6330,7 +5846,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">19</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6347,7 +5862,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">42</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6364,7 +5878,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6389,7 +5902,6 @@ map_values(empty) #=&gt;  []
                             <th></th>
                             <td class="font-monospace">1</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6430,7 +5942,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">". is not an object"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6447,7 +5958,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">[null, 1]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6464,7 +5974,6 @@ map_values(empty) #=&gt;  []
                             <th>Output</th>
                             <td class="font-monospace">"some exception"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6532,7 +6041,6 @@ try repeat(exp) catch if .=="break" then empty else error
                             <th>Output</th>
                             <td class="font-monospace">[null, 1]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6549,7 +6057,6 @@ try repeat(exp) catch if .=="break" then empty else error
                             <th>Output</th>
                             <td class="font-monospace">[1, 3, 4]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6639,7 +6146,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6660,7 +6166,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6720,7 +6225,6 @@ STRING | FILTER([REGEX, FLAGS])
                                 [{"offset": 4, "length": 3, "string": "abc", "name": null}]}
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6737,7 +6241,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"offset": 0, "length": 3, "string": "foo", "captures": []}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6758,7 +6261,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">{"offset": 8, "length": 3, "string": "FOO", "captures": []}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6783,7 +6285,6 @@ STRING | FILTER([REGEX, FLAGS])
                                 [{"offset": -1, "length": 0, "string": null, "name": "bar123"}]}
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -6800,7 +6301,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">3</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6839,7 +6339,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{ "a": "xyzzy", "n": "14" }</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6885,7 +6384,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">"c"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6924,7 +6422,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">["ab","cd","ef"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -6974,7 +6471,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">"gh"</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7019,7 +6515,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">"ZabcZdef"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7038,7 +6533,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">["AB","aB"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7077,7 +6571,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">"+A-+a-"</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7094,7 +6587,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">["a","b"]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7226,7 +6718,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">210</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7243,7 +6734,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[10,5]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7260,7 +6750,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">9</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7285,7 +6774,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">{"a":2,"b":1}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7355,7 +6843,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">{"a":1,"b":2,"d":3,"e":4}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7380,7 +6867,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">{"a":1,"b":2,"d":null,"e":4}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7399,7 +6885,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"a":null,"b":3}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7474,7 +6959,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[[1,2,1], [10,20,10]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7491,7 +6975,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[[1,2,1,2], [10,20,1,2]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7547,7 +7030,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7564,7 +7046,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7581,7 +7062,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">false</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7617,7 +7097,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[0,1,2]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7657,7 +7136,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[0,9,5]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7696,7 +7174,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[0,9,5]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7747,7 +7224,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">15</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7764,7 +7240,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">44</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7781,7 +7256,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"x":"abc","y":[1,2,3]}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -7853,7 +7327,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">15</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7886,7 +7359,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">[5,30]</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -7911,7 +7383,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">{"index":3,"item":"baz"}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8008,7 +7479,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">9</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -8027,7 +7497,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[1,2,4,8,16,32,64]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8232,7 +7701,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">[[0]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8272,7 +7740,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[2]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8308,7 +7775,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">true</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8403,7 +7869,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">[1,0,[5,1,[1,[0]],0]]</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8443,7 +7908,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"foo": 43}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -8502,7 +7966,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"a":20,"b":20}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -8519,7 +7982,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"a":10,"b":20}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -8544,7 +8006,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th></th>
                             <td class="font-monospace">{"a":2,"b":2}</td>
                         </tr>
-
                         </tbody>
                     </table>
                     <table class="table table-borderless table-sm w-auto">
@@ -8561,7 +8022,6 @@ STRING | FILTER([REGEX, FLAGS])
                             <th>Output</th>
                             <td class="font-monospace">{"a":0,"b":0}</td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>

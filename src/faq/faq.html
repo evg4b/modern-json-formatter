@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="sidebar">
-    <div>
+    <div class="menu">
         <div class="section">
             <a href="#basic-filters" class="item">Basic filters</a>
             <div class="children section"><a href="#identity" class="item">Identity: .</a>
@@ -185,11 +185,14 @@
 </div>
 <main>
     <h1>JQ Queries Manual</h1>
-    <p>A jq program is a "filter": it takes an input, and produces an
+    <p>
+        A jq program is a "filter": it takes an input, and produces an
         output. There are a lot of builtin filters for extracting a
         particular field of an object, or converting a number to a string,
-        or various other standard tasks.</p>
-    <p>Filters can be combined in various ways - you can pipe the output of
+        or various other standard tasks.
+    </p>
+    <p>
+        Filters can be combined in various ways - you can pipe the output of
         one filter into another filter, or collect the output of a filter
         into an array.</p>
     <p>Some filters produce multiple results, for instance there's one that
@@ -252,18 +255,12 @@
                 big decimal representation of numbers if available, as
                 illustrated in one of the following examples.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example1" aria-expanded="false"
-                        aria-controls="example1">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example1" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.'</td>
                         </tr>
                         <tr>
@@ -279,7 +276,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.'</td>
                         </tr>
                         <tr>
@@ -295,7 +292,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[., tojson]'</td>
                         </tr>
                         <tr>
@@ -311,7 +308,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. &lt; 0.12345678901234567890123456788'</td>
                         </tr>
                         <tr>
@@ -327,7 +324,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map([., . == 1]) | tojson'</td>
                         </tr>
                         <tr>
@@ -343,7 +340,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. as $big | [$big, $big + 1] | map(. &gt;
                                 10000000000000000000000000000000)'
                             </td>
@@ -383,18 +380,12 @@
                 <code>.foo::bar</code> does not.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example2" aria-expanded="false"
-                        aria-controls="example2">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example2" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo'</td>
                         </tr>
                         <tr>
@@ -410,7 +401,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo'</td>
                         </tr>
                         <tr>
@@ -426,7 +417,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.["foo"]'</td>
                         </tr>
                         <tr>
@@ -452,18 +443,12 @@
             <p>Just like <code>.foo</code>, but does not output an error when <code>.</code> is not an
                 object.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example3" aria-expanded="true"
-                        aria-controls="example3">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example3" class="mx-3 small d-print-block collapse show" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo?'</td>
                         </tr>
                         <tr>
@@ -479,7 +464,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo?'</td>
                         </tr>
                         <tr>
@@ -495,7 +480,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.["foo"]?'</td>
                         </tr>
                         <tr>
@@ -511,7 +496,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.foo?]'</td>
                         </tr>
                         <tr>
@@ -552,18 +537,12 @@
             <p>Negative indices are allowed, with -1 referring to the last
                 element, -2 referring to the next to last element, and so on.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example4" aria-expanded="false"
-                        aria-controls="example4">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example4" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[0]'</td>
                         </tr>
                         <tr>
@@ -579,7 +558,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[2]'</td>
                         </tr>
                         <tr>
@@ -595,7 +574,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[-2]'</td>
                         </tr>
                         <tr>
@@ -627,18 +606,12 @@
                 case it refers to the start or end of the array).
                 Indices are zero-based.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example5" aria-expanded="false"
-                        aria-controls="example5">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example5" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[2:4]'</td>
                         </tr>
                         <tr>
@@ -654,7 +627,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[2:4]'</td>
                         </tr>
                         <tr>
@@ -670,7 +643,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[:3]'</td>
                         </tr>
                         <tr>
@@ -686,7 +659,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[-2:]'</td>
                         </tr>
                         <tr>
@@ -720,18 +693,12 @@
                 the values of the object.</p>
             <p>Note that the iterator operator is a generator of values.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example6" aria-expanded="false"
-                        aria-controls="example6">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example6" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[]'</td>
                         </tr>
                         <tr>
@@ -751,7 +718,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[]'</td>
                         </tr>
                         <tr>
@@ -767,7 +734,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo[]'</td>
                         </tr>
                         <tr>
@@ -791,7 +758,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[]'</td>
                         </tr>
                         <tr>
@@ -837,18 +804,12 @@
                 separate outputs.</p>
             <p>The <code>,</code> operator is one way to construct generators.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0 collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#example7" aria-expanded="false"
-                        aria-controls="example7">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example7" class="mx-3 small d-print-block collapse" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo, .bar'</td>
                         </tr>
                         <tr>
@@ -868,7 +829,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.user, .projects[]'</td>
                         </tr>
                         <tr>
@@ -892,7 +853,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[4,2]'</td>
                         </tr>
                         <tr>
@@ -932,18 +893,12 @@
                 Thus <code>.a | . | .b</code> is the same as <code>.a.b</code>, as the <code>.</code> in the
                 middle refers to whatever value <code>.a</code> produced.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example8" aria-expanded="false"
-                        aria-controls="example8">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example8" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | .name'</td>
                         </tr>
                         <tr>
@@ -972,18 +927,12 @@
             <p>Parenthesis work as a grouping operator just as in any typical
                 programming language.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example9" aria-expanded="false"
-                        aria-controls="example9">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example9" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(. + 2) * 5'</td>
                         </tr>
                         <tr>
@@ -1045,18 +994,12 @@
                 then the expression <code>[X]</code> will produce a single result, an
                 array of four elements.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example10" aria-expanded="false"
-                        aria-controls="example10">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example10" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.user, .projects[]]'</td>
                         </tr>
                         <tr>
@@ -1072,7 +1015,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[ .[] | . * 2]'</td>
                         </tr>
                         <tr>
@@ -1147,18 +1090,12 @@
             <pre><code>{"foo":"f o o","b a r":"f o o"}
 </code></pre>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example11" aria-expanded="false"
-                        aria-controls="example11">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example11" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '{user, title: .titles[]}'</td>
                         </tr>
                         <tr>
@@ -1178,7 +1115,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '{(.user): .titles}'</td>
                         </tr>
                         <tr>
@@ -1211,18 +1148,12 @@
             <p>This is particularly useful in conjunction with <code>path(EXP)</code>
                 (also see below) and the <code>?</code> operator.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example12" aria-expanded="false"
-                        aria-controls="example12">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example12" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.. | .a?'</td>
                         </tr>
                         <tr>
@@ -1288,18 +1219,12 @@
             <p><code>null</code> can be added to any value, and returns the other
                 value unchanged.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example13" aria-expanded="false"
-                        aria-controls="example13">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example13" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.a + 1'</td>
                         </tr>
                         <tr>
@@ -1315,7 +1240,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.a + .b'</td>
                         </tr>
                         <tr>
@@ -1331,7 +1256,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.a + null'</td>
                         </tr>
                         <tr>
@@ -1347,7 +1272,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.a + 1'</td>
                         </tr>
                         <tr>
@@ -1363,7 +1288,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '{a: 1} + {b: 2} + {c: 3} + {a: 42}'</td>
                         </tr>
                         <tr>
@@ -1389,18 +1314,12 @@
                 operator can be used on arrays to remove all occurrences of
                 the second array's elements from the first array.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example14" aria-expanded="false"
-                        aria-controls="example14">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example14" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '4 - .a'</td>
                         </tr>
                         <tr>
@@ -1416,7 +1335,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. - ["xml", "yaml"]'</td>
                         </tr>
                         <tr>
@@ -1450,18 +1369,12 @@
                 same key, and the values are objects, the two are merged with
                 the same strategy.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example15" aria-expanded="false"
-                        aria-controls="example15">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example15" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '10 / . * 3'</td>
                         </tr>
                         <tr>
@@ -1477,7 +1390,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. / ", "'</td>
                         </tr>
                         <tr>
@@ -1493,7 +1406,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '{"k": {"a": 1, "b": 2}} * {"k": {"a": 0,"c": 3}}'</td>
                         </tr>
                         <tr>
@@ -1509,7 +1422,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | (1 / .)?'</td>
                         </tr>
                         <tr>
@@ -1543,18 +1456,12 @@
             <p>To compute the absolute value of a number as a floating point number, you may wish use <code>fabs</code>.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example16" aria-expanded="false"
-                        aria-controls="example16">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example16" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(abs)'</td>
                         </tr>
                         <tr>
@@ -1601,18 +1508,12 @@
                 </li>
             </ul>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example17" aria-expanded="false"
-                        aria-controls="example17">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example17" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | length'</td>
                         </tr>
                         <tr>
@@ -1653,18 +1554,12 @@
             <p>The builtin function <code>utf8bytelength</code> outputs the number of
                 bytes used to encode a string in UTF-8.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example18" aria-expanded="false"
-                        aria-controls="example18">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example18" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'utf8bytelength'</td>
                         </tr>
                         <tr>
@@ -1700,18 +1595,12 @@
                 the input is an object then the keys will not be sorted,
                 instead the keys will roughly be in insertion order.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example19" aria-expanded="false"
-                        aria-controls="example19">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example19" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'keys'</td>
                         </tr>
                         <tr>
@@ -1727,7 +1616,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'keys'</td>
                         </tr>
                         <tr>
@@ -1756,18 +1645,12 @@
                 is a member of the array returned by <code>keys</code>, although <code>has</code>
                 will be faster.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example20" aria-expanded="false"
-                        aria-controls="example20">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example20" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(has("foo"))'</td>
                         </tr>
                         <tr>
@@ -1783,7 +1666,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(has(2))'</td>
                         </tr>
                         <tr>
@@ -1810,18 +1693,12 @@
                 in the given array. It is, essentially, an inversed version
                 of <code>has</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example21" aria-expanded="false"
-                        aria-controls="example21">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example21" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | in({"foo": 42})'</td>
                         </tr>
                         <tr>
@@ -1841,7 +1718,7 @@
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(in([0,1]))'</td>
                         </tr>
                         <tr>
@@ -1901,18 +1778,12 @@ map_values(empty) #=&gt;  []
             </p>
             <p>In fact, these are their implementations.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example22" aria-expanded="false"
-                        aria-controls="example22">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example22" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(.+1)'</td>
                         </tr>
                         <tr>
@@ -1928,7 +1799,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map_values(.+1)'</td>
                         </tr>
                         <tr>
@@ -1944,7 +1815,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(., .)'</td>
                         </tr>
                         <tr>
@@ -1960,7 +1831,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map_values(. // empty)'</td>
                         </tr>
                         <tr>
@@ -1988,18 +1859,12 @@ map_values(empty) #=&gt;  []
                 same value as <code>(. | pick(pathexps) | p)</code>. For arrays, negative
                 indices and <code>.[m:n]</code> specifications should not be used.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example23" aria-expanded="false"
-                        aria-controls="example23">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example23" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'pick(.a, .b.c, .x)'</td>
                         </tr>
                         <tr>
@@ -2015,7 +1880,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'pick(.[2], .[0], .[0])'</td>
                         </tr>
                         <tr>
@@ -2055,18 +1920,12 @@ map_values(empty) #=&gt;  []
                 boolean values in <code>.</code>, and only those paths.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example24" aria-expanded="false"
-                        aria-controls="example24">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example24" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'path(.a[0].b)'</td>
                         </tr>
                         <tr>
@@ -2082,7 +1941,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[path(..)]'</td>
                         </tr>
                         <tr>
@@ -2107,18 +1966,12 @@ map_values(empty) #=&gt;  []
             <p>The builtin function <code>del</code> removes a key and its corresponding
                 value from an object.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example25" aria-expanded="false"
-                        aria-controls="example25">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example25" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'del(.foo)'</td>
                         </tr>
                         <tr>
@@ -2134,7 +1987,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'del(.[1, 2])'</td>
                         </tr>
                         <tr>
@@ -2159,18 +2012,12 @@ map_values(empty) #=&gt;  []
             <p>The builtin function <code>getpath</code> outputs the values in <code>.</code> found
                 at each path in <code>PATHS</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example26" aria-expanded="false"
-                        aria-controls="example26">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example26" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'getpath(["a","b"])'</td>
                         </tr>
                         <tr>
@@ -2186,7 +2033,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[getpath(["a","b"], ["a","c"])]'</td>
                         </tr>
                         <tr>
@@ -2212,18 +2059,12 @@ map_values(empty) #=&gt;  []
                 <code>VALUE</code>.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example27" aria-expanded="false"
-                        aria-controls="example27">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example27" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'setpath(["a","b"]; 1)'</td>
                         </tr>
                         <tr>
@@ -2239,7 +2080,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'setpath(["a","b"]; 1)'</td>
                         </tr>
                         <tr>
@@ -2255,7 +2096,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'setpath([0,"a"]; 1)'</td>
                         </tr>
                         <tr>
@@ -2282,18 +2123,12 @@ map_values(empty) #=&gt;  []
                 of strings and numbers.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example28" aria-expanded="false"
-                        aria-controls="example28">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example28" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'delpaths([["a","b"]])'</td>
                         </tr>
                         <tr>
@@ -2327,18 +2162,12 @@ map_values(empty) #=&gt;  []
                 <code>"value"</code>, and <code>"Value"</code> as keys.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example29" aria-expanded="false"
-                        aria-controls="example29">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example29" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'to_entries'</td>
                         </tr>
                         <tr>
@@ -2354,7 +2183,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'from_entries'</td>
                         </tr>
                         <tr>
@@ -2370,7 +2199,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'with_entries(.key |= "KEY_" + .)'</td>
                         </tr>
                         <tr>
@@ -2400,18 +2229,12 @@ map_values(empty) #=&gt;  []
             <p>It's useful for filtering lists: <code>[1,2,3] | map(select(. &gt;= 2))</code>
                 will give you <code>[2,3]</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example30" aria-expanded="false"
-                        aria-controls="example30">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example30" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(select(. &gt;= 2))'</td>
                         </tr>
                         <tr>
@@ -2427,7 +2250,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | select(.id == "second")'</td>
                         </tr>
                         <tr>
@@ -2458,18 +2281,12 @@ map_values(empty) #=&gt;  []
                 numbers, finite numbers, strings, null, non-null values, and
                 non-iterables, respectively.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example31" aria-expanded="false"
-                        aria-controls="example31">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example31" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[]|numbers'</td>
                         </tr>
                         <tr>
@@ -2494,18 +2311,12 @@ map_values(empty) #=&gt;  []
             <p><code>empty</code> returns no results. None at all. Not even <code>null</code>.</p>
             <p>It's useful on occasion. You'll know if you need it :)</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example32" aria-expanded="false"
-                        aria-controls="example32">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example32" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '1, empty, 2'</td>
                         </tr>
                         <tr>
@@ -2525,7 +2336,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[1,2,empty,3]'</td>
                         </tr>
                         <tr>
@@ -2551,18 +2362,12 @@ map_values(empty) #=&gt;  []
                 given as the argument. Errors can be caught with try/catch;
                 see below.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example33" aria-expanded="false"
-                        aria-controls="example33">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example33" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'try error catch .'</td>
                         </tr>
                         <tr>
@@ -2578,7 +2383,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'try error("invalid value: \(.)") catch .'</td>
                         </tr>
                         <tr>
@@ -2627,18 +2432,12 @@ map_values(empty) #=&gt;  []
                 the filename and line number where <code>$__loc__</code> occurs, as
                 values.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example34" aria-expanded="false"
-                        aria-controls="example34">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example34" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'try error("\($__loc__)") catch .'</td>
                         </tr>
                         <tr>
@@ -2668,18 +2467,12 @@ map_values(empty) #=&gt;  []
                 That is, <code>paths(type == "number")</code> outputs the paths to all numeric
                 values.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example35" aria-expanded="false"
-                        aria-controls="example35">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example35" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[paths]'</td>
                         </tr>
                         <tr>
@@ -2695,7 +2488,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[paths(type == "number")]'</td>
                         </tr>
                         <tr>
@@ -2724,18 +2517,12 @@ map_values(empty) #=&gt;  []
                 as those for the <code>+</code> operator (described above).</p>
             <p>If the input is an empty array, <code>add</code> returns <code>null</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example36" aria-expanded="false"
-                        aria-controls="example36">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example36" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'add'</td>
                         </tr>
                         <tr>
@@ -2751,7 +2538,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'add'</td>
                         </tr>
                         <tr>
@@ -2767,7 +2554,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'add'</td>
                         </tr>
                         <tr>
@@ -2799,18 +2586,12 @@ map_values(empty) #=&gt;  []
             <p>The <code>any(generator; condition)</code> form applies the given
                 condition to all the outputs of the given generator.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example37" aria-expanded="false"
-                        aria-controls="example37">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example37" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'any'</td>
                         </tr>
                         <tr>
@@ -2826,7 +2607,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'any'</td>
                         </tr>
                         <tr>
@@ -2842,7 +2623,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'any'</td>
                         </tr>
                         <tr>
@@ -2874,18 +2655,12 @@ map_values(empty) #=&gt;  []
                 condition to all the outputs of the given generator.</p>
             <p>If the input is an empty array, <code>all</code> returns <code>true</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example38" aria-expanded="false"
-                        aria-controls="example38">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example38" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'all'</td>
                         </tr>
                         <tr>
@@ -2901,7 +2676,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'all'</td>
                         </tr>
                         <tr>
@@ -2917,7 +2692,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'all'</td>
                         </tr>
                         <tr>
@@ -2947,18 +2722,12 @@ map_values(empty) #=&gt;  []
             <p><code>flatten(2)</code> is like <code>flatten</code>, but going only up to two
                 levels deep.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example39" aria-expanded="false"
-                        aria-controls="example39">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example39" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'flatten'</td>
                         </tr>
                         <tr>
@@ -2974,7 +2743,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'flatten(1)'</td>
                         </tr>
                         <tr>
@@ -2990,7 +2759,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'flatten'</td>
                         </tr>
                         <tr>
@@ -3006,7 +2775,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'flatten'</td>
                         </tr>
                         <tr>
@@ -3040,18 +2809,12 @@ map_values(empty) #=&gt;  []
             <p>The three argument form generates numbers <code>from</code> to <code>upto</code>
                 with an increment of <code>by</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example40" aria-expanded="false"
-                        aria-controls="example40">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example40" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'range(2; 4)'</td>
                         </tr>
                         <tr>
@@ -3071,7 +2834,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[range(2; 4)]'</td>
                         </tr>
                         <tr>
@@ -3087,7 +2850,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[range(4)]'</td>
                         </tr>
                         <tr>
@@ -3103,7 +2866,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[range(0; 10; 3)]'</td>
                         </tr>
                         <tr>
@@ -3119,7 +2882,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[range(0; 10; -1)]'</td>
                         </tr>
                         <tr>
@@ -3135,7 +2898,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[range(0; -5; -1)]'</td>
                         </tr>
                         <tr>
@@ -3159,18 +2922,12 @@ map_values(empty) #=&gt;  []
             </h3>
             <p>The <code>floor</code> function returns the floor of its numeric input.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example41" aria-expanded="false"
-                        aria-controls="example41">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example41" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'floor'</td>
                         </tr>
                         <tr>
@@ -3194,18 +2951,12 @@ map_values(empty) #=&gt;  []
             </h3>
             <p>The <code>sqrt</code> function returns the square root of its numeric input.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example42" aria-expanded="false"
-                        aria-controls="example42">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example42" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'sqrt'</td>
                         </tr>
                         <tr>
@@ -3231,18 +2982,12 @@ map_values(empty) #=&gt;  []
                 will convert correctly-formatted strings to their numeric
                 equivalent, leave numbers alone, and give an error on all other input.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example43" aria-expanded="false"
-                        aria-controls="example43">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example43" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | tonumber'</td>
                         </tr>
                         <tr>
@@ -3272,18 +3017,12 @@ map_values(empty) #=&gt;  []
                 string. Strings are left unchanged, and all other values are
                 JSON-encoded.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example44" aria-expanded="false"
-                        aria-controls="example44">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example44" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | tostring'</td>
                         </tr>
                         <tr>
@@ -3317,18 +3056,12 @@ map_values(empty) #=&gt;  []
                 string, which is one of null, boolean, number, string, array
                 or object.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example45" aria-expanded="false"
-                        aria-controls="example45">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example45" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'map(type)'</td>
                         </tr>
                         <tr>
@@ -3363,18 +3096,12 @@ map_values(empty) #=&gt;  []
             <p>Currently most arithmetic operations operating on infinities,
                 NaNs, and sub-normals do not raise errors.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example46" aria-expanded="false"
-                        aria-controls="example46">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example46" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | (infinite * .) &lt; 0'</td>
                         </tr>
                         <tr>
@@ -3394,7 +3121,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'infinite, nan | type'</td>
                         </tr>
                         <tr>
@@ -3443,18 +3170,12 @@ map_values(empty) #=&gt;  []
                 first values, and the second values if the first values are
                 equal, and so on.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example47" aria-expanded="false"
-                        aria-controls="example47">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example47" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'sort'</td>
                         </tr>
                         <tr>
@@ -3470,7 +3191,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'sort_by(.foo)'</td>
                         </tr>
                         <tr>
@@ -3488,7 +3209,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'sort_by(.foo, .bar)'</td>
                         </tr>
                         <tr>
@@ -3523,18 +3244,12 @@ map_values(empty) #=&gt;  []
                 place of <code>.foo</code>. The sorting order is the same as described
                 in the <code>sort</code> function above.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example48" aria-expanded="false"
-                        aria-controls="example48">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example48" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'group_by(.foo)'</td>
                         </tr>
                         <tr>
@@ -3566,18 +3281,12 @@ map_values(empty) #=&gt;  []
                 <code>min_by(.foo)</code> finds the object with the smallest <code>foo</code> field.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example49" aria-expanded="false"
-                        aria-controls="example49">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example49" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'min'</td>
                         </tr>
                         <tr>
@@ -3593,7 +3302,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'max_by(.foo)'</td>
                         </tr>
                         <tr>
@@ -3624,18 +3333,12 @@ map_values(empty) #=&gt;  []
                 as making an array by taking one element out of every group
                 produced by <code>group</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example50" aria-expanded="false"
-                        aria-controls="example50">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example50" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'unique'</td>
                         </tr>
                         <tr>
@@ -3651,7 +3354,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'unique_by(.foo)'</td>
                         </tr>
                         <tr>
@@ -3669,7 +3372,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'unique_by(length)'</td>
                         </tr>
                         <tr>
@@ -3693,18 +3396,12 @@ map_values(empty) #=&gt;  []
             </h3>
             <p>This function reverses an array.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example51" aria-expanded="false"
-                        aria-controls="example51">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example51" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'reverse'</td>
                         </tr>
                         <tr>
@@ -3735,18 +3432,12 @@ map_values(empty) #=&gt;  []
                 value in A with the same key. All other types are assumed to
                 be contained in each other if they are equal.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example52" aria-expanded="false"
-                        aria-controls="example52">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example52" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'contains("bar")'</td>
                         </tr>
                         <tr>
@@ -3762,7 +3453,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'contains(["baz", "bar"])'</td>
                         </tr>
                         <tr>
@@ -3778,7 +3469,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'contains(["bazzzzz", "bar"])'</td>
                         </tr>
                         <tr>
@@ -3794,7 +3485,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'contains({foo: 12, bar: [{barp: 12}]})'</td>
                         </tr>
                         <tr>
@@ -3810,7 +3501,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'contains({foo: 12, bar: [{barp: 15}]})'</td>
                         </tr>
                         <tr>
@@ -3837,18 +3528,12 @@ map_values(empty) #=&gt;  []
                 array then the indices output will be those where all elements
                 in <code>.</code> match those of <code>s</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example53" aria-expanded="false"
-                        aria-controls="example53">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example53" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'indices(", ")'</td>
                         </tr>
                         <tr>
@@ -3864,7 +3549,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'indices(1)'</td>
                         </tr>
                         <tr>
@@ -3880,7 +3565,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'indices([1,2])'</td>
                         </tr>
                         <tr>
@@ -3906,18 +3591,12 @@ map_values(empty) #=&gt;  []
             <p>Outputs the index of the first (<code>index</code>) or last (<code>rindex</code>)
                 occurrence of <code>s</code> in the input.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example54" aria-expanded="false"
-                        aria-controls="example54">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example54" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'index(", ")'</td>
                         </tr>
                         <tr>
@@ -3933,7 +3612,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'index(1)'</td>
                         </tr>
                         <tr>
@@ -3949,7 +3628,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'index([1,2])'</td>
                         </tr>
                         <tr>
@@ -3965,7 +3644,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'rindex(", ")'</td>
                         </tr>
                         <tr>
@@ -3981,7 +3660,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'rindex(1)'</td>
                         </tr>
                         <tr>
@@ -3997,7 +3676,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'rindex([1,2])'</td>
                         </tr>
                         <tr>
@@ -4023,18 +3702,12 @@ map_values(empty) #=&gt;  []
                 completely contained within b. It is, essentially, an
                 inversed version of <code>contains</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example55" aria-expanded="false"
-                        aria-controls="example55">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example55" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'inside("foobar")'</td>
                         </tr>
                         <tr>
@@ -4050,7 +3723,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'inside(["foobar", "foobaz", "blarp"])'</td>
                         </tr>
                         <tr>
@@ -4066,7 +3739,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'inside(["foobar", "foobaz", "blarp"])'</td>
                         </tr>
                         <tr>
@@ -4082,7 +3755,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'inside({"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]})'</td>
                         </tr>
                         <tr>
@@ -4098,7 +3771,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'inside({"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]})'</td>
                         </tr>
                         <tr>
@@ -4122,18 +3795,12 @@ map_values(empty) #=&gt;  []
             </h3>
             <p>Outputs <code>true</code> if . starts with the given string argument.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example56" aria-expanded="false"
-                        aria-controls="example56">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example56" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|startswith("foo")]'</td>
                         </tr>
                         <tr>
@@ -4157,18 +3824,12 @@ map_values(empty) #=&gt;  []
             </h3>
             <p>Outputs <code>true</code> if . ends with the given string argument.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example57" aria-expanded="false"
-                        aria-controls="example57">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example57" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|endswith("foo")]'</td>
                         </tr>
                         <tr>
@@ -4195,18 +3856,12 @@ map_values(empty) #=&gt;  []
                 input array. If given an argument <code>n</code>, it outputs all combinations
                 of <code>n</code> repetitions of the input array.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example58" aria-expanded="false"
-                        aria-controls="example58">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example58" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'combinations'</td>
                         </tr>
                         <tr>
@@ -4234,7 +3889,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'combinations(2)'</td>
                         </tr>
                         <tr>
@@ -4271,18 +3926,12 @@ map_values(empty) #=&gt;  []
             <p>Outputs its input with the given prefix string removed, if it
                 starts with it.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example59" aria-expanded="false"
-                        aria-controls="example59">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example59" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|ltrimstr("foo")]'</td>
                         </tr>
                         <tr>
@@ -4307,18 +3956,12 @@ map_values(empty) #=&gt;  []
             <p>Outputs its input with the given suffix string removed, if it
                 ends with it.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example60" aria-expanded="false"
-                        aria-controls="example60">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example60" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|rtrimstr("foo")]'</td>
                         </tr>
                         <tr>
@@ -4343,18 +3986,12 @@ map_values(empty) #=&gt;  []
             <p>Converts an input string into an array of the string's
                 codepoint numbers.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example61" aria-expanded="false"
-                        aria-controls="example61">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example61" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'explode'</td>
                         </tr>
                         <tr>
@@ -4378,18 +4015,12 @@ map_values(empty) #=&gt;  []
             </h3>
             <p>The inverse of explode.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example62" aria-expanded="false"
-                        aria-controls="example62">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example62" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'implode'</td>
                         </tr>
                         <tr>
@@ -4415,18 +4046,12 @@ map_values(empty) #=&gt;  []
             <p><code>split</code> can also split on regex matches when called with
                 two arguments (see the regular expressions section below).</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example63" aria-expanded="false"
-                        aria-controls="example63">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example63" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'split(", ")'</td>
                         </tr>
                         <tr>
@@ -4456,18 +4081,12 @@ map_values(empty) #=&gt;  []
                 Null values are treated as empty strings. Arrays and objects
                 in the input are not supported.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example64" aria-expanded="false"
-                        aria-controls="example64">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example64" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'join(", ")'</td>
                         </tr>
                         <tr>
@@ -4483,7 +4102,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'join(" ")'</td>
                         </tr>
                         <tr>
@@ -4509,18 +4128,12 @@ map_values(empty) #=&gt;  []
             <p>Emit a copy of the input string with its alphabetic characters (a-z and A-Z)
                 converted to the specified case.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example65" aria-expanded="false"
-                        aria-controls="example65">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example65" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'ascii_upcase'</td>
                         </tr>
                         <tr>
@@ -4549,18 +4162,12 @@ map_values(empty) #=&gt;  []
                 not consume additional memory if <code>update</code> produces at most one
                 output for each input. See advanced topics below.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example66" aria-expanded="false"
-                        aria-controls="example66">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example66" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[while(.&lt;100; .*2)]'</td>
                         </tr>
                         <tr>
@@ -4589,18 +4196,12 @@ map_values(empty) #=&gt;  []
                 not consume additional memory if <code>exp</code> produces at most one
                 output for each input. See advanced topics below.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example67" aria-expanded="false"
-                        aria-controls="example67">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example67" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[repeat(.*2, error)?]'</td>
                         </tr>
                         <tr>
@@ -4631,18 +4232,12 @@ map_values(empty) #=&gt;  []
                 not consume additional memory if <code>next</code> produces at most one
                 output for each input. See advanced topics below.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example68" aria-expanded="false"
-                        aria-controls="example68">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example68" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.,1]|until(.[0] &lt; 1; [.[0] - 1, .[1] * .[0]])|.[1]'</td>
                         </tr>
                         <tr>
@@ -4697,18 +4292,12 @@ map_values(empty) #=&gt;  []
                 memory whenever <code>f</code> produces at most a single output for each
                 input.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example69" aria-expanded="false"
-                        aria-controls="example69">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example69" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'recurse(.foo[])'</td>
                         </tr>
                         <tr>
@@ -4736,7 +4325,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'recurse'</td>
                         </tr>
                         <tr>
@@ -4764,7 +4353,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'recurse(. * .; . &lt; 20)'</td>
                         </tr>
                         <tr>
@@ -4806,18 +4395,12 @@ map_values(empty) #=&gt;  []
                 example shows how all the keys of all the objects within the
                 input can be considered for alteration.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example70" aria-expanded="false"
-                        aria-controls="example70">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example70" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'walk(if type == "array" then sort else . end)'</td>
                         </tr>
                         <tr>
@@ -4833,7 +4416,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'walk( if type == "object" then with_entries( .key |= sub(
                                 "^_+"; "") ) else . end )'
                             </td>
@@ -4879,18 +4462,12 @@ map_values(empty) #=&gt;  []
             <p>At the moment there is no builtin for setting environment
                 variables.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example71" aria-expanded="false"
-                        aria-controls="example71">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example71" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '$ENV.PAGER'</td>
                         </tr>
                         <tr>
@@ -4906,7 +4483,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'env.PAGER'</td>
                         </tr>
                         <tr>
@@ -4931,18 +4508,12 @@ map_values(empty) #=&gt;  []
             <p>Transpose a possibly jagged matrix (an array of arrays).
                 Rows are padded with nulls so the result is always rectangular.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example72" aria-expanded="false"
-                        aria-controls="example72">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example72" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'transpose'</td>
                         </tr>
                         <tr>
@@ -4974,18 +4545,12 @@ map_values(empty) #=&gt;  []
                 interest.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example73" aria-expanded="false"
-                        aria-controls="example73">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example73" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'bsearch(0)'</td>
                         </tr>
                         <tr>
@@ -5001,7 +4566,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'bsearch(0)'</td>
                         </tr>
                         <tr>
@@ -5017,7 +4582,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'bsearch(4) as $ix | if $ix &lt; 0 then .[-(1+$ix)] = 4 else .
                                 end'
                             </td>
@@ -5046,18 +4611,12 @@ map_values(empty) #=&gt;  []
                 after a backslash. Whatever the expression returns will be
                 interpolated into the string.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example74" aria-expanded="false"
-                        aria-controls="example74">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example74" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '"The input was \(.), which is one less than \(.+1)"'</td>
                         </tr>
                         <tr>
@@ -5085,18 +4644,12 @@ map_values(empty) #=&gt;  []
                 builtin differs from <code>tostring</code> in that <code>tostring</code> returns strings
                 unmodified, while <code>tojson</code> encodes strings as JSON strings.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example75" aria-expanded="false"
-                        aria-controls="example75">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example75" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|tostring]'</td>
                         </tr>
                         <tr>
@@ -5112,7 +4665,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|tojson]'</td>
                         </tr>
                         <tr>
@@ -5128,7 +4681,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|tojson|fromjson]'</td>
                         </tr>
                         <tr>
@@ -5222,18 +4775,12 @@ map_values(empty) #=&gt;  []
             <p>Note that the slashes, question mark, etc. in the URL are
                 not escaped, as they were part of the string literal.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example76" aria-expanded="false"
-                        aria-controls="example76">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example76" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '@html'</td>
                         </tr>
                         <tr>
@@ -5249,7 +4796,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '@sh "echo \(.)"'</td>
                         </tr>
                         <tr>
@@ -5265,7 +4812,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '@base64'</td>
                         </tr>
                         <tr>
@@ -5281,7 +4828,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '@base64d'</td>
                         </tr>
                         <tr>
@@ -5354,18 +4901,12 @@ map_values(empty) #=&gt;  []
                 <code>strptime(fmt)</code> are not supported on macOS.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example77" aria-expanded="false"
-                        aria-controls="example77">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example77" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'fromdate'</td>
                         </tr>
                         <tr>
@@ -5381,7 +4922,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'strptime("%Y-%m-%dT%H:%M:%SZ")'</td>
                         </tr>
                         <tr>
@@ -5397,7 +4938,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'</td>
                         </tr>
                         <tr>
@@ -5486,18 +5027,12 @@ map_values(empty) #=&gt;  []
                 JavaScript's <code>===</code>, the "strict equality" operator.</p>
             <p>!= is "not equal", and 'a != b' returns the opposite value of 'a == b'</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example78" aria-expanded="false"
-                        aria-controls="example78">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example78" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. == false'</td>
                         </tr>
                         <tr>
@@ -5513,7 +5048,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. == {"b": {"d": (4 + 1e-20), "c": 3}, "a":1}'</td>
                         </tr>
                         <tr>
@@ -5529,7 +5064,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] == 1'</td>
                         </tr>
                         <tr>
@@ -5581,18 +5116,12 @@ map_values(empty) #=&gt;  []
                 once for each false or null.</p>
             <p>More cases can be added to an if using <code>elif A then B</code> syntax.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example79" aria-expanded="false"
-                        aria-controls="example79">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example79" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'if . == 0 then
                                 "zero"
                                 elif . == 1 then
@@ -5628,18 +5157,12 @@ map_values(empty) #=&gt;  []
                 (respectively).</p>
             <p>The ordering is the same as that described for <code>sort</code>, above.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example80" aria-expanded="false"
-                        aria-controls="example80">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example80" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. &lt; 5'</td>
                         </tr>
                         <tr>
@@ -5679,18 +5202,12 @@ map_values(empty) #=&gt;  []
                 form of "or", picking between two values rather than
                 evaluating a condition, see the <code>//</code> operator below.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example81" aria-expanded="false"
-                        aria-controls="example81">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example81" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '42 and "a string"'</td>
                         </tr>
                         <tr>
@@ -5706,7 +5223,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(true, false) or false'</td>
                         </tr>
                         <tr>
@@ -5726,7 +5243,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(true, true) and (true, false)'</td>
                         </tr>
                         <tr>
@@ -5754,7 +5271,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[true, false | not]'</td>
                         </tr>
                         <tr>
@@ -5808,18 +5325,12 @@ map_values(empty) #=&gt;  []
                 produced.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example82" aria-expanded="false"
-                        aria-controls="example82">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example82" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'empty // 42'</td>
                         </tr>
                         <tr>
@@ -5835,7 +5346,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo // 42'</td>
                         </tr>
                         <tr>
@@ -5851,7 +5362,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo // 42'</td>
                         </tr>
                         <tr>
@@ -5867,7 +5378,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(false, null, 1) // 42'</td>
                         </tr>
                         <tr>
@@ -5883,7 +5394,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(false, null, 1) | . // 42'</td>
                         </tr>
                         <tr>
@@ -5920,18 +5431,12 @@ map_values(empty) #=&gt;  []
                 expression to try.</p>
             <p>The <code>try EXP</code> form uses <code>empty</code> as the exception handler.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example83" aria-expanded="false"
-                        aria-controls="example83">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example83" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'try .a catch ". is not an object"'</td>
                         </tr>
                         <tr>
@@ -5947,7 +5452,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[]|try .a]'</td>
                         </tr>
                         <tr>
@@ -5963,7 +5468,7 @@ map_values(empty) #=&gt;  []
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'try error("some exception") catch .'</td>
                         </tr>
                         <tr>
@@ -6019,18 +5524,12 @@ try repeat(exp) catch if .=="break" then empty else error
             </h3>
             <p>The <code>?</code> operator, used as <code>EXP?</code>, is shorthand for <code>try EXP</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example84" aria-expanded="false"
-                        aria-controls="example84">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example84" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[] | .a?]'</td>
                         </tr>
                         <tr>
@@ -6046,7 +5545,7 @@ try repeat(exp) catch if .=="break" then empty else error
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[.[] | tonumber?]'</td>
                         </tr>
                         <tr>
@@ -6124,18 +5623,12 @@ STRING | FILTER([REGEX, FLAGS])
             <p>Like <code>match</code>, but does not return match objects, only <code>true</code> or <code>false</code>
                 for whether or not the regex matches the input.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example85" aria-expanded="false"
-                        aria-controls="example85">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example85" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'test("foo")'</td>
                         </tr>
                         <tr>
@@ -6151,7 +5644,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] | test("a b c # spaces are ignored"; "ix")'</td>
                         </tr>
                         <tr>
@@ -6195,18 +5688,12 @@ STRING | FILTER([REGEX, FLAGS])
             </ul>
             <p>Capturing groups that did not match anything return an offset of -1</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example86" aria-expanded="false"
-                        aria-controls="example86">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example86" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'match("(abc)+"; "g")'</td>
                         </tr>
                         <tr>
@@ -6230,7 +5717,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'match("foo")'</td>
                         </tr>
                         <tr>
@@ -6246,7 +5733,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'match(["foo", "ig"])'</td>
                         </tr>
                         <tr>
@@ -6266,7 +5753,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'match("foo (?&lt;bar123&gt;bar)? foo"; "ig")'</td>
                         </tr>
                         <tr>
@@ -6290,7 +5777,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[ match("."; "g")] | length'</td>
                         </tr>
                         <tr>
@@ -6317,18 +5804,12 @@ STRING | FILTER([REGEX, FLAGS])
                 of each capture as the key, and the matched string as the
                 corresponding value.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example87" aria-expanded="false"
-                        aria-controls="example87">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example87" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'capture("(?&lt;a&gt;[a-z]+)-(?&lt;n&gt;[0-9]+)")'</td>
                         </tr>
                         <tr>
@@ -6358,18 +5839,12 @@ STRING | FILTER([REGEX, FLAGS])
                 <code>[ expr ]</code>, e.g. <code>[ scan(regex) ]</code>.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example88" aria-expanded="false"
-                        aria-controls="example88">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example88" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'scan("c")'</td>
                         </tr>
                         <tr>
@@ -6400,18 +5875,12 @@ STRING | FILTER([REGEX, FLAGS])
                 <code>split</code> splits on a string, not a regex.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example89" aria-expanded="false"
-                        aria-controls="example89">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example89" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'split(", *"; null)'</td>
                         </tr>
                         <tr>
@@ -6437,18 +5906,12 @@ STRING | FILTER([REGEX, FLAGS])
             <p>These provide the same results as their <code>split</code> counterparts,
                 but as a stream instead of an array.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example90" aria-expanded="false"
-                        aria-controls="example90">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example90" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'splits(", *")'</td>
                         </tr>
                         <tr>
@@ -6493,18 +5956,12 @@ STRING | FILTER([REGEX, FLAGS])
                 would take the form: <code>"\(.x)"</code>.
             </p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example91" aria-expanded="false"
-                        aria-controls="example91">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example91" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'sub("[^a-z]*(?&lt;x&gt;[a-z]+)"; "Z\(.x)"; "g")'</td>
                         </tr>
                         <tr>
@@ -6520,7 +5977,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[sub("(?&lt;a&gt;.)"; "\(.a|ascii_upcase)",
                                 "\(.a|ascii_downcase)")]'
                             </td>
@@ -6549,18 +6006,12 @@ STRING | FILTER([REGEX, FLAGS])
                 replaced by <code>tostring</code>, after interpolation. If the second argument is a stream
                 of jq strings, then <code>gsub</code> will produce a corresponding stream of JSON strings.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example92" aria-expanded="false"
-                        aria-controls="example92">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example92" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'gsub("(?&lt;x&gt;.)[^a]*"; "+\(.x)-")'</td>
                         </tr>
                         <tr>
@@ -6576,7 +6027,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[gsub("p"; "a", "b")]'</td>
                         </tr>
                         <tr>
@@ -6696,18 +6147,12 @@ STRING | FILTER([REGEX, FLAGS])
                 one can only setup a new binding with the same name, but which
                 will not be visible where the old one was.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example93" aria-expanded="false"
-                        aria-controls="example93">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example93" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.bar as $x | .foo | . + $x'</td>
                         </tr>
                         <tr>
@@ -6723,7 +6168,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. as $i|[(.*2|. as $i| $i), $i]'</td>
                         </tr>
                         <tr>
@@ -6739,7 +6184,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. as [$a, $b, {c: $c}] | $a + $b + $c'</td>
                         </tr>
                         <tr>
@@ -6755,7 +6200,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] as [$a, $b] | {a: $a, b: $b}'</td>
                         </tr>
                         <tr>
@@ -6813,18 +6258,12 @@ STRING | FILTER([REGEX, FLAGS])
             <pre><code>[[3]] | .[] as [$a] ?// [$b] | if $a != null then error("err: \($a)") else {$a,$b} end
 </code></pre>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example94" aria-expanded="false"
-                        aria-controls="example94">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example94" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} |
                                 {$a, $b, $d, $e}'
                             </td>
@@ -6848,7 +6287,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] as {$a, $b, c: {$d}} ?// {$a, $b, c: [{$e}]} | {$a, $b,
                                 $d, $e}'
                             </td>
@@ -6872,7 +6311,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.[] as [$a] ?// [$b] | if $a != null then error("err: \($a)")
                                 else {$a,$b} end'
                             </td>
@@ -6937,18 +6376,12 @@ STRING | FILTER([REGEX, FLAGS])
                 functions (or main program) subsequent to the re-definition.
                 See also the section below on scoping.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example95" aria-expanded="false"
-                        aria-controls="example95">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example95" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'def addvalue(f): . + [f]; map(addvalue(.[0]))'</td>
                         </tr>
                         <tr>
@@ -6964,7 +6397,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'def addvalue(f): f as $x | map(. + $x); addvalue(.[0])'</td>
                         </tr>
                         <tr>
@@ -7008,18 +6441,12 @@ STRING | FILTER([REGEX, FLAGS])
             </h3>
             <p>Returns true if <code>exp</code> produces no outputs, false otherwise.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example96" aria-expanded="false"
-                        aria-controls="example96">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example96" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'isempty(empty)'</td>
                         </tr>
                         <tr>
@@ -7035,7 +6462,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'isempty(.[])'</td>
                         </tr>
                         <tr>
@@ -7051,7 +6478,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'isempty(.[])'</td>
                         </tr>
                         <tr>
@@ -7075,18 +6502,12 @@ STRING | FILTER([REGEX, FLAGS])
             </h3>
             <p>The <code>limit</code> function extracts up to <code>n</code> outputs from <code>exp</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example97" aria-expanded="false"
-                        aria-controls="example97">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example97" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[limit(3;.[])]'</td>
                         </tr>
                         <tr>
@@ -7114,18 +6535,12 @@ STRING | FILTER([REGEX, FLAGS])
             <p>The <code>nth(n; expr)</code> function extracts the nth value output by <code>expr</code>.
                 Note that <code>nth(n; expr)</code> doesn't support negative values of <code>n</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example98" aria-expanded="false"
-                        aria-controls="example98">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example98" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[first(range(.)), last(range(.)), nth(./2; range(.))]'</td>
                         </tr>
                         <tr>
@@ -7152,18 +6567,12 @@ STRING | FILTER([REGEX, FLAGS])
                 and last values from any array at <code>.</code>.</p>
             <p>The <code>nth(n)</code> function extracts the nth value of any array at <code>.</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example99" aria-expanded="false"
-                        aria-controls="example99">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example99" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '[range(.)]|[first, last, nth(5)]'</td>
                         </tr>
                         <tr>
@@ -7202,18 +6611,12 @@ STRING | FILTER([REGEX, FLAGS])
     3 as $item | . + $item
 </code></pre>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example100" aria-expanded="false"
-                        aria-controls="example100">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example100" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'reduce .[] as $item (0; . + $item)'</td>
                         </tr>
                         <tr>
@@ -7229,7 +6632,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'reduce .[] as [$i,$j] (0; . + $i * $j)'</td>
                         </tr>
                         <tr>
@@ -7245,7 +6648,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'reduce .[] as {$x,$y} (null; .x += $x | .y += [$y])'</td>
                         </tr>
                         <tr>
@@ -7289,18 +6692,12 @@ STRING | FILTER([REGEX, FLAGS])
             <p>When <code>EXTRACT</code> is omitted, the identity filter is used.
                 That is, it outputs the intermediate values as they are.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example101" aria-expanded="false"
-                        aria-controls="example101">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example101" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'foreach .[] as $item (0; . + $item)'</td>
                         </tr>
                         <tr>
@@ -7332,7 +6729,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'foreach .[] as $item (0; . + $item; [$item, . * 2])'</td>
                         </tr>
                         <tr>
@@ -7364,7 +6761,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'foreach .[] as $item (0; . + 1; {index: ., $item})'</td>
                         </tr>
                         <tr>
@@ -7441,18 +6838,12 @@ STRING | FILTER([REGEX, FLAGS])
                 The example shows off three advanced topics: tail recursion,
                 generator construction, and sub-functions.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example102" aria-expanded="true"
-                        aria-controls="example102">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example102" class="mx-3 small d-print-block collapse show" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'def range(init; upto; by): def _range: if (by &gt; 0 and .
                                 &lt; upto) or (by &lt; 0 and . &gt; upto) then ., ((.+by)|_range) else . end; if by == 0
                                 then init else init|_range end | select((by &gt; 0 and . &lt; upto) or (by &lt; 0 and .
@@ -7484,7 +6875,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'def while(cond; update): def _while: if cond then ., (update
                                 | _while) else empty end; _while; [while(.&lt;100; .*2)]'
                             </td>
@@ -7674,19 +7065,12 @@ STRING | FILTER([REGEX, FLAGS])
             <p>Consumes a number as input and truncates the corresponding
                 number of path elements from the left of the outputs of the
                 given streaming expression.</p>
-            <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example103" aria-expanded="true"
-                        aria-controls="example103">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+            <div class="pb-3"><h4>Examples:</h4>
                 <div id="example103" class="mx-3 small d-print-block collapse show" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq 'truncate_stream([[0],1],[[1,0],2],[[1,0]],[[1]])'</td>
                         </tr>
                         <tr>
@@ -7715,19 +7099,12 @@ STRING | FILTER([REGEX, FLAGS])
             </h3>
             <p>Outputs values corresponding to the stream expression's
                 outputs.</p>
-            <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example104" aria-expanded="true"
-                        aria-controls="example104">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+            <div class="pb-3"><h4>Examples:</h4>
                 <div id="example104" class="mx-3 small d-print-block collapse show" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq
                                 'fromstream(1|truncate_stream([[0],1],[[1,0],2],[[1,0]],[[1]]))'
                             </td>
@@ -7752,19 +7129,12 @@ STRING | FILTER([REGEX, FLAGS])
                         class="bi bi-link-45deg" aria-hidden="true"></span></a>
             </h3>
             <p>The <code>tostream</code> builtin outputs the streamed form of its input.</p>
-            <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example105" aria-expanded="true"
-                        aria-controls="example105">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+            <div class="pb-3"><h4>Examples:</h4>
                 <div id="example105" class="mx-3 small d-print-block collapse show" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '. as $dot|fromstream($dot|tostream)|.==$dot'</td>
                         </tr>
                         <tr>
@@ -7847,18 +7217,12 @@ STRING | FILTER([REGEX, FLAGS])
                 one will be used (COMPATIBILITY NOTE: in jq 1.5 and earlier
                 releases, it used to be that only the last one was used).</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example106" aria-expanded="false"
-                        aria-controls="example106">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example106" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(..|select(type=="boolean")) |= if . then 1 else 0 end'</td>
                         </tr>
                         <tr>
@@ -7886,18 +7250,12 @@ STRING | FILTER([REGEX, FLAGS])
                 equivalent to <code>a |= . op b</code>. So, <code>+= 1</code> can be used to
                 increment values, being the same as <code>|= . + 1</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example107" aria-expanded="true"
-                        aria-controls="example107">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Example
-                </button>
+                <h4>Examples:</h4>
                 <div id="example107" class="mx-3 small d-print-block collapse show" style="">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.foo += 1'</td>
                         </tr>
                         <tr>
@@ -7944,18 +7302,12 @@ STRING | FILTER([REGEX, FLAGS])
                 The latter will set the <code>a</code> field of the input to the <code>a</code>
                 field's <code>b</code> field, producing <code>{"a": 10, "b": 20}</code>.</p>
             <div class="pb-3">
-                <button type="button"
-                        class="btn btn-sm btn-secondary text-body-secondary bg-transparent link-body-emphasis border-0"
-                        data-bs-toggle="collapse" data-bs-target="#example108" aria-expanded="false"
-                        aria-controls="example108">
-                    <span class="me-1 d-print-none" aria-hidden="true"><span class="bi bi-chevron-right"></span><span
-                            class="bi bi-chevron-down"></span></span>Examples
-                </button>
+                <h4>Examples:</h4>
                 <div id="example108" class="collapse mx-3 small d-print-block">
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.a = .b'</td>
                         </tr>
                         <tr>
@@ -7971,7 +7323,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '.a |= .b'</td>
                         </tr>
                         <tr>
@@ -7987,7 +7339,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(.a, .b) = range(3)'</td>
                         </tr>
                         <tr>
@@ -8011,7 +7363,7 @@ STRING | FILTER([REGEX, FLAGS])
                     <table class="table table-borderless table-sm w-auto">
                         <tbody>
                         <tr>
-                            <th class="pe-3">Command</th>
+                            <th class="pe-3">Query</th>
                             <td class="font-monospace">jq '(.a, .b) |= range(3)'</td>
                         </tr>
                         <tr>

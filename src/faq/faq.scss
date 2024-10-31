@@ -4,10 +4,12 @@
   --h-padding: 20px;
 }
 
-
-html, body {
+html,
+body {
   font-size: 15px;
   margin: 0;
+  background: #282828;
+  color: #eee;
 }
 
 * {
@@ -20,6 +22,7 @@ html, body {
   bottom: 0;
   width: var(--sidebar-width);
   padding: var(--v-padding) var(--h-padding);
+  padding-left: 0;
   position: fixed;
   overflow-y: scroll;
 
@@ -42,19 +45,20 @@ html, body {
   flex-direction: column;
   gap: 4px;
 
+  a,
+  a:hover {
+    text-decoration: none;
+  }
+
+  a:hover {
+    background: #6e6e6e;
+  }
+
   .item {
-    background: #7dadf9;
-    border-radius: 5px;
+    //background: #3b3073;
+    border-radius: 0 15px 15px 0;
     padding: 5px 10px;
-
-    a,
-    a:hover {
-      text-decoration: none;
-    }
-
-    &:hover {
-      background: red;
-    }
+    color: #eee;
   }
 
   .section {
@@ -65,23 +69,36 @@ html, body {
     //background: #6e6e6e;
   }
 
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
   .children.section {
-    margin-left: 15px;
+    //margin-left: 15px;
+
+    a.item {
+      padding-left: 30px;
+    }
   }
 
   a.active {
-    background: greenyellow;
+    background: #7cacf8;
+    color: #282828;
   }
 }
 
 main {
   display: flex;
   flex-direction: column;
-  padding: var(--v-padding) var(--h-padding) var(--v-padding) calc(var(--sidebar-width) + var(--h-padding));
+  padding: var(--v-padding) var(--h-padding) var(--v-padding)
+    calc(var(--sidebar-width) + var(--h-padding));
 }
 
 code {
-  background: #c4b7ff;
+  background: #43376e;
+  color: #eee;
   padding: 1px 3px;
   border-radius: 3px;
 }

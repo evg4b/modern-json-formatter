@@ -10,6 +10,8 @@ body {
   margin: 0;
   background: #282828;
   color: #eee;
+  scrollbar-width: thin;
+  scrollbar-color: #757575 #3c3c3c;
 }
 
 * {
@@ -25,6 +27,42 @@ body {
   padding-left: 0;
   position: fixed;
   overflow-y: scroll;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 0;
+    user-select: none;
+
+    .logo {
+      height: 66px;
+      background: url(https://raw.githubusercontent.com/evg4b/modern-json-formatter/main/.github/readme-logo.png)
+        no-repeat center;
+      background-size: contain;
+    }
+
+    .name {
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      a {
+        transition: all 150ms ease;
+      }
+
+      a:hover {
+        background: none;
+        transform: scale(1.1);
+      }
+    }
+  }
 
   .sidebar-header {
     display: flex;
@@ -93,19 +131,42 @@ main {
   display: flex;
   flex-direction: column;
   padding: var(--v-padding) var(--h-padding) var(--v-padding) calc(var(--sidebar-width) + var(--h-padding));
+  gap: 25px;
+
+  h3 {
+    margin: 50px 0 20px 0;
+  }
+}
+
+h4.examples {
+  margin: 5px 0;
+  font-weight: 400;
 }
 
 code {
-  background: #43376e;
-  color: #eee;
-  padding: 1px 3px;
+  color: #a8c7fa;
+  font-family: monospace;
+  padding: 1px 5px;
   border-radius: 3px;
+  background: #3c3c3c;
+}
+
+pre {
+  display: block;
+  color: #a8c7fa;
+  font-family: monospace;
+  padding: 10px 10px;
+  border-radius: 3px;
+  background: #3c3c3c;
+  overflow: auto;
+
+  code {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .d-print-block {
-  //background: #3c3c3c;
-  //padding: 10px 10px;
-  //border-radius: 5px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -117,16 +178,66 @@ code {
     padding: 10px 10px;
     border-radius: 5px;
 
-    th, td {
+    th,
+    td {
       padding: 5px 10px;
     }
 
-    td {
+    th {
+      color: #696969;
+      font-weight: 400;
+    }
+
+    td.font-monospace {
       font-family: monospace;
+      font-weight: 400;
     }
   }
 
   .pe-3 {
-    width: 100px;
+    width: 65px;
   }
+}
+
+/* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
+/** {
+  scrollbar-width: thin;
+  scrollbar-color: #757575 #DFE9EB;
+}*/
+
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background: #282828;
+  transition: all 150ms ease;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: #3c3c3c;
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #757575;
+  }
+}
+
+*::-webkit-scrollbar-track:active {
+  background-color: #3c3c3c;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #3c3c3c;
+  transition: all 150ms ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #757575;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #757575;
 }

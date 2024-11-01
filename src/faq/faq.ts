@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const link = linksMap.get(`#${section.id}`);
       if (scrollPos >= top && scrollPos <= bottom) {
         link?.classList?.add('active');
-        link?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        link?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       } else {
         link?.classList?.remove('active');
       }

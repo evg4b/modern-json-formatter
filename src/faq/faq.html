@@ -5354,7 +5354,7 @@ map_values(empty) #=&gt;  []
                 <tbody>
                   <tr>
                     <th class="pe-3">Query</th>
-                    <td class="font-monospace">jq 'if . == 0 then "zero" elif . == 1 then "one" else "many" end'</td>
+                    <td class="font-monospace">if . == 0 then "zero" elif . == 1 then "one" else "many" end</td>
                   </tr>
                   <tr>
                     <th>Input</th>
@@ -7167,9 +7167,9 @@ STRING | FILTER([REGEX, FLAGS])
                   <tr>
                     <th class="pe-3">Query</th>
                     <td class="font-monospace">
-                      jq 'def range(init; upto; by): def _range: if (by &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt;
+                      def range(init; upto; by): def _range: if (by &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt;
                       upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end | select((by
-                      &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt; upto)); range(0; 10; 3)'
+                      &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt; upto)); range(0; 10; 3)
                     </td>
                   </tr>
                   <tr>
@@ -7199,8 +7199,8 @@ STRING | FILTER([REGEX, FLAGS])
                   <tr>
                     <th class="pe-3">Query</th>
                     <td class="font-monospace">
-                      jq 'def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while;
-                      [while(.&lt;100; .*2)]'
+                      def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while;
+                      [while(.&lt;100; .*2)]
                     </td>
                   </tr>
                   <tr>
@@ -7456,7 +7456,7 @@ STRING | FILTER([REGEX, FLAGS])
                 <tbody>
                   <tr>
                     <th class="pe-3">Query</th>
-                    <td class="font-monospace">jq 'fromstream(1|truncate_stream([[0],1],[[1,0],2],[[1,0]],[[1]]))'</td>
+                    <td class="font-monospace">fromstream(1|truncate_stream([[0],1],[[1,0],2],[[1,0]],[[1]]))</td>
                   </tr>
                   <tr>
                     <th>Input</th>

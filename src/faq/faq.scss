@@ -101,8 +101,7 @@ a {
   }
 
   .item {
-    //background: #3b3073;
-    border-radius: 0 15px 15px 0;
+    border-radius: 0 30px 30px 0;
     padding: 5px 10px;
     color: #eee;
   }
@@ -111,8 +110,6 @@ a {
     display: flex;
     flex-direction: column;
     gap: 2px;
-
-    //background: #6e6e6e;
   }
 
   .menu {
@@ -122,8 +119,6 @@ a {
   }
 
   .children.section {
-    //margin-left: 15px;
-
     a.item {
       padding-left: 30px;
     }
@@ -174,6 +169,15 @@ pre {
   }
 }
 
+p {
+  line-height: 1.5em;
+}
+
+ol p,
+ul p {
+  margin: 5px 0;
+}
+
 .d-print-block {
   display: flex;
   flex-direction: column;
@@ -194,59 +198,22 @@ pre {
     th {
       color: #696969;
       font-weight: 400;
+      user-select: none;
     }
 
     td.font-monospace {
       font-family: monospace;
       font-weight: 400;
+      color: #a8c7fa;
+    }
+
+    td.fst-italic {
+      font-style: italic;
+      color: dimgray;
     }
   }
 
   .pe-3 {
     width: 65px;
   }
-}
-
-/* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
-/** {
-  scrollbar-width: thin;
-  scrollbar-color: #757575 #DFE9EB;
-}*/
-
-/* Chrome, Edge and Safari */
-*::-webkit-scrollbar {
-  height: 10px;
-  width: 10px;
-}
-
-*::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: #282828;
-  transition: all 150ms ease;
-}
-
-*::-webkit-scrollbar-track:hover {
-  background-color: #3c3c3c;
-
-  *::-webkit-scrollbar-thumb {
-    background-color: #757575;
-  }
-}
-
-*::-webkit-scrollbar-track:active {
-  background-color: #3c3c3c;
-}
-
-*::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background-color: #3c3c3c;
-  transition: all 150ms ease;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: #757575;
-}
-
-*::-webkit-scrollbar-thumb:active {
-  background-color: #757575;
 }

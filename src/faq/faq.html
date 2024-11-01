@@ -153,148 +153,183 @@
         <div class="section">
           <a href="#basic-filters" class="item">Basic filters</a>
           <div class="children section">
-            <a href="#identity" class="item">Identity: .</a>
-            <a href="#object-identifier-index" class="item">Object Identifier-Index: .foo, .foo.bar</a>
-            <a href="#optional-object-identifier-index" class="item">Optional Object Identifier-Index: .foo?</a>
-            <a href="#object-index" class="item">Object Index: .[&lt;string&gt;]</a>
-            <a href="#array-index" class="item">Array Index: .[&lt;number&gt;]</a>
-            <a href="#array-string-slice" class="item">Array/String Slice: .[&lt;number&gt;:&lt;number&gt;]</a>
-            <a href="#array-object-value-iterator" class="item">Array/Object Value Iterator: .[]</a>
-            <a href="#.[]?" class="item">.[]?</a>
-            <a href="#comma" class="item">Comma: ,</a>
-            <a href="#pipe" class="item">Pipe: |</a>
+            <a href="#identity" class="item"> Identity: <code>.</code> </a>
+            <a href="#object-identifier-index" class="item">
+              Object Identifier-Index: <code>.foo</code>, <code>.foo.bar</code>
+            </a>
+            <a href="#optional-object-identifier-index" class="item">
+              Optional Object Identifier-Index: <code>.foo?</code>
+            </a>
+            <a href="#object-index" class="item"> Object Index: <code>.[&lt;string&gt;]</code> </a>
+            <a href="#array-index" class="item"> Array Index: <code>.[&lt;number&gt;]</code> </a>
+            <a href="#array-string-slice" class="item">
+              Array/String Slice: <code>.[&lt;number&gt;:&lt;number&gt;]</code>
+            </a>
+            <a href="#array-object-value-iterator" class="item"> Array/Object Value Iterator: <code>.[]</code> </a>
+            <a href="#.[]?" class="item"><code>.[]?</code></a>
+            <a href="#comma" class="item">Comma: <code>,</code></a>
+            <a href="#pipe" class="item">Pipe: <code>|</code></a>
             <a href="#parenthesis" class="item">Parenthesis</a>
           </div>
         </div>
         <div class="section">
           <a href="#types-and-values" class="item">Types and Values</a>
           <div class="children section">
-            <a href="#array-construction" class="item">Array construction: []</a>
-            <a href="#object-construction" class="item">Object Construction: {}</a>
-            <a href="#recursive-descent" class="item">Recursive Descent: ..</a>
+            <a href="#array-construction" class="item">Array construction: <code>[]</code></a>
+            <a href="#object-construction" class="item">Object Construction: <code>{}</code></a>
+            <a href="#recursive-descent" class="item">Recursive Descent: <code>..</code></a>
           </div>
         </div>
         <div class="section">
           <a href="#builtin-operators-and-functions" class="item">Builtin operators and functions</a>
           <div class="children section">
-            <a href="#addition" class="item">Addition: +</a>
-            <a href="#subtraction" class="item">Subtraction: -</a>
-            <a href="#multiplication-division-modulo" class="item">Multiplication, division, modulo: *, /, %</a>
-            <a href="#abs" class="item">abs</a>
-            <a href="#length" class="item">length</a>
-            <a href="#utf8bytelength" class="item">utf8bytelength</a>
-            <a href="#keys-keys_unsorted" class="item">keys, keys_unsorted</a>
-            <a href="#has" class="item">has(key)</a>
-            <a href="#in" class="item">in</a>
-            <a href="#map-map_values" class="item">map(f), map_values(f)</a>
-            <a href="#pick" class="item">pick(pathexps)</a>
-            <a href="#path" class="item">path(path_expression)</a>
-            <a href="#del" class="item">del(path_expression)</a>
-            <a href="#getpath" class="item">getpath(PATHS)</a>
-            <a href="#setpath" class="item">setpath(PATHS; VALUE)</a>
-            <a href="#delpaths" class="item">delpaths(PATHS)</a>
-            <a href="#to_entries-from_entries-with_entries" class="item">to_entries, from_entries, with_entries(f)</a>
-            <a href="#select" class="item">select(boolean_expression)</a>
+            <a href="#addition" class="item">Addition: <code>+</code></a>
+            <a href="#subtraction" class="item">Subtraction: <code>-</code></a>
+            <a href="#multiplication-division-modulo" class="item">
+              Multiplication, division, modulo: <code>*</code>, <code>/</code>, <code>%</code>
+            </a>
+            <a href="#abs" class="item"><code>abs</code></a>
+            <a href="#length" class="item"><code>length</code></a>
+            <a href="#utf8bytelength" class="item"><code>utf8bytelength</code></a>
+            <a href="#keys-keys_unsorted" class="item"><code>keys</code>, <code>keys_unsorted</code></a>
+            <a href="#has" class="item"><code>has(key)</code></a>
+            <a href="#in" class="item"><code>in</code></a>
+            <a href="#map-map_values" class="item"><code>map(f)</code>, <code>map_values(f)</code></a>
+            <a href="#pick" class="item"><code>pick(pathexps)</code></a>
+            <a href="#path" class="item"><code>path(path_expression)</code></a>
+            <a href="#del" class="item"><code>del(path_expression)</code></a>
+            <a href="#getpath" class="item"><code>getpath(PATHS)</code></a>
+            <a href="#setpath" class="item"><code>setpath(PATHS; VALUE)</code></a>
+            <a href="#delpaths" class="item"><code>delpaths(PATHS)</code></a>
+            <a href="#to_entries-from_entries-with_entries" class="item">
+              <code>to_entries</code>, <code>from_entries</code>, <code>with_entries(f)</code>
+            </a>
+            <a href="#select" class="item"><code>select(boolean_expression)</code></a>
             <a
               href="#arrays-objects-iterables-booleans-numbers-normals-finites-strings-nulls-values-scalars"
-              class="item"
-              >arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars</a
-            >
-            <a href="#empty" class="item">empty</a>
-            <a href="#error" class="item">error, error(message)</a>
-            <a href="#halt" class="item">halt</a>
-            <a href="#halt_error" class="item">halt_error, halt_error(exit_code)</a>
-            <a href="#$__loc__" class="item">$__loc__</a>
-            <a href="#paths" class="item">paths, paths(node_filter)</a>
-            <a href="#add" class="item">add</a>
-            <a href="#any" class="item">any, any(condition), any(generator; condition)</a>
-            <a href="#all" class="item">all, all(condition), all(generator; condition)</a>
-            <a href="#flatten" class="item">flatten, flatten(depth)</a>
-            <a href="#range" class="item">range(upto), range(from; upto), range(from; upto; by)</a>
-            <a href="#floor" class="item">floor</a>
-            <a href="#sqrt" class="item">sqrt</a>
-            <a href="#tonumber" class="item">tonumber</a>
-            <a href="#tostring" class="item">tostring</a>
-            <a href="#type" class="item">type</a>
-            <a href="#infinite-nan-isinfinite-isnan-isfinite-isnormal" class="item">
-              infinite, nan, isinfinite, isnan, isfinite, isnormal
+              class="item">
+              <code>arrays</code>, <code>objects</code>, <code>iterables</code>, <code>booleans</code>,
+              <code>numbers</code>, <code>normals</code>, <code>finites</code>, <code>strings</code>,
+              <code>nulls</code>, <code>values</code>, <code>scalars</code>
             </a>
-            <a href="#sort-sort_by" class="item">sort, sort_by(path_expression)</a>
-            <a href="#group_by" class="item">group_by(path_expression)</a>
-            <a href="#min-max-min_by-max_by" class="item">min, max, min_by(path_exp), max_by(path_exp)</a>
-            <a href="#unique-unique_by" class="item">unique, unique_by(path_exp)</a>
-            <a href="#reverse" class="item">reverse</a>
-            <a href="#contains" class="item">contains(element)</a>
-            <a href="#indices" class="item">indices(s)</a>
-            <a href="#index-rindex" class="item">index(s), rindex(s)</a>
-            <a href="#inside" class="item">inside</a>
-            <a href="#startswith" class="item">startswith(str)</a>
-            <a href="#endswith" class="item">endswith(str)</a>
-            <a href="#combinations" class="item">combinations, combinations(n)</a>
-            <a href="#ltrimstr" class="item">ltrimstr(str)</a>
-            <a href="#rtrimstr" class="item">rtrimstr(str)</a>
-            <a href="#explode" class="item">explode</a>
-            <a href="#implode" class="item">implode</a>
-            <a href="#split-1" class="item">split(str)</a>
-            <a href="#join" class="item">join(str)</a>
-            <a href="#ascii_downcase-ascii_upcase" class="item">ascii_downcase, ascii_upcase</a>
-            <a href="#while" class="item">while(cond; update)</a>
-            <a href="#repeat" class="item">repeat(exp)</a>
-            <a href="#until" class="item">until(cond; next)</a>
-            <a href="#recurse" class="item">recurse(f), recurse, recurse(f; condition)</a>
-            <a href="#walk" class="item">walk(f)</a>
-            <a href="#$env-env" class="item">$ENV, env</a>
-            <a href="#transpose" class="item">transpose</a>
-            <a href="#bsearch" class="item">bsearch(x)</a>
-            <a href="#string-interpolation" class="item">String interpolation: \(exp)</a>
+            <a href="#empty" class="item"><code>empty</code></a>
+            <a href="#error" class="item"><code>error</code>, <code>error(message)</code></a>
+            <a href="#halt" class="item"><code>halt</code></a>
+            <a href="#halt_error" class="item"><code>halt_error</code>, <code>halt_error(exit_code)</code></a>
+            <a href="#$__loc__" class="item"><code>$__loc__</code></a>
+            <a href="#paths" class="item"><code>paths</code>, <code>paths(node_filter)</code></a>
+            <a href="#add" class="item"><code>add</code></a>
+            <a href="#any" class="item">
+              <code>any</code>, <code>any(condition)</code>, <code>any(generator; condition)</code>
+            </a>
+            <a href="#all" class="item">
+              <code>all</code>, <code>all(condition)</code>, <code>all(generator; condition)</code>
+            </a>
+            <a href="#flatten" class="item"><code>flatten</code>, <code>flatten(depth)</code></a>
+            <a href="#range" class="item">
+              <code>range(upto)</code>, <code>range(from; upto)</code>, <code> range(from; upto; by)</code>
+            </a>
+            <a href="#floor" class="item"><code>floor</code></a>
+            <a href="#sqrt" class="item"><code>sqrt</code></a>
+            <a href="#tonumber" class="item"><code>tonumber</code></a>
+            <a href="#tostring" class="item"><code>tostring</code></a>
+            <a href="#type" class="item"><code>type</code></a>
+            <a href="#infinite-nan-isinfinite-isnan-isfinite-isnormal" class="item">
+              <code>infinite</code>, <code>nan</code>, <code>isinfinite</code>, <code>isnan</code>,
+              <code>isfinite</code>, <code>isnormal</code>
+            </a>
+            <a href="#sort-sort_by" class="item"><code>sort</code>, <code>sort_by(path_expression)</code></a>
+            <a href="#group_by" class="item"><code>group_by(path_expression)</code></a>
+            <a href="#min-max-min_by-max_by" class="item">
+              <code>min</code>, <code>max</code>, <code>min_by(path_exp)</code>, <code>max_by(path_exp)</code>
+            </a>
+            <a href="#unique-unique_by" class="item"><code>unique</code>, <code>unique_by(path_exp)</code></a>
+            <a href="#reverse" class="item"><code>reverse</code></a>
+            <a href="#contains" class="item"><code>contains(element)</code></a>
+            <a href="#indices" class="item"><code>indices(s)</code></a>
+            <a href="#index-rindex" class="item"><code>index(s)</code>, <code>rindex(s)</code></a>
+            <a href="#inside" class="item"><code>inside</code></a>
+            <a href="#startswith" class="item"><code>startswith(str)</code></a>
+            <a href="#endswith" class="item"><code>endswith(str)</code></a>
+            <a href="#combinations" class="item"><code>combinations</code>, <code>combinations(n)</code></a>
+            <a href="#ltrimstr" class="item"><code>ltrimstr(str)</code></a>
+            <a href="#rtrimstr" class="item"><code>rtrimstr(str)</code></a>
+            <a href="#explode" class="item"><code>explode</code></a>
+            <a href="#implode" class="item"><code>implode</code></a>
+            <a href="#split-1" class="item"><code>split(str)</code></a>
+            <a href="#join" class="item"><code>join(str)</code></a>
+            <a href="#ascii_downcase-ascii_upcase" class="item">
+              <code>ascii_downcase</code>, <code>ascii_upcase</code>
+            </a>
+            <a href="#while" class="item"><code>while(cond; update)</code></a>
+            <a href="#repeat" class="item"><code>repeat(exp)</code></a>
+            <a href="#until" class="item"><code>until(cond; next)</code></a>
+            <a href="#recurse" class="item">
+              <code>recurse(f)</code>, <code>recurse</code>, <code>recurse(f; condition)</code>
+            </a>
+            <a href="#walk" class="item"><code>walk(f)</code></a>
+            <a href="#$env-env" class="item"><code>$ENV</code>, <code>env</code></a>
+            <a href="#transpose" class="item"><code>transpose</code></a>
+            <a href="#bsearch" class="item"><code>bsearch(x)</code></a>
+            <a href="#string-interpolation" class="item">String interpolation: <code>\(exp)</code></a>
             <a href="#convert-to-from-json" class="item">Convert to/from JSON</a>
             <a href="#format-strings-and-escaping" class="item">Format strings and escaping</a>
             <a href="#dates" class="item">Dates</a>
             <a href="#sql-style-operators" class="item">SQL-Style Operators</a>
-            <a href="#builtins" class="item">builtins</a>
+            <a href="#builtins" class="item"><code>builtins</code></a>
           </div>
         </div>
         <div class="section">
           <a href="#conditionals-and-comparisons" class="item">Conditionals and Comparisons</a>
           <div class="children section">
-            <a href="#==-!=" class="item">==, !=</a>
+            <a href="#==-!=" class="item"><code>==</code>, <code>!=</code></a>
             <a href="#if-then-else-end" class="item">if-then-else-end</a>
-            <a href="#>->=-<=-<" class="item">&gt;, &gt;=, &lt;=, &lt;</a>
-            <a href="#and-or-not" class="item">and, or, not</a>
-            <a href="#alternative-operator" class="item">Alternative operator: //</a>
+            <a href="#>->=-<=-<" class="item">
+              <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;</code>
+            </a>
+            <a href="#and-or-not" class="item"><code>and</code>, <code>or</code>, <code>not</code></a>
+            <a href="#alternative-operator" class="item">Alternative operator: <code>//</code></a>
             <a href="#try-catch" class="item">try-catch</a>
             <a href="#breaking-out-of-control-structures" class="item">Breaking out of control structures</a>
-            <a href="#error-suppression-optional-operator" class="item">Error Suppression / Optional Operator: ?</a>
+            <a href="#error-suppression-optional-operator" class="item">
+              Error Suppression / Optional Operator: <code>?</code>
+            </a>
           </div>
         </div>
         <div class="section">
           <a href="#regular-expressions" class="item">Regular expressions</a>
           <div class="children section">
-            <a href="#test" class="item">test(val), test(regex; flags)</a>
-            <a href="#match" class="item">match(val), match(regex; flags)</a>
-            <a href="#capture" class="item">capture(val), capture(regex; flags)</a>
-            <a href="#scan" class="item">scan(regex), scan(regex; flags)</a>
-            <a href="#split-2" class="item">split(regex; flags)</a>
-            <a href="#splits" class="item">splits(regex), splits(regex; flags)</a>
-            <a href="#sub" class="item">sub(regex; tostring), sub(regex; tostring; flags)</a>
-            <a href="#gsub" class="item">gsub(regex; tostring), gsub(regex; tostring; flags)</a>
+            <a href="#test" class="item"><code>test(val)</code>, <code>test(regex; flags)</code></a>
+            <a href="#match" class="item"><code>match(val)</code>, <code>match(regex; flags)</code></a>
+            <a href="#capture" class="item"><code>capture(val)</code>, <code>capture(regex; flags)</code></a>
+            <a href="#scan" class="item"><code>scan(regex)</code>, <code>scan(regex; flags)</code></a>
+            <a href="#split-2" class="item"><code>split(regex; flags)</code></a>
+            <a href="#splits" class="item"><code>splits(regex)</code>, <code>splits(regex; flags)</code></a>
+            <a href="#sub" class="item"><code>sub(regex; tostring)</code>, <code>sub(regex; tostring; flags)</code></a>
+            <a href="#gsub" class="item">
+              <code>gsub(regex; tostring)</code>, <code>gsub(regex; tostring; flags)</code>
+            </a>
           </div>
         </div>
         <div class="section">
           <a href="#advanced-features" class="item">Advanced features</a>
           <div class="children section">
-            <a href="#variable-symbolic-binding-operator" class="item"
-              >Variable / Symbolic Binding Operator: ... as $identifier | ...</a
-            >
-            <a href="#destructuring-alternative-operator" class="item">Destructuring Alternative Operator: ?//</a>
+            <a href="#variable-symbolic-binding-operator" class="item">
+              Variable / Symbolic Binding Operator: <code>... as $identifier | ...</code>
+            </a>
+            <a href="#destructuring-alternative-operator" class="item">
+              Destructuring Alternative Operator: <code>?//</code>
+            </a>
             <a href="#defining-functions" class="item">Defining Functions</a>
             <a href="#scoping" class="item">Scoping</a>
-            <a href="#isempty" class="item">isempty(exp)</a>
-            <a href="#limit" class="item">limit(n; exp)</a>
-            <a href="#first-last-nth-2" class="item">first(expr), last(expr), nth(n; expr)</a>
-            <a href="#first-last-nth-1" class="item">first, last, nth(n)</a>
-            <a href="#reduce" class="item">reduce</a>
-            <a href="#foreach" class="item">foreach</a>
+            <a href="#isempty" class="item"><code>isempty(exp)</code></a>
+            <a href="#limit" class="item"><code>limit(n; exp)</code></a>
+            <a href="#first-last-nth-2" class="item">
+              <code>first(expr)</code>, <code>last(expr)</code>, <code>nth(n; expr)</code>
+            </a>
+            <a href="#first-last-nth-1" class="item"><code>first</code>, <code>last</code>, <code>nth(n)</code></a>
+            <a href="#reduce" class="item"><code>reduce</code></a>
+            <a href="#foreach" class="item"><code>foreach</code></a>
             <a href="#recursion" class="item">Recursion</a>
             <a href="#generators-and-iterators" class="item">Generators and iterators</a>
           </div>
@@ -317,19 +352,20 @@
         <div class="section">
           <a href="#streaming" class="item">Streaming</a>
           <div class="children section">
-            <a href="#truncate_stream" class="item">truncate_stream(stream_expression)</a>
-            <a href="#fromstream" class="item">fromstream(stream_expression)</a>
-            <a href="#tostream" class="item">tostream</a>
+            <a href="#truncate_stream" class="item"><code>truncate_stream(stream_expression)</code></a>
+            <a href="#fromstream" class="item"><code>fromstream(stream_expression)</code></a>
+            <a href="#tostream" class="item"><code>tostream</code></a>
           </div>
         </div>
         <div class="section">
           <a href="#assignment" class="item">Assignment</a>
           <div class="children section">
-            <a href="#update-assignment" class="item">Update-assignment: |=</a>
-            <a href="#arithmetic-update-assignment" class="item"
-              >Arithmetic update-assignment: +=, -=, *=, /=, %=, //=</a
-            >
-            <a href="#plain-assignment" class="item">Plain assignment: =</a>
+            <a href="#update-assignment" class="item">Update-assignment: <code>|=</code></a>
+            <a href="#arithmetic-update-assignment" class="item">
+              Arithmetic update-assignment: <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>,
+              <code>%=</code>, <code>//=</code>
+            </a>
+            <a href="#plain-assignment" class="item">Plain assignment: <code>=</code></a>
             <a href="#complex-assignments" class="item">Complex assignments</a>
           </div>
         </div>
@@ -337,14 +373,20 @@
           <a href="#modules" class="item">Modules</a>
           <div class="children section">
             <a href="#import-relativepathstring-as-name" class="item">
-              import RelativePathString as NAME [&lt;metadata&gt;];
+              <code>import RelativePathString as NAME [&lt;metadata&gt;];</code>
             </a>
-            <a href="#include-relativepathstring" class="item">include RelativePathString [&lt;metadata&gt;];</a>
+            <a href="#include-relativepathstring" class="item">
+              <code>include RelativePathString [&lt;metadata&gt;];</code>
+            </a>
             <a href="#import-relativepathstring-as-$name" class="item">
-              import RelativePathString as $NAME [&lt;metadata&gt;];
+              <code>import RelativePathString as $NAME [&lt;metadata&gt;];</code>
             </a>
-            <a href="#module-<metadata>" class="item">module &lt;metadata&gt;;</a>
-            <a href="#modulemeta" class="item">modulemeta</a>
+            <a href="#module-<metadata>" class="item">
+              <code>module &lt;metadata&gt;;</code>
+            </a>
+            <a href="#modulemeta" class="item">
+              <code>modulemeta</code>
+            </a>
           </div>
         </div>
       </div>
@@ -394,8 +436,7 @@
             appear as though it does. For example, using the current implementation of jq, we would see that the
             expression:
           </p>
-          <pre><code>1E1234567890 | .
-</code></pre>
+          <pre><code>1E1234567890 | .</code></pre>
           <p>
             produces <code>1.7976931348623157e+308</code> on at least one platform. This is because, in the process of
             parsing the number, this particular version of jq has converted it to an IEEE754 double-precision
@@ -528,15 +569,7 @@
           </div>
         </section>
         <section id="object-identifier-index">
-          <h3>
-            Object Identifier-Index: <code>.foo</code>, <code>.foo.bar</code>
-            <a
-              href="#object-identifier-index"
-              class="icon-link"
-              aria-label="Link to this section: Object Identifier-Index: `.foo`, `.foo.bar`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Object Identifier-Index: <code>.foo</code>, <code>.foo.bar</code></h3>
           <p>
             The simplest <em>useful</em> filter has the form <code>.foo</code>. When given a JSON object (aka dictionary
             or hash) as input, <code>.foo</code> produces the value at the key "foo" if the key is present, or null
@@ -611,15 +644,7 @@
           </div>
         </section>
         <section id="optional-object-identifier-index">
-          <h3>
-            Optional Object Identifier-Index: <code>.foo?</code>
-            <a
-              href="#optional-object-identifier-index"
-              class="icon-link"
-              aria-label="Link to this section: Optional Object Identifier-Index: `.foo?`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Optional Object Identifier-Index: <code>.foo?</code></h3>
           <p>Just like <code>.foo</code>, but does not output an error when <code>.</code> is not an object.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -765,15 +790,7 @@
           </div>
         </section>
         <section id="array-string-slice">
-          <h3>
-            Array/String Slice: <code>.[&lt;number&gt;:&lt;number&gt;]</code>
-            <a
-              href="#array-string-slice"
-              class="icon-link"
-              aria-label="Link to this section: Array/String Slice: `.[<number>:<number>]`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Array/String Slice: <code>.[&lt;number&gt;:&lt;number&gt;]</code></h3>
           <p>
             The <code>.[&lt;number&gt;:&lt;number&gt;]</code> syntax can be used to return a subarray of an array or
             substring of a string. The array returned by <code>.[10:15]</code> will be of length 5, containing the
@@ -852,15 +869,7 @@
           </div>
         </section>
         <section id="array-object-value-iterator">
-          <h3>
-            Array/Object Value Iterator: <code>.[]</code>
-            <a
-              href="#array-object-value-iterator"
-              class="icon-link"
-              aria-label="Link to this section: Array/Object Value Iterator: `.[]`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Array/Object Value Iterator: <code>.[]</code></h3>
           <p>
             If you use the <code>.[index]</code> syntax, but omit the index entirely, it will return <em>all</em> of the
             elements of an array. Running <code>.[]</code> with the input <code>[1,2,3]</code> will produce the numbers
@@ -1189,15 +1198,7 @@
           </div>
         </section>
         <section id="object-construction">
-          <h3>
-            Object Construction: <code>{}</code>
-            <a
-              href="#object-construction"
-              class="icon-link"
-              aria-label="Link to this section: Object Construction: `{}`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Object Construction: <code>{}</code></h3>
           <p>
             Like JSON, <code>{}</code> is for constructing objects (aka dictionaries or hashes), as in:
             <code>{"a": 42, "b": 17}</code>.
@@ -1335,15 +1336,7 @@
         </section>
       </section>
       <section id="builtin-operators-and-functions">
-        <h2>
-          Builtin operators and functions
-          <a
-            href="#builtin-operators-and-functions"
-            class="icon-link"
-            aria-label="Link to this section: Builtin operators and functions"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Builtin operators and functions</h2>
         <p>
           Some jq operators (for instance, <code>+</code>) do different things depending on the type of their arguments
           (arrays, numbers, etc.). However, jq never does implicit type conversions. If you try to add a string to an
@@ -1517,16 +1510,7 @@
           </div>
         </section>
         <section id="multiplication-division-modulo">
-          <h3>
-            Multiplication, division, modulo: <code>*</code>, <code>/</code>,
-            <code>%</code>
-            <a
-              href="#multiplication-division-modulo"
-              class="icon-link"
-              aria-label="Link to this section: Multiplication, division, modulo: `*`, `/`, `%`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Multiplication, division, modulo: <code>*</code>, <code>/</code>, <code>%</code></h3>
           <p>
             These infix operators behave as expected when given two numbers. Division by zero raises an error.
             <code>x % y</code> computes x modulo y.
@@ -2285,16 +2269,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="to_entries-from_entries-with_entries">
-          <h3>
-            <code>to_entries</code>, <code>from_entries</code>,
-            <code>with_entries(f)</code>
-            <a
-              href="#to_entries-from_entries-with_entries"
-              class="icon-link"
-              aria-label="Link to this section: `to_entries`, `from_entries`, `with_entries(f)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>to_entries</code>, <code>from_entries</code>, <code>with_entries(f)</code></h3>
           <p>
             These functions convert between an object and an array of key-value pairs. If <code>to_entries</code> is
             passed an object, then for each <code>k: v</code> entry in the input, the output array includes
@@ -2413,12 +2388,6 @@ map_values(empty) #=&gt;  []
             <code>arrays</code>, <code>objects</code>, <code>iterables</code>, <code>booleans</code>,
             <code>numbers</code>, <code>normals</code>, <code>finites</code>, <code>strings</code>, <code>nulls</code>,
             <code>values</code>, <code>scalars</code>
-            <a
-              href="#arrays-objects-iterables-booleans-numbers-normals-finites-strings-nulls-values-scalars"
-              class="icon-link"
-              aria-label="Link to this section: `arrays`, `objects`, `iterables`, `booleans`, `numbers`, `normals`, `finites`, `strings`, `nulls`, `values`, `scalars`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
           </h3>
           <p>
             These built-ins select only inputs that are arrays, objects, iterables (arrays or objects), booleans,
@@ -2541,15 +2510,7 @@ map_values(empty) #=&gt;  []
           <p>Stops the jq program with no further outputs. jq will exit with exit status <code>0</code>.</p>
         </section>
         <section id="halt_error">
-          <h3>
-            <code>halt_error</code>, <code>halt_error(exit_code)</code>
-            <a
-              href="#halt_error"
-              class="icon-link"
-              aria-label="Link to this section: `halt_error`, `halt_error(exit_code)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>halt_error</code>, <code>halt_error(exit_code)</code></h3>
           <p>
             Stops the jq program with no further outputs. The input will be printed on <code>stderr</code> as raw output
             (i.e., strings will not have double quotes) with no decoration, not even a newline.
@@ -2561,12 +2522,7 @@ map_values(empty) #=&gt;  []
           </p>
         </section>
         <section id="$__loc__">
-          <h3>
-            <code>$__loc__</code>
-            <a href="#$__loc__" class="icon-link" aria-label="Link to this section: `$__loc__`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>$__loc__</code></h3>
           <p>
             Produces an object with a "file" key and a "line" key, with the filename and line number where
             <code>$__loc__</code> occurs, as values.
@@ -2594,12 +2550,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="paths">
-          <h3>
-            <code>paths</code>, <code>paths(node_filter)</code>
-            <a href="#paths" class="icon-link" aria-label="Link to this section: `paths`, `paths(node_filter)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>paths</code>, <code>paths(node_filter)</code></h3>
           <p>
             <code>paths</code> outputs the paths to all the elements in its input (except it does not output the empty
             list, representing . itself).
@@ -2647,12 +2598,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="add">
-          <h3>
-            <code>add</code>
-            <a href="#add" class="icon-link" aria-label="Link to this section: `add`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>add</code></h3>
           <p>
             The filter <code>add</code> takes as input an array, and produces as output the elements of the array added
             together. This might mean summed, concatenated or merged depending on the types of the elements of the input
@@ -2714,16 +2660,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="any">
-          <h3>
-            <code>any</code>, <code>any(condition)</code>,
-            <code>any(generator; condition)</code>
-            <a
-              href="#any"
-              class="icon-link"
-              aria-label="Link to this section: `any`, `any(condition)`, `any(generator; condition)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>any</code>, <code>any(condition)</code>, <code>any(generator; condition)</code></h3>
           <p>
             The filter <code>any</code> takes as input an array of boolean values, and produces <code>true</code> as
             output if any of the elements of the array are <code>true</code>.
@@ -2789,16 +2726,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="all">
-          <h3>
-            <code>all</code>, <code>all(condition)</code>,
-            <code>all(generator; condition)</code>
-            <a
-              href="#all"
-              class="icon-link"
-              aria-label="Link to this section: `all`, `all(condition)`, `all(generator; condition)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>all</code>, <code>all(condition)</code>, <code>all(generator; condition)</code></h3>
           <p>
             The filter <code>all</code> takes as input an array of boolean values, and produces <code>true</code> as
             output if all of the elements of the array are <code>true</code>.
@@ -2864,12 +2792,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="flatten">
-          <h3>
-            <code>flatten</code>, <code>flatten(depth)</code>
-            <a href="#flatten" class="icon-link" aria-label="Link to this section: `flatten`, `flatten(depth)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>flatten</code>, <code>flatten(depth)</code></h3>
           <p>
             The filter <code>flatten</code> takes as input an array of nested arrays, and produces a flat array in which
             all arrays inside the original array have been recursively replaced by their values. You can pass an
@@ -2947,16 +2870,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="range">
-          <h3>
-            <code>range(upto)</code>, <code>range(from; upto)</code>,
-            <code>range(from; upto; by)</code>
-            <a
-              href="#range"
-              class="icon-link"
-              aria-label="Link to this section: `range(upto)`, `range(from; upto)`, `range(from; upto; by)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>range(upto)</code>, <code>range(from; upto)</code>, <code>range(from; upto; by)</code></h3>
           <p>
             The <code>range</code> function produces a range of numbers. <code>range(4; 10)</code> produces 6 numbers,
             from 4 (inclusive) to 10 (exclusive). The numbers are produced as separate outputs. Use
@@ -3077,12 +2991,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="floor">
-          <h3>
-            <code>floor</code>
-            <a href="#floor" class="icon-link" aria-label="Link to this section: `floor`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>floor</code></h3>
           <p>The <code>floor</code> function returns the floor of its numeric input.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -3107,12 +3016,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="sqrt">
-          <h3>
-            <code>sqrt</code>
-            <a href="#sqrt" class="icon-link" aria-label="Link to this section: `sqrt`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>sqrt</code></h3>
           <p>The <code>sqrt</code> function returns the square root of its numeric input.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -3137,12 +3041,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="tonumber">
-          <h3>
-            <code>tonumber</code>
-            <a href="#tonumber" class="icon-link" aria-label="Link to this section: `tonumber`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>tonumber</code></h3>
           <p>
             The <code>tonumber</code> function parses its input as a number. It will convert correctly-formatted strings
             to their numeric equivalent, leave numbers alone, and give an error on all other input.
@@ -3174,12 +3073,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="tostring">
-          <h3>
-            <code>tostring</code>
-            <a href="#tostring" class="icon-link" aria-label="Link to this section: `tostring`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>tostring</code></h3>
           <p>
             The <code>tostring</code> function prints its input as a string. Strings are left unchanged, and all other
             values are JSON-encoded.
@@ -3215,12 +3109,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="type">
-          <h3>
-            <code>type</code>
-            <a href="#type" class="icon-link" aria-label="Link to this section: `type`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>type</code></h3>
           <p>
             The <code>type</code> function returns the type of its argument as a string, which is one of null, boolean,
             number, string, array or object.
@@ -3251,12 +3140,6 @@ map_values(empty) #=&gt;  []
           <h3>
             <code>infinite</code>, <code>nan</code>, <code>isinfinite</code>, <code>isnan</code>, <code>isfinite</code>,
             <code>isnormal</code>
-            <a
-              href="#infinite-nan-isinfinite-isnan-isfinite-isnormal"
-              class="icon-link"
-              aria-label="Link to this section: `infinite`, `nan`, `isinfinite`, `isnan`, `isfinite`, `isnormal`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
           </h3>
           <p>
             Some arithmetic operations can yield infinities and "not a number" (NaN) values. The
@@ -3316,15 +3199,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="sort-sort_by">
-          <h3>
-            <code>sort</code>, <code>sort_by(path_expression)</code>
-            <a
-              href="#sort-sort_by"
-              class="icon-link"
-              aria-label="Link to this section: `sort`, `sort_by(path_expression)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>sort</code>, <code>sort_by(path_expression)</code></h3>
           <p>
             The <code>sort</code> functions sorts its input, which must be an array. Values are sorted in the following
             order:
@@ -3407,12 +3282,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="group_by">
-          <h3>
-            <code>group_by(path_expression)</code>
-            <a href="#group_by" class="icon-link" aria-label="Link to this section: `group_by(path_expression)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>group_by(path_expression)</code></h3>
           <p>
             <code>group_by(.foo)</code> takes as input an array, groups the elements having the same
             <code>.foo</code> field into separate arrays, and produces all of these arrays as elements of a larger
@@ -3445,16 +3315,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="min-max-min_by-max_by">
-          <h3>
-            <code>min</code>, <code>max</code>, <code>min_by(path_exp)</code>,
-            <code>max_by(path_exp)</code>
-            <a
-              href="#min-max-min_by-max_by"
-              class="icon-link"
-              aria-label="Link to this section: `min`, `max`, `min_by(path_exp)`, `max_by(path_exp)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>min</code>, <code>max</code>, <code>min_by(path_exp)</code>, <code>max_by(path_exp)</code></h3>
           <p>Find the minimum or maximum element of the input array.</p>
           <p>
             The <code>min_by(path_exp)</code> and <code>max_by(path_exp)</code> functions allow you to specify a
@@ -3500,15 +3361,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="unique-unique_by">
-          <h3>
-            <code>unique</code>, <code>unique_by(path_exp)</code>
-            <a
-              href="#unique-unique_by"
-              class="icon-link"
-              aria-label="Link to this section: `unique`, `unique_by(path_exp)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>unique</code>, <code>unique_by(path_exp)</code></h3>
           <p>
             The <code>unique</code> function takes as input an array and produces an array of the same elements, in
             sorted order, with duplicates removed.
@@ -3573,12 +3426,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="reverse">
-          <h3>
-            <code>reverse</code>
-            <a href="#reverse" class="icon-link" aria-label="Link to this section: `reverse`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>reverse</code></h3>
           <p>This function reverses an array.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -3603,12 +3451,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="contains">
-          <h3>
-            <code>contains(element)</code>
-            <a href="#contains" class="icon-link" aria-label="Link to this section: `contains(element)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>contains(element)</code></h3>
           <p>
             The filter <code>contains(b)</code> will produce true if b is completely contained within the input. A
             string B is contained in a string A if B is a substring of A. An array B is contained in an array A if all
@@ -3703,12 +3546,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="indices">
-          <h3>
-            <code>indices(s)</code>
-            <a href="#indices" class="icon-link" aria-label="Link to this section: `indices(s)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>indices(s)</code></h3>
           <p>
             Outputs an array containing the indices in <code>.</code> where <code>s</code> occurs. The input may be an
             array, in which case if <code>s</code> is an array then the indices output will be those where all elements
@@ -3769,12 +3607,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="index-rindex">
-          <h3>
-            <code>index(s)</code>, <code>rindex(s)</code>
-            <a href="#index-rindex" class="icon-link" aria-label="Link to this section: `index(s)`, `rindex(s)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>index(s)</code>, <code>rindex(s)</code></h3>
           <p>
             Outputs the index of the first (<code>index</code>) or last (<code>rindex</code>) occurrence of
             <code>s</code> in the input.
@@ -3882,12 +3715,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="inside">
-          <h3>
-            <code>inside</code>
-            <a href="#inside" class="icon-link" aria-label="Link to this section: `inside`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>inside</code></h3>
           <p>
             The filter <code>inside(b)</code> will produce true if the input is completely contained within b. It is,
             essentially, an inversed version of <code>contains</code>.
@@ -3979,12 +3807,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="startswith">
-          <h3>
-            <code>startswith(str)</code>
-            <a href="#startswith" class="icon-link" aria-label="Link to this section: `startswith(str)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>startswith(str)</code></h3>
           <p>Outputs <code>true</code> if . starts with the given string argument.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -4009,12 +3832,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="endswith">
-          <h3>
-            <code>endswith(str)</code>
-            <a href="#endswith" class="icon-link" aria-label="Link to this section: `endswith(str)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>endswith(str)</code></h3>
           <p>Outputs <code>true</code> if . ends with the given string argument.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -4039,15 +3857,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="combinations">
-          <h3>
-            <code>combinations</code>, <code>combinations(n)</code>
-            <a
-              href="#combinations"
-              class="icon-link"
-              aria-label="Link to this section: `combinations`, `combinations(n)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>combinations</code>, <code>combinations(n)</code></h3>
           <p>
             Outputs all combinations of the elements of the arrays in the input array. If given an argument
             <code>n</code>, it outputs all combinations of <code>n</code> repetitions of the input array.
@@ -4115,12 +3925,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="ltrimstr">
-          <h3>
-            <code>ltrimstr(str)</code>
-            <a href="#ltrimstr" class="icon-link" aria-label="Link to this section: `ltrimstr(str)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>ltrimstr(str)</code></h3>
           <p>Outputs its input with the given prefix string removed, if it starts with it.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -4145,12 +3950,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="rtrimstr">
-          <h3>
-            <code>rtrimstr(str)</code>
-            <a href="#rtrimstr" class="icon-link" aria-label="Link to this section: `rtrimstr(str)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>rtrimstr(str)</code></h3>
           <p>Outputs its input with the given suffix string removed, if it ends with it.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -4175,12 +3975,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="explode">
-          <h3>
-            <code>explode</code>
-            <a href="#explode" class="icon-link" aria-label="Link to this section: `explode`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>explode</code></h3>
           <p>Converts an input string into an array of the string's codepoint numbers.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -4205,12 +4000,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="implode">
-          <h3>
-            <code>implode</code>
-            <a href="#implode" class="icon-link" aria-label="Link to this section: `implode`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>implode</code></h3>
           <p>The inverse of explode.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -4235,12 +4025,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="split-1">
-          <h3>
-            <code>split(str)</code>
-            <a href="#split-1" class="icon-link" aria-label="Link to this section: `split(str)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>split(str)</code></h3>
           <p>Splits an input string on the separator argument.</p>
           <p>
             <code>split</code> can also split on regex matches when called with two arguments (see the regular
@@ -4269,12 +4054,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="join">
-          <h3>
-            <code>join(str)</code>
-            <a href="#join" class="icon-link" aria-label="Link to this section: `join(str)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>join(str)</code></h3>
           <p>
             Joins the array of elements given as input, using the argument as separator. It is the inverse of
             <code>split</code>: that is, running <code>split("foo") | join("foo")</code> over any input string returns
@@ -4323,15 +4103,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="ascii_downcase-ascii_upcase">
-          <h3>
-            <code>ascii_downcase</code>, <code>ascii_upcase</code>
-            <a
-              href="#ascii_downcase-ascii_upcase"
-              class="icon-link"
-              aria-label="Link to this section: `ascii_downcase`, `ascii_upcase`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>ascii_downcase</code>, <code>ascii_upcase</code></h3>
           <p>
             Emit a copy of the input string with its alphabetic characters (a-z and A-Z) converted to the specified
             case.
@@ -4359,12 +4131,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="while">
-          <h3>
-            <code>while(cond; update)</code>
-            <a href="#while" class="icon-link" aria-label="Link to this section: `while(cond; update)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>while(cond; update)</code></h3>
           <p>
             The <code>while(cond; update)</code> function allows you to repeatedly apply an update to
             <code>.</code> until <code>cond</code> is false.
@@ -4397,12 +4164,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="repeat">
-          <h3>
-            <code>repeat(exp)</code>
-            <a href="#repeat" class="icon-link" aria-label="Link to this section: `repeat(exp)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>repeat(exp)</code></h3>
           <p>
             The <code>repeat(exp)</code> function allows you to repeatedly apply expression <code>exp</code> to
             <code>.</code> until an error is raised.
@@ -4435,12 +4197,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="until">
-          <h3>
-            <code>until(cond; next)</code>
-            <a href="#until" class="icon-link" aria-label="Link to this section: `until(cond; next)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>until(cond; next)</code></h3>
           <p>
             The <code>until(cond; next)</code> function allows you to repeatedly apply the expression <code>next</code>,
             initially to <code>.</code> then to its own output, until <code>cond</code> is true. For example, this can
@@ -4474,16 +4231,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="recurse">
-          <h3>
-            <code>recurse(f)</code>, <code>recurse</code>,
-            <code>recurse(f; condition)</code>
-            <a
-              href="#recurse"
-              class="icon-link"
-              aria-label="Link to this section: `recurse(f)`, `recurse`, `recurse(f; condition)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>recurse(f)</code>, <code>recurse</code>, <code>recurse(f; condition)</code></h3>
           <p>
             The <code>recurse(f)</code> function allows you to search through a recursive structure, and extract
             interesting data from all levels. Suppose your input represents a filesystem:
@@ -4603,12 +4351,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="walk">
-          <h3>
-            <code>walk(f)</code>
-            <a href="#walk" class="icon-link" aria-label="Link to this section: `walk(f)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>walk(f)</code></h3>
           <p>
             The <code>walk(f)</code> function applies f recursively to every component of the input entity. When an
             array is encountered, f is first applied to its elements and then to the array itself; when an object is
@@ -4794,15 +4537,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="string-interpolation">
-          <h3>
-            String interpolation: <code>\(exp)</code>
-            <a
-              href="#string-interpolation"
-              class="icon-link"
-              aria-label="Link to this section: String interpolation: `\(exp)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>String interpolation: <code>\(exp)</code></h3>
           <p>
             Inside a string, you can put an expression inside parens after a backslash. Whatever the expression returns
             will be interpolated into the string.
@@ -4891,15 +4626,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="format-strings-and-escaping">
-          <h3>
-            Format strings and escaping
-            <a
-              href="#format-strings-and-escaping"
-              class="icon-link"
-              aria-label="Link to this section: Format strings and escaping"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Format strings and escaping</h3>
           <p>
             The <code>@foo</code> syntax is used to format and escape strings, which is useful for building URLs,
             documents in a language like HTML or XML, and so forth. <code>@foo</code> can be used as a filter on its
@@ -5048,12 +4775,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="dates">
-          <h3>
-            Dates
-            <a href="#dates" class="icon-link" aria-label="Link to this section: Dates"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Dates</h3>
           <p>
             jq provides some basic date handling functionality, with some high-level and low-level builtins. In all
             cases these builtins deal exclusively with time in UTC.
@@ -5163,12 +4885,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="sql-style-operators">
-          <h3>
-            SQL-Style Operators
-            <a href="#sql-style-operators" class="icon-link" aria-label="Link to this section: SQL-Style Operators"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>SQL-Style Operators</h3>
           <p>jq provides a few SQL-style operators.</p>
           <ul>
             <li>INDEX(stream; index_expression):</li>
@@ -5212,12 +4929,7 @@ map_values(empty) #=&gt;  []
           </p>
         </section>
         <section id="builtins">
-          <h3>
-            <code>builtins</code>
-            <a href="#builtins" class="icon-link" aria-label="Link to this section: `builtins`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>builtins</code></h3>
           <p>
             Returns a list of all builtin functions in the format
             <code>name/arity</code>. Since functions with the same name but different arities are considered separate
@@ -5226,22 +4938,9 @@ map_values(empty) #=&gt;  []
         </section>
       </section>
       <section id="conditionals-and-comparisons">
-        <h2>
-          Conditionals and Comparisons
-          <a
-            href="#conditionals-and-comparisons"
-            class="icon-link"
-            aria-label="Link to this section: Conditionals and Comparisons"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Conditionals and Comparisons</h2>
         <section id="==-!=">
-          <h3>
-            <code>==</code>, <code>!=</code>
-            <a href="#==-!=" class="icon-link" aria-label="Link to this section: `==`, `!=`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>==</code>, <code>!=</code></h3>
           <p>
             The expression 'a == b' will produce 'true' if the results of evaluating a and b are equal (that is, if they
             represent equivalent JSON values) and 'false' otherwise. In particular, strings are never considered equal
@@ -5317,12 +5016,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="if-then-else-end">
-          <h3>
-            if-then-else-end
-            <a href="#if-then-else-end" class="icon-link" aria-label="Link to this section: if-then-else-end"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>if-then-else-end</h3>
           <p>
             <code>if A then B else C end</code> will act the same as <code>B</code> if <code>A</code> produces a value
             other than false or null, but act the same as <code>C</code> otherwise.
@@ -5370,13 +5064,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id=">->=-<=-<">
-          <h3>
-            <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;=</code>,
-            <code>&lt;</code>
-            <a href="#>->=-<=-<" class="icon-link" aria-label="Link to this section: `>`, `>=`, `<=`, `<`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;</code></h3>
           <p>
             The comparison operators <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;</code>
             return whether their left argument is greater than, greater than or equal to, less than or equal to or less
@@ -5406,12 +5094,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="and-or-not">
-          <h3>
-            <code>and</code>, <code>or</code>, <code>not</code>
-            <a href="#and-or-not" class="icon-link" aria-label="Link to this section: `and`, `or`, `not`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>and</code>, <code>or</code>, <code>not</code></h3>
           <p>
             jq supports the normal Boolean operators <code>and</code>, <code>or</code>, <code>not</code>. They have the
             same standard of truth as if expressions - <code>false</code> and <code>null</code> are considered "false
@@ -5518,15 +5201,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="alternative-operator">
-          <h3>
-            Alternative operator: <code>//</code>
-            <a
-              href="#alternative-operator"
-              class="icon-link"
-              aria-label="Link to this section: Alternative operator: `//`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Alternative operator: <code>//</code></h3>
           <p>
             The <code>//</code> operator produces all the values of its left-hand side that are neither
             <code>false</code> nor <code>null</code>, or, if the left-hand side produces no values other than
@@ -5651,12 +5326,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="try-catch">
-          <h3>
-            try-catch
-            <a href="#try-catch" class="icon-link" aria-label="Link to this section: try-catch"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>try-catch</h3>
           <p>
             Errors can be caught by using <code>try EXP catch EXP</code>. The first expression is executed, and if it
             fails then the second is executed with the error message. The output of the handler, if any, is output as if
@@ -5718,15 +5388,7 @@ map_values(empty) #=&gt;  []
           </div>
         </section>
         <section id="breaking-out-of-control-structures">
-          <h3>
-            Breaking out of control structures
-            <a
-              href="#breaking-out-of-control-structures"
-              class="icon-link"
-              aria-label="Link to this section: Breaking out of control structures"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Breaking out of control structures</h3>
           <p>
             A convenient use of try/catch is to break out of control structures like <code>reduce</code>,
             <code>foreach</code>, <code>while</code>, and so on.
@@ -5757,15 +5419,7 @@ try repeat(exp) catch if .=="break" then empty else error
           <p>because no label <code>$out</code> is visible.</p>
         </section>
         <section id="error-suppression-optional-operator">
-          <h3>
-            Error Suppression / Optional Operator: <code>?</code>
-            <a
-              href="#error-suppression-optional-operator"
-              class="icon-link"
-              aria-label="Link to this section: Error Suppression / Optional Operator: `?`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Error Suppression / Optional Operator: <code>?</code></h3>
           <p>The <code>?</code> operator, used as <code>EXP?</code>, is shorthand for <code>try EXP</code>.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -5807,12 +5461,7 @@ try repeat(exp) catch if .=="break" then empty else error
         </section>
       </section>
       <section id="regular-expressions">
-        <h2>
-          Regular expressions
-          <a href="#regular-expressions" class="icon-link" aria-label="Link to this section: Regular expressions"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Regular expressions</h2>
         <p>
           jq uses the
           <a href="https://github.com/kkos/oniguruma/blob/master/doc/RE">Oniguruma regular expression library</a>, as do
@@ -5862,12 +5511,7 @@ STRING | FILTER([REGEX, FLAGS])
 </code></pre>
         <p>evaluates to: <code>true</code>, <code>true</code>, <code>false</code>, <code>false</code>.</p>
         <section id="test">
-          <h3>
-            <code>test(val)</code>, <code>test(regex; flags)</code>
-            <a href="#test" class="icon-link" aria-label="Link to this section: `test(val)`, `test(regex; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>test(val)</code>, <code>test(regex; flags)</code></h3>
           <p>
             Like <code>match</code>, but does not return match objects, only <code>true</code> or <code>false</code>
             for whether or not the regex matches the input.
@@ -5915,12 +5559,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="match">
-          <h3>
-            <code>match(val)</code>, <code>match(regex; flags)</code>
-            <a href="#match" class="icon-link" aria-label="Link to this section: `match(val)`, `match(regex; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>match(val)</code>, <code>match(regex; flags)</code></h3>
           <p><strong>match</strong> outputs an object for each match it finds. Matches have the following fields:</p>
           <ul>
             <li><code>offset</code> - offset in UTF-8 codepoints from the beginning of the input</li>
@@ -6047,15 +5686,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="capture">
-          <h3>
-            <code>capture(val)</code>, <code>capture(regex; flags)</code>
-            <a
-              href="#capture"
-              class="icon-link"
-              aria-label="Link to this section: `capture(val)`, `capture(regex; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>capture(val)</code>, <code>capture(regex; flags)</code></h3>
           <p>
             Collects the named captures in a JSON object, with the name of each capture as the key, and the matched
             string as the corresponding value.
@@ -6083,12 +5714,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="scan">
-          <h3>
-            <code>scan(regex)</code>, <code>scan(regex; flags)</code>
-            <a href="#scan" class="icon-link" aria-label="Link to this section: `scan(regex)`, `scan(regex; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>scan(regex)</code>, <code>scan(regex; flags)</code></h3>
           <p>
             Emit a stream of the non-overlapping substrings of the input that match the regex in accordance with the
             flags, if any have been specified. If there is no match, the stream is empty. To capture all the matches for
@@ -6122,12 +5748,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="split-2">
-          <h3>
-            <code>split(regex; flags)</code>
-            <a href="#split-2" class="icon-link" aria-label="Link to this section: `split(regex; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>split(regex; flags)</code></h3>
           <p>Splits an input string on each regex match.</p>
           <p>
             For backwards compatibility, when called with a single argument,
@@ -6156,15 +5777,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="splits">
-          <h3>
-            <code>splits(regex)</code>, <code>splits(regex; flags)</code>
-            <a
-              href="#splits"
-              class="icon-link"
-              aria-label="Link to this section: `splits(regex)`, `splits(regex; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>splits(regex)</code>, <code>splits(regex; flags)</code></h3>
           <p>
             These provide the same results as their
             <code>split</code> counterparts, but as a stream instead of an array.
@@ -6204,16 +5817,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="sub">
-          <h3>
-            <code>sub(regex; tostring)</code>,
-            <code>sub(regex; tostring; flags)</code>
-            <a
-              href="#sub"
-              class="icon-link"
-              aria-label="Link to this section: `sub(regex; tostring)`, `sub(regex; tostring; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>sub(regex; tostring)</code>, <code>sub(regex; tostring; flags)</code></h3>
           <p>
             Emit the string obtained by replacing the first match of regex in the input string with
             <code>tostring</code>, after interpolation. <code>tostring</code> should be a jq string or a stream of such
@@ -6260,16 +5864,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="gsub">
-          <h3>
-            <code>gsub(regex; tostring)</code>,
-            <code>gsub(regex; tostring; flags)</code>
-            <a
-              href="#gsub"
-              class="icon-link"
-              aria-label="Link to this section: `gsub(regex; tostring)`, `gsub(regex; tostring; flags)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>gsub(regex; tostring)</code>, <code>gsub(regex; tostring; flags)</code></h3>
           <p>
             <code>gsub</code> is like <code>sub</code> but all the non-overlapping occurrences of the regex are replaced
             by <code>tostring</code>, after interpolation. If the second argument is a stream of jq strings, then
@@ -6315,12 +5910,7 @@ STRING | FILTER([REGEX, FLAGS])
         </section>
       </section>
       <section id="advanced-features">
-        <h2>
-          Advanced features
-          <a href="#advanced-features" class="icon-link" aria-label="Link to this section: Advanced features"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Advanced features</h2>
         <p>
           Variables are an absolute necessity in most programming languages, but they're relegated to an "advanced
           feature" in jq.
@@ -6350,16 +5940,7 @@ STRING | FILTER([REGEX, FLAGS])
         </p>
         <p>Finally, there is a module/library system.</p>
         <section id="variable-symbolic-binding-operator">
-          <h3>
-            Variable / Symbolic Binding Operator:
-            <code>... as $identifier | ...</code>
-            <a
-              href="#variable-symbolic-binding-operator"
-              class="icon-link"
-              aria-label="Link to this section: Variable / Symbolic Binding Operator: `... as $identifier | ...`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Variable / Symbolic Binding Operator: <code>... as $identifier | ...</code></h3>
           <p>
             In jq, all filters have an input and an output, so manual plumbing is not necessary to pass a value from one
             part of a program to the next. Many expressions, for instance <code>a + b</code>, pass their input to two
@@ -6516,15 +6097,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="destructuring-alternative-operator">
-          <h3>
-            Destructuring Alternative Operator: <code>?//</code>
-            <a
-              href="#destructuring-alternative-operator"
-              class="icon-link"
-              aria-label="Link to this section: Destructuring Alternative Operator: `?//`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Destructuring Alternative Operator: <code>?//</code></h3>
           <p>
             The destructuring alternative operator provides a concise mechanism for destructuring an input that can take
             one of several forms.
@@ -6627,12 +6200,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="defining-functions">
-          <h3>
-            Defining Functions
-            <a href="#defining-functions" class="icon-link" aria-label="Link to this section: Defining Functions"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Defining Functions</h3>
           <p>You can give a filter a name using "def" syntax:</p>
           <pre><code>def increment: . + 1;
 </code></pre>
@@ -6712,12 +6280,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="scoping">
-          <h3>
-            Scoping
-            <a href="#scoping" class="icon-link" aria-label="Link to this section: Scoping"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Scoping</h3>
           <p>
             There are two types of symbols in jq: value bindings (a.k.a., "variables"), and functions. Both are scoped
             lexically, with expressions being able to refer only to symbols that have been defined "to the left" of
@@ -6732,12 +6295,7 @@ STRING | FILTER([REGEX, FLAGS])
           </p>
         </section>
         <section id="isempty">
-          <h3>
-            <code>isempty(exp)</code>
-            <a href="#isempty" class="icon-link" aria-label="Link to this section: `isempty(exp)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>isempty(exp)</code></h3>
           <p>Returns true if <code>exp</code> produces no outputs, false otherwise.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -6794,12 +6352,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="limit">
-          <h3>
-            <code>limit(n; exp)</code>
-            <a href="#limit" class="icon-link" aria-label="Link to this section: `limit(n; exp)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>limit(n; exp)</code></h3>
           <p>The <code>limit</code> function extracts up to <code>n</code> outputs from <code>exp</code>.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -6824,16 +6377,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="first-last-nth-2">
-          <h3>
-            <code>first(expr)</code>, <code>last(expr)</code>,
-            <code>nth(n; expr)</code>
-            <a
-              href="#first-last-nth-2"
-              class="icon-link"
-              aria-label="Link to this section: `first(expr)`, `last(expr)`, `nth(n; expr)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>first(expr)</code>, <code>last(expr)</code>, <code>nth(n; expr)</code></h3>
           <p>
             The <code>first(expr)</code> and <code>last(expr)</code> functions extract the first and last values from
             <code>expr</code>, respectively.
@@ -6865,12 +6409,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="first-last-nth-1">
-          <h3>
-            <code>first</code>, <code>last</code>, <code>nth(n)</code>
-            <a href="#first-last-nth-1" class="icon-link" aria-label="Link to this section: `first`, `last`, `nth(n)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>first</code>, <code>last</code>, <code>nth(n)</code></h3>
           <p>
             The <code>first</code> and <code>last</code> functions extract the first and last values from any array at
             <code>.</code>.
@@ -6899,12 +6438,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="reduce">
-          <h3>
-            <code>reduce</code>
-            <a href="#reduce" class="icon-link" aria-label="Link to this section: `reduce`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>reduce</code></h3>
           <p>
             The <code>reduce</code> syntax allows you to combine all of the results of an expression by accumulating
             them into a single answer. The form is <code>reduce EXP as $var (INIT; UPDATE)</code>. As an example, we'll
@@ -6976,12 +6510,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="foreach">
-          <h3>
-            <code>foreach</code>
-            <a href="#foreach" class="icon-link" aria-label="Link to this section: `foreach`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>foreach</code></h3>
           <p>
             The <code>foreach</code> syntax is similar to <code>reduce</code>, but intended to allow the construction of
             <code>limit</code> and reducers that produce intermediate results.
@@ -7103,12 +6632,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="recursion">
-          <h3>
-            Recursion
-            <a href="#recursion" class="icon-link" aria-label="Link to this section: Recursion"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Recursion</h3>
           <p>
             As described above, <code>recurse</code> uses recursion, and any jq function can be recursive. The
             <code>while</code> builtin is also implemented in terms of recursion.
@@ -7129,15 +6653,7 @@ STRING | FILTER([REGEX, FLAGS])
 </code></pre>
         </section>
         <section id="generators-and-iterators">
-          <h3>
-            Generators and iterators
-            <a
-              href="#generators-and-iterators"
-              class="icon-link"
-              aria-label="Link to this section: Generators and iterators"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Generators and iterators</h3>
           <p>
             Some jq operators and functions are actually generators in that they can produce zero, one, or more values
             for each input, just as one might expect in other programming languages that have generators. For example,
@@ -7218,12 +6734,7 @@ STRING | FILTER([REGEX, FLAGS])
         </section>
       </section>
       <section id="math">
-        <h2>
-          Math
-          <a href="#math" class="icon-link" aria-label="Link to this section: Math"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Math</h2>
         <p>jq currently only has IEEE754 double-precision (64-bit) floating point number support.</p>
         <p>
           Besides simple arithmetic operators such as <code>+</code>, jq also has most standard math functions from the
@@ -7256,12 +6767,7 @@ STRING | FILTER([REGEX, FLAGS])
         <p>See your system's manual for more information on each of these.</p>
       </section>
       <section id="io">
-        <h2>
-          I/O
-          <a href="#io" class="icon-link" aria-label="Link to this section: I/O"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>I/O</h2>
         <p>
           At this time jq has minimal support for I/O, mostly in the form of control over when inputs are read. Two
           builtins functions are provided for this, <code>input</code> and <code>inputs</code>, that read from the same
@@ -7281,12 +6787,7 @@ STRING | FILTER([REGEX, FLAGS])
           to constant inputs. This is not true of I/O builtins.
         </p>
         <section id="input">
-          <h3>
-            <code>input</code>
-            <a href="#input" class="icon-link" aria-label="Link to this section: `input`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>input</code></h3>
           <p>Outputs one new input.</p>
           <p>
             Note that when using <code>input</code> it is generally be necessary to invoke jq with the
@@ -7296,12 +6797,7 @@ STRING | FILTER([REGEX, FLAGS])
 </code></pre>
         </section>
         <section id="inputs">
-          <h3>
-            <code>inputs</code>
-            <a href="#inputs" class="icon-link" aria-label="Link to this section: `inputs`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>inputs</code></h3>
           <p>Outputs all remaining inputs, one by one.</p>
           <p>
             This is primarily useful for reductions over a program's inputs. Note that when using
@@ -7312,12 +6808,7 @@ STRING | FILTER([REGEX, FLAGS])
 </code></pre>
         </section>
         <section id="debug">
-          <h3>
-            <code>debug</code>, <code>debug(msgs)</code>
-            <a href="#debug" class="icon-link" aria-label="Link to this section: `debug`, `debug(msgs)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>debug</code>, <code>debug(msgs)</code></h3>
           <p>
             These two filters are like <code>.</code> but have as a side-effect the production of one or more messages
             on stderr.
@@ -7343,43 +6834,23 @@ STRING | FILTER([REGEX, FLAGS])
 </code></pre>
         </section>
         <section id="stderr">
-          <h3>
-            <code>stderr</code>
-            <a href="#stderr" class="icon-link" aria-label="Link to this section: `stderr`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>stderr</code></h3>
           <p>Prints its input in raw and compact mode to stderr with no additional decoration, not even a newline.</p>
         </section>
         <section id="input_filename">
-          <h3>
-            <code>input_filename</code>
-            <a href="#input_filename" class="icon-link" aria-label="Link to this section: `input_filename`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>input_filename</code></h3>
           <p>
             Returns the name of the file whose input is currently being filtered. Note that this will not work well
             unless jq is running in a UTF-8 locale.
           </p>
         </section>
         <section id="input_line_number">
-          <h3>
-            <code>input_line_number</code>
-            <a href="#input_line_number" class="icon-link" aria-label="Link to this section: `input_line_number`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>input_line_number</code></h3>
           <p>Returns the line number of the input currently being filtered.</p>
         </section>
       </section>
       <section id="streaming">
-        <h2>
-          Streaming
-          <a href="#streaming" class="icon-link" aria-label="Link to this section: Streaming"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Streaming</h2>
         <p>
           With the <code>--stream</code> option jq can parse input texts in a streaming fashion, allowing jq programs to
           start processing large JSON texts immediately rather than after the parse completes. If you have a single JSON
@@ -7402,15 +6873,7 @@ STRING | FILTER([REGEX, FLAGS])
           <code>["error message"]</code> when an input text fails to parse.
         </p>
         <section id="truncate_stream">
-          <h3>
-            <code>truncate_stream(stream_expression)</code>
-            <a
-              href="#truncate_stream"
-              class="icon-link"
-              aria-label="Link to this section: `truncate_stream(stream_expression)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>truncate_stream(stream_expression)</code></h3>
           <p>
             Consumes a number as input and truncates the corresponding number of path elements from the left of the
             outputs of the given streaming expression.
@@ -7442,12 +6905,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="fromstream">
-          <h3>
-            <code>fromstream(stream_expression)</code>
-            <a href="#fromstream" class="icon-link" aria-label="Link to this section: `fromstream(stream_expression)`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>fromstream(stream_expression)</code></h3>
           <p>Outputs values corresponding to the stream expression's outputs.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -7472,12 +6930,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="tostream">
-          <h3>
-            <code>tostream</code>
-            <a href="#tostream" class="icon-link" aria-label="Link to this section: `tostream`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>tostream</code></h3>
           <p>The <code>tostream</code> builtin outputs the streamed form of its input.</p>
           <div class="pb-3">
             <h4 class="examples">Examples:</h4>
@@ -7503,12 +6956,7 @@ STRING | FILTER([REGEX, FLAGS])
         </section>
       </section>
       <section id="assignment">
-        <h2>
-          Assignment
-          <a href="#assignment" class="icon-link" aria-label="Link to this section: Assignment"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Assignment</h2>
         <p>
           Assignment works a little differently in jq than in most programming languages. jq doesn't distinguish between
           references to and copies of something - two objects or arrays are either equal or not equal, without any
@@ -7552,12 +7000,7 @@ STRING | FILTER([REGEX, FLAGS])
           <code>(.a,.b)=0</code> sets both.
         </p>
         <section id="update-assignment">
-          <h3>
-            Update-assignment: <code>|=</code>
-            <a href="#update-assignment" class="icon-link" aria-label="Link to this section: Update-assignment: `|=`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Update-assignment: <code>|=</code></h3>
           <p>
             This is the "update" operator <code>|=</code>. It takes a filter on the right-hand side and works out the
             new value for the property of <code>.</code> being assigned to by running the old value through this
@@ -7607,14 +7050,7 @@ STRING | FILTER([REGEX, FLAGS])
         <section id="arithmetic-update-assignment">
           <h3>
             Arithmetic update-assignment: <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>,
-            <code>%=</code>,
-            <code>//=</code>
-            <a
-              href="#arithmetic-update-assignment"
-              class="icon-link"
-              aria-label="Link to this section: Arithmetic update-assignment: `+=`, `-=`, `*=`, `/=`, `%=`, `//=`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
+            <code>%=</code>, <code>//=</code>
           </h3>
           <p>
             jq has a few operators of the form <code>a op= b</code>, which are all equivalent to
@@ -7644,12 +7080,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="plain-assignment">
-          <h3>
-            Plain assignment: <code>=</code>
-            <a href="#plain-assignment" class="icon-link" aria-label="Link to this section: Plain assignment: `=`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Plain assignment: <code>=</code></h3>
           <p>
             This is the plain assignment operator. Unlike the others, the input to the right-hand side (RHS) is the same
             as the input to the left-hand side (LHS) rather than the value at the LHS path, and all values output by the
@@ -7752,12 +7183,7 @@ STRING | FILTER([REGEX, FLAGS])
           </div>
         </section>
         <section id="complex-assignments">
-          <h3>
-            Complex assignments
-            <a href="#complex-assignments" class="icon-link" aria-label="Link to this section: Complex assignments"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3>Complex assignments</h3>
           <p>
             Lots more things are allowed on the left-hand side of a jq assignment than in most languages. We've already
             seen simple field accesses on the left hand side, and it's no surprise that array accesses work just as
@@ -7798,12 +7224,7 @@ STRING | FILTER([REGEX, FLAGS])
         </section>
       </section>
       <section id="modules">
-        <h2>
-          Modules
-          <a href="#modules" class="icon-link" aria-label="Link to this section: Modules"
-            ><span class="bi bi-link-45deg" aria-hidden="true"></span
-          ></a>
-        </h2>
+        <h2>Modules</h2>
         <p>
           jq has a library/module system. Modules are files whose names end in
           <code>.jq</code>.
@@ -7844,15 +7265,7 @@ STRING | FILTER([REGEX, FLAGS])
         </p>
         <p>If <code>$HOME/.jq</code> is a file, it is sourced into the main program.</p>
         <section id="import-relativepathstring-as-name">
-          <h3>
-            <code>import RelativePathString as NAME [&lt;metadata&gt;];</code>
-            <a
-              href="#import-relativepathstring-as-name"
-              class="icon-link"
-              aria-label="Link to this section: `import RelativePathString as NAME [<metadata>];`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>import RelativePathString as NAME [&lt;metadata&gt;];</code></h3>
           <p>
             Imports a module found at the given path relative to a directory in a search path. A <code>.jq</code> suffix
             will be added to the relative path string. The module's symbols are prefixed with <code>NAME::</code>.
@@ -7868,15 +7281,7 @@ STRING | FILTER([REGEX, FLAGS])
           </p>
         </section>
         <section id="include-relativepathstring">
-          <h3>
-            <code>include RelativePathString [&lt;metadata&gt;];</code>
-            <a
-              href="#include-relativepathstring"
-              class="icon-link"
-              aria-label="Link to this section: `include RelativePathString [<metadata>];`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>include RelativePathString [&lt;metadata&gt;];</code></h3>
           <p>
             Imports a module found at the given path relative to a directory in a search path as if it were included in
             place. A
@@ -7890,15 +7295,7 @@ STRING | FILTER([REGEX, FLAGS])
           </p>
         </section>
         <section id="import-relativepathstring-as-$name">
-          <h3>
-            <code>import RelativePathString as $NAME [&lt;metadata&gt;];</code>
-            <a
-              href="#import-relativepathstring-as-$name"
-              class="icon-link"
-              aria-label="Link to this section: `import RelativePathString as $NAME [<metadata>];`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>import RelativePathString as $NAME [&lt;metadata&gt;];</code></h3>
           <p>
             Imports a JSON file found at the given path relative to a directory in a search path. A
             <code>.json</code> suffix will be added to the relative path string. The file's data will be available as
@@ -7915,12 +7312,7 @@ STRING | FILTER([REGEX, FLAGS])
           </p>
         </section>
         <section id="module-<metadata>">
-          <h3>
-            <code>module &lt;metadata&gt;;</code>
-            <a href="#module-<metadata>" class="icon-link" aria-label="Link to this section: `module <metadata>;`"
-              ><span class="bi bi-link-45deg" aria-hidden="true"></span
-            ></a>
-          </h3>
+          <h3><code>module &lt;metadata&gt;;</code></h3>
           <p>
             This directive is entirely optional. It's not required for proper operation. It serves only the purpose of
             providing metadata that can be read with the <code>modulemeta</code> builtin.

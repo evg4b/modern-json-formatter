@@ -348,3 +348,21 @@ pre {
     pointer-events: none;
   }
 }
+
+.input-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c6c6c;
+    transition: all 150ms ease;
+
+    &:hover {
+      color: #b0b0b0;
+    }
+  }
+}

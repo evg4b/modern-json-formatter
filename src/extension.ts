@@ -29,27 +29,27 @@ export const runExtension = async () => {
   const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadow);
   rawContainer.appendChild(data);
 
-  const { rawButton, queryButton, formatButton, queryInput } = buildButtons(shadow);
+  const { rawButton, queryButton, formatButton, queryInput, queryInputWrapper } = buildButtons(shadow);
 
   const response = await tokenize(data.innerText);
 
-  queryInput.style.display = 'none';
+  queryInputWrapper.style.display = 'none';
   rawButton.addEventListener('click', () => {
     rootContainer.classList.remove('formatted', 'query');
     rootContainer.classList.add('raw');
-    queryInput.style.display = 'none';
+    queryInputWrapper.style.display = 'none';
   });
 
   formatButton.addEventListener('click', () => {
     rootContainer.classList.remove('raw', 'query');
     rootContainer.classList.add('formatted');
-    queryInput.style.display = 'none';
+    queryInputWrapper.style.display = 'none';
   });
 
   queryButton.addEventListener('click', () => {
     rootContainer.classList.remove('raw', 'formatted');
     rootContainer.classList.add('query');
-    queryInput.style.display = 'inline-block';
+    queryInputWrapper.style.display = 'flex';
   });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises

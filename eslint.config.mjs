@@ -13,7 +13,7 @@ export default tseslint.config(
       'tsup.config.js',
       'packages/wasm_exec.js',
       'eslint.config.mjs',
-      'coverage/'
+      'coverage/',
     ],
   },
   eslint.configs.recommended,
@@ -22,10 +22,13 @@ export default tseslint.config(
   {
     rules: {
       '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/restrict-template-expressions': ['error', {
-        allowNumber: true,
-      }]
-    }
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        {
+          allowNumber: true,
+        },
+      ],
+    },
   },
   {
     languageOptions: {
@@ -34,5 +37,5 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  },
+  }
 );

@@ -4,14 +4,16 @@ $indentation: 30px;
   font-family: 'Monaco';
   font-style: normal;
   font-weight: normal;
-  src: local('Monaco'), url('chrome-extension://__MSG_@@extension_id__/Monaco.woff') format('woff');
+  src:
+    local('Monaco'),
+    url('chrome-extension://__MSG_@@extension_id__/Monaco.woff') format('woff');
 }
 
 :host {
   display: flex;
   flex-direction: column;
   padding: $indentation;
-  font-family: "Monaco", Arial, sans-serif;
+  font-family: 'Monaco', Arial, sans-serif;
   background: #282828;
   color: #eeeeee;
   font-size: 14px;
@@ -23,7 +25,7 @@ $indentation: 30px;
     padding: 0;
     text-wrap: pretty;
     word-wrap: break-word;
-    font-family: "Monaco", Arial, sans-serif;
+    font-family: 'Monaco', Arial, sans-serif;
     font-size: 14px;
   }
 

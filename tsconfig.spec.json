@@ -3,12 +3,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "allowJs": true,
-    "types": [
-      "jest",
-      "node",
-      "chrome",
-      "golang-wasm-exec"
-    ]
+    "types": ["jest", "node", "chrome", "golang-wasm-exec"]
   },
   "include": [
     "packages/**/*.test.ts",

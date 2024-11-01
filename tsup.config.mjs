@@ -9,16 +9,17 @@ const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
-const assets = path => copy({
-  resolveFrom: 'cwd',
-  assets: { from: [path], to: ['dist'] },
-  watch: !production,
-});
+const assets = path =>
+  copy({
+    resolveFrom: 'cwd',
+    assets: { from: [path], to: ['dist'] },
+    watch: !production,
+  });
 
 export default defineConfig({
   entry: {
     main: 'src/main.ts',
-    'faq': 'src/faq/faq.html',
+    faq: 'src/faq/faq.html',
   },
   splitting: false,
   sourcemap: !production,
@@ -61,8 +62,6 @@ export default defineConfig({
     assets('packages/tokenizer/*.wasm'),
     assets('packages/jq/*.wasm'),
     assets('assets/*'),
-    production
-      ? assets('assets/production/*')
-      : assets('assets/debug/*'),
+    production ? assets('assets/production/*') : assets('assets/debug/*'),
   ],
 });

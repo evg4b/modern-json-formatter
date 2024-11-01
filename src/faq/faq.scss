@@ -92,8 +92,7 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  padding: var(--v-padding) var(--h-padding) var(--v-padding)
-    calc(var(--sidebar-width) + var(--h-padding));
+  padding: var(--v-padding) var(--h-padding) var(--v-padding) calc(var(--sidebar-width) + var(--h-padding));
 }
 
 code {
@@ -101,4 +100,33 @@ code {
   color: #eee;
   padding: 1px 3px;
   border-radius: 3px;
+}
+
+.d-print-block {
+  //background: #3c3c3c;
+  //padding: 10px 10px;
+  //border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  table {
+    width: 100%;
+    text-align: left;
+    background: #3c3c3c;
+    padding: 10px 10px;
+    border-radius: 5px;
+
+    th, td {
+      padding: 5px 10px;
+    }
+
+    td {
+      font-family: monospace;
+    }
+  }
+
+  .pe-3 {
+    width: 100px;
+  }
 }

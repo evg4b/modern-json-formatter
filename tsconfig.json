@@ -5,11 +5,7 @@
     "moduleResolution": "node",
     "allowJs": false,
     "module": "esnext",
-    "types": [
-      "node",
-      "chrome",
-      "golang-wasm-exec"
-    ],
+    "types": ["node", "chrome", "golang-wasm-exec"],
     "baseUrl": ".",
     "strict": true,
     "skipLibCheck": true,

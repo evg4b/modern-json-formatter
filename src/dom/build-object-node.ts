@@ -17,11 +17,7 @@ export const buildObjectNode = (object: ObjectNode) => {
       if (isValueExpandable(value)) {
         propertyNode.appendChild(toggle());
       }
-      propertyNode.append(
-        element({ content: JSON.stringify(key), class: 'key' }),
-        colon(),
-        buildNode(value),
-      );
+      propertyNode.append(element({ content: JSON.stringify(key), class: 'key' }), colon(), buildNode(value));
       if (index !== lastIndex) {
         propertyNode.appendChild(comma());
       }

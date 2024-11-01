@@ -8,7 +8,7 @@ import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
 
 export const runExtension = async () => {
-  if (!await detectJson()) {
+  if (!(await detectJson())) {
     return;
   }
 
@@ -59,15 +59,11 @@ export const runExtension = async () => {
 
       const info = await jq(data.innerText, queryInput.value);
       queryContainer.innerHTML = '';
-      queryContainer.appendChild(
-        prepareResponse(info),
-      );
+      queryContainer.appendChild(prepareResponse(info));
     }
   });
 
-  formatContainer.appendChild(
-    prepareResponse(response),
-  );
+  formatContainer.appendChild(prepareResponse(response));
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
@@ -78,8 +74,5 @@ const prepareResponse = (response: TokenizerResponse): HTMLElement => {
 
 const extractLines = (response: ErrorNode) => response.error;
 
-const extractHeader = (response: ErrorNode): string => response.scope === 'tokenizer'
-  ? 'Invalid JSON file.'
-  : 'Invalid JQ Query.';
-
-
+const extractHeader = (response: ErrorNode): string =>
+  response.scope === 'tokenizer' ? 'Invalid JSON file.' : 'Invalid JQ Query.';

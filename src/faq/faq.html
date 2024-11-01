@@ -339,17 +339,6 @@
           <div class="children section"></div>
         </div>
         <div class="section">
-          <a href="#io" class="item">I/O</a>
-          <div class="children section">
-            <a href="#input" class="item">input</a>
-            <a href="#inputs" class="item">inputs</a>
-            <a href="#debug" class="item">debug, debug(msgs)</a>
-            <a href="#stderr" class="item">stderr</a>
-            <a href="#input_filename" class="item">input_filename</a>
-            <a href="#input_line_number" class="item">input_line_number</a>
-          </div>
-        </div>
-        <div class="section">
           <a href="#streaming" class="item">Streaming</a>
           <div class="children section">
             <a href="#truncate_stream" class="item"><code>truncate_stream(stream_expression)</code></a>
@@ -6765,89 +6754,6 @@ STRING | FILTER([REGEX, FLAGS])
         </p>
         <p>Three-input C math functions: <code>fma</code>.</p>
         <p>See your system's manual for more information on each of these.</p>
-      </section>
-      <section id="io">
-        <h2>I/O</h2>
-        <p>
-          At this time jq has minimal support for I/O, mostly in the form of control over when inputs are read. Two
-          builtins functions are provided for this, <code>input</code> and <code>inputs</code>, that read from the same
-          sources (e.g., <code>stdin</code>, files named on the command-line) as jq itself. These two builtins, and jq's
-          own reading actions, can be interleaved with each other. They are commonly used in combination with the null
-          input option <code>-n</code> to prevent one input from being read implicitly.
-        </p>
-        <p>
-          Two builtins provide minimal output capabilities, <code>debug</code>, and <code>stderr</code>. (Recall that a
-          jq program's output values are always output as JSON texts on <code>stdout</code>.) The
-          <code>debug</code> builtin can have application-specific behavior, such as for executables that use the libjq
-          C API but aren't the jq executable itself. The <code>stderr</code>
-          builtin outputs its input in raw mode to stder with no additional decoration, not even a newline.
-        </p>
-        <p>
-          Most jq builtins are referentially transparent, and yield constant and repeatable value streams when applied
-          to constant inputs. This is not true of I/O builtins.
-        </p>
-        <section id="input">
-          <h3><code>input</code></h3>
-          <p>Outputs one new input.</p>
-          <p>
-            Note that when using <code>input</code> it is generally be necessary to invoke jq with the
-            <code>-n</code> command-line option, otherwise the first entity will be lost.
-          </p>
-          <pre><code>echo 1 2 3 4 | jq '[., input]' # [1,2] [3,4]
-</code></pre>
-        </section>
-        <section id="inputs">
-          <h3><code>inputs</code></h3>
-          <p>Outputs all remaining inputs, one by one.</p>
-          <p>
-            This is primarily useful for reductions over a program's inputs. Note that when using
-            <code>inputs</code> it is generally necessary to invoke jq with the <code>-n</code> command-line option,
-            otherwise the first entity will be lost.
-          </p>
-          <pre><code>echo 1 2 3 | jq -n 'reduce inputs as $i (0; . + $i)' # 6
-</code></pre>
-        </section>
-        <section id="debug">
-          <h3><code>debug</code>, <code>debug(msgs)</code></h3>
-          <p>
-            These two filters are like <code>.</code> but have as a side-effect the production of one or more messages
-            on stderr.
-          </p>
-          <p>The message produced by the <code>debug</code> filter has the form</p>
-          <pre><code>["DEBUG:",&lt;input-value&gt;]
-</code></pre>
-          <p>
-            where <code>&lt;input-value&gt;</code> is a compact rendition of the input value. This format may change in
-            the future.
-          </p>
-          <p>
-            The <code>debug(msgs)</code> filter is defined as <code>(msgs | debug | empty), .</code> thus allowing great
-            flexibility in the content of the message, while also allowing multi-line debugging statements to be
-            created.
-          </p>
-          <p>For example, the expression:</p>
-          <pre><code>1 as $x | 2 | debug("Entering function foo with $x == \($x)", .) | (.+1)
-</code></pre>
-          <p>would produce the value 3 but with the following two lines being written to stderr:</p>
-          <pre><code>["DEBUG:","Entering function foo with $x == 1"]
-["DEBUG:",2]
-</code></pre>
-        </section>
-        <section id="stderr">
-          <h3><code>stderr</code></h3>
-          <p>Prints its input in raw and compact mode to stderr with no additional decoration, not even a newline.</p>
-        </section>
-        <section id="input_filename">
-          <h3><code>input_filename</code></h3>
-          <p>
-            Returns the name of the file whose input is currently being filtered. Note that this will not work well
-            unless jq is running in a UTF-8 locale.
-          </p>
-        </section>
-        <section id="input_line_number">
-          <h3><code>input_line_number</code></h3>
-          <p>Returns the line number of the input currently being filtered.</p>
-        </section>
       </section>
       <section id="streaming">
         <h2>Streaming</h2>

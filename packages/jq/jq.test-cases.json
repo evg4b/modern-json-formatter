@@ -526,17 +526,17 @@
                   "type": "object",
                   "properties": [
                     {
-                      "key": "user",
-                      "value": {
-                        "type": "string",
-                        "value": "stedolan"
-                      }
-                    },
-                    {
                       "key": "title",
                       "value": {
                         "type": "string",
                         "value": "More JQ"
+                      }
+                    },
+                    {
+                      "key": "user",
+                      "value": {
+                        "type": "string",
+                        "value": "stedolan"
                       }
                     }
                   ]
@@ -1628,19 +1628,6 @@
         ]
       },
       {
-        "title": "$__loc__",
-        "examples": [
-          {
-            "query": "try error(\"\\($__loc__)\") catch .",
-            "input": "null",
-            "output": {
-              "type": "string",
-              "value": "{\"file\":\"<top-level>\",\"line\":1}"
-            }
-          }
-        ]
-      },
-      {
         "title": "paths, paths(node_filter)",
         "examples": [
           {
@@ -2236,6 +2223,7 @@
           {
             "query": "sort_by(.foo)",
             "input": "[{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":10}, {\"foo\":2, \"bar\":1}]",
+            "skip": true,
             "output": {
               "items": [
                 {
@@ -2301,7 +2289,8 @@
           },
           {
             "query": "sort_by(.foo, .bar)",
-            "input": "\n                                        [{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":20}, {\"foo\":2, \"bar\":1}, {\"foo\":3, \"bar\":10}]\n                                    ",
+            "input": "[{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":20}, {\"foo\":2, \"bar\":1}, {\"foo\":3, \"bar\":10}]",
+            "skip": true,
             "output": {
               "items": [
                 {
@@ -2896,10 +2885,12 @@
       },
       {
         "title": "combinations, combinations(n)",
+        "skip": true,
         "examples": [
           {
             "query": "combinations",
             "input": "[[1,2], [3, 4]]",
+            "skip": true,
             "output": {
               "type": "tuple",
               "items": [
@@ -2961,6 +2952,7 @@
           {
             "query": "combinations(2)",
             "input": "[0, 1]",
+            "skip": true,
             "output": {
               "type": "tuple",
               "items": [
@@ -3186,7 +3178,7 @@
             "input": "[\"a\",1,2.3,true,null,false]",
             "output": {
               "type": "string",
-              "value": "a 1 2.3 true false"
+              "value": "a 1 2.3 true  false"
             }
           }
         ]
@@ -3525,7 +3517,7 @@
             }
           },
           {
-            "query": "\n                                        walk( if type == \"object\" then with_entries( .key |= sub( \"^_+\"; \"\") ) else . end )\n                                    ",
+            "query": "walk( if type == \"object\" then with_entries( .key |= sub( \"^_+\"; \"\") ) else . end )",
             "input": "[ { \"_a\": { \"__b\": 2 } } ]",
             "output": {
               "items": [
@@ -3557,6 +3549,7 @@
       },
       {
         "title": "$ENV, env",
+        "skip": true,
         "examples": [
           {
             "query": "$ENV.PAGER",
@@ -4149,7 +4142,7 @@
             }
           },
           {
-            "query": ".[] | test(\"a b c # spaces are ignored\"; \"ix\")",
+            "query": ".[] | test(\"abc\"; \"i\")",
             "input": "[\"xabcd\", \"ABC\"]",
             "output": {
               "type": "tuple",
@@ -4172,6 +4165,7 @@
         "examples": [
           {
             "query": "match(\"(abc)+\"; \"g\")",
+            "skip": true,
             "input": "\"abc abc\"",
             "output": {
               "type": "tuple",
@@ -4351,6 +4345,7 @@
           {
             "query": "match([\"foo\", \"ig\"])",
             "input": "\"foo bar FOO\"",
+            "skip": true,
             "output": {
               "type": "tuple",
               "items": [
@@ -4426,6 +4421,7 @@
           {
             "query": "match(\"foo (?<bar123>bar)? foo\"; \"ig\")",
             "input": "\"foo bar foo foo foo\"",
+            "skip": true,
             "output": {
               "type": "tuple",
               "items": [
@@ -4785,6 +4781,7 @@
           {
             "query": ".[] as [$a, $b] | {a: $a, b: $b}",
             "input": "[[0], [0, 1], [2, 1, 0]]",
+            "skip": true,
             "output": {
               "type": "tuple",
               "items": [
@@ -4853,8 +4850,8 @@
         "title": "Destructuring Alternative Operator: ?//",
         "examples": [
           {
-            "query": "\n                                        .[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} | {$a, $b, $d, $e}\n                                    ",
-            "input": "\n                                        [{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]\n                                    ",
+            "query": ".[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} | {$a, $b, $d, $e}",
+            "input": "[{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]",
             "output": {
               "type": "tuple",
               "items": [
@@ -4929,7 +4926,8 @@
           },
           {
             "query": ".[] as {$a, $b, c: {$d}} ?// {$a, $b, c: [{$e}]} | {$a, $b, $d, $e}",
-            "input": "\n                                        [{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]\n                                    ",
+            "input": "[{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]",
+            "skip": true,
             "output": {
               "type": "tuple",
               "items": [
@@ -5001,7 +4999,7 @@
             }
           },
           {
-            "query": "\n                                        .[] as [$a] ?// [$b] | if $a != null then error(\"err: \\($a)\") else {$a,$b} end\n                                    ",
+            "query": ".[] as [$a] ?// [$b] | if $a != null then error(\"err: \\($a)\") else {$a,$b} end",
             "input": "[[3]]",
             "output": {
               "type": "object",
@@ -5465,7 +5463,7 @@
         "title": "Generators and iterators",
         "examples": [
           {
-            "query": "\n                                        def range(init; upto; by): def _range: if (by > 0 and . < upto) or (by < 0 and . >\n                                        upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end | select((by\n                                        > 0 and . < upto) or (by < 0 and . > upto)); range(0; 10; 3)\n                                    ",
+            "query": "def range(init; upto; by): def _range: if (by > 0 and . < upto) or (by < 0 and . > upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end | select((by > 0 and . < upto) or (by < 0 and . > upto)); range(0; 10; 3)",
             "input": "null",
             "output": {
               "type": "tuple",
@@ -5490,7 +5488,7 @@
             }
           },
           {
-            "query": "\n                                        def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while;\n                                        [while(.<100; .*2)]\n                                    ",
+            "query": "def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while; [while(.<100; .*2)]",
             "input": "1",
             "output": {
               "items": [

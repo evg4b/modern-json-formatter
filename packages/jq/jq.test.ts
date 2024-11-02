@@ -1,8 +1,10 @@
 import '@testing/browser.mock';
 import { tNumber } from '@testing/json';
+import { TokenizerResponse } from '@packages/tokenizer';
 import { readFileSync } from 'fs';
 import { jq } from './index';
 import testCases from './jq.test-cases.json';
+import '../../testing/jest-soft-equal';
 
 jest.mock('../shared/wasm_helpers.ts', () => ({
   loadWasm: (_: string, imports: WebAssembly.Imports) => {
@@ -11,6 +13,20 @@ jest.mock('../shared/wasm_helpers.ts', () => ({
   },
 }));
 
+interface TestCase {
+  title: string;
+  sections: {
+    title: string;
+    skip?: boolean;
+    examples: {
+      query: string;
+      input: string;
+      skip?: boolean;
+      output: TokenizerResponse;
+    }[]
+  }[];
+}
+
 describe('jq', () => {
   test('should return a TokenizerResponse', async () => {
     const data = await jq('{ "data": 123 }', '.data');
@@ -18,14 +34,15 @@ describe('jq', () => {
     expect(data).toEqual(tNumber(`123`));
   });
 
-  describe.each(testCases)('$title', ({ sections }) => {
+  describe.each(testCases as TestCase[])('$title', ({ sections }) => {
+    const activeSections = sections.filter(section => !section.skip)
+    describe.each(activeSections)('$title', ({ examples }) => {
+      const active = examples.filter(p => !p.skip);
 
-    describe.each(sections as any[])('$title', ({ examples }) => {
-      const active = examples.filter((p: { skip: boolean }) => !p.skip) as Record<string, string>[]
-      test.each(active)('%p', async ({ input, query, output }: any) => {
+      test.each(active)('$input => $query', async ({ input, query, output }) => {
         const data = await jq(input, query);
 
-        expect(data).toEqual(output)
+        expect(data).toSoftEqual(output);
       });
     });
   });

@@ -1410,6 +1410,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4":
+  version: 4.17.13
+  resolution: "@types/lodash@npm:4.17.13"
+  checksum: 10c0/c3d0b7efe7933ac0369b99f2f7bff9240d960680fdb74b41ed4bd1b3ca60cca1e31fe4046d9abbde778f941a41bc2a75eb629abf8659fa6c27b66efbbb0802a9
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 20.12.11
   resolution: "@types/node@npm:20.12.11"
@@ -4230,6 +4237,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^10.0.1, lru-cache@npm:^10.2.0":
   version: 10.2.2
   resolution: "lru-cache@npm:10.2.2"
@@ -4468,6 +4482,7 @@ __metadata:
     "@types/chrome": "npm:^0.0.280"
     "@types/golang-wasm-exec": "npm:^1.15.2"
     "@types/jest": "npm:^29.5.14"
+    "@types/lodash": "npm:^4"
     "@types/node": "npm:^20.17.5"
     "@types/text-encoding": "npm:^0.0.39"
     esbuild: "npm:^0.24.0"
@@ -4479,8 +4494,10 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
+    lodash: "npm:^4.17.21"
     prettier: "npm:3.3.3"
     sass-embedded: "npm:^1.80.6"
+    sort-any: "npm:^4.0.6"
     text-encoding: "npm:^0.7.0"
     ts-jest: "npm:^29.2.5"
     tsup: "npm:^8.3.5"
@@ -5473,6 +5490,15 @@ __metadata:
     ip-address: "npm:^9.0.5"
     smart-buffer: "npm:^4.2.0"
   checksum: 10c0/d54a52bf9325165770b674a67241143a3d8b4e4c8884560c4e0e078aace2a728dffc7f70150660f51b85797c4e1a3b82f9b7aa25e0a0ceae1a243365da5c51a7
+  languageName: node
+  linkType: hard
+
+"sort-any@npm:^4.0.6":
+  version: 4.0.6
+  resolution: "sort-any@npm:4.0.6"
+  dependencies:
+    lodash: "npm:^4.17.21"
+  checksum: 10c0/3f04f601ac3b3eef3977669aa401fbc5a4e05530311764522cf5c16c965ba82bd70c02652dd498a5a8b91ff97fff823e81594022c3a1768bb1538dd5864d54b9
   languageName: node
   linkType: hard
 

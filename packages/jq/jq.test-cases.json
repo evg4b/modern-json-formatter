@@ -1,0 +1,3031 @@
+[
+  {
+    "title": "Basic filters",
+    "sections": [
+      {
+        "title": "Identity: .",
+        "examples": [
+          {
+            "query": ".",
+            "input": "\"Hello, world!\"",
+            "output": [
+              "Hello, world!"
+            ]
+          },
+          {
+            "query": ".",
+            "input": "0.12345678901234567890123456789",
+            "output": [
+              0.12345678901234568
+            ]
+          },
+          {
+            "query": "[., tojson]",
+            "input": "12345678909876543212345",
+            "output": [
+              [
+                1.2345678909876543e+22,
+                "12345678909876543212345"
+              ]
+            ]
+          },
+          {
+            "query": ". < 0.12345678901234567890123456788",
+            "input": "0.12345678901234567890123456789",
+            "output": [
+              false
+            ]
+          },
+          {
+            "query": "map([., . == 1]) | tojson",
+            "input": "[1, 1.000, 1.0, 100e-2]",
+            "output": [
+              "[[1,true],[1.000,true],[1.0,true],[1.00,true]]"
+            ]
+          },
+          {
+            "query": "\n                                        . as $big | [$big, $big + 1] | map(. > 10000000000000000000000000000000)\n                                    ",
+            "input": "10000000000000000000000000000001",
+            "output": [
+              [
+                true,
+                false
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Object Identifier-Index: .foo, .foo.bar",
+        "examples": [
+          {
+            "query": ".foo",
+            "input": "{\"foo\": 42, \"bar\": \"less interesting data\"}",
+            "output": [
+              42
+            ]
+          },
+          {
+            "query": ".foo",
+            "input": "{\"notfoo\": true, \"alsonotfoo\": false}",
+            "output": [
+              null
+            ]
+          },
+          {
+            "query": ".[\"foo\"]",
+            "input": "{\"foo\": 42}",
+            "output": [
+              42
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Optional Object Identifier-Index: .foo?",
+        "examples": [
+          {
+            "query": ".foo?",
+            "input": "{\"foo\": 42, \"bar\": \"less interesting data\"}",
+            "output": [
+              42
+            ]
+          },
+          {
+            "query": ".foo?",
+            "input": "{\"notfoo\": true, \"alsonotfoo\": false}",
+            "output": [
+              null
+            ]
+          },
+          {
+            "query": ".[\"foo\"]?",
+            "input": "{\"foo\": 42}",
+            "output": [
+              42
+            ]
+          },
+          {
+            "query": "[.foo?]",
+            "input": "[1,2]",
+            "output": [
+              []
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Array Index: .[<number>]",
+        "examples": [
+          {
+            "query": ".[0]",
+            "input": "[{\"name\":\"JSON\", \"good\":true}, {\"name\":\"XML\", \"good\":false}]",
+            "output": [
+              {
+                "name": "JSON",
+                "good": true
+              }
+            ]
+          },
+          {
+            "query": ".[2]",
+            "input": "[{\"name\":\"JSON\", \"good\":true}, {\"name\":\"XML\", \"good\":false}]",
+            "output": [
+              null
+            ]
+          },
+          {
+            "query": ".[-2]",
+            "input": "[1,2,3]",
+            "output": [
+              2
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Array/String Slice: .[<number>:<number>]",
+        "examples": [
+          {
+            "query": ".[2:4]",
+            "input": "[\"a\",\"b\",\"c\",\"d\",\"e\"]",
+            "output": [
+              [
+                "c",
+                "d"
+              ]
+            ]
+          },
+          {
+            "query": ".[2:4]",
+            "input": "\"abcdefghi\"",
+            "output": [
+              "cd"
+            ]
+          },
+          {
+            "query": ".[:3]",
+            "input": "[\"a\",\"b\",\"c\",\"d\",\"e\"]",
+            "output": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ]
+          },
+          {
+            "query": ".[-2:]",
+            "input": "[\"a\",\"b\",\"c\",\"d\",\"e\"]",
+            "output": [
+              [
+                "d",
+                "e"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Array/Object Value Iterator: .[]",
+        "examples": [
+          {
+            "query": ".[]",
+            "input": "[{\"name\":\"JSON\", \"good\":true}, {\"name\":\"XML\", \"good\":false}]",
+            "output": [
+              {
+                "name": "JSON",
+                "good": true
+              },
+              {
+                "name": "XML",
+                "good": false
+              }
+            ]
+          },
+          {
+            "query": ".[]",
+            "input": "[]",
+            "output": [
+              null
+            ]
+          },
+          {
+            "query": ".foo[]",
+            "input": "{\"foo\":[1,2,3]}",
+            "output": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "query": ".[]",
+            "input": "{\"a\": 1, \"b\": 1}",
+            "output": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Comma: ,",
+        "examples": [
+          {
+            "query": ".foo, .bar",
+            "input": "{\"foo\": 42, \"bar\": \"something else\", \"baz\": true}",
+            "output": [
+              42,
+              "something else"
+            ]
+          },
+          {
+            "query": ".user, .projects[]",
+            "input": "{\"user\":\"stedolan\", \"projects\": [\"jq\", \"wikiflow\"]}",
+            "output": [
+              "stedolan",
+              "jq",
+              "wikiflow"
+            ]
+          },
+          {
+            "query": ".[4,2]",
+            "input": "[\"a\",\"b\",\"c\",\"d\",\"e\"]",
+            "output": [
+              "e",
+              "c"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Pipe: |",
+        "examples": [
+          {
+            "query": ".[] | .name",
+            "input": "[{\"name\":\"JSON\", \"good\":true}, {\"name\":\"XML\", \"good\":false}]",
+            "output": [
+              "JSON",
+              "XML"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Parenthesis",
+        "examples": [
+          {
+            "query": "(. + 2) * 5",
+            "input": "1",
+            "output": [
+              15
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Types and Values",
+    "sections": [
+      {
+        "title": "Array construction: []",
+        "examples": [
+          {
+            "query": "[.user, .projects[]]",
+            "input": "{\"user\":\"stedolan\", \"projects\": [\"jq\", \"wikiflow\"]}",
+            "output": [
+              [
+                "stedolan",
+                "jq",
+                "wikiflow"
+              ]
+            ]
+          },
+          {
+            "query": "[ .[] | . * 2]",
+            "input": "[1, 2, 3]",
+            "output": [
+              [
+                2,
+                4,
+                6
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Object Construction: {}",
+        "examples": [
+          {
+            "query": "{user, title: .titles[]}",
+            "input": "{\"user\":\"stedolan\",\"titles\":[\"JQ Primer\", \"More JQ\"]}",
+            "output": [
+              {
+                "user": "stedolan",
+                "title": "JQ Primer"
+              },
+              {
+                "user": "stedolan",
+                "title": "More JQ"
+              }
+            ]
+          },
+          {
+            "query": "{(.user): .titles}",
+            "input": "{\"user\":\"stedolan\",\"titles\":[\"JQ Primer\", \"More JQ\"]}",
+            "output": [
+              {
+                "stedolan": [
+                  "JQ Primer",
+                  "More JQ"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Recursive Descent: ..",
+        "examples": [
+          {
+            "query": ".. | .a?",
+            "input": "[[{\"a\":1}]]",
+            "output": [
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Builtin operators and functions",
+    "sections": [
+      {
+        "title": "Addition: +",
+        "examples": [
+          {
+            "query": ".a + 1",
+            "input": "{\"a\": 7}",
+            "output": [
+              8
+            ]
+          },
+          {
+            "query": ".a + .b",
+            "input": "{\"a\": [1,2], \"b\": [3,4]}",
+            "output": [
+              [
+                1,
+                2,
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "query": ".a + null",
+            "input": "{\"a\": 1}",
+            "output": [
+              1
+            ]
+          },
+          {
+            "query": ".a + 1",
+            "input": "{}",
+            "output": [
+              1
+            ]
+          },
+          {
+            "query": "{a: 1} + {b: 2} + {c: 3} + {a: 42}",
+            "input": "null",
+            "output": [
+              {
+                "a": 42,
+                "b": 2,
+                "c": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Subtraction: -",
+        "examples": [
+          {
+            "query": "4 - .a",
+            "input": "{\"a\":3}",
+            "output": [
+              1
+            ]
+          },
+          {
+            "query": ". - [\"xml\", \"yaml\"]",
+            "input": "[\"xml\", \"yaml\", \"json\"]",
+            "output": [
+              [
+                "json"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Multiplication, division, modulo: *, /, %",
+        "examples": [
+          {
+            "query": "10 / . * 3",
+            "input": "5",
+            "output": [
+              6
+            ]
+          },
+          {
+            "query": ". / \", \"",
+            "input": "\"a, b,c,d, e\"",
+            "output": [
+              [
+                "a",
+                "b,c,d",
+                "e"
+              ]
+            ]
+          },
+          {
+            "query": "{\"k\": {\"a\": 1, \"b\": 2}} * {\"k\": {\"a\": 0,\"c\": 3}}",
+            "input": "null",
+            "output": [
+              {
+                "k": {
+                  "a": 0,
+                  "b": 2,
+                  "c": 3
+                }
+              }
+            ]
+          },
+          {
+            "query": ".[] | (1 / .)?",
+            "input": "[1,0,-1]",
+            "output": [
+              1,
+              -1
+            ]
+          }
+        ]
+      },
+      {
+        "title": "abs",
+        "examples": [
+          {
+            "query": "map(abs)",
+            "input": "[-10, -1.1, -1e-1]",
+            "output": [
+              [
+                10,
+                1.1,
+                0.1
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "length",
+        "examples": [
+          {
+            "query": ".[] | length",
+            "input": "[[1,2], \"string\", {\"a\":2}, null, -5]",
+            "output": [
+              2,
+              6,
+              1,
+              0,
+              5
+            ]
+          }
+        ]
+      },
+      {
+        "title": "utf8bytelength",
+        "examples": [
+          {
+            "query": "utf8bytelength",
+            "input": "\"\\u03bc\"",
+            "output": [
+              2
+            ]
+          }
+        ]
+      },
+      {
+        "title": "keys, keys_unsorted",
+        "examples": [
+          {
+            "query": "keys",
+            "input": "{\"abc\": 1, \"abcd\": 2, \"Foo\": 3}",
+            "output": [
+              [
+                "Foo",
+                "abc",
+                "abcd"
+              ]
+            ]
+          },
+          {
+            "query": "keys",
+            "input": "[42,3,35]",
+            "output": [
+              [
+                0,
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "has(key)",
+        "examples": [
+          {
+            "query": "map(has(\"foo\"))",
+            "input": "[{\"foo\": 42}, {}]",
+            "output": [
+              [
+                true,
+                false
+              ]
+            ]
+          },
+          {
+            "query": "map(has(2))",
+            "input": "[[0,1], [\"a\",\"b\",\"c\"]]",
+            "output": [
+              [
+                false,
+                true
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "in",
+        "examples": [
+          {
+            "query": ".[] | in({\"foo\": 42})",
+            "input": "[\"foo\", \"bar\"]",
+            "output": [
+              true,
+              false
+            ]
+          },
+          {
+            "query": "map(in([0,1]))",
+            "input": "[2, 0]",
+            "output": [
+              [
+                false,
+                true
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "map(f), map_values(f)",
+        "examples": [
+          {
+            "query": "map(.+1)",
+            "input": "[1,2,3]",
+            "output": [
+              [
+                2,
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "query": "map_values(.+1)",
+            "input": "{\"a\": 1, \"b\": 2, \"c\": 3}",
+            "output": [
+              {
+                "a": 2,
+                "b": 3,
+                "c": 4
+              }
+            ]
+          },
+          {
+            "query": "map(., .)",
+            "input": "[1,2]",
+            "output": [
+              [
+                1,
+                1,
+                2,
+                2
+              ]
+            ]
+          },
+          {
+            "query": "map_values(. // empty)",
+            "input": "{\"a\": null, \"b\": true, \"c\": false}",
+            "output": [
+              {
+                "b": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "pick(pathexps)",
+        "examples": [
+          {
+            "query": "pick(.a, .b.c, .x)",
+            "input": "{\"a\": 1, \"b\": {\"c\": 2, \"d\": 3}, \"e\": 4}",
+            "output": [
+              {
+                "a": 1,
+                "b": {
+                  "c": 2
+                },
+                "x": null
+              }
+            ]
+          },
+          {
+            "query": "pick(.[2], .[0], .[0])",
+            "input": "[1,2,3,4]",
+            "output": [
+              [
+                1,
+                null,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "path(path_expression)",
+        "examples": [
+          {
+            "query": "path(.a[0].b)",
+            "input": "null",
+            "output": [
+              [
+                "a",
+                0,
+                "b"
+              ]
+            ]
+          },
+          {
+            "query": "[path(..)]",
+            "input": "{\"a\":[{\"b\":1}]}",
+            "output": [
+              [
+                [],
+                [
+                  "a"
+                ],
+                [
+                  "a",
+                  0
+                ],
+                [
+                  "a",
+                  0,
+                  "b"
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "del(path_expression)",
+        "examples": [
+          {
+            "query": "del(.foo)",
+            "input": "{\"foo\": 42, \"bar\": 9001, \"baz\": 42}",
+            "output": [
+              {
+                "bar": 9001,
+                "baz": 42
+              }
+            ]
+          },
+          {
+            "query": "del(.[1, 2])",
+            "input": "[\"foo\", \"bar\", \"baz\"]",
+            "output": [
+              [
+                "foo"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "getpath(PATHS)",
+        "examples": [
+          {
+            "query": "getpath([\"a\",\"b\"])",
+            "input": "null",
+            "output": [
+              null
+            ]
+          },
+          {
+            "query": "[getpath([\"a\",\"b\"], [\"a\",\"c\"])]",
+            "input": "{\"a\":{\"b\":0, \"c\":1}}",
+            "output": [
+              [
+                0,
+                1
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "setpath(PATHS; VALUE)",
+        "examples": [
+          {
+            "query": "setpath([\"a\",\"b\"]; 1)",
+            "input": "null",
+            "output": [
+              {
+                "a": {
+                  "b": 1
+                }
+              }
+            ]
+          },
+          {
+            "query": "setpath([\"a\",\"b\"]; 1)",
+            "input": "{\"a\":{\"b\":0}}",
+            "output": [
+              {
+                "a": {
+                  "b": 1
+                }
+              }
+            ]
+          },
+          {
+            "query": "setpath([0,\"a\"]; 1)",
+            "input": "null",
+            "output": [
+              [
+                {
+                  "a": 1
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "delpaths(PATHS)",
+        "examples": [
+          {
+            "query": "delpaths([[\"a\",\"b\"]])",
+            "input": "{\"a\":{\"b\":1},\"x\":{\"y\":2}}",
+            "output": [
+              {
+                "a": {},
+                "x": {
+                  "y": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "to_entries, from_entries, with_entries(f)",
+        "examples": [
+          {
+            "query": "to_entries",
+            "input": "{\"a\": 1, \"b\": 2}",
+            "output": [
+              [
+                {
+                  "key": "a",
+                  "value": 1
+                },
+                {
+                  "key": "b",
+                  "value": 2
+                }
+              ]
+            ]
+          },
+          {
+            "query": "from_entries",
+            "input": "[{\"key\":\"a\", \"value\":1}, {\"key\":\"b\", \"value\":2}]",
+            "output": [
+              {
+                "a": 1,
+                "b": 2
+              }
+            ]
+          },
+          {
+            "query": "with_entries(.key |= \"KEY_\" + .)",
+            "input": "{\"a\": 1, \"b\": 2}",
+            "output": [
+              {
+                "KEY_a": 1,
+                "KEY_b": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "select(boolean_expression)",
+        "examples": [
+          {
+            "query": "map(select(. >= 2))",
+            "input": "[1,5,3,0,7]",
+            "output": [
+              [
+                5,
+                3,
+                7
+              ]
+            ]
+          },
+          {
+            "query": ".[] | select(.id == \"second\")",
+            "input": "[{\"id\": \"first\", \"val\": 1}, {\"id\": \"second\", \"val\": 2}]",
+            "output": [
+              {
+                "id": "second",
+                "val": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "arrays, objects, iterables, booleans, numbers, normals, finites, strings, nulls, values, scalars",
+        "examples": [
+          {
+            "query": ".[]|numbers",
+            "input": "[[],{},1,\"foo\",null,true,false]",
+            "output": [
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "title": "empty",
+        "examples": [
+          {
+            "query": "1, empty, 2",
+            "input": "null",
+            "output": [
+              1,
+              2
+            ]
+          },
+          {
+            "query": "[1,2,empty,3]",
+            "input": "null",
+            "output": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "error, error(message)",
+        "examples": [
+          {
+            "query": "try error catch .",
+            "input": "\"error message\"",
+            "output": [
+              "error message"
+            ]
+          },
+          {
+            "query": "try error(\"invalid value: \\(.)\") catch .",
+            "input": "42",
+            "output": [
+              "invalid value: 42"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "$__loc__",
+        "examples": [
+          {
+            "query": "try error(\"\\($__loc__)\") catch .",
+            "input": "null",
+            "output": [
+              "{\"file\":\"<top-level>\",\"line\":1}"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "paths, paths(node_filter)",
+        "examples": [
+          {
+            "query": "[paths]",
+            "input": "[1,[[],{\"a\":2}]]",
+            "output": [
+              [
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  1,
+                  "a"
+                ]
+              ]
+            ]
+          },
+          {
+            "query": "[paths(type == \"number\")]",
+            "input": "[1,[[],{\"a\":2}]]",
+            "output": [
+              [
+                [
+                  0
+                ],
+                [
+                  1,
+                  1,
+                  "a"
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "add",
+        "examples": [
+          {
+            "query": "add",
+            "input": "[\"a\",\"b\",\"c\"]",
+            "output": [
+              "abc"
+            ]
+          },
+          {
+            "query": "add",
+            "input": "[1, 2, 3]",
+            "output": [
+              6
+            ]
+          },
+          {
+            "query": "add",
+            "input": "[]",
+            "output": [
+              null
+            ]
+          }
+        ]
+      },
+      {
+        "title": "any, any(condition), any(generator; condition)",
+        "examples": [
+          {
+            "query": "any",
+            "input": "[true, false]",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "any",
+            "input": "[false, false]",
+            "output": [
+              false
+            ]
+          },
+          {
+            "query": "any",
+            "input": "[]",
+            "output": [
+              false
+            ]
+          }
+        ]
+      },
+      {
+        "title": "all, all(condition), all(generator; condition)",
+        "examples": [
+          {
+            "query": "all",
+            "input": "[true, false]",
+            "output": [
+              false
+            ]
+          },
+          {
+            "query": "all",
+            "input": "[true, true]",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "all",
+            "input": "[]",
+            "output": [
+              true
+            ]
+          }
+        ]
+      },
+      {
+        "title": "flatten, flatten(depth)",
+        "examples": [
+          {
+            "query": "flatten",
+            "input": "[1, [2], [[3]]]",
+            "output": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "query": "flatten(1)",
+            "input": "[1, [2], [[3]]]",
+            "output": [
+              [
+                1,
+                2,
+                [
+                  3
+                ]
+              ]
+            ]
+          },
+          {
+            "query": "flatten",
+            "input": "[[]]",
+            "output": [
+              []
+            ]
+          },
+          {
+            "query": "flatten",
+            "input": "[{\"foo\": \"bar\"}, [{\"foo\": \"baz\"}]]",
+            "output": [
+              [
+                {
+                  "foo": "bar"
+                },
+                {
+                  "foo": "baz"
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "range(upto), range(from; upto), range(from; upto; by)",
+        "examples": [
+          {
+            "query": "range(2; 4)",
+            "input": "null",
+            "output": [
+              2,
+              3
+            ]
+          },
+          {
+            "query": "[range(2; 4)]",
+            "input": "null",
+            "output": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "query": "[range(4)]",
+            "input": "null",
+            "output": [
+              [
+                0,
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "query": "[range(0; 10; 3)]",
+            "input": "null",
+            "output": [
+              [
+                0,
+                3,
+                6,
+                9
+              ]
+            ]
+          },
+          {
+            "query": "[range(0; 10; -1)]",
+            "input": "null",
+            "output": [
+              []
+            ]
+          },
+          {
+            "query": "[range(0; -5; -1)]",
+            "input": "null",
+            "output": [
+              [
+                0,
+                -1,
+                -2,
+                -3,
+                -4
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "floor",
+        "examples": [
+          {
+            "query": "floor",
+            "input": "3.14159",
+            "output": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "title": "sqrt",
+        "examples": [
+          {
+            "query": "sqrt",
+            "input": "9",
+            "output": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "title": "tonumber",
+        "examples": [
+          {
+            "query": ".[] | tonumber",
+            "input": "[1, \"1\"]",
+            "output": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "title": "tostring",
+        "examples": [
+          {
+            "query": ".[] | tostring",
+            "input": "[1, \"1\", [1]]",
+            "output": [
+              "1",
+              "1",
+              "[1]"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "type",
+        "examples": [
+          {
+            "query": "map(type)",
+            "input": "[0, false, [], {}, null, \"hello\"]",
+            "output": [
+              [
+                "number",
+                "boolean",
+                "array",
+                "object",
+                "null",
+                "string"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "infinite, nan, isinfinite, isnan, isfinite, isnormal",
+        "examples": [
+          {
+            "query": ".[] | (infinite * .) < 0",
+            "input": "[-1, 1]",
+            "output": [
+              true,
+              false
+            ]
+          },
+          {
+            "query": "infinite, nan | type",
+            "input": "null",
+            "output": [
+              "number",
+              "number"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "sort, sort_by(path_expression)",
+        "examples": [
+          {
+            "query": "sort",
+            "input": "[8,3,null,6]",
+            "output": [
+              [
+                null,
+                3,
+                6,
+                8
+              ]
+            ]
+          },
+          {
+            "query": "sort_by(.foo)",
+            "input": "[{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":10}, {\"foo\":2, \"bar\":1}]",
+            "output": [
+              [
+                {
+                  "foo": 2,
+                  "bar": 1
+                },
+                {
+                  "foo": 3,
+                  "bar": 10
+                },
+                {
+                  "foo": 4,
+                  "bar": 10
+                }
+              ]
+            ]
+          },
+          {
+            "query": "sort_by(.foo, .bar)",
+            "input": "\n                                        [{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":20}, {\"foo\":2, \"bar\":1}, {\"foo\":3, \"bar\":10}]\n                                    ",
+            "output": [
+              [
+                {
+                  "foo": 2,
+                  "bar": 1
+                },
+                {
+                  "foo": 3,
+                  "bar": 10
+                },
+                {
+                  "foo": 3,
+                  "bar": 20
+                },
+                {
+                  "foo": 4,
+                  "bar": 10
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "group_by(path_expression)",
+        "examples": [
+          {
+            "query": "group_by(.foo)",
+            "input": "[{\"foo\":1, \"bar\":10}, {\"foo\":3, \"bar\":100}, {\"foo\":1, \"bar\":1}]",
+            "output": [
+              [
+                [
+                  {
+                    "foo": 1,
+                    "bar": 10
+                  },
+                  {
+                    "foo": 1,
+                    "bar": 1
+                  }
+                ],
+                [
+                  {
+                    "foo": 3,
+                    "bar": 100
+                  }
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "min, max, min_by(path_exp), max_by(path_exp)",
+        "examples": [
+          {
+            "query": "min",
+            "input": "[5,4,2,7]",
+            "output": [
+              2
+            ]
+          },
+          {
+            "query": "max_by(.foo)",
+            "input": "[{\"foo\":1, \"bar\":14}, {\"foo\":2, \"bar\":3}]",
+            "output": [
+              {
+                "foo": 2,
+                "bar": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "unique, unique_by(path_exp)",
+        "examples": [
+          {
+            "query": "unique",
+            "input": "[1,2,5,3,5,3,1,3]",
+            "output": [
+              [
+                1,
+                2,
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "query": "unique_by(.foo)",
+            "input": "[{\"foo\": 1, \"bar\": 2}, {\"foo\": 1, \"bar\": 3}, {\"foo\": 4, \"bar\": 5}]",
+            "output": [
+              [
+                {
+                  "foo": 1,
+                  "bar": 2
+                },
+                {
+                  "foo": 4,
+                  "bar": 5
+                }
+              ]
+            ]
+          },
+          {
+            "query": "unique_by(length)",
+            "input": "[\"chunky\", \"bacon\", \"kitten\", \"cicada\", \"asparagus\"]",
+            "output": [
+              [
+                "bacon",
+                "chunky",
+                "asparagus"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "reverse",
+        "examples": [
+          {
+            "query": "reverse",
+            "input": "[1,2,3,4]",
+            "output": [
+              [
+                4,
+                3,
+                2,
+                1
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "contains(element)",
+        "examples": [
+          {
+            "query": "contains(\"bar\")",
+            "input": "\"foobar\"",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "contains([\"baz\", \"bar\"])",
+            "input": "[\"foobar\", \"foobaz\", \"blarp\"]",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "contains([\"bazzzzz\", \"bar\"])",
+            "input": "[\"foobar\", \"foobaz\", \"blarp\"]",
+            "output": [
+              false
+            ]
+          },
+          {
+            "query": "contains({foo: 12, bar: [{barp: 12}]})",
+            "input": "{\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]}",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "contains({foo: 12, bar: [{barp: 15}]})",
+            "input": "{\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]}",
+            "output": [
+              false
+            ]
+          }
+        ]
+      },
+      {
+        "title": "indices(s)",
+        "examples": [
+          {
+            "query": "indices(\", \")",
+            "input": "\"a,b, cd, efg, hijk\"",
+            "output": [
+              [
+                3,
+                7,
+                12
+              ]
+            ]
+          },
+          {
+            "query": "indices(1)",
+            "input": "[0,1,2,1,3,1,4]",
+            "output": [
+              [
+                1,
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "query": "indices([1,2])",
+            "input": "[0,1,2,3,1,4,2,5,1,2,6,7]",
+            "output": [
+              [
+                1,
+                8
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "index(s), rindex(s)",
+        "examples": [
+          {
+            "query": "index(\", \")",
+            "input": "\"a,b, cd, efg, hijk\"",
+            "output": [
+              3
+            ]
+          },
+          {
+            "query": "index(1)",
+            "input": "[0,1,2,1,3,1,4]",
+            "output": [
+              1
+            ]
+          },
+          {
+            "query": "index([1,2])",
+            "input": "[0,1,2,3,1,4,2,5,1,2,6,7]",
+            "output": [
+              1
+            ]
+          },
+          {
+            "query": "rindex(\", \")",
+            "input": "\"a,b, cd, efg, hijk\"",
+            "output": [
+              12
+            ]
+          },
+          {
+            "query": "rindex(1)",
+            "input": "[0,1,2,1,3,1,4]",
+            "output": [
+              5
+            ]
+          },
+          {
+            "query": "rindex([1,2])",
+            "input": "[0,1,2,3,1,4,2,5,1,2,6,7]",
+            "output": [
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "title": "inside",
+        "examples": [
+          {
+            "query": "inside(\"foobar\")",
+            "input": "\"bar\"",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "inside([\"foobar\", \"foobaz\", \"blarp\"])",
+            "input": "[\"baz\", \"bar\"]",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "inside([\"foobar\", \"foobaz\", \"blarp\"])",
+            "input": "[\"bazzzzz\", \"bar\"]",
+            "output": [
+              false
+            ]
+          },
+          {
+            "query": "inside({\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]})",
+            "input": "{\"foo\": 12, \"bar\": [{\"barp\": 12}]}",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "inside({\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]})",
+            "input": "{\"foo\": 12, \"bar\": [{\"barp\": 15}]}",
+            "output": [
+              false
+            ]
+          }
+        ]
+      },
+      {
+        "title": "startswith(str)",
+        "examples": [
+          {
+            "query": "[.[]|startswith(\"foo\")]",
+            "input": "[\"fo\", \"foo\", \"barfoo\", \"foobar\", \"barfoob\"]",
+            "output": [
+              [
+                false,
+                true,
+                false,
+                true,
+                false
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "endswith(str)",
+        "examples": [
+          {
+            "query": "[.[]|endswith(\"foo\")]",
+            "input": "[\"foobar\", \"barfoo\"]",
+            "output": [
+              [
+                false,
+                true
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "combinations, combinations(n)",
+        "examples": [
+          {
+            "query": "combinations",
+            "input": "[[1,2], [3, 4]]",
+            "output": [
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "query": "combinations(2)",
+            "input": "[0, 1]",
+            "output": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "ltrimstr(str)",
+        "examples": [
+          {
+            "query": "[.[]|ltrimstr(\"foo\")]",
+            "input": "[\"fo\", \"foo\", \"barfoo\", \"foobar\", \"afoo\"]",
+            "output": [
+              [
+                "fo",
+                "",
+                "barfoo",
+                "bar",
+                "afoo"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "rtrimstr(str)",
+        "examples": [
+          {
+            "query": "[.[]|rtrimstr(\"foo\")]",
+            "input": "[\"fo\", \"foo\", \"barfoo\", \"foobar\", \"foob\"]",
+            "output": [
+              [
+                "fo",
+                "",
+                "bar",
+                "foobar",
+                "foob"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "explode",
+        "examples": [
+          {
+            "query": "explode",
+            "input": "\"foobar\"",
+            "output": [
+              [
+                102,
+                111,
+                111,
+                98,
+                97,
+                114
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "implode",
+        "examples": [
+          {
+            "query": "implode",
+            "input": "[65, 66, 67]",
+            "output": [
+              "ABC"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "split(str)",
+        "examples": [
+          {
+            "query": "split(\", \")",
+            "input": "\"a, b,c,d, e, \"",
+            "output": [
+              [
+                "a",
+                "b,c,d",
+                "e",
+                ""
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "join(str)",
+        "examples": [
+          {
+            "query": "join(\", \")",
+            "input": "[\"a\",\"b,c,d\",\"e\"]",
+            "output": [
+              "a, b,c,d, e"
+            ]
+          },
+          {
+            "query": "join(\" \")",
+            "input": "[\"a\",1,2.3,true,null,false]",
+            "output": [
+              "a 1 2.3 true false"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "ascii_downcase, ascii_upcase",
+        "examples": [
+          {
+            "query": "ascii_upcase",
+            "input": "\"useful but not for é\"",
+            "output": [
+              "USEFUL BUT NOT FOR é"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "while(cond; update)",
+        "examples": [
+          {
+            "query": "[while(.<100; .*2)]",
+            "input": "1",
+            "output": [
+              [
+                1,
+                2,
+                4,
+                8,
+                16,
+                32,
+                64
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "repeat(exp)",
+        "examples": [
+          {
+            "query": "[repeat(.*2, error)?]",
+            "input": "1",
+            "output": [
+              [
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "until(cond; next)",
+        "examples": [
+          {
+            "query": "[.,1]|until(.[0] < 1; [.[0] - 1, .[1] * .[0]])|.[1]",
+            "input": "4",
+            "output": [
+              24
+            ]
+          }
+        ]
+      },
+      {
+        "title": "recurse(f), recurse, recurse(f; condition)",
+        "examples": [
+          {
+            "query": "recurse(.foo[])",
+            "input": "{\"foo\":[{\"foo\": []}, {\"foo\":[{\"foo\":[]}]}]}",
+            "output": [
+              {
+                "foo": [
+                  {
+                    "foo": []
+                  },
+                  {
+                    "foo": [
+                      {
+                        "foo": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "foo": []
+              },
+              {
+                "foo": [
+                  {
+                    "foo": []
+                  }
+                ]
+              },
+              {
+                "foo": []
+              }
+            ]
+          },
+          {
+            "query": "recurse",
+            "input": "{\"a\":0,\"b\":[1]}",
+            "output": [
+              {
+                "a": 0,
+                "b": [
+                  1
+                ]
+              },
+              0,
+              [
+                1
+              ],
+              1
+            ]
+          },
+          {
+            "query": "recurse(. * .; . < 20)",
+            "input": "2",
+            "output": [
+              2,
+              4,
+              16
+            ]
+          }
+        ]
+      },
+      {
+        "title": "walk(f)",
+        "examples": [
+          {
+            "query": "walk(if type == \"array\" then sort else . end)",
+            "input": "[[4, 1, 7], [8, 5, 2], [3, 6, 9]]",
+            "output": [
+              [
+                [
+                  1,
+                  4,
+                  7
+                ],
+                [
+                  2,
+                  5,
+                  8
+                ],
+                [
+                  3,
+                  6,
+                  9
+                ]
+              ]
+            ]
+          },
+          {
+            "query": "\n                                        walk( if type == \"object\" then with_entries( .key |= sub( \"^_+\"; \"\") ) else . end )\n                                    ",
+            "input": "[ { \"_a\": { \"__b\": 2 } } ]",
+            "output": [
+              [
+                {
+                  "a": {
+                    "b": 2
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "$ENV, env",
+        "examples": [
+          {
+            "query": "$ENV.PAGER",
+            "input": "null",
+            "output": [
+              "less"
+            ]
+          },
+          {
+            "query": "env.PAGER",
+            "input": "null",
+            "output": [
+              "less"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "transpose",
+        "examples": [
+          {
+            "query": "transpose",
+            "input": "[[1], [2,3]]",
+            "output": [
+              [
+                [
+                  1,
+                  2
+                ],
+                [
+                  null,
+                  3
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "bsearch(x)",
+        "examples": [
+          {
+            "query": "bsearch(0)",
+            "input": "[0,1]",
+            "output": [
+              0
+            ]
+          },
+          {
+            "query": "bsearch(0)",
+            "input": "[1,2,3]",
+            "output": [
+              -1
+            ]
+          },
+          {
+            "query": "bsearch(4) as $ix | if $ix < 0 then .[-(1+$ix)] = 4 else . end",
+            "input": "[1,2,3]",
+            "output": [
+              [
+                1,
+                2,
+                3,
+                4
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "String interpolation: \\(exp)",
+        "examples": [
+          {
+            "query": "\"The input was \\(.), which is one less than \\(.+1)\"",
+            "input": "42",
+            "output": [
+              "The input was 42, which is one less than 43"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Convert to/from JSON",
+        "examples": [
+          {
+            "query": "[.[]|tostring]",
+            "input": "[1, \"foo\", [\"foo\"]]",
+            "output": [
+              [
+                "1",
+                "foo",
+                "[\"foo\"]"
+              ]
+            ]
+          },
+          {
+            "query": "[.[]|tojson]",
+            "input": "[1, \"foo\", [\"foo\"]]",
+            "output": [
+              [
+                "1",
+                "\"foo\"",
+                "[\"foo\"]"
+              ]
+            ]
+          },
+          {
+            "query": "[.[]|tojson|fromjson]",
+            "input": "[1, \"foo\", [\"foo\"]]",
+            "output": [
+              [
+                1,
+                "foo",
+                [
+                  "foo"
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Format strings and escaping",
+        "examples": [
+          {
+            "query": "@html",
+            "input": "\"This works if x < y\"",
+            "output": [
+              "This works if x &lt; y"
+            ]
+          },
+          {
+            "query": "@sh \"echo \\(.)\"",
+            "input": "\"O'Hara's Ale\"",
+            "output": [
+              "echo 'O'\\''Hara'\\''s Ale'"
+            ]
+          },
+          {
+            "query": "@base64",
+            "input": "\"This is a message\"",
+            "output": [
+              "VGhpcyBpcyBhIG1lc3NhZ2U="
+            ]
+          },
+          {
+            "query": "@base64d",
+            "input": "\"VGhpcyBpcyBhIG1lc3NhZ2U=\"",
+            "output": [
+              "This is a message"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Dates",
+        "examples": [
+          {
+            "query": "fromdate",
+            "input": "\"2015-03-05T23:51:47Z\"",
+            "output": [
+              1425599507
+            ]
+          },
+          {
+            "query": "strptime(\"%Y-%m-%dT%H:%M:%SZ\")",
+            "input": "\"2015-03-05T23:51:47Z\"",
+            "output": [
+              [
+                2015,
+                2,
+                5,
+                23,
+                51,
+                47,
+                4,
+                63
+              ]
+            ]
+          },
+          {
+            "query": "strptime(\"%Y-%m-%dT%H:%M:%SZ\")|mktime",
+            "input": "\"2015-03-05T23:51:47Z\"",
+            "output": [
+              1425599507
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Conditionals and Comparisons",
+    "sections": [
+      {
+        "title": "==, !=",
+        "examples": [
+          {
+            "query": ". == false",
+            "input": "null",
+            "output": [
+              false
+            ]
+          },
+          {
+            "query": ". == {\"b\": {\"d\": (4 + 1e-20), \"c\": 3}, \"a\":1}",
+            "input": "{\"a\":1, \"b\": {\"c\": 3, \"d\": 4}}",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": ".[] == 1",
+            "input": "[1, 1.0, \"1\", \"banana\"]",
+            "output": [
+              true,
+              true,
+              false,
+              false
+            ]
+          }
+        ]
+      },
+      {
+        "title": "if-then-else-end",
+        "examples": [
+          {
+            "query": "if . == 0 then \"zero\" elif . == 1 then \"one\" else \"many\" end",
+            "input": "2",
+            "output": [
+              "many"
+            ]
+          }
+        ]
+      },
+      {
+        "title": ">, >=, <=, <",
+        "examples": [
+          {
+            "query": ". < 5",
+            "input": "2",
+            "output": [
+              true
+            ]
+          }
+        ]
+      },
+      {
+        "title": "and, or, not",
+        "examples": [
+          {
+            "query": "42 and \"a string\"",
+            "input": "null",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "(true, false) or false",
+            "input": "null",
+            "output": [
+              true,
+              false
+            ]
+          },
+          {
+            "query": "(true, true) and (true, false)",
+            "input": "null",
+            "output": [
+              true,
+              false,
+              true,
+              false
+            ]
+          },
+          {
+            "query": "[true, false | not]",
+            "input": "null",
+            "output": [
+              [
+                false,
+                true
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Alternative operator: //",
+        "examples": [
+          {
+            "query": "empty // 42",
+            "input": "null",
+            "output": [
+              42
+            ]
+          },
+          {
+            "query": ".foo // 42",
+            "input": "{\"foo\": 19}",
+            "output": [
+              19
+            ]
+          },
+          {
+            "query": ".foo // 42",
+            "input": "{}",
+            "output": [
+              42
+            ]
+          },
+          {
+            "query": "(false, null, 1) // 42",
+            "input": "null",
+            "output": [
+              1
+            ]
+          },
+          {
+            "query": "(false, null, 1) | . // 42",
+            "input": "null",
+            "output": [
+              42,
+              42,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "title": "try-catch",
+        "examples": [
+          {
+            "query": "try .a catch \". is not an object\"",
+            "input": "true",
+            "output": [
+              ". is not an object"
+            ]
+          },
+          {
+            "query": "[.[]|try .a]",
+            "input": "[{}, true, {\"a\":1}]",
+            "output": [
+              [
+                null,
+                1
+              ]
+            ]
+          },
+          {
+            "query": "try error(\"some exception\") catch .",
+            "input": "true",
+            "output": [
+              "some exception"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Error Suppression / Optional Operator: ?",
+        "examples": [
+          {
+            "query": "[.[] | .a?]",
+            "input": "[{}, true, {\"a\":1}]",
+            "output": [
+              [
+                null,
+                1
+              ]
+            ]
+          },
+          {
+            "query": "[.[] | tonumber?]",
+            "input": "[\"1\", \"invalid\", \"3\", 4]",
+            "output": [
+              [
+                1,
+                3,
+                4
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Regular expressions",
+    "sections": [
+      {
+        "title": "test(val), test(regex; flags)",
+        "examples": [
+          {
+            "query": "test(\"foo\")",
+            "input": "\"foo\"",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": ".[] | test(\"a b c # spaces are ignored\"; \"ix\")",
+            "input": "[\"xabcd\", \"ABC\"]",
+            "output": [
+              true,
+              true
+            ]
+          }
+        ]
+      },
+      {
+        "title": "match(val), match(regex; flags)",
+        "examples": [
+          {
+            "query": "match(\"(abc)+\"; \"g\")",
+            "input": "\"abc abc\"",
+            "output": [
+              {
+                "offset": 0,
+                "length": 3,
+                "string": "abc",
+                "captures": [
+                  {
+                    "offset": 0,
+                    "length": 3,
+                    "string": "abc",
+                    "name": null
+                  }
+                ]
+              },
+              {
+                "offset": 4,
+                "length": 3,
+                "string": "abc",
+                "captures": [
+                  {
+                    "offset": 4,
+                    "length": 3,
+                    "string": "abc",
+                    "name": null
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "query": "match(\"foo\")",
+            "input": "\"foo bar foo\"",
+            "output": [
+              {
+                "offset": 0,
+                "length": 3,
+                "string": "foo",
+                "captures": []
+              }
+            ]
+          },
+          {
+            "query": "match([\"foo\", \"ig\"])",
+            "input": "\"foo bar FOO\"",
+            "output": [
+              {
+                "offset": 0,
+                "length": 3,
+                "string": "foo",
+                "captures": []
+              },
+              {
+                "offset": 8,
+                "length": 3,
+                "string": "FOO",
+                "captures": []
+              }
+            ]
+          },
+          {
+            "query": "match(\"foo (?<bar123>bar)? foo\"; \"ig\")",
+            "input": "\"foo bar foo foo foo\"",
+            "output": [
+              {
+                "offset": 0,
+                "length": 11,
+                "string": "foo bar foo",
+                "captures": [
+                  {
+                    "offset": 4,
+                    "length": 3,
+                    "string": "bar",
+                    "name": "bar123"
+                  }
+                ]
+              },
+              {
+                "offset": 12,
+                "length": 8,
+                "string": "foo foo",
+                "captures": [
+                  {
+                    "offset": -1,
+                    "length": 0,
+                    "string": null,
+                    "name": "bar123"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "query": "[ match(\".\"; \"g\")] | length",
+            "input": "\"abc\"",
+            "output": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "title": "capture(val), capture(regex; flags)",
+        "examples": [
+          {
+            "query": "capture(\"(?<a>[a-z]+)-(?<n>[0-9]+)\")",
+            "input": "\"xyzzy-14\"",
+            "output": [
+              {
+                "a": "xyzzy",
+                "n": "14"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "scan(regex), scan(regex; flags)",
+        "examples": [
+          {
+            "query": "scan(\"c\")",
+            "input": "\"abcdefabc\"",
+            "output": [
+              "c",
+              "c"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "split(regex; flags)",
+        "examples": [
+          {
+            "query": "split(\", *\"; null)",
+            "input": "\"ab,cd, ef\"",
+            "output": [
+              [
+                "ab",
+                "cd",
+                "ef"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "splits(regex), splits(regex; flags)",
+        "examples": [
+          {
+            "query": "splits(\", *\")",
+            "input": "\"ab,cd, ef, gh\"",
+            "output": [
+              "ab",
+              "cd",
+              "ef",
+              "gh"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "sub(regex; tostring), sub(regex; tostring; flags)",
+        "examples": [
+          {
+            "query": "sub(\"[^a-z]*(?<x>[a-z]+)\"; \"Z\\(.x)\"; \"g\")",
+            "input": "\"123abc456def\"",
+            "output": [
+              "ZabcZdef"
+            ]
+          },
+          {
+            "query": "[sub(\"(?<a>.)\"; \"\\(.a|ascii_upcase)\", \"\\(.a|ascii_downcase)\")]",
+            "input": "\"aB\"",
+            "output": [
+              [
+                "AB",
+                "aB"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "gsub(regex; tostring), gsub(regex; tostring; flags)",
+        "examples": [
+          {
+            "query": "gsub(\"(?<x>.)[^a]*\"; \"+\\(.x)-\")",
+            "input": "\"Abcabc\"",
+            "output": [
+              "+A-+a-"
+            ]
+          },
+          {
+            "query": "[gsub(\"p\"; \"a\", \"b\")]",
+            "input": "\"p\"",
+            "output": [
+              [
+                "a",
+                "b"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Advanced features",
+    "sections": [
+      {
+        "title": "Variable / Symbolic Binding Operator: ... as $identifier | ...",
+        "examples": [
+          {
+            "query": ".bar as $x | .foo | . + $x",
+            "input": "{\"foo\":10, \"bar\":200}",
+            "output": [
+              210
+            ]
+          },
+          {
+            "query": ". as $i|[(.*2|. as $i| $i), $i]",
+            "input": "5",
+            "output": [
+              [
+                10,
+                5
+              ]
+            ]
+          },
+          {
+            "query": ". as [$a, $b, {c: $c}] | $a + $b + $c",
+            "input": "[2, 3, {\"c\": 4, \"d\": 5}]",
+            "output": [
+              9
+            ]
+          },
+          {
+            "query": ".[] as [$a, $b] | {a: $a, b: $b}",
+            "input": "[[0], [0, 1], [2, 1, 0]]",
+            "output": [
+              {
+                "a": 0,
+                "b": null
+              },
+              {
+                "a": 0,
+                "b": 1
+              },
+              {
+                "a": 2,
+                "b": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Destructuring Alternative Operator: ?//",
+        "examples": [
+          {
+            "query": "\n                                        .[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} | {$a, $b, $d, $e}\n                                    ",
+            "input": "\n                                        [{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]\n                                    ",
+            "output": [
+              {
+                "a": 1,
+                "b": 2,
+                "d": 3,
+                "e": 4
+              },
+              {
+                "a": 1,
+                "b": 2,
+                "d": 3,
+                "e": 4
+              }
+            ]
+          },
+          {
+            "query": ".[] as {$a, $b, c: {$d}} ?// {$a, $b, c: [{$e}]} | {$a, $b, $d, $e}",
+            "input": "\n                                        [{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]\n                                    ",
+            "output": [
+              {
+                "a": 1,
+                "b": 2,
+                "d": 3,
+                "e": null
+              },
+              {
+                "a": 1,
+                "b": 2,
+                "d": null,
+                "e": 4
+              }
+            ]
+          },
+          {
+            "query": "\n                                        .[] as [$a] ?// [$b] | if $a != null then error(\"err: \\($a)\") else {$a,$b} end\n                                    ",
+            "input": "[[3]]",
+            "output": [
+              {
+                "a": null,
+                "b": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Defining Functions",
+        "examples": [
+          {
+            "query": "def addvalue(f): . + [f]; map(addvalue(.[0]))",
+            "input": "[[1,2],[10,20]]",
+            "output": [
+              [
+                [
+                  1,
+                  2,
+                  1
+                ],
+                [
+                  10,
+                  20,
+                  10
+                ]
+              ]
+            ]
+          },
+          {
+            "query": "def addvalue(f): f as $x | map(. + $x); addvalue(.[0])",
+            "input": "[[1,2],[10,20]]",
+            "output": [
+              [
+                [
+                  1,
+                  2,
+                  1,
+                  2
+                ],
+                [
+                  10,
+                  20,
+                  1,
+                  2
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "isempty(exp)",
+        "examples": [
+          {
+            "query": "isempty(empty)",
+            "input": "null",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "isempty(.[])",
+            "input": "[]",
+            "output": [
+              true
+            ]
+          },
+          {
+            "query": "isempty(.[])",
+            "input": "[1,2,3]",
+            "output": [
+              false
+            ]
+          }
+        ]
+      },
+      {
+        "title": "limit(n; exp)",
+        "examples": [
+          {
+            "query": "[limit(3;.[])]",
+            "input": "[0,1,2,3,4,5,6,7,8,9]",
+            "output": [
+              [
+                0,
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "first(expr), last(expr), nth(n; expr)",
+        "examples": [
+          {
+            "query": "[first(range(.)), last(range(.)), nth(./2; range(.))]",
+            "input": "10",
+            "output": [
+              [
+                0,
+                9,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "first, last, nth(n)",
+        "examples": [
+          {
+            "query": "[range(.)]|[first, last, nth(5)]",
+            "input": "10",
+            "output": [
+              [
+                0,
+                9,
+                5
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "reduce",
+        "examples": [
+          {
+            "query": "reduce .[] as $item (0; . + $item)",
+            "input": "[1,2,3,4,5]",
+            "output": [
+              15
+            ]
+          },
+          {
+            "query": "reduce .[] as [$i,$j] (0; . + $i * $j)",
+            "input": "[[1,2],[3,4],[5,6]]",
+            "output": [
+              44
+            ]
+          },
+          {
+            "query": "reduce .[] as {$x,$y} (null; .x += $x | .y += [$y])",
+            "input": "[{\"x\":\"a\",\"y\":1},{\"x\":\"b\",\"y\":2},{\"x\":\"c\",\"y\":3}]",
+            "output": [
+              {
+                "x": "abc",
+                "y": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "foreach",
+        "examples": [
+          {
+            "query": "foreach .[] as $item (0; . + $item)",
+            "input": "[1,2,3,4,5]",
+            "output": [
+              1,
+              3,
+              6,
+              10,
+              15
+            ]
+          },
+          {
+            "query": "foreach .[] as $item (0; . + $item; [$item, . * 2])",
+            "input": "[1,2,3,4,5]",
+            "output": [
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                6
+              ],
+              [
+                3,
+                12
+              ],
+              [
+                4,
+                20
+              ],
+              [
+                5,
+                30
+              ]
+            ]
+          },
+          {
+            "query": "foreach .[] as $item (0; . + 1; {index: ., $item})",
+            "input": "[\"foo\", \"bar\", \"baz\"]",
+            "output": [
+              {
+                "index": 1,
+                "item": "foo"
+              },
+              {
+                "index": 2,
+                "item": "bar"
+              },
+              {
+                "index": 3,
+                "item": "baz"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Generators and iterators",
+        "examples": [
+          {
+            "query": "\n                                        def range(init; upto; by): def _range: if (by > 0 and . < upto) or (by < 0 and . >\n                                        upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end | select((by\n                                        > 0 and . < upto) or (by < 0 and . > upto)); range(0; 10; 3)\n                                    ",
+            "input": "null",
+            "output": [
+              0,
+              3,
+              6,
+              9
+            ]
+          },
+          {
+            "query": "\n                                        def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while;\n                                        [while(.<100; .*2)]\n                                    ",
+            "input": "1",
+            "output": [
+              [
+                1,
+                2,
+                4,
+                8,
+                16,
+                32,
+                64
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Assignment",
+    "sections": [
+      {
+        "title": "Update-assignment: |=",
+        "examples": [
+          {
+            "query": "(..|select(type==\"boolean\")) |= if . then 1 else 0 end",
+            "input": "[true,false,[5,true,[true,[false]],false]]",
+            "output": [
+              [
+                1,
+                0,
+                [
+                  5,
+                  1,
+                  [
+                    1,
+                    [
+                      0
+                    ]
+                  ],
+                  0
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Arithmetic update-assignment: +=, -=, *=, /=, %=, //=",
+        "examples": [
+          {
+            "query": ".foo += 1",
+            "input": "{\"foo\": 42}",
+            "output": [
+              {
+                "foo": 43
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Plain assignment: =",
+        "examples": [
+          {
+            "query": ".a = .b",
+            "input": "{\"a\": {\"b\": 10}, \"b\": 20}",
+            "output": [
+              {
+                "a": 20,
+                "b": 20
+              }
+            ]
+          },
+          {
+            "query": ".a |= .b",
+            "input": "{\"a\": {\"b\": 10}, \"b\": 20}",
+            "output": [
+              {
+                "a": 10,
+                "b": 20
+              }
+            ]
+          },
+          {
+            "query": "(.a, .b) = range(3)",
+            "input": "null",
+            "output": [
+              {
+                "a": 0,
+                "b": 0
+              },
+              {
+                "a": 1,
+                "b": 1
+              },
+              {
+                "a": 2,
+                "b": 2
+              }
+            ]
+          },
+          {
+            "query": "(.a, .b) |= range(3)",
+            "input": "null",
+            "output": [
+              {
+                "a": 0,
+                "b": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

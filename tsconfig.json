@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "sourceRoot": ".",
     "strictNullChecks": true,
+    "resolveJsonModule": true,
     "paths": {
       "@packages/*": ["packages/*"],
       "@core/*": ["src/core/*"],

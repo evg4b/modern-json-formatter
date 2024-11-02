@@ -3,8 +3,7 @@ import { detectors } from './detectors';
 import { selectors } from './selectors';
 
 export const detectJson = () => {
-  const detector = detectors[detectBrowser()];
-  return detector();
+  return detectors[detectBrowser()].call(null);
 };
 
 export const getJsonSelector = (): string => {

@@ -26,6 +26,8 @@ module.exports = {
   moduleNameMapper: {
     '^@packages/jq/(.*)$': '<rootDir>packages/jq/$1',
     '^@packages/tokenizer/(.*)$': '<rootDir>packages/tokenizer/$1',
+    '^@core/(.*)$': '<rootDir>src/core/$1',
+    '^@testing/(.*)$': '<rootDir>testing/$1',
   },
   transform: {
     '^.+\\.[tj]sx?$': [

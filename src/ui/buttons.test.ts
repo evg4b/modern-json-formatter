@@ -1,12 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-deprecated
-globalThis.chrome = {
-  runtime: {
-    getURL: (resource: string) => resource,
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-  } as unknown as typeof chrome.runtime,
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-} as unknown as typeof chrome;
-
+import '@testing/browser.mock';
 import { buildButtons } from './buttons';
 
 describe('buildButtons', () => {

@@ -13,7 +13,7 @@ export default tseslint.config(
       'packages/wasm_exec.js',
       'eslint.config.mjs',
       'coverage/',
-      'tsup.config.mjs'
+      'tsup.config.mjs',
     ],
   },
   eslint.configs.recommended,

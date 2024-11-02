@@ -1,8 +1,8 @@
+import { getURL } from '@core/browser';
 import { loadWasm } from './wasm_helpers';
 
 export const importWasm = async (go: Go, wasmFile: string) => {
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  const webAssemblyInstance = await loadWasm(chrome.runtime.getURL(wasmFile), go.importObject);
+  const webAssemblyInstance = await loadWasm(getURL(wasmFile), go.importObject);
 
   void go
     .run(webAssemblyInstance.instance)

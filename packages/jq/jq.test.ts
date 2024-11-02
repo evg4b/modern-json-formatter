@@ -1,5 +1,6 @@
+import '@testing/browser.mock';
+import { tNumber } from '@testing/json';
 import { readFileSync } from 'fs';
-import { chromeMockAfter, chromeMockBefore, tNumber } from '../../testing';
 import { jq } from './index';
 
 jest.mock('../shared/wasm_helpers.ts', () => ({
@@ -10,10 +11,6 @@ jest.mock('../shared/wasm_helpers.ts', () => ({
 }));
 
 describe('jq', () => {
-  beforeAll(chromeMockBefore);
-
-  afterAll(chromeMockAfter);
-
   test('should return a TokenizerResponse', async () => {
     const data = await jq('{ "data": 123 }', '.data');
 

@@ -12,7 +12,9 @@
     "sourceRoot": ".",
     "strictNullChecks": true,
     "paths": {
-      "@packages/*": ["packages/*"]
+      "@packages/*": ["packages/*"],
+      "@core/*": ["src/core/*"],
+      "@testing/*": ["testing/*"]
     }
   },
   "references": [

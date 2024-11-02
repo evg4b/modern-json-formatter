@@ -1,11 +1,12 @@
+import { getURL } from '@core/browser';
 import { element } from './helpres';
 
 export const buildErrorNode = (header: string, ...lines: string[]) => {
   const wrapper = document.createElement('div');
   wrapper.className = 'error';
   const image = document.createElement('img');
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  image.src = chrome.runtime.getURL('invalid.svg');
+
+  image.src = getURL('invalid.svg');
   image.alt = 'Error';
   const message = document.createElement('div');
   message.className = 'message';

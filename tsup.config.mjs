@@ -35,7 +35,7 @@ export default defineConfig({
   minifyIdentifiers: production,
   minifySyntax: production,
   loader: {
-    '.svg': 'text'
+    '.svg': 'text',
   },
   esbuildPlugins: [
     htmlPlugin({

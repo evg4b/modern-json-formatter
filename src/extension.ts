@@ -3,7 +3,7 @@ import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
 import { detectJson, getJsonSelector } from './json-detector/detect';
-import styles from './styles.scss';
+import styles from './styles.module.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
 

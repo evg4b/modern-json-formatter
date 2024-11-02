@@ -34,6 +34,9 @@ export default defineConfig({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
+  loader: {
+    '.svg': 'text'
+  },
   esbuildPlugins: [
     htmlPlugin({
       modulesTarget: 'es2020',
@@ -49,7 +52,7 @@ export default defineConfig({
       verbose: true,
       sourceMap: !production,
       sourceMapIncludeSources: !production,
-      filter: /styles.scss$/,
+      filter: /^.*\.module.scss$/,
     }),
     sassPlugin({
       type: 'css',

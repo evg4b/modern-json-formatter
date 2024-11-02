@@ -60,15 +60,6 @@ a {
       justify-content: center;
       align-items: center;
       gap: 10px;
-
-      a {
-        transition: all 150ms ease;
-      }
-
-      a:hover {
-        background: none;
-        transform: scale(1.1);
-      }
     }
   }
 

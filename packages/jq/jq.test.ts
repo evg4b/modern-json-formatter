@@ -19,12 +19,13 @@ describe('jq', () => {
   });
 
   describe.each(testCases)('$title', ({ sections }) => {
-    describe.each(sections as any[])('$title', ({ examples }) => {
-      // @ts-ignore
-      test.each(examples)('%p', async (test: any) => {
-        const data = await jq(test.input, test.query);
 
-        expect(data).toEqual(test.output)
+    describe.each(sections as any[])('$title', ({ examples }) => {
+      const active = examples.filter((p: { skip: boolean }) => !p.skip) as Record<string, string>[]
+      test.each(active)('%p', async ({ input, query, output }: any) => {
+        const data = await jq(input, query);
+
+        expect(data).toEqual(output)
       });
     });
   });

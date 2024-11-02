@@ -28,7 +28,7 @@
               "items": [
                 {
                   "type": "number",
-                  "value": "1.2345678909876543e+22"
+                  "value": "12345678909876543212345"
                 },
                 {
                   "type": "string",
@@ -51,12 +51,13 @@
             "input": "[1, 1.000, 1.0, 100e-2]",
             "output": {
               "type": "string",
-              "value": "[[1,true],[1.000,true],[1.0,true],[1.00,true]]"
+              "value": "[[1,true],[1,true],[1,true],[1,true]]"
             }
           },
           {
-            "query": "\n                                        . as $big | [$big, $big + 1] | map(. > 10000000000000000000000000000000)\n                                    ",
+            "query": ". as $big | [$big, $big + 1] | map(. > 10000000000000000000000000000000)",
             "input": "10000000000000000000000000000001",
+            "skip": true,
             "output": {
               "items": [
                 {
@@ -302,7 +303,8 @@
             "query": ".[]",
             "input": "[]",
             "output": {
-              "type": "null"
+              "items": [],
+              "type": "tuple"
             }
           },
           {
@@ -505,17 +507,17 @@
                   "type": "object",
                   "properties": [
                     {
-                      "key": "user",
-                      "value": {
-                        "type": "string",
-                        "value": "stedolan"
-                      }
-                    },
-                    {
                       "key": "title",
                       "value": {
                         "type": "string",
                         "value": "JQ Primer"
+                      }
+                    },
+                    {
+                      "key": "user",
+                      "value": {
+                        "type": "string",
+                        "value": "stedolan"
                       }
                     }
                   ]

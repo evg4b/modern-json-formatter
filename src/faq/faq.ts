@@ -3,13 +3,13 @@ import './buttons/chrome-web-store-button';
 import './buttons/ko-fi-button';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const sections = document.querySelectorAll('main section') as NodeListOf<HTMLElement>;
-  const links = document.querySelectorAll('a.item') as NodeListOf<HTMLAnchorElement>;
+  const sections: NodeListOf<HTMLElement> = document.querySelectorAll('main section');
+  const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('a.item');
 
   const sectionsMap = new Map<string, HTMLElement>();
-  sections.forEach(section => sectionsMap.set(`#${ section.id }`, section));
+  sections.forEach(section => sectionsMap.set(`#${section.id}`, section));
 
-  const linksMap = new Map<string, HTMLElement>();
+  const linksMap = new Map<string, HTMLAnchorElement>();
   links.forEach(link => linksMap.set(link.hash, link));
 
   const handleClick: EventListener = e => {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(section => {
       const top = section.offsetTop;
       const bottom = top + section.offsetHeight;
-      const link = linksMap.get(`#${ section.id }`);
+      const link = linksMap.get(`#${section.id}`);
       if (link) {
         if (scrollPosition >= top && scrollPosition <= bottom) {
           link.classList.add('active');

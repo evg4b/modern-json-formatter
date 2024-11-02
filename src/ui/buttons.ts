@@ -1,4 +1,5 @@
 import { query } from '../helpres';
+// eslint-disable-next-line @typescript-eslint/no-deprecated
 import getURL = chrome.runtime.getURL;
 
 export const buildButtons = (root: ShadowRoot) => {

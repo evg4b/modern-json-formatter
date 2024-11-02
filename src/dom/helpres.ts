@@ -1,7 +1,7 @@
 import { ArrayNode, ObjectNode, TokenNode } from '@packages/tokenizer';
 import { itemsCount, propertiesCount } from './elements';
 
-export const element = (options?: { content?: string, class?: string, block?: boolean }) => {
+export const element = (options?: { content?: string; class?: string; block?: boolean }) => {
   const span = document.createElement(!options?.block ? 'span' : 'div');
   if (options?.content) {
     span.appendChild(document.createTextNode(options.content));
@@ -14,8 +14,7 @@ export const element = (options?: { content?: string, class?: string, block?: bo
 };
 
 export const isValueExpandable = (value: TokenNode): value is ObjectNode | ArrayNode =>
-  value.type === 'object' && !!value.properties.length
-  || value.type === 'array' && !!value.items.length;
+  (value.type === 'object' && !!value.properties.length) || (value.type === 'array' && !!value.items.length);
 
 export const isToggleElement = (element: EventTarget | null): element is HTMLElement => {
   return element instanceof HTMLElement && element.classList.contains('toggle');

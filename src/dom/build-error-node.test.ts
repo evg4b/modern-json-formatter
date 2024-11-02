@@ -12,10 +12,7 @@ describe('error-node', () => {
   });
 
   test('should render error node', () => {
-    const node = buildErrorNode(
-      'Invalid json file.',
-      'Please check the file and try again.',
-    );
+    const node = buildErrorNode('Invalid json file.', 'Please check the file and try again.');
 
     expect(node).toMatchSnapshot();
   });

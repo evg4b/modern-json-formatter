@@ -1,4 +1,4 @@
-# WASMs for modern-json-formatter 
+# WASMs for modern-json-formatter
 
 Custom json tokenizer written in GO and compiled to WASM.
 
@@ -11,7 +11,9 @@ The output of the tokenizer is a schema that represents the json structure and v
 Null node:
 
 ```js
-{ type: "null" }
+{
+  type: 'null';
+}
 ```
 
 Number node:

@@ -8,7 +8,7 @@ import { buildInfoNode, element, isToggleElement, isValueExpandable } from './he
 export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
   if (object.type === 'tuple') {
     const container = element({ class: 'tuple', block: true });
-    object.items.forEach((item) => {
+    object.items.forEach(item => {
       container.appendChild(buildDom(item));
     });
     return container;
@@ -28,7 +28,7 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
   }
 
   root.addEventListener('click', ({ target }) => {
-    if (isToggleElement(target) && (target.parentNode instanceof HTMLElement)) {
+    if (isToggleElement(target) && target.parentNode instanceof HTMLElement) {
       target.parentNode.classList.toggle('collapsed');
     }
   });
@@ -38,9 +38,9 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
 
 export const buildNode = (object: TokenNode): HTMLElement => {
   switch (object.type) {
-    case  'string':
+    case 'string':
       return buildStringNode(object);
-    case  'number':
+    case 'number':
       return buildNumberNode(object);
     case 'bool':
       return buildBoolNode(object);

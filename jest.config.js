@@ -5,10 +5,7 @@ module.exports = {
   collectCoverage: true,
   showSeed: true,
   coverageDirectory: 'coverage',
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-    '/.yarn/',
-  ],
+  coveragePathIgnorePatterns: ['/node_modules/', '/.yarn/'],
   coverageProvider: 'v8',
   coverageReporters: ['lcov', 'text'],
   collectCoverageFrom: [
@@ -34,9 +31,9 @@ module.exports = {
     '^.+\\.[tj]sx?$': [
       'ts-jest',
       {
-        tsconfig: 'tsconfig.spec.json'
+        tsconfig: 'tsconfig.spec.json',
       },
     ],
     '^.+\\.scss$': 'jest-transform-stub',
   },
-}
+};

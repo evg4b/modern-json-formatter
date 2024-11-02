@@ -9,7 +9,6 @@ jest.mock('../shared/wasm_helpers.ts', () => ({
   },
 }));
 
-
 describe('jq', () => {
   beforeAll(chromeMockBefore);
 
@@ -18,10 +17,6 @@ describe('jq', () => {
   test('should return a TokenizerResponse', async () => {
     const data = await tokenize('{ "data": 123 }');
 
-    expect(data).toEqual(
-      tObject(
-        tProperty('data', tNumber(`123`)),
-      ),
-    );
+    expect(data).toEqual(tObject(tProperty('data', tNumber(`123`))));
   });
 });

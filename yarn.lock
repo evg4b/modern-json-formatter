@@ -416,6 +416,46 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chialab/esbuild-plugin-html@npm:^0.18.2":
+  version: 0.18.2
+  resolution: "@chialab/esbuild-plugin-html@npm:0.18.2"
+  dependencies:
+    "@chialab/esbuild-rna": "npm:^0.18.1"
+  peerDependencies:
+    htmlnano: ^2.0.0
+  peerDependenciesMeta:
+    htmlnano:
+      optional: true
+  checksum: 10c0/ecf045e8c2c215d09fb9679ee9be9217c6de6f550f9e9f9d11e7c8390c4665e62f3461d43aa55a7f27eb4e023d42675e908debaff664be3d4d44bbbfb3eb7b59
+  languageName: node
+  linkType: hard
+
+"@chialab/esbuild-rna@npm:^0.18.1":
+  version: 0.18.2
+  resolution: "@chialab/esbuild-rna@npm:0.18.2"
+  dependencies:
+    "@chialab/estransform": "npm:^0.18.0"
+    "@chialab/node-resolve": "npm:^0.18.0"
+  checksum: 10c0/ed1e542b85b121b02fa6fd9a554c7306d96ffd08e29905fa7959acd0011e9fba7c70702f4dee2e32d3a9b7b886767d319bb7cd6909ee765c364f828348329884
+  languageName: node
+  linkType: hard
+
+"@chialab/estransform@npm:^0.18.0":
+  version: 0.18.1
+  resolution: "@chialab/estransform@npm:0.18.1"
+  dependencies:
+    "@parcel/source-map": "npm:^2.0.0"
+  checksum: 10c0/0e58a740a44de0918a413e6ef85061a8c2e87d26d5ba3e9e819bf08636fd9630da78caec318fa95e66b1ad1f8aa7ea4e1f00e1b2d8d0720f2837d8eff3e6f63c
+  languageName: node
+  linkType: hard
+
+"@chialab/node-resolve@npm:^0.18.0":
+  version: 0.18.0
+  resolution: "@chialab/node-resolve@npm:0.18.0"
+  checksum: 10c0/99ba3e219de064d0fb97079e3f715eae088f1b203825bf6a4ecb7c3bfc03db1dd6509a3e6d2c130d370200e29a5e2d43cde44ca3324377d4cad04d38582d1769
+  languageName: node
+  linkType: hard
+
 "@esbuild/aix-ppc64@npm:0.24.0":
   version: 0.24.0
   resolution: "@esbuild/aix-ppc64@npm:0.24.0"
@@ -1057,6 +1097,15 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.5"
   checksum: 10c0/c37a5b4842bfdece3d14dfdb054f73fe15ed2d3da61b34ff76629fb5b1731647c49166fd2a8bf8b56fcfa51200382385ea8909a3cbecdad612310c114d3f6c99
+  languageName: node
+  linkType: hard
+
+"@parcel/source-map@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "@parcel/source-map@npm:2.1.1"
+  dependencies:
+    detect-libc: "npm:^1.0.3"
+  checksum: 10c0/cea8450e152666be413556f0d100f125e81646bffc497e7c792bd9fc5067d052f1a008c8404ce1cd3a587d58b9ef57207ada89149cf2c705e71b1978308045f6
   languageName: node
   linkType: hard
 
@@ -2277,6 +2326,15 @@ __metadata:
   version: 1.0.0
   resolution: "delayed-stream@npm:1.0.0"
   checksum: 10c0/d758899da03392e6712f042bec80aa293bbe9e9ff1b2634baae6a360113e708b91326594c8a486d475c69d6259afb7efacdc3537bfcda1c6c648e390ce601b19
+  languageName: node
+  linkType: hard
+
+"detect-libc@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "detect-libc@npm:1.0.3"
+  bin:
+    detect-libc: ./bin/detect-libc.js
+  checksum: 10c0/4da0deae9f69e13bc37a0902d78bf7169480004b1fed3c19722d56cff578d16f0e11633b7fbf5fb6249181236c72e90024cbd68f0b9558ae06e281f47326d50d
   languageName: node
   linkType: hard
 
@@ -4404,6 +4462,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "modern-json-formatter@workspace:."
   dependencies:
+    "@chialab/esbuild-plugin-html": "npm:^0.18.2"
     "@eslint/js": "npm:^9.13.0"
     "@jest/globals": "npm:^29.7.0"
     "@types/chrome": "npm:^0.0.279"
@@ -4420,6 +4479,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
+    prettier: "npm:3.3.3"
     sass-embedded: "npm:^1.80.4"
     text-encoding: "npm:^0.7.0"
     ts-jest: "npm:^29.2.5"
@@ -4774,6 +4834,15 @@ __metadata:
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
   checksum: 10c0/b00d617431e7886c520a6f498a2e14c75ec58f6d93ba48c3b639cf241b54232d90daa05d83a9e9b9fef6baa63cb7e1e4602c2372fea5bc169668401eb127d0cd
+  languageName: node
+  linkType: hard
+
+"prettier@npm:3.3.3":
+  version: 3.3.3
+  resolution: "prettier@npm:3.3.3"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 10c0/b85828b08e7505716324e4245549b9205c0cacb25342a030ba8885aba2039a115dbcf75a0b7ca3b37bc9d101ee61fab8113fc69ca3359f2a226f1ecc07ad2e26
   languageName: node
   linkType: hard
 

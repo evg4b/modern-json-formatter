@@ -1,13 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "packages/**/*.ts",
-    "packages/**/*.d.ts",
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ],
-  "exclude": [
-    "src/**/*.test.ts",
-    "packages/**/*.test.ts"
-  ]
+  "include": ["packages/**/*.ts", "packages/**/*.d.ts", "src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["src/**/*.test.ts", "packages/**/*.test.ts"]
 }

@@ -8,15 +8,11 @@ describe('dom helpers', () => {
       const testCases = [
         {
           name: 'not empty object',
-          value: tObject(
-            tProperty('demo', tBool(true)),
-          ),
+          value: tObject(tProperty('demo', tBool(true))),
         },
         {
           name: 'not empty array',
-          value: tArray(
-            tString('demo'),
-          ),
+          value: tArray(tString('demo')),
         },
       ];
       test.each(testCases)('$name', ({ value }) => {
@@ -81,20 +77,14 @@ describe('dom helpers', () => {
 
     describe('should return properties count element for', () => {
       test('object node', () => {
-        const node = tObject(
-          tProperty('demo', tBool(true)),
-          tProperty('test', tString('demo')),
-        );
+        const node = tObject(tProperty('demo', tBool(true)), tProperty('test', tString('demo')));
         const infoElement = buildInfoNode(node);
 
         expect(infoElement).toMatchSnapshot();
       });
 
       test('array node', () => {
-        const node = tArray(
-          tString('demo'),
-          tString('test'),
-        );
+        const node = tArray(tString('demo'), tString('test'));
         const infoElement = buildInfoNode(node);
 
         expect(infoElement).toMatchSnapshot();

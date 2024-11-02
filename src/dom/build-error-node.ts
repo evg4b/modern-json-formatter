@@ -11,13 +11,10 @@ export const buildErrorNode = (header: string, ...lines: string[]) => {
   message.className = 'message';
   message.append(
     element({ content: header }), // 'Invalid json file.' }),
-    ...lines.map(line => element({ content: line })),
+    ...lines.map(line => element({ content: line }))
     // element({ content: 'Please check the file and try again.' }),
   );
-  wrapper.append(
-    image,
-    message,
-  );
+  wrapper.append(image, message);
 
   return wrapper;
 };

@@ -1,3 +1,4 @@
+import { registerStyles } from '@core/ui/helpers';
 import { ErrorNode, TokenizerResponse } from '@packages/tokenizer';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
@@ -14,22 +15,16 @@ export const runExtension = async () => {
 
   const { tokenize } = await import('@packages/tokenizer');
 
-  const shadow = document.body.attachShadow({ mode: 'open' });
-  const styleNode = document.createElement('style');
-  styleNode.textContent = styles;
-  styleNode.setAttribute('type', 'text/css');
-  styleNode.setAttribute('rel', 'stylesheet');
-  styleNode.setAttribute('role', 'presentation');
-
-  shadow.appendChild(styleNode);
+  const shadowRoot = document.body.attachShadow({ mode: 'open' });
+  registerStyles(shadowRoot, styles);
 
   const data = document.querySelector<HTMLPreElement>(getJsonSelector());
   isNotNull(data, 'No data found');
 
-  const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadow);
+  const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadowRoot);
   rawContainer.appendChild(data);
 
-  const { rawButton, queryButton, formatButton, queryInput, queryInputWrapper } = buildButtons(shadow);
+  const { rawButton, queryButton, formatButton, queryInput, queryInputWrapper } = buildButtons(shadowRoot);
 
   const response = await tokenize(data.innerText);
 

@@ -1,3 +1,4 @@
+import { registerStyles } from '@core/ui/helpers';
 import styles from './button.module.scss';
 
 export abstract class BaseButtonElement extends HTMLElement {
@@ -6,16 +7,11 @@ export abstract class BaseButtonElement extends HTMLElement {
   protected constructor(icon: string) {
     super();
     const shadowRoot = this.attachShadow({ mode: 'closed' });
-    const styleNode = document.createElement('style');
-    styleNode.textContent = styles;
-    styleNode.setAttribute('type', 'text/css');
-    styleNode.setAttribute('rel', 'stylesheet');
-    styleNode.setAttribute('role', 'presentation');
+    registerStyles(shadowRoot, styles);
 
     this.link.innerHTML = icon;
     this.link.target = '_blank';
 
-    shadowRoot.appendChild(styleNode);
     shadowRoot.appendChild(this.link);
   }
 

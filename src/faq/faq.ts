@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('a.item');
 
   const sectionsMap = new Map<string, HTMLElement>();
-  sections.forEach(section => sectionsMap.set(`#${ section.id }`, section));
+  sections.forEach(section => sectionsMap.set(`#${section.id}`, section));
 
   const linksMap = new Map<string, HTMLAnchorElement>();
   links.forEach(link => linksMap.set(link.hash, link));
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(section => {
       const top = section.offsetTop;
       const bottom = top + section.offsetHeight;
-      const link = linksMap.get(`#${ section.id }`);
+      const link = linksMap.get(`#${section.id}`);
       if (link) {
         if (scrollPosition >= top && scrollPosition <= bottom) {
           link.classList.add('active');

@@ -1,10 +1,9 @@
-import { CustomElement } from '@core/dom';
-import { StyledComponentElement } from '@core/dom/styled-component';
-import { createElement } from '../../dom/helpres';
+import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
+import { assetTabType } from '../../helpres';
 import { QueryInputElement } from '../query-input';
 import toolboxStyles from './toolbox.module.scss';
 
-@CustomElement('toolbox-2')
+@CustomElement('extension-toolbox')
 export class ToolboxElement extends StyledComponentElement {
   private readonly input = new QueryInputElement();
   private readonly rawButton = this.createButton('Raw', 'raw');
@@ -30,13 +29,15 @@ export class ToolboxElement extends StyledComponentElement {
     this.shadow.addEventListener('click', e => {
       if (e.target instanceof HTMLButtonElement) {
         e.preventDefault();
-        this.activateButton(e.target.getAttribute('ref') as any);
+        const ref = e.target.getAttribute('ref');
+        assetTabType(ref);
+        this.activateButton(ref);
       }
     });
     this.input.hide();
   }
 
-  public onQueryChanged(callback: (s: string) => void): void {
+  public onQueryChanged(callback: (s: string) => void | Promise<void>): void {
     this.input.onSubmit(callback);
   }
 
@@ -50,7 +51,7 @@ export class ToolboxElement extends StyledComponentElement {
 
   private activateButton(tab: TabType): void {
     this.buttonList.forEach(([key, value]) =>
-      key === tab ? value.classList.add('active') : value.classList.remove('active'),
+      key === tab ? value.classList.add('active') : value.classList.remove('active')
     );
     this.tabChangedCallback?.(tab);
     if (tab === 'query') {
@@ -61,7 +62,7 @@ export class ToolboxElement extends StyledComponentElement {
     }
   }
 
-  private createButton(content: string, ref: TabType, active: boolean = false): HTMLButtonElement {
+  private createButton(content: string, ref: TabType, active = false): HTMLButtonElement {
     return createElement({
       element: 'button',
       content,

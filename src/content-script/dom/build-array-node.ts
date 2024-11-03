@@ -1,18 +1,19 @@
+import { createElement } from '@core/dom';
 import { ArrayNode } from '@packages/tokenizer';
 import { buildNode } from './build-dom';
 import { comma, ellipsis, squareBracket, toggle } from './elements';
-import { buildInfoNode, element, isValueExpandable } from './helpres';
+import { buildInfoNode, isValueExpandable } from './helpres';
 
 export const buildArrayNode = ({ items }: ArrayNode) => {
-  const arrayNode = element({ class: 'array' });
+  const arrayNode = createElement({ element: 'span', class: 'array' });
   arrayNode.appendChild(squareBracket.open());
 
   if (items.length) {
-    const innerNode = element({ class: 'inner' });
+    const innerNode = createElement({ element: 'span', class: 'inner' });
     arrayNode.append(innerNode, ellipsis());
     const lastIndex = items.length - 1;
     items.forEach((item, index) => {
-      const itemNode = element({ class: 'item' });
+      const itemNode = createElement({ element: 'span', class: 'item' });
       innerNode.appendChild(itemNode);
       if (isValueExpandable(item)) {
         itemNode.appendChild(toggle());

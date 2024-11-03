@@ -15,23 +15,3 @@ exports[`dom helpers buildInfoNode should return properties count element for ob
   // 2 properties
 </span>
 `;
-
-exports[`dom helpers element should create element with class 1`] = `
-<span
-  class="demo"
-/>
-`;
-
-exports[`dom helpers element should create element with content 1`] = `
-<span>
-  demo
-</span>
-`;
-
-exports[`dom helpers element should create element with content and class 1`] = `
-<span
-  class="demo"
->
-  demo
-</span>
-`;

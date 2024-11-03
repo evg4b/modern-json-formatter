@@ -1,18 +1,30 @@
+import { createElement } from '@core/dom';
 import { BooleanNode, NumberNode, StringNode } from '@packages/tokenizer';
-import { element } from './helpres';
 
-export const buildNullNode = () => element({ content: 'null', class: 'null' });
+export const buildNullNode = () =>
+  createElement({
+    element: 'span',
+    content: 'null',
+    class: 'null',
+  });
 
-export const buildNumberNode = ({ value }: NumberNode) => element({ content: value, class: 'number' });
+export const buildNumberNode = ({ value }: NumberNode) =>
+  createElement({
+    element: 'span',
+    content: value,
+    class: 'number',
+  });
 
 export const buildBoolNode = (object: BooleanNode) =>
-  element({
+  createElement({
+    element: 'span',
     content: object.value ? 'true' : 'false',
     class: 'boolean',
   });
 
 export const buildStringNode = ({ value }: StringNode) =>
-  element({
+  createElement({
+    element: 'span',
     content: JSON.stringify(value),
     class: 'string',
   });

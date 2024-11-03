@@ -1,7 +1,5 @@
 import { getURL } from '@core/browser';
-import { CustomElement } from '@core/dom';
-import { StyledComponentElement } from '@core/dom/styled-component';
-import { createElement } from '../../dom/helpres';
+import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { InfoButtonElement } from '../info-button';
 import queryInputStyles from './query-input.module.scss';
 
@@ -11,7 +9,7 @@ export class QueryInputElement extends StyledComponentElement {
   private readonly errorMessage = this.createErrorMessage();
   private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
 
-  private onSubmitCallback: ((s: string) => void) | null = null;
+  private onSubmitCallback: ((s: string) => unknown) | null = null;
 
   constructor() {
     super(queryInputStyles);
@@ -33,7 +31,7 @@ export class QueryInputElement extends StyledComponentElement {
     }
   }
 
-  public onSubmit(callback: (s: string) => void): void {
+  public onSubmit(callback: (s: string) => void | Promise<void>): void {
     this.onSubmitCallback = callback;
   }
 
@@ -54,12 +52,12 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   private createInput(): HTMLInputElement {
-    const input = document.createElement('input');
+    const input = createElement({ element: 'input' });
     input.type = 'text';
     input.placeholder = 'Input jq query...';
-    input.addEventListener('keydown', async event => {
+    input.addEventListener('keydown', event => {
+      this.setErrorMessage(null);
       if (event.key === 'Enter') {
-        this.setErrorMessage(null);
         this.onSubmitCallback?.(input.value);
       }
     });

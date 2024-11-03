@@ -1,5 +1,5 @@
 import { getURL } from '@core/browser';
-import { element } from './helpres';
+import { createElement } from '@core/dom';
 
 export const buildErrorNode = (header: string, ...lines: string[]) => {
   const wrapper = document.createElement('div');
@@ -11,8 +11,8 @@ export const buildErrorNode = (header: string, ...lines: string[]) => {
   const message = document.createElement('div');
   message.className = 'message';
   message.append(
-    element({ content: header }), // 'Invalid json file.' }),
-    ...lines.map(line => element({ content: line }))
+    createElement({ element: 'span', content: header }), // 'Invalid json file.' }),
+    ...lines.map(line => createElement({ element: 'span', content: line }))
     // element({ content: 'Please check the file and try again.' }),
   );
   wrapper.append(image, message);

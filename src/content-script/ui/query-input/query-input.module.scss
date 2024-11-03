@@ -1,4 +1,3 @@
-
 :host {
   display: flex;
   flex-direction: row;
@@ -22,7 +21,7 @@
     .error-message {
       position: absolute;
       top: calc(100% + 5px);
-      color: red;
+      color: #e46962;
       font-size: 10px;
       user-select: none;
 
@@ -34,12 +33,5 @@
         display: none;
       }
     }
-  }
-}
-
-:host-context(.hidden) {
-  :host {
-    display: none;
-    background: red;
   }
 }

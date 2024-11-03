@@ -19,7 +19,6 @@ export const runExtension = async () => {
   const shadowRoot = document.body.attachShadow({ mode: 'open' });
   registerStyles(shadowRoot, styles);
 
-
   const data = document.querySelector<HTMLPreElement>(getJsonSelector());
   isNotNull(data, 'No data found');
 
@@ -78,7 +77,7 @@ export const runExtension = async () => {
         rootContainer.classList.add('formatted');
         return;
     }
-  })
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   queryInput.addEventListener('keydown', async event => {

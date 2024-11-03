@@ -1,17 +1,15 @@
 import { CustomElement } from '@core/dom';
-import { registerStyles } from '@core/ui/helpers';
+import { StyledComponentElement } from '@core/dom/styled-component';
 import infoButtonStyles from './info-buton.module.scss';
 import icon from './info-button-icon.svg';
 
 @CustomElement('info-button')
-export class InfoButtonElement extends HTMLElement {
-  private readonly shadow = this.attachShadow({ mode: 'closed' });
+export class InfoButtonElement extends StyledComponentElement {
   private readonly link = document.createElement('a');
 
   constructor(url: string) {
-    super();
+    super(infoButtonStyles);
     this.shadow.appendChild(this.link);
-    registerStyles(this.shadow, infoButtonStyles);
     this.link.innerHTML = icon;
     this.link.target = '_blank';
     this.link.href = url;

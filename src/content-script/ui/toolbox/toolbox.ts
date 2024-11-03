@@ -1,16 +1,15 @@
 import { CustomElement } from '@core/dom';
-import { registerStyles } from '@core/ui/helpers';
+import { StyledComponentElement } from '@core/dom/styled-component';
+import { createElement } from '../../dom/helpres';
 import { QueryInputElement } from '../query-input';
 import toolboxStyles from './toolbox.module.scss';
 
 @CustomElement('toolbox-2')
-export class ToolboxElement extends HTMLElement {
-  private readonly shadow = this.attachShadow({ mode: 'closed' });
-
+export class ToolboxElement extends StyledComponentElement {
   private readonly input = new QueryInputElement();
-  private readonly rawButton = this.createRawButton();
-  private readonly formattedButton = this.createFormattedButton();
-  private readonly queryButton = this.createQueryButton();
+  private readonly rawButton = this.createButton('Raw', 'raw');
+  private readonly formattedButton = this.createButton('Formatted', 'formatted', true);
+  private readonly queryButton = this.createButton('Query', 'query');
 
   private readonly buttonList: [TabType, HTMLButtonElement][] = [
     ['raw', this.rawButton],
@@ -21,12 +20,20 @@ export class ToolboxElement extends HTMLElement {
   private tabChangedCallback: ((s: TabType) => void) | null = null;
 
   constructor() {
-    super();
-    registerStyles(this.shadow, toolboxStyles);
-    this.shadow.appendChild(this.input);
-    this.shadow.appendChild(this.queryButton);
-    this.shadow.appendChild(this.formattedButton);
-    this.shadow.appendChild(this.rawButton);
+    super(toolboxStyles);
+    const container = createElement({
+      element: 'div',
+      class: 'button-container',
+      children: [this.queryButton, this.formattedButton, this.rawButton],
+    });
+    this.shadow.append(this.input, container);
+    this.shadow.addEventListener('click', e => {
+      if (e.target instanceof HTMLButtonElement) {
+        e.preventDefault();
+        this.activateButton(e.target.getAttribute('ref') as any);
+      }
+    });
+    this.input.hide();
   }
 
   public onQueryChanged(callback: (s: string) => void): void {
@@ -43,37 +50,23 @@ export class ToolboxElement extends HTMLElement {
 
   private activateButton(tab: TabType): void {
     this.buttonList.forEach(([key, value]) =>
-      key === tab
-        ? value.classList.add('active')
-        : value.classList.remove('active'),
+      key === tab ? value.classList.add('active') : value.classList.remove('active'),
     );
     this.tabChangedCallback?.(tab);
+    if (tab === 'query') {
+      this.input.show();
+      this.input.focus();
+    } else {
+      this.input.hide();
+    }
   }
 
-  private createRawButton(): HTMLButtonElement {
-    const buttonElement = document.createElement('button');
-    buttonElement.setAttribute('type', 'button');
-    buttonElement.appendChild(document.createTextNode('Raw'));
-    buttonElement.addEventListener('click', () => this.activateButton('raw'));
-
-    return buttonElement;
-  }
-
-  private createFormattedButton(): HTMLButtonElement {
-    const buttonElement = document.createElement('button');
-    buttonElement.setAttribute('type', 'button');
-    buttonElement.appendChild(document.createTextNode('Formatted'));
-    buttonElement.addEventListener('click', () => this.activateButton('formatted'));
-
-    return buttonElement;
-  }
-
-  private createQueryButton(): HTMLButtonElement {
-    const buttonElement = document.createElement('button');
-    buttonElement.setAttribute('type', 'button');
-    buttonElement.appendChild(document.createTextNode('Query'));
-    buttonElement.addEventListener('click', () => this.activateButton('query'));
-
-    return buttonElement;
+  private createButton(content: string, ref: TabType, active: boolean = false): HTMLButtonElement {
+    return createElement({
+      element: 'button',
+      content,
+      class: active ? 'active' : undefined,
+      attributes: { type: 'button', ref },
+    });
   }
 }

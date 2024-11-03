@@ -1,13 +1,12 @@
 import { getURL } from '@core/browser';
 import { CustomElement } from '@core/dom';
-import { registerStyles } from '@core/ui/helpers';
+import { StyledComponentElement } from '@core/dom/styled-component';
+import { createElement } from '../../dom/helpres';
 import { InfoButtonElement } from '../info-button';
 import queryInputStyles from './query-input.module.scss';
 
 @CustomElement('query-input')
-export class QueryInputElement extends HTMLElement {
-  private readonly shadow = this.attachShadow({ mode: 'closed' });
-
+export class QueryInputElement extends StyledComponentElement {
   private readonly input = this.createInput();
   private readonly errorMessage = this.createErrorMessage();
   private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
@@ -15,11 +14,12 @@ export class QueryInputElement extends HTMLElement {
   private onSubmitCallback: ((s: string) => void) | null = null;
 
   constructor() {
-    super();
-    registerStyles(this.shadow, queryInputStyles);
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('input-wrapper');
-    wrapper.append(this.input, this.errorMessage);
+    super(queryInputStyles);
+    const wrapper = createElement({
+      element: 'div',
+      class: 'input-wrapper',
+      children: [this.input, this.errorMessage],
+    });
     this.shadow.append(this.infoIcons, wrapper);
   }
 
@@ -35,6 +35,22 @@ export class QueryInputElement extends HTMLElement {
 
   public onSubmit(callback: (s: string) => void): void {
     this.onSubmitCallback = callback;
+  }
+
+  public focus(): void {
+    this.input.focus();
+  }
+
+  public blur(): void {
+    this.input.blur();
+  }
+
+  public hide(): void {
+    this.style.display = 'none';
+  }
+
+  public show(): void {
+    this.style.display = 'flex';
   }
 
   private createInput(): HTMLInputElement {

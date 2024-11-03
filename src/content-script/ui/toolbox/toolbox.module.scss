@@ -5,4 +5,8 @@
   position: fixed;
   top: 15px;
   right: 30px;
+
+  background: var(--background-color);
+  padding: 2px;
+  box-shadow: 0px 0px 2px 1px var(--background-color);
 }

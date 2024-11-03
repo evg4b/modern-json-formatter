@@ -19,6 +19,11 @@
       top: calc(100% + 5px);
       color: red;
       font-size: 10px;
+      user-select: none;
+
+      background: var(--background-color);
+      padding: 2px;
+      box-shadow: 0 0 2px 1px var(--background-color);
 
       &.hidden {
         display: none;

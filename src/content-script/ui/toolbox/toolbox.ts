@@ -12,6 +12,14 @@ export class ToolboxElement extends HTMLElement {
   private readonly formattedButton = this.createFormattedButton();
   private readonly queryButton = this.createQueryButton();
 
+  private readonly buttonList: [TabType, HTMLButtonElement][] = [
+    ['raw', this.rawButton],
+    ['formatted', this.formattedButton],
+    ['query', this.queryButton],
+  ];
+
+  private tabChangedCallback: ((s: TabType) => void) | null = null;
+
   constructor() {
     super();
     registerStyles(this.shadow, toolboxStyles);
@@ -25,14 +33,28 @@ export class ToolboxElement extends HTMLElement {
     this.input.onSubmit(callback);
   }
 
+  public onTabChanged(callback: (s: TabType) => void): void {
+    this.tabChangedCallback = callback;
+  }
+
   public setErrorMessage(error: string): void {
     this.input.setErrorMessage(error);
+  }
+
+  private activateButton(tab: TabType): void {
+    this.buttonList.forEach(([key, value]) =>
+      key === tab
+        ? value.classList.add('active')
+        : value.classList.remove('active'),
+    );
+    this.tabChangedCallback?.(tab);
   }
 
   private createRawButton(): HTMLButtonElement {
     const buttonElement = document.createElement('button');
     buttonElement.setAttribute('type', 'button');
     buttonElement.appendChild(document.createTextNode('Raw'));
+    buttonElement.addEventListener('click', () => this.activateButton('raw'));
 
     return buttonElement;
   }
@@ -41,6 +63,7 @@ export class ToolboxElement extends HTMLElement {
     const buttonElement = document.createElement('button');
     buttonElement.setAttribute('type', 'button');
     buttonElement.appendChild(document.createTextNode('Formatted'));
+    buttonElement.addEventListener('click', () => this.activateButton('formatted'));
 
     return buttonElement;
   }
@@ -49,6 +72,7 @@ export class ToolboxElement extends HTMLElement {
     const buttonElement = document.createElement('button');
     buttonElement.setAttribute('type', 'button');
     buttonElement.appendChild(document.createTextNode('Query'));
+    buttonElement.addEventListener('click', () => this.activateButton('query'));
 
     return buttonElement;
   }

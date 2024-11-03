@@ -19,6 +19,7 @@ export const runExtension = async () => {
   const shadowRoot = document.body.attachShadow({ mode: 'open' });
   registerStyles(shadowRoot, styles);
 
+
   const data = document.querySelector<HTMLPreElement>(getJsonSelector());
   isNotNull(data, 'No data found');
 
@@ -61,6 +62,23 @@ export const runExtension = async () => {
     queryContainer.innerHTML = '';
     queryContainer.appendChild(prepareResponse(info));
   });
+
+  toolbox2.onTabChanged(async tab => {
+    switch (tab) {
+      case 'query':
+        rootContainer.classList.remove('raw', 'formatted');
+        rootContainer.classList.add('query');
+        return;
+      case 'raw':
+        rootContainer.classList.remove('formatted', 'query');
+        rootContainer.classList.add('raw');
+        return;
+      case 'formatted':
+        rootContainer.classList.remove('raw', 'query');
+        rootContainer.classList.add('formatted');
+        return;
+    }
+  })
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   queryInput.addEventListener('keydown', async event => {

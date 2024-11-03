@@ -1,10 +1,11 @@
 import { query } from '../helpres';
 import { getURL } from '@core/browser';
+import { ToolboxElement } from './toolbox';
 
 export const buildButtons = (root: ShadowRoot) => {
   const toolbox = document.createElement('div');
   toolbox.innerHTML = `
-    <div class="toolbox-container">
+    <div class="toolbox-container" style="display: none">
         <div class="input-wrapper" style="display: none" >
             <a href="${getURL('faq.html')}" title="JQ Queries Manual" target="_blank">
                 <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

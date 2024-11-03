@@ -7,6 +7,7 @@ import { detectJson, getJsonSelector } from './json-detector/detect';
 import styles from './styles.module.scss';
 import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
+import { ToolboxElement } from './ui/toolbox';
 
 export const runExtension = async () => {
   if (!(await detectJson())) {
@@ -25,6 +26,8 @@ export const runExtension = async () => {
   rawContainer.appendChild(data);
 
   const { rawButton, queryButton, formatButton, queryInput, queryInputWrapper } = buildButtons(shadowRoot);
+  const toolbox2 = new ToolboxElement();
+  shadowRoot.appendChild(toolbox2);
 
   const response = await tokenize(data.innerText);
 
@@ -45,6 +48,14 @@ export const runExtension = async () => {
     rootContainer.classList.remove('raw', 'formatted');
     rootContainer.classList.add('query');
     queryInputWrapper.style.display = 'flex';
+  });
+
+  toolbox2.onQueryChanged(async query => {
+    const { jq } = await import('@packages/jq');
+
+    const info = await jq(data.innerText, query);
+    queryContainer.innerHTML = '';
+    queryContainer.appendChild(prepareResponse(info));
   });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises

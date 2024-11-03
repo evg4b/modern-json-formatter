@@ -1581,6 +1581,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@webcomponents/custom-elements@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@webcomponents/custom-elements@npm:1.6.0"
+  checksum: 10c0/8c3c3b0250ad7b063fe92b550fb725cc6074c8c5caea4a80901f9d9a93cdacf6dc0c73f715fa7b16f86e2ca1630e43cd80499bbf80e3a9b5c6ec042e074d22b4
+  languageName: node
+  linkType: hard
+
 "abab@npm:^2.0.6":
   version: 2.0.6
   resolution: "abab@npm:2.0.6"
@@ -4470,6 +4477,7 @@ __metadata:
     "@types/jest": "npm:^29.5.14"
     "@types/node": "npm:^20.17.5"
     "@types/text-encoding": "npm:^0.0.39"
+    "@webcomponents/custom-elements": "npm:^1.6.0"
     esbuild: "npm:^0.24.0"
     esbuild-plugin-copy: "npm:^2.1.1"
     esbuild-plugin-json-merge: "npm:^0.1.0"

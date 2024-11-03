@@ -34,6 +34,7 @@ export default defineConfig({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
+  noExternal: ['@webcomponents/custom-elements'],
   loader: {
     '.svg': 'text',
   },

@@ -25,6 +25,10 @@ export class ToolboxElement extends HTMLElement {
     this.input.onSubmit(callback);
   }
 
+  public setErrorMessage(error: string): void {
+    this.input.setErrorMessage(error);
+  }
+
   private createRawButton(): HTMLButtonElement {
     const buttonElement = document.createElement('button');
     buttonElement.setAttribute('type', 'button');

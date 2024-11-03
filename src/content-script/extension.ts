@@ -54,6 +54,10 @@ export const runExtension = async () => {
     const { jq } = await import('@packages/jq');
 
     const info = await jq(data.innerText, query);
+    if (info.type === 'error' && info.scope === 'jq') {
+      toolbox2.setErrorMessage(info.error);
+    }
+
     queryContainer.innerHTML = '';
     queryContainer.appendChild(prepareResponse(info));
   });

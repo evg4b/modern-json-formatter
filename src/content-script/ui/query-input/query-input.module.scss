@@ -16,8 +16,9 @@
 
     .error-message {
       position: absolute;
-      bottom: -100%;
+      top: calc(100% + 5px);
       color: red;
+      font-size: 10px;
 
       &.hidden {
         display: none;

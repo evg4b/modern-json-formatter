@@ -1,5 +1,7 @@
+import { getURL } from '@core/browser';
 import { CustomElement } from '@core/dom';
 import { registerStyles } from '@core/ui/helpers';
+import { InfoButtonElement } from '../info-button';
 import queryInputStyles from './query-input.module.scss';
 
 @CustomElement('query-input')
@@ -8,6 +10,7 @@ export class QueryInputElement extends HTMLElement {
 
   private readonly input = this.createInput();
   private readonly errorMessage = this.createErrorMessage();
+  private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
 
   private onSubmitCallback: ((s: string) => void) | null = null;
 
@@ -17,7 +20,7 @@ export class QueryInputElement extends HTMLElement {
     const wrapper = document.createElement('div');
     wrapper.classList.add('input-wrapper');
     wrapper.append(this.input, this.errorMessage);
-    this.shadow.appendChild(wrapper);
+    this.shadow.append(this.infoIcons, wrapper);
   }
 
   public setErrorMessage(errorMessage: string | null): void {

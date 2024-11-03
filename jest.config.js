@@ -28,6 +28,7 @@ module.exports = {
     '^@packages/tokenizer/(.*)$': '<rootDir>packages/tokenizer/$1',
     '^@core/(.*)$': '<rootDir>src/core/$1',
     '^@testing/(.*)$': '<rootDir>testing/$1',
+    '^@testing$': '<rootDir>testing',
   },
   transform: {
     '^.+\\.[tj]sx?$': [

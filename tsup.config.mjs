@@ -18,7 +18,7 @@ const assets = path =>
 
 export default defineConfig({
   entry: {
-    main: 'src/main.ts',
+    'content-script': 'src/content-script/main.ts',
     faq: 'src/faq/faq.html',
   },
   splitting: false,

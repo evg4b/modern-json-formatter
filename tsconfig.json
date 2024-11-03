@@ -14,7 +14,8 @@
     "paths": {
       "@packages/*": ["packages/*"],
       "@core/*": ["src/core/*"],
-      "@testing/*": ["testing/*"]
+      "@testing/*": ["testing/*"],
+      "@testing": ["testing"]
     }
   },
   "references": [

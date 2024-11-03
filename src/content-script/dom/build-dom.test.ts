@@ -1,6 +1,6 @@
 import { TokenNode } from '@packages/tokenizer';
 import assert from 'node:assert';
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../../testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { buildDom } from './build-dom';
 
 describe('buildDom', () => {

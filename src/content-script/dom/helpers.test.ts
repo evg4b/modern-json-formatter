@@ -1,4 +1,4 @@
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '../../testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { colon, toggle } from './elements';
 import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
 

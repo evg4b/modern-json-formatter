@@ -38,5 +38,6 @@ module.exports = {
       },
     ],
     '^.+\\.scss$': 'jest-transform-stub',
+    '^.+\\.svg': 'jest-transform-stub',
   },
 };

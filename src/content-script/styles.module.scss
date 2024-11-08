@@ -96,11 +96,6 @@ $indentation: 30px;
   }
 }
 
-.button-container {
-  display: flex;
-  flex-direction: row;
-}
-
 pre {
   margin: 0;
   padding: 0;
@@ -235,40 +230,6 @@ pre {
 
 .toolbox-container {
   gap: 10px;
-
-  button {
-    &:first-child {
-      border-bottom-left-radius: 5px;
-      border-top-left-radius: 5px;
-    }
-
-    &:last-child {
-      border-bottom-right-radius: 5px;
-      border-top-right-radius: 5px;
-    }
-
-    &:hover {
-      background: #525252;
-    }
-
-    &.active {
-      background: #2c2c2c;
-      color: #b4b2b2;
-      cursor: default;
-    }
-
-    padding: 5px 10px;
-    background: #3b3b3b;
-    color: #eeeeee;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.3s;
-    min-width: 41px;
-    display: block;
-    user-select: none;
-  }
 }
 
 .toggle {

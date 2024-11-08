@@ -1,27 +1,29 @@
-import { element } from './helpres';
+import { createElement } from '@core/dom';
 
-export const toggle = () => element({ class: 'toggle' });
-export const ellipsis = () => element({ class: 'ellipsis' });
-export const comma = () => element({ content: ',', class: 'comma' });
-export const colon = () => element({ content: ':', class: 'colon' });
+export const toggle = () => createElement({ element: 'span', class: 'toggle' });
+export const ellipsis = () => createElement({ element: 'span', class: 'ellipsis' });
+export const comma = () => createElement({ element: 'span', content: ',', class: 'comma' });
+export const colon = () => createElement({ element: 'span', content: ':', class: 'colon' });
 export const bracket = {
-  open: () => element({ content: '{', class: 'bracket bracket-open' }),
-  close: () => element({ content: '}', class: 'bracket bracket-close' }),
+  open: () => createElement({ element: 'span', content: '{', class: ['bracket', 'bracket-open'] }),
+  close: () => createElement({ element: 'span', content: '}', class: ['bracket', 'bracket-close'] }),
 };
 
 export const squareBracket = {
-  open: () => element({ content: '[', class: 'bracket square-bracket-open' }),
-  close: () => element({ content: ']', class: 'bracket square-bracket-close' }),
+  open: () => createElement({ element: 'span', content: '[', class: ['bracket', 'square-bracket-open'] }),
+  close: () => createElement({ element: 'span', content: ']', class: ['bracket', 'square-bracket-close'] }),
 };
 
 export const propertiesCount = (count: number) =>
-  element({
+  createElement({
+    element: 'span',
     content: `// ${count} propert${count === 1 ? 'y' : 'ies'}`,
     class: 'properties-count',
   });
 
 export const itemsCount = (count: number) =>
-  element({
+  createElement({
+    element: 'span',
     content: `// ${count} item${count === 1 ? '' : 's'}`,
     class: 'items-count',
   });

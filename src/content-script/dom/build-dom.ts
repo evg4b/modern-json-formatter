@@ -1,20 +1,21 @@
+import { createElement } from '@core/dom';
 import { TokenNode, TupleNode } from '@packages/tokenizer';
 import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
 import { toggle } from './elements';
-import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
+import { buildInfoNode, isToggleElement, isValueExpandable } from './helpres';
 
 export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
   if (object.type === 'tuple') {
-    const container = element({ class: 'tuple', block: true });
-    object.items.forEach(item => {
-      container.appendChild(buildDom(item));
+    return createElement({
+      class: 'tuple',
+      element: 'div',
+      children: object.items.map(buildDom),
     });
-    return container;
   }
 
-  const root = element({ class: 'root' });
+  const root = createElement({ element: 'span', class: 'root' });
 
   if (isValueExpandable(object)) {
     root.appendChild(toggle());

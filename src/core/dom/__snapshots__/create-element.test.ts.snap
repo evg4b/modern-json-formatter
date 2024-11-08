@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createElement {"attributes": [Object], "content": "test content", "element": "a"} 1`] = `
+<a
+  href="http://test"
+>
+  test content
+</a>
+`;
+
+exports[`createElement {"attributes": [Object], "content": "test content", "element": "div"} 1`] = `
+<div
+  aria-data="test"
+>
+  test content
+</div>
+`;
+
+exports[`createElement {"attributes": [Object], "content": "test content", "element": "input"} 1`] = `
+<input
+  test="data"
+>
+  test content
+</input>
+`;
+
+exports[`createElement {"attributes": [Object], "content": "test content", "element": "span"} 1`] = `
+<span
+  ref="test"
+>
+  test content
+</span>
+`;
+
+exports[`createElement {"children": [Array], "element": "a"} 1`] = `
+<a>
+  <span>
+    test1
+  </span>
+  <span>
+    test2
+  </span>
+  <span>
+    test3
+  </span>
+</a>
+`;
+
+exports[`createElement {"children": [Array], "element": "div"} 1`] = `
+<div>
+  <div>
+    test1
+  </div>
+  <div>
+    test2
+  </div>
+  <div>
+    test3
+  </div>
+</div>
+`;
+
+exports[`createElement {"children": [Array], "element": "span"} 1`] = `
+<span>
+  <span>
+    test1
+  </span>
+  <span>
+    test2
+  </span>
+  <span>
+    test3
+  </span>
+</span>
+`;
+
+exports[`createElement {"class": "test", "content": "test content", "element": "a"} 1`] = `
+<a
+  class="test"
+>
+  test content
+</a>
+`;
+
+exports[`createElement {"class": "test", "content": "test content", "element": "div"} 1`] = `
+<div
+  class="test"
+>
+  test content
+</div>
+`;
+
+exports[`createElement {"class": "test", "content": "test content", "element": "span"} 1`] = `
+<span
+  class="test"
+>
+  test content
+</span>
+`;
+
+exports[`createElement {"class": "test", "element": "a"} 1`] = `
+<a
+  class="test"
+/>
+`;
+
+exports[`createElement {"class": "test", "element": "div"} 1`] = `
+<div
+  class="test"
+/>
+`;
+
+exports[`createElement {"class": "test", "element": "input"} 1`] = `
+<input
+  class="test"
+/>
+`;
+
+exports[`createElement {"class": "test", "element": "span"} 1`] = `
+<span
+  class="test"
+/>
+`;
+
+exports[`createElement {"class": [Array], "content": "test content", "element": "a"} 1`] = `
+<a
+  class="test1 test2 test3"
+>
+  test content
+</a>
+`;
+
+exports[`createElement {"class": [Array], "content": "test content", "element": "div"} 1`] = `
+<div
+  class="test1 test2 test3"
+>
+  test content
+</div>
+`;
+
+exports[`createElement {"class": [Array], "content": "test content", "element": "span"} 1`] = `
+<span
+  class="test1 test2 test3"
+>
+  test content
+</span>
+`;
+
+exports[`createElement {"class": [Array], "element": "input"} 1`] = `
+<input
+  class="test1 test2 test3"
+/>
+`;
+
+exports[`createElement {"element": "a", "html": "<span>test</span>"} 1`] = `
+<a>
+  <span>
+    test
+  </span>
+</a>
+`;
+
+exports[`createElement {"element": "a"} 1`] = `<a />`;
+
+exports[`createElement {"element": "div", "html": "<span>test</span>"} 1`] = `
+<div>
+  <span>
+    test
+  </span>
+</div>
+`;
+
+exports[`createElement {"element": "div"} 1`] = `<div />`;
+
+exports[`createElement {"element": "input"} 1`] = `<input />`;
+
+exports[`createElement {"element": "span", "html": "<span>test</span>"} 1`] = `
+<span>
+  <span>
+    test
+  </span>
+</span>
+`;
+
+exports[`createElement {"element": "span"} 1`] = `<span />`;

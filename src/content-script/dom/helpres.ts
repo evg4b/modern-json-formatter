@@ -1,18 +1,6 @@
 import { ArrayNode, ObjectNode, TokenNode } from '@packages/tokenizer';
 import { itemsCount, propertiesCount } from './elements';
 
-export const element = (options?: { content?: string; class?: string; block?: boolean }) => {
-  const span = document.createElement(!options?.block ? 'span' : 'div');
-  if (options?.content) {
-    span.appendChild(document.createTextNode(options.content));
-  }
-  if (options?.class) {
-    span.className = options.class;
-  }
-
-  return span;
-};
-
 export const isValueExpandable = (value: TokenNode): value is ObjectNode | ArrayNode =>
   (value.type === 'object' && !!value.properties.length) || (value.type === 'array' && !!value.items.length);
 

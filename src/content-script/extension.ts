@@ -1,12 +1,12 @@
 import { registerStyles } from '@core/ui/helpers';
-import { ErrorNode, TokenizerResponse } from '@packages/tokenizer';
+import { TokenizerResponse } from '@packages/tokenizer';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
 import { detectJson, getJsonSelector } from './json-detector/detect';
 import styles from './styles.module.scss';
-import { buildButtons } from './ui/buttons';
 import { buildContainers } from './ui/containers';
+import { ToolboxElement } from './ui/toolbox';
 
 export const runExtension = async () => {
   if (!(await detectJson())) {
@@ -24,37 +24,38 @@ export const runExtension = async () => {
   const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadowRoot);
   rawContainer.appendChild(data);
 
-  const { rawButton, queryButton, formatButton, queryInput, queryInputWrapper } = buildButtons(shadowRoot);
+  const toolbox = new ToolboxElement();
+  shadowRoot.appendChild(toolbox);
 
   const response = await tokenize(data.innerText);
 
-  queryInputWrapper.style.display = 'none';
-  rawButton.addEventListener('click', () => {
-    rootContainer.classList.remove('formatted', 'query');
-    rootContainer.classList.add('raw');
-    queryInputWrapper.style.display = 'none';
+  toolbox.onQueryChanged(async query => {
+    const { jq } = await import('@packages/jq');
+
+    const info = await jq(data.innerText, query);
+    if (info.type === 'error' && info.scope === 'jq') {
+      toolbox.setErrorMessage(info.error);
+      return;
+    }
+
+    queryContainer.innerHTML = '';
+    queryContainer.appendChild(prepareResponse(info));
   });
 
-  formatButton.addEventListener('click', () => {
-    rootContainer.classList.remove('raw', 'query');
-    rootContainer.classList.add('formatted');
-    queryInputWrapper.style.display = 'none';
-  });
-
-  queryButton.addEventListener('click', () => {
-    rootContainer.classList.remove('raw', 'formatted');
-    rootContainer.classList.add('query');
-    queryInputWrapper.style.display = 'flex';
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  queryInput.addEventListener('keydown', async event => {
-    if (event.key === 'Enter') {
-      const { jq } = await import('@packages/jq');
-
-      const info = await jq(data.innerText, queryInput.value);
-      queryContainer.innerHTML = '';
-      queryContainer.appendChild(prepareResponse(info));
+  toolbox.onTabChanged(tab => {
+    switch (tab) {
+      case 'query':
+        rootContainer.classList.remove('raw', 'formatted');
+        rootContainer.classList.add('query');
+        return;
+      case 'raw':
+        rootContainer.classList.remove('formatted', 'query');
+        rootContainer.classList.add('raw');
+        return;
+      case 'formatted':
+        rootContainer.classList.remove('raw', 'query');
+        rootContainer.classList.add('formatted');
+        return;
     }
   });
 
@@ -62,12 +63,5 @@ export const runExtension = async () => {
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
-  return response.type === 'error'
-    ? buildErrorNode(extractHeader(response), extractLines(response))
-    : buildDom(response);
+  return response.type === 'error' ? buildErrorNode('Invalid JSON file.', response.error) : buildDom(response);
 };
-
-const extractLines = (response: ErrorNode) => response.error;
-
-const extractHeader = (response: ErrorNode): string =>
-  response.scope === 'tokenizer' ? 'Invalid JSON file.' : 'Invalid JQ Query.';

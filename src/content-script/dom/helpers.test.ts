@@ -1,6 +1,6 @@
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { colon, toggle } from './elements';
-import { buildInfoNode, element, isToggleElement, isValueExpandable } from './helpres';
+import { buildInfoNode, isToggleElement, isValueExpandable } from './helpres';
 
 describe('dom helpers', () => {
   describe('isValueExpandable', () => {
@@ -41,20 +41,6 @@ describe('dom helpers', () => {
     });
     test('should return false for non-toggle element', () => {
       expect(isToggleElement(colon())).toBe(false);
-    });
-  });
-
-  describe('element', () => {
-    test('should create element with content', () => {
-      expect(element({ content: 'demo' })).toMatchSnapshot();
-    });
-
-    test('should create element with class', () => {
-      expect(element({ class: 'demo' })).toMatchSnapshot();
-    });
-
-    test('should create element with content and class', () => {
-      expect(element({ content: 'demo', class: 'demo' })).toMatchSnapshot();
     });
   });
 

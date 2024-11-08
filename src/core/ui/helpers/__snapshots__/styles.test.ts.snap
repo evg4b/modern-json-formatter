@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` Should render the style block 1`] = `
+"<style type="text/css" rel="stylesheet" role="presentation">
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;  
+      }
+    </style>"
+`;

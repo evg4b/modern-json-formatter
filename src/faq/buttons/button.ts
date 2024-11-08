@@ -1,18 +1,18 @@
-import { registerStyles } from '@core/ui/helpers';
+import { createElement, StyledComponentElement } from '@core/dom';
 import styles from './button.module.scss';
 
-export abstract class BaseButtonElement extends HTMLElement {
-  private readonly link = document.createElement('a');
+export abstract class BaseButtonElement extends StyledComponentElement {
+  private readonly link = createElement({
+    element: 'a',
+    attributes: {
+      target: '_blank',
+    },
+  });
 
   protected constructor(icon: string) {
-    super();
-    const shadowRoot = this.attachShadow({ mode: 'closed' });
-    registerStyles(shadowRoot, styles);
-
+    super(styles);
     this.link.innerHTML = icon;
-    this.link.target = '_blank';
-
-    shadowRoot.appendChild(this.link);
+    this.shadow.appendChild(this.link);
   }
 
   public static get observedAttributes() {

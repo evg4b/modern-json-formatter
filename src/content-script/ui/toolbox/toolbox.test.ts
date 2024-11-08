@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import '@testing/browser.mock';
 import '@testing/query-input.mock';
 import { beforeEach, describe, expect, test } from '@jest/globals';
@@ -24,10 +23,10 @@ describe('Toolbox', () => {
     ];
 
     describe.each(cases)(`$name`, ({ name, selector }) => {
-      let button: HTMLButtonElement;
+      let button: HTMLButtonElement | null;
 
       beforeEach(() => {
-        button = shadowRoot.querySelector<HTMLButtonElement>(selector)!;
+        button = shadowRoot.querySelector<HTMLButtonElement>(selector);
       });
 
       test('should exists', () => {
@@ -41,7 +40,7 @@ describe('Toolbox', () => {
       test(`should have handle click`, () => {
         const handler = jest.fn();
         toolbox.onTabChanged(handler);
-        button.click();
+        button?.click();
 
         expect(handler).toBeCalledWith(name);
       });
@@ -49,10 +48,10 @@ describe('Toolbox', () => {
   });
 
   describe('input', () => {
-    let input: QueryInputElement;
+    let input: QueryInputElement | null;
 
     beforeEach(() => {
-      input = shadowRoot.querySelector<QueryInputElement>('query-input')!;
+      input = shadowRoot.querySelector<QueryInputElement>('query-input');
     });
 
     test('should exists', () => {
@@ -60,7 +59,7 @@ describe('Toolbox', () => {
     });
 
     test('should be hided by default', () => {
-      expect(input.hide).toBeCalled();
+      expect(input?.hide).toBeCalled();
     });
 
     describe('after query button click', () => {
@@ -69,16 +68,16 @@ describe('Toolbox', () => {
       });
 
       test('should be visible', () => {
-        expect(input.show).toBeCalledTimes(1);
+        expect(input?.show).toBeCalledTimes(1);
       });
 
       test('should be focused', () => {
-        expect(input.focus).toBeCalledTimes(1);
+        expect(input?.focus).toBeCalledTimes(1);
       });
 
       test('should be hidden after raw button click', () => {
         shadowRoot.querySelector<HTMLButtonElement>('button[ref="raw"]')?.click();
-        expect(input.hide).toBeCalledTimes(2);
+        expect(input?.hide).toBeCalledTimes(2);
       });
     });
 
@@ -87,7 +86,7 @@ describe('Toolbox', () => {
 
       toolbox.setErrorMessage(errorMessage);
 
-      expect(input.setErrorMessage).toBeCalledWith(errorMessage);
+      expect(input?.setErrorMessage).toBeCalledWith(errorMessage);
     });
 
     test(`should set submit handler on the input`, () => {
@@ -97,7 +96,7 @@ describe('Toolbox', () => {
 
       toolbox.onQueryChanged(handler);
 
-      expect(input.onSubmit).toBeCalledWith(handler);
+      expect(input?.onSubmit).toBeCalledWith(handler);
     });
   });
 });

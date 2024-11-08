@@ -152,10 +152,34 @@ exports[`createElement {"class": [Array], "element": "input"} 1`] = `
 />
 `;
 
+exports[`createElement {"element": "a", "html": "<span>test</span>"} 1`] = `
+<a>
+  <span>
+    test
+  </span>
+</a>
+`;
+
 exports[`createElement {"element": "a"} 1`] = `<a />`;
+
+exports[`createElement {"element": "div", "html": "<span>test</span>"} 1`] = `
+<div>
+  <span>
+    test
+  </span>
+</div>
+`;
 
 exports[`createElement {"element": "div"} 1`] = `<div />`;
 
 exports[`createElement {"element": "input"} 1`] = `<input />`;
+
+exports[`createElement {"element": "span", "html": "<span>test</span>"} 1`] = `
+<span>
+  <span>
+    test
+  </span>
+</span>
+`;
 
 exports[`createElement {"element": "span"} 1`] = `<span />`;

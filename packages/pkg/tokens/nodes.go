@@ -1,7 +1,5 @@
 package tokens
 
-import "encoding/json"
-
 func TupleNode(items []any) map[string]any {
 	return map[string]any{
 		"type":  "tuple",
@@ -30,8 +28,12 @@ func PropertyNode(key string, value any) map[string]any {
 	}
 }
 
-func StringToken(token json.Token) map[string]any {
-	return StringNode(token.(string))
+func UrlNode(token string) map[string]any {
+	return map[string]any{
+		"type":    "string",
+		"value":   token,
+		"variant": "url",
+	}
 }
 
 func StringNode(token string) map[string]any {

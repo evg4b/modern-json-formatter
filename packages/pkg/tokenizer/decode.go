@@ -56,7 +56,7 @@ func tokenize(decoder *json.Decoder) (map[string]any, error) {
 		}
 
 	case string:
-		return tokens.StringToken(token), nil
+		return decodeString(token)
 	case json.Number:
 		return tokens.NumberNode(token.(json.Number).String()), nil
 	case nil:

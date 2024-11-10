@@ -1,4 +1,4 @@
-package tokens
+package core
 
 func TupleNode(items []any) map[string]any {
 	return map[string]any{

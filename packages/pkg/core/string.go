@@ -1,8 +1,6 @@
-package tokenizer
+package core
 
 import (
-	"encoding/json"
-	"packages/pkg/tokens"
 	"strings"
 )
 
@@ -18,11 +16,10 @@ func hasUrlPrefix(value string) bool {
 		strings.HasPrefix(value, relativeUrlPrefix)
 }
 
-func decodeString(token json.Token) (map[string]any, error) {
-	original := token.(string)
-	if hasUrlPrefix(strings.Trim(original, cutset)) {
-		return tokens.UrlNode(original), nil
+func BuildStringNode(value string) map[string]any {
+	if hasUrlPrefix(strings.Trim(value, cutset)) {
+		return UrlNode(value)
 	}
 
-	return tokens.StringNode(original), nil
+	return StringNode(value)
 }

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"github.com/itchyny/gojq"
 	"github.com/marcozac/go-jsonc"
-	"packages/pkg/tokens"
+	"packages/pkg/core"
 )
 
 func Query(jsonString string, queryString string) (any, error) {
@@ -52,5 +52,5 @@ func Query(jsonString string, queryString string) (any, error) {
 		return results[0], nil
 	}
 
-	return tokens.TupleNode(results), nil
+	return core.TupleNode(results), nil
 }

@@ -1,6 +1,7 @@
 package tokenizer_test
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"io"
@@ -21,6 +22,43 @@ func TestTokenizer(t *testing.T) {
 				input:    `"value"`,
 				expected: tString("value"),
 			},
+		})
+
+		t.Run("url detecting", func(t *testing.T) {
+			var variants = []struct {
+				name string
+				url  string
+			}{
+				{
+					name: "string with http url",
+					url:  "http://test.com",
+				},
+				{
+					name: "string with https url",
+					url:  "https://test.com",
+				},
+				{
+					name: "string with relative url",
+					url:  "/path/to/resource",
+				},
+			}
+
+			for _, variant := range variants {
+				t.Run(variant.name, func(t *testing.T) {
+					runTestCasesTokenizer(t, []testCases{
+						{
+							name:     "tokenizer directly",
+							input:    fmt.Sprintf(`"%s"`, variant.url),
+							expected: tUrl(variant.url),
+						},
+						{
+							name:     "with empty symbols",
+							input:    fmt.Sprintf(`" \t\n\r%s \t\n\r"`, variant.url),
+							expected: tUrl(fmt.Sprintf(" \t\n\r%s \t\n\r", variant.url)),
+						},
+					})
+				})
+			}
 		})
 	})
 
@@ -215,6 +253,14 @@ func tString(value string) map[string]any {
 	return map[string]any{
 		"type":  "string",
 		"value": value,
+	}
+}
+
+func tUrl(value string) map[string]any {
+	return map[string]any{
+		"type":    "string",
+		"value":   value,
+		"variant": "url",
 	}
 }
 

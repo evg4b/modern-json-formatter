@@ -1,4 +1,5 @@
 import { createElement } from '@core/dom';
+import { trim } from '@core/helpers';
 import { BooleanNode, NumberNode, StringNode } from '@packages/tokenizer';
 
 export const buildNullNode = () =>
@@ -22,9 +23,21 @@ export const buildBoolNode = (object: BooleanNode) =>
     class: 'boolean',
   });
 
-export const buildStringNode = ({ value }: StringNode) =>
-  createElement({
+export const buildStringNode = ({ value, variant }: StringNode) => {
+  if (variant === 'url') {
+    return createElement({
+      element: 'span',
+      content: JSON.stringify(value),
+      class: ['string', 'url'],
+      attributes: {
+        href: trim(value, ' \t\n\r'),
+      },
+    });
+  }
+
+  return createElement({
     element: 'span',
     content: JSON.stringify(value),
     class: 'string',
   });
+};

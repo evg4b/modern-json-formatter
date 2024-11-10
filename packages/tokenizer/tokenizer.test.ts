@@ -1,6 +1,6 @@
 import '@testing/browser.mock';
 import { readFileSync } from 'fs';
-import { tNumber, tObject, tProperty } from '../../testing';
+import { tNumber, tObject, tProperty } from '@testing';
 import { tokenize } from './index';
 
 jest.mock('../shared/wasm_helpers.ts', () => ({

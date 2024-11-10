@@ -4,7 +4,7 @@ import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
 import { toggle } from './elements';
-import { buildInfoNode, isToggleElement, isValueExpandable } from './helpres';
+import { buildInfoNode, isLinkElement, isToggleElement, isValueExpandable } from './helpres';
 
 export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
   if (object.type === 'tuple') {
@@ -28,9 +28,27 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
     root.appendChild(infoNode);
   }
 
-  root.addEventListener('click', ({ target }) => {
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Meta' || event.key === 'Control') {
+      root.classList.add('active-links');
+    }
+  });
+
+  document.addEventListener('keyup', event => {
+    if (event.key === 'Meta' || event.key === 'Control') {
+      root.classList.remove('active-links');
+    }
+  });
+
+  root.addEventListener('click', event => {
+    const { target } = event;
     if (isToggleElement(target) && target.parentNode instanceof HTMLElement) {
       target.parentNode.classList.toggle('collapsed');
+    } else if ((event.metaKey || event.ctrlKey) && isLinkElement(target)) {
+      const url = target.getAttribute('href');
+      if (url) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
     }
   });
 

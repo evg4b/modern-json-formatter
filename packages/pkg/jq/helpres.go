@@ -1,7 +1,7 @@
 package jq
 
 import (
-	"packages/pkg/tokens"
+	"packages/pkg/core"
 	"strconv"
 )
 
@@ -27,7 +27,7 @@ func objectProperties(value any) []any {
 	properties := value.(map[string]any)
 	mapped := make([]any, 0, len(properties))
 	for key, value := range properties {
-		mapped = append(mapped, tokens.PropertyNode(key, normalise(value)))
+		mapped = append(mapped, core.PropertyNode(key, normalise(value)))
 	}
 
 	return mapped

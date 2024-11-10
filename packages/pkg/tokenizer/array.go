@@ -2,7 +2,7 @@ package tokenizer
 
 import (
 	"encoding/json"
-	"packages/pkg/tokens"
+	"packages/pkg/core"
 )
 
 func decodeArray(decoder *json.Decoder) (map[string]any, error) {
@@ -17,5 +17,5 @@ func decodeArray(decoder *json.Decoder) (map[string]any, error) {
 		items = append(items, item)
 	}
 
-	return tokens.ArrayNode(items), nil
+	return core.ArrayNode(items), nil
 }

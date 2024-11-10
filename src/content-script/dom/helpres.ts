@@ -8,6 +8,10 @@ export const isToggleElement = (element: EventTarget | null): element is HTMLEle
   return element instanceof HTMLElement && element.classList.contains('toggle');
 };
 
+export const isLinkElement = (element: EventTarget | null): element is HTMLElement => {
+  return element instanceof HTMLElement && element.classList.contains('url');
+};
+
 export const buildInfoNode = (value: TokenNode): HTMLSpanElement | null => {
   if (isValueExpandable(value)) {
     switch (value.type) {

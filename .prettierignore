@@ -4,3 +4,4 @@ coverage
 .yarn
 .idea
 media_data/data/**/*.json
+packages/wasm_exec.js

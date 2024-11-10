@@ -21,6 +21,7 @@ export interface TupleNode {
 export interface StringNode {
   type: 'string';
   value: string;
+  variant?: 'url';
 }
 
 export interface NumberNode {

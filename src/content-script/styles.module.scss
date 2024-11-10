@@ -140,6 +140,13 @@ pre {
 
 .root {
   display: block;
+  --link-decoration: none;
+  --link-cursor: auto;
+
+  &.active-links {
+    --link-decoration: underline;
+    --link-cursor: pointer;
+  }
 
   &.padding {
     margin-left: 17px;
@@ -207,6 +214,15 @@ pre {
 .string {
   color: #5dd9ff;
   word-wrap: break-word;
+
+  &.url {
+    text-decoration: none;
+    cursor: var(--link-cursor);
+
+    &:hover {
+      text-decoration: var(--link-decoration);
+    }
+  }
 }
 
 .boolean,

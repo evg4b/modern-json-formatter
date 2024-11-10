@@ -28,6 +28,12 @@ String node:
 { type: "string", value: "string value" }
 ```
 
+or
+
+```js
+{ type: "string", value: "string value", variant: "url" }
+```
+
 Boolean node:
 
 ```js

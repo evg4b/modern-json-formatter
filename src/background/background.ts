@@ -9,7 +9,14 @@ chrome.runtime.onMessage.addListener(function (message: TokenizeParams | JqParam
   if (is(message, 'tokenize')) {
     tokenize(message.json)
       .then(sendResponse)
-      .catch((err: unknown) => console.error(err));
+      .catch((err: Error) =>
+        sendResponse({
+          type: 'error',
+          scope: 'worker',
+          stack: err.stack,
+          error: err.message,
+        })
+      );
 
     return true;
   }
@@ -17,7 +24,14 @@ chrome.runtime.onMessage.addListener(function (message: TokenizeParams | JqParam
   if (is(message, 'jq')) {
     jq(message.json, message.query)
       .then(sendResponse)
-      .catch((err: unknown) => console.error(err));
+      .catch((err: Error) =>
+        sendResponse({
+          type: 'error',
+          scope: 'worker',
+          stack: err.stack,
+          error: err.message,
+        })
+      );
 
     return true;
   }

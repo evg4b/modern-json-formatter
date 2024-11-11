@@ -1,4 +1,4 @@
-import { TokenizerResponse } from "@packages/tokenizer";
+import { TokenizerResponse } from '@packages/tokenizer';
 
 export interface TokenizeParams {
   action: 'tokenize';

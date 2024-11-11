@@ -1,6 +1,12 @@
+import { createElement } from '@core/dom';
+
 export const buildContainers = (root: ShadowRoot) => {
-  const rootContainer = document.createElement('div');
-  rootContainer.className = 'root-container';
+  const rootContainer = createElement({
+    element: 'div',
+    class: 'root-container',
+  });
+
+  rootContainer.appendChild(createElement({ element: 'div', class: 'loader' }));
 
   const formatContainer = document.createElement('div');
   formatContainer.className = 'formatted-json-container';

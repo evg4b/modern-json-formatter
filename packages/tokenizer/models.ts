@@ -42,8 +42,9 @@ export type TokenNode = ObjectNode | ArrayNode | StringNode | NumberNode | Boole
 
 export interface ErrorNode {
   type: 'error';
-  scope: 'jq' | 'tokenizer';
+  scope: 'jq' | 'tokenizer' | 'worker';
   error: string;
+  stack?: string;
 }
 
 export type TokenizerResponse = TokenNode | TupleNode | ErrorNode;

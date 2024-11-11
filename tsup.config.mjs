@@ -20,6 +20,7 @@ export default defineConfig({
   entry: {
     'content-script': 'src/content-script/main.ts',
     faq: 'src/faq/faq.html',
+    background: 'src/background/background.ts',
   },
   splitting: false,
   sourcemap: !production,

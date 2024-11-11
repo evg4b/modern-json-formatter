@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-deprecated
 const getURL = chrome.runtime.getURL;
+const sendMessage = chrome.runtime.sendMessage;
 
-export { getURL };
+export { getURL, sendMessage };

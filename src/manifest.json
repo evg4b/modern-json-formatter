@@ -25,6 +25,13 @@
     }
   ],
   "host_permissions": ["*://*/*", "<all_urls>"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",

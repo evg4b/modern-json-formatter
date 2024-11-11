@@ -21,11 +21,11 @@ jobs:
 
       - name: Build JSON Tokenizer
         working-directory: ./packages
-        run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./tokenizer
+        run: make tokenizer
 
       - name: Build JQ
         working-directory: ./packages
-        run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./jq
+        run: make jq
 
       - name: Test GO code
         working-directory: ./packages

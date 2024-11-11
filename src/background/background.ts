@@ -2,15 +2,23 @@ import '../../packages/wasm_exec.js';
 import { JqParams, TokenizeParams } from '@core/background';
 import { jq } from '@packages/jq';
 import { tokenize } from '@packages/tokenizer';
+import { is } from './helpres';
 
-chrome.runtime.onMessage.addListener(function (message: TokenizeParams | JqParams, _, sendResponse) {
-  if (message.action == 'tokenize') {
-    tokenize(message.json).then(sendResponse);
+// eslint-disable-next-line @typescript-eslint/no-deprecated
+chrome.runtime.onMessage.addListener(function (message: TokenizeParams | JqParams | object, _, sendResponse) {
+  if (is(message, 'tokenize')) {
+    tokenize(message.json)
+      .then(sendResponse)
+      .catch((err: unknown) => console.error(err));
+
     return true;
   }
 
-  if (message.action == 'jq') {
-    jq(message.json, message.query).then(sendResponse);
+  if (is(message, 'jq')) {
+    jq(message.json, message.query)
+      .then(sendResponse)
+      .catch((err: unknown) => console.error(err));
+
     return true;
   }
 });

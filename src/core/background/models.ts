@@ -11,4 +11,6 @@ export interface JqParams {
   query: string;
 }
 
+export type Message = TokenizeParams | JqParams;
+
 export { TokenizerResponse };

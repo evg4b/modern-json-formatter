@@ -15,10 +15,12 @@ describe('buildDom', () => {
             {
               type: 'string',
               value: 'https://www.youtube.com/watch?v=QH2-TGUlwu4',
+              variant: 'url',
             },
             {
               type: 'string',
               value: '/json-formatter/examples/2-array-root.json',
+              variant: 'url',
             },
           ],
         },

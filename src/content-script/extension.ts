@@ -1,5 +1,5 @@
+import { jq, tokenize, TokenizerResponse } from '@core/background';
 import { registerStyles } from '@core/ui/helpers';
-import { TokenizerResponse } from '@packages/tokenizer';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
@@ -12,8 +12,6 @@ export const runExtension = async () => {
   if (!(await detectJson())) {
     return;
   }
-
-  const { tokenize } = await import('@packages/tokenizer');
 
   const shadowRoot = document.body.attachShadow({ mode: 'open' });
   registerStyles(shadowRoot, styles);
@@ -30,8 +28,6 @@ export const runExtension = async () => {
   const response = await tokenize(data.innerText);
 
   toolbox.onQueryChanged(async query => {
-    const { jq } = await import('@packages/jq');
-
     const info = await jq(data.innerText, query);
     if (info.type === 'error' && info.scope === 'jq') {
       toolbox.setErrorMessage(info.error);

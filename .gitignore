@@ -133,3 +133,6 @@ dist
 extention.zip
 packages/coverage.out
 packages/test-report.out
+packages/wasm_exec.js
+packages/tokenizer/tokenizer.wasm
+packages/jq/jq.wasm

@@ -2,7 +2,7 @@
 /.yarn/releases/*    binary
 /.yarn/plugins/**/*  binary
 /.pnp.*              binary linguist-generated
-/tokenizer/tokenizer.wasm  binary
 /.github/*.psd       binary
 /.github/*.png       binary
-/assets/*.png        binary
+/assets/**/*.png        binary
+/media_data/*.psd    binary

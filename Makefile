@@ -15,3 +15,9 @@ build-packages:
 
 pack-extension:
 	cd ./dist && zip -r -X ../extention.zip *
+
+prepare:
+	if [ ! -f packages/jq/jq.wasm ];then cd packages && $(MAKE) jq; fi;
+	if [ ! -f packages/tokenizer/tokenizer.wasm ];then cd packages && $(MAKE) tokenizer; fi;
+	if [ ! -f packages/wasm_exec.js ];then cd packages && $(MAKE) exec-script; fi;
+

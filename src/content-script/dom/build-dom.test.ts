@@ -1,4 +1,4 @@
-import { TokenNode } from '@packages/tokenizer';
+import { type TokenNode } from '@packages/tokenizer';
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import assert from 'node:assert';
 import { buildDom } from './build-dom';
@@ -294,7 +294,7 @@ describe('buildDom', () => {
         {
           name: 'object with nested arrays',
           input: tObject(
-            tProperty('foo', tObject(tProperty('bar', tArray(tString('baz'), tString('qux'), tString('quux')))))
+            tProperty('foo', tObject(tProperty('bar', tArray(tString('baz'), tString('qux'), tString('quux'))))),
           ),
           expected: 3,
         },
@@ -311,7 +311,7 @@ describe('buildDom', () => {
         {
           name: 'array with nested objects',
           input: tArray(
-            tObject(tProperty('foo', tObject(tProperty('bar', tObject(tProperty('baz', tString('baz')))))))
+            tObject(tProperty('foo', tObject(tProperty('bar', tObject(tProperty('baz', tString('baz'))))))),
           ),
           expected: 4,
         },
@@ -319,7 +319,7 @@ describe('buildDom', () => {
           name: 'array with nested arrays',
           input: tArray(
             tArray(tString('baz'), tString('qux'), tString('quux')),
-            tArray(tString('baz'), tString('qux'), tString('quux'))
+            tArray(tString('baz'), tString('qux'), tString('quux')),
           ),
           expected: 3,
         },
@@ -368,7 +368,7 @@ describe('buildDom', () => {
           {
             name: 'object with nested arrays',
             input: tObject(
-              tProperty('foo', tObject(tProperty('bar', tArray(tString('baz'), tString('qux'), tString('quux')))))
+              tProperty('foo', tObject(tProperty('bar', tArray(tString('baz'), tString('qux'), tString('quux'))))),
             ),
             expected: 2,
           },
@@ -398,7 +398,7 @@ describe('buildDom', () => {
           {
             name: 'array with nested objects',
             input: tArray(
-              tObject(tProperty('foo', tObject(tProperty('bar', tObject(tProperty('baz', tString('baz')))))))
+              tObject(tProperty('foo', tObject(tProperty('bar', tObject(tProperty('baz', tString('baz'))))))),
             ),
             expected: 1,
           },
@@ -406,7 +406,7 @@ describe('buildDom', () => {
             name: 'array with nested arrays',
             input: tArray(
               tArray(tString('baz'), tString('qux'), tString('quux')),
-              tArray(tString('baz'), tString('qux'), tString('quux'))
+              tArray(tString('baz'), tString('qux'), tString('quux')),
             ),
             expected: 3,
           },

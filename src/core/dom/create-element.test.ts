@@ -1,4 +1,4 @@
-import { createElement, Options } from '@core/dom/create-element';
+import { createElement, type Options } from '@core/dom/create-element';
 import { describe, expect } from '@jest/globals';
 
 describe('createElement', () => {

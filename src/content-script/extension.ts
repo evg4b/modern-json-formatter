@@ -3,24 +3,25 @@ import { registerStyles } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
 import { buildErrorNode } from './dom/build-error-node';
-import { detectJson, getJsonSelector } from './json-detector/detect';
+import { findNodeWithCode } from './json-detector';
 import styles from './styles.module.scss';
 import { buildContainers } from './ui/containers';
 import { ToolboxElement } from './ui/toolbox';
 
 export const runExtension = async () => {
-  if (!(await detectJson())) {
+  const preNode = await findNodeWithCode();
+  if (!preNode) {
     return;
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'open' });
   registerStyles(shadowRoot, styles);
 
-  const data = document.querySelector<HTMLPreElement>(getJsonSelector());
-  isNotNull(data, 'No data found');
+  const content = preNode.textContent;
+  isNotNull(content, 'No data found');
 
   const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadowRoot);
-  rawContainer.appendChild(data);
+  rawContainer.appendChild(preNode);
 
   const wrapper = async <T>(promise: Promise<T>): Promise<T> => {
     rootContainer.classList.add('loading');
@@ -37,7 +38,7 @@ export const runExtension = async () => {
   toolbox.onQueryChanged(async query => {
     await wrapper(
       (async (query: string) => {
-        const info = await jq(data.innerText, query);
+        const info = await jq(preNode.innerText, query);
         if (info.type === 'error' && info.scope === 'jq') {
           toolbox.setErrorMessage(info.error);
           return;
@@ -45,7 +46,7 @@ export const runExtension = async () => {
 
         queryContainer.innerHTML = '';
         queryContainer.appendChild(prepareResponse(info));
-      })(query)
+      })(query),
     );
   });
 
@@ -66,7 +67,7 @@ export const runExtension = async () => {
     }
   });
 
-  await wrapper(tokenize(data.innerText).then(response => formatContainer.appendChild(prepareResponse(response))));
+  await wrapper(tokenize(preNode.innerText).then(response => formatContainer.appendChild(prepareResponse(response))));
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {

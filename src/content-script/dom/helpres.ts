@@ -1,4 +1,4 @@
-import { ArrayNode, ObjectNode, TokenNode } from '@packages/tokenizer';
+import { type ArrayNode, type ObjectNode, type TokenNode } from '@packages/tokenizer';
 import { itemsCount, propertiesCount } from './elements';
 
 export const isValueExpandable = (value: TokenNode): value is ObjectNode | ArrayNode =>

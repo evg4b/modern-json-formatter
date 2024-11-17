@@ -1,4 +1,4 @@
-import { Browser } from './browser';
+import { type Browser } from './browser';
 
 export type Detector = () => Promise<boolean>;
 

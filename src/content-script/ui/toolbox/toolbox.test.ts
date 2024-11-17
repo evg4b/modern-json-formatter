@@ -3,7 +3,7 @@ import '@testing/browser.mock';
 import '@testing/query-input.mock';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
-import { QueryInputElement } from '../query-input';
+import { type QueryInputElement } from '../query-input';
 import { ToolboxElement } from './toolbox';
 
 describe('Toolbox', () => {

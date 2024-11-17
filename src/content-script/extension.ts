@@ -1,4 +1,4 @@
-import { jq, tokenize, TokenizerResponse } from '@core/background';
+import { jq, tokenize, type TokenizerResponse } from '@core/background';
 import { registerStyles } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';

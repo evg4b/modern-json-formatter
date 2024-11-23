@@ -5,12 +5,17 @@ export interface TokenizeParams {
   json: string;
 }
 
+export interface FormatParams {
+  action: 'format';
+  json: string;
+}
+
 export interface JqParams {
   action: 'jq';
   json: string;
   query: string;
 }
 
-export type Message = TokenizeParams | JqParams;
+export type Message = TokenizeParams | JqParams | FormatParams;
 
 export { TokenizerResponse };

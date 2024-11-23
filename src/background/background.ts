@@ -1,5 +1,5 @@
 import '../../packages/wasm_exec.js';
-import { Message } from '@core/background';
+import { type Message } from '@core/background';
 import { jq } from '@packages/jq';
 import { format, tokenize } from '@packages/tokenizer';
 import { is } from './helpres';

@@ -20,10 +20,17 @@ export class FloatingMessageElement extends StyledComponentElement {
       createElement({ element: 'div', class: 'body', content: message }),
     );
 
-    // const id = setTimeout(() => this.remove(), 15_000);
+    setTimeout(() => this.classList.add('opened'), 10);
+
+    const id = setTimeout(() => this.closeMessage(), 10_000);
     this.close.addEventListener('click', () => {
-      // clearTimeout(id);
-      this.remove();
+      clearTimeout(id);
+      this.closeMessage();
     });
+  }
+
+  private closeMessage() {
+    this.classList.remove('opened');
+    setTimeout(() => this.remove(), 250);
   }
 }

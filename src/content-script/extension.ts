@@ -7,6 +7,7 @@ import { buildErrorNode } from './dom/build-error-node';
 import { findNodeWithCode } from './json-detector';
 import styles from './styles.module.scss';
 import { buildContainers } from './ui/containers';
+import { FloatingMessageElement } from './ui/floating-message';
 import { ToolboxElement } from './ui/toolbox';
 
 const ONE_MEGABYTE_LENGTH = 927182;
@@ -23,7 +24,7 @@ export const runExtension = async () => {
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');
-  
+
   const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadowRoot);
 
   if (content.length > LIMIT) {
@@ -41,6 +42,11 @@ export const runExtension = async () => {
       element: 'pre',
       content: formatted,
     }));
+
+    rootContainer.appendChild(new FloatingMessageElement(
+      'File is too large',
+      'File is too large to be processed (More than 3MB). It has been formatted instead.',
+    ));
 
     return;
   }

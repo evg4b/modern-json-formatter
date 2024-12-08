@@ -10,6 +10,19 @@ describe('QueryInputElement', () => {
   let innerInput: HTMLInputElement;
   let shadowRoot: ShadowRoot;
 
+  const keyPress = (key: string, options?: KeyboardEventInit) => {
+    innerInput.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key,
+        ...(options ?? {}),
+      }),
+    );
+  };
+
+  const times = (n: number, fn: () => void) => {
+    Array.from({ length: n }).forEach(fn);
+  };
+
   beforeEach(() => {
     input = new QueryInputElement();
     shadowRoot = getShadowRoot(input);
@@ -75,7 +88,7 @@ describe('QueryInputElement', () => {
 
   describe('focus/blur', () => {
     test('should focus', () => {
-      Reflect.set(innerInput ?? throws('No input'), 'focus', jest.fn());
+      Reflect.set(innerInput, 'focus', jest.fn());
 
       input.focus();
 
@@ -83,7 +96,7 @@ describe('QueryInputElement', () => {
     });
 
     test('should blur', () => {
-      Reflect.set(innerInput ?? throws('No input'), 'blur', jest.fn());
+      Reflect.set(innerInput, 'blur', jest.fn());
 
       input.blur();
 
@@ -95,7 +108,7 @@ describe('QueryInputElement', () => {
     test('should call onSubmitCallback on Enter', () => {
       const onSubmitCallback = jest.fn();
       input.onSubmit(onSubmitCallback);
-      innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      keyPress('Enter');
 
       expect(onSubmitCallback).toBeCalled();
     });
@@ -103,14 +116,14 @@ describe('QueryInputElement', () => {
     test('should not call onSubmitCallback on other key', () => {
       const onSubmitCallback = jest.fn();
       input.onSubmit(onSubmitCallback);
-      innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+      keyPress('a');
 
       expect(onSubmitCallback).not.toBeCalled();
     });
 
     test('should clear error message on typing', () => {
       input.setErrorMessage('Error message');
-      innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+      keyPress('a');
 
       expect(shadowRoot.querySelector('.error-message')?.classList.contains('hidden')).toBe(true);
     });
@@ -152,7 +165,7 @@ describe('QueryInputElement', () => {
           expect(selectedText).toEqual(expectedSelection);
         });
 
-        test(`should wrap selected text with ${key}`, () => {
+        test(`should wrap selected text with ${ key }`, () => {
           expect(innerInput.value).toEqual(expected);
         });
       });
@@ -171,6 +184,71 @@ describe('QueryInputElement', () => {
         test(`should not change text`, () => {
           expect(innerInput.value).toEqual(query);
         });
+      });
+    });
+  });
+
+  describe('history', () => {
+    const change = (value: string) => {
+      innerInput.value = value;
+      innerInput.dispatchEvent(new KeyboardEvent('input'));
+    };
+
+    beforeEach(() => {
+      change('1');
+      change('12');
+      change('123');
+      change('1234');
+      change('12345');
+    });
+
+    describe('undo', () => {
+      test('should undo value', () => {
+        keyPress('z', { ctrlKey: true });
+
+        expect(innerInput.value).toEqual('1234');
+      });
+
+      test('should undo value multiple times', () => {
+        times(3, () => keyPress('z', { ctrlKey: true }));
+
+        expect(innerInput.value).toEqual('12');
+      });
+
+      test('should not undo if no more states', () => {
+        times(10, () => keyPress('z', { ctrlKey: true }));
+
+        expect(innerInput.value).toEqual('');
+      });
+    });
+
+    describe('redo', () => {
+      beforeEach(() => {
+        times(3, () => keyPress('z', { ctrlKey: true }));
+      });
+
+      test('should redo value', () => {
+        keyPress('z', { ctrlKey: true, shiftKey: true });
+        expect(innerInput.value).toEqual('123');
+      });
+
+      test('should redo multiple times', () => {
+        times(2, () => keyPress('z', { ctrlKey: true, shiftKey: true }));
+
+        expect(innerInput.value).toEqual('1234');
+      });
+
+      test('should not redo if no more states', () => {
+        times(10, () => keyPress('z', { ctrlKey: true, shiftKey: true }));
+
+        expect(innerInput.value).toEqual('12345');
+      });
+
+      test('should not redo after changing', () => {
+        change('###');
+        keyPress('z', { ctrlKey: true, shiftKey: true });
+
+        expect(innerInput.value).toEqual('###');
       });
     });
   });

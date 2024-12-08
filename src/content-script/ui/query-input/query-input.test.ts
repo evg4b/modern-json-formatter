@@ -115,4 +115,63 @@ describe('QueryInputElement', () => {
       expect(shadowRoot.querySelector('.error-message')?.classList.contains('hidden')).toBe(true);
     });
   });
+
+  describe('for selection', () => {
+    const query = '.[] | key, value';
+    const expectedSelection = 'key, value';
+
+    beforeEach(() => {
+      innerInput.value = '.[] | key, value';
+      innerInput.focus();
+    });
+
+    const items = [
+      { key: '[', expected: '.[] | [key, value]' },
+      { key: '(', expected: '.[] | (key, value)' },
+      { key: '{', expected: '.[] | {key, value}' },
+      { key: '\'', expected: '.[] | \'key, value\'' },
+      { key: '"', expected: '.[] | "key, value"' },
+      { key: '`', expected: '.[] | `key, value`' },
+    ];
+
+    describe('when text is selected', () => {
+      const start = query.indexOf(expectedSelection);
+      const end = start + expectedSelection.length;
+
+      beforeEach(() => {
+        innerInput.setSelectionRange(start, end);
+      });
+
+      describe.each(items)('when $key is pressed', ({ key, expected }) => {
+        beforeEach(() => {
+          innerInput.dispatchEvent(new KeyboardEvent('keydown', { key }));
+        });
+
+        test('should save selection', () => {
+          const selectedText = innerInput.value.substring(innerInput.selectionStart ?? 0, innerInput.selectionEnd ?? 0);
+          expect(selectedText).toEqual(expectedSelection);
+        });
+
+        test(`should wrap selected text with ${key}`, () => {
+          expect(innerInput.value).toEqual(expected);
+        });
+      });
+    });
+
+    describe('for selected text', () => {
+      beforeEach(() => {
+        innerInput.setSelectionRange(query.length, query.length);
+      });
+
+      describe.each(items)('when $key is pressed', ({ key }) => {
+        beforeEach(() => {
+          innerInput.dispatchEvent(new KeyboardEvent('keydown', { key }));
+        });
+
+        test(`should not change text`, () => {
+          expect(innerInput.value).toEqual(query);
+        });
+      });
+    });
+  });
 });

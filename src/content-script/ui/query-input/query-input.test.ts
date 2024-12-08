@@ -7,13 +7,13 @@ import { QueryInputElement } from './query-input';
 
 describe('QueryInputElement', () => {
   let input: QueryInputElement;
-  let innerInput: HTMLInputElement | null;
+  let innerInput: HTMLInputElement;
   let shadowRoot: ShadowRoot;
 
   beforeEach(() => {
     input = new QueryInputElement();
     shadowRoot = getShadowRoot(input);
-    innerInput = shadowRoot.querySelector('input');
+    innerInput = shadowRoot.querySelector('input') ?? throws('No input');
   });
 
   test('should create input element', () => {
@@ -79,7 +79,7 @@ describe('QueryInputElement', () => {
 
       input.focus();
 
-      expect(innerInput?.focus).toBeCalled();
+      expect(innerInput.focus).toBeCalled();
     });
 
     test('should blur', () => {
@@ -87,7 +87,7 @@ describe('QueryInputElement', () => {
 
       input.blur();
 
-      expect(innerInput?.blur).toBeCalled();
+      expect(innerInput.blur).toBeCalled();
     });
   });
 
@@ -95,7 +95,7 @@ describe('QueryInputElement', () => {
     test('should call onSubmitCallback on Enter', () => {
       const onSubmitCallback = jest.fn();
       input.onSubmit(onSubmitCallback);
-      innerInput?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
       expect(onSubmitCallback).toBeCalled();
     });
@@ -103,14 +103,14 @@ describe('QueryInputElement', () => {
     test('should not call onSubmitCallback on other key', () => {
       const onSubmitCallback = jest.fn();
       input.onSubmit(onSubmitCallback);
-      innerInput?.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+      innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
 
       expect(onSubmitCallback).not.toBeCalled();
     });
 
     test('should clear error message on typing', () => {
       input.setErrorMessage('Error message');
-      innerInput?.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+      innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
 
       expect(shadowRoot.querySelector('.error-message')?.classList.contains('hidden')).toBe(true);
     });

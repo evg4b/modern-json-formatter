@@ -1,7 +1,17 @@
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
+import { isNotNil } from '../../helpres';
 import { InfoButtonElement } from '../info-button';
 import queryInputStyles from './query-input.module.scss';
+
+const endKeys: Record<string, string> = {
+  '[': ']',
+  '(': ')',
+  '{': '}',
+  '\'': '\'',
+  '"': '"',
+  '`': '`',
+};
 
 @CustomElement('query-input')
 export class QueryInputElement extends StyledComponentElement {
@@ -59,6 +69,16 @@ export class QueryInputElement extends StyledComponentElement {
       this.setErrorMessage(null);
       if (event.key === 'Enter') {
         this.onSubmitCallback?.(input.value);
+      }
+      if (endKeys[event.key]) {
+        const start = input.selectionStart ?? 0;
+        const end = input.selectionEnd ?? 0;
+        if (isNotNil(start) && isNotNil(end) && start !== end) {
+          event.preventDefault();
+          const selectedText = input.value.substring(start, end);
+          input.setRangeText(`${ event.key }${ selectedText }${ endKeys[event.key] }`);
+          input.setSelectionRange(start + 1, end + 1);
+        }
       }
     });
 

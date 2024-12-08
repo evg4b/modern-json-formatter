@@ -10,7 +10,7 @@ const brackets: Record<string, string> = {
   '[': ']',
   '(': ')',
   '{': '}',
-  "'": "'",
+  '\'': '\'',
   '"': '"',
   '`': '`',
 };
@@ -91,7 +91,7 @@ export class QueryInputElement extends StyledComponentElement {
     input.addEventListener('keydown', event => {
       this.setErrorMessage(null);
       if (isSubmitEvent(event)) {
-        this.onSubmitEvent(event);
+        this.onSubmitEvent();
       }
       if (isWrapEvent(event, brackets)) {
         this.onWrapEvent(event);
@@ -107,7 +107,7 @@ export class QueryInputElement extends StyledComponentElement {
     input.addEventListener('input', this.saveState.bind(this));
   }
 
-  private onSubmitEvent(_: KeyboardEvent) {
+  private onSubmitEvent() {
     this.onSubmitCallback?.(this.input.value);
   }
 
@@ -118,7 +118,7 @@ export class QueryInputElement extends StyledComponentElement {
       event.preventDefault();
       this.saveState();
       const selectedText = this.input.value.substring(start, end);
-      this.input.setRangeText(`${event.key}${selectedText}${brackets[event.key]}`);
+      this.input.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
       this.input.setSelectionRange(start + 1, end + 1);
     }
   }

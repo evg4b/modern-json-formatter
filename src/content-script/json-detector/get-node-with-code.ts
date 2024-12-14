@@ -1,5 +1,5 @@
 const testNode = <T extends HTMLElement>(node: T | null): T | null => {
-  return node && /(^\s*[{[\d"])|(^\s*true)|(^\s*false)/.test(node?.innerText)
+  return node && /(^\s*[{[\d"])|(^\s*true)|(^\s*false)/.test(node.innerText)
     ? node
     : null;
 };

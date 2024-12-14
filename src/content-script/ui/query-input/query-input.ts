@@ -3,7 +3,7 @@ import { createElement, CustomElement, StyledComponentElement } from '@core/dom'
 import { isNotNil } from '../../helpres';
 import { InfoButtonElement } from '../info-button';
 import { HistoryManager } from './history-manager';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
+import { isPrintableKey, isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
 import queryInputStyles from './query-input.module.scss';
 
 const brackets: Record<string, string> = {
@@ -40,7 +40,6 @@ export class QueryInputElement extends StyledComponentElement {
     super(queryInputStyles);
     this.shadow.append(this.infoIcons, this.wrapper);
     this.setupEventHandlers(this.input);
-    this.saveState();
   }
 
   public setErrorMessage(errorMessage: string | null): void {
@@ -92,19 +91,20 @@ export class QueryInputElement extends StyledComponentElement {
       this.setErrorMessage(null);
       if (isSubmitEvent(event)) {
         this.onSubmitEvent();
-      }
-      if (isWrapEvent(event, brackets)) {
+      } else if (isWrapEvent(event, brackets)) {
         this.onWrapEvent(event);
-      }
-      if (isUndoEvent(event)) {
+      } else if (isUndoEvent(event)) {
         this.onUndoEvent(event);
-      }
-      if (isRedoEvent(event)) {
+      } else if (isRedoEvent(event)) {
         this.onRedoEvent(event);
       }
     });
 
-    input.addEventListener('input', this.saveState.bind(this));
+    input.addEventListener('keypress', event => {
+      if (isPrintableKey(event) && !isSubmitEvent(event) && !isUndoEvent(event) && !isRedoEvent(event)) {
+        this.saveState();
+      }
+    });
   }
 
   private onSubmitEvent() {

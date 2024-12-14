@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
 import { throws } from '../../helpres';
 import { QueryInputElement } from './query-input';
+import { isPrintableKey } from './query-input.helpres';
 
 describe('QueryInputElement', () => {
   let input: QueryInputElement;
@@ -11,12 +12,13 @@ describe('QueryInputElement', () => {
   let shadowRoot: ShadowRoot;
 
   const keyPress = (key: string, options?: KeyboardEventInit) => {
-    innerInput.dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key,
-        ...(options ?? {}),
-      }),
-    );
+    innerInput.dispatchEvent(new KeyboardEvent('keydown', { key, ...(options ?? {}) }));
+    innerInput.dispatchEvent(new KeyboardEvent('keypress', { key, ...(options ?? {}) }));
+    if (isPrintableKey(new KeyboardEvent('keypress', { key, ...(options ?? {}) }))) {
+      innerInput.value += key;
+    }
+    innerInput.dispatchEvent(new Event('input', { bubbles: true }));
+    innerInput.dispatchEvent(new KeyboardEvent('keyup', { key, ...(options ?? {}) }));
   };
 
   const times = (n: number, fn: () => void) => {
@@ -190,16 +192,23 @@ describe('QueryInputElement', () => {
 
   describe('history', () => {
     const change = (value: string) => {
-      innerInput.value = value;
-      innerInput.dispatchEvent(new KeyboardEvent('input'));
+      Array.from(value).forEach((key) => key);
+    };
+
+    const select = (start: number, end: number) => {
+      innerInput.setSelectionRange(start, end);
     };
 
     beforeEach(() => {
-      change('1');
-      change('12');
-      change('123');
-      change('1234');
-      change('12345');
+      keyPress('1');
+      select(0, 1);
+      keyPress('2');
+      select(1, 2);
+      keyPress('3');
+      select(2, 3);
+      keyPress('4');
+      select(2, 4);
+      keyPress('5');
     });
 
     describe('undo', () => {

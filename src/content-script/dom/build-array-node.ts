@@ -2,7 +2,7 @@ import { createElement } from '@core/dom';
 import { type ArrayNode } from '@worker-core';
 import { buildNode } from './build-dom';
 import { comma, ellipsis, squareBracket, toggle } from './elements';
-import { buildInfoNode, isValueExpandable } from './helpres';
+import { buildInfoNode, isValueExpandable } from './helpers';
 
 export const buildArrayNode = ({ items }: ArrayNode) => {
   const arrayNode = createElement({ element: 'span', class: 'array' });

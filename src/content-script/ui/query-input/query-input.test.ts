@@ -2,9 +2,9 @@
 import '@testing/browser.mock';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
-import { throws } from '../../helpres';
+import { throws } from '../../helpers';
 import { brackets, QueryInputElement } from './query-input';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 
 describe('QueryInputElement', () => {
   let input: QueryInputElement;

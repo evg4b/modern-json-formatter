@@ -1,5 +1,5 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { assetTabType } from '../../helpres';
+import { assetTabType } from '../../helpers';
 import { QueryInputElement } from '../query-input';
 import toolboxStyles from './toolbox.module.scss';
 

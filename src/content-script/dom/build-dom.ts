@@ -4,7 +4,7 @@ import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
 import { toggle } from './elements';
-import { buildInfoNode, isLinkElement, isToggleElement, isValueExpandable } from './helpres';
+import { buildInfoNode, isLinkElement, isToggleElement, isValueExpandable } from './helpers';
 
 export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
   if (object.type === 'tuple') {

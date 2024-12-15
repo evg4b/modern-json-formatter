@@ -1,9 +1,9 @@
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { isNotNil } from '../../helpres';
+import { isNotNil } from '../../helpers';
 import { InfoButtonElement } from '../info-button';
 import { HistoryManager } from './history-manager';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import queryInputStyles from './query-input.module.scss';
 
 export const brackets: Record<string, string> = {

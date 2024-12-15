@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 
 interface TestCase { event: KeyboardEventInit; expected: boolean }
 

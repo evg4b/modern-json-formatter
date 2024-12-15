@@ -1,5 +1,5 @@
-import { type TokenNode } from '@worker-core';
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
+import { type TokenNode } from '@worker-core';
 import assert from 'node:assert';
 import { buildDom } from './build-dom';
 

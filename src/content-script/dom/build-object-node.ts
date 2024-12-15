@@ -2,7 +2,7 @@ import { createElement } from '@core/dom';
 import { type ObjectNode } from '@worker-core';
 import { buildNode } from './build-dom';
 import { bracket, colon, comma, ellipsis, toggle } from './elements';
-import { buildInfoNode, isValueExpandable } from './helpres';
+import { buildInfoNode, isValueExpandable } from './helpers';
 
 export const buildObjectNode = (object: ObjectNode) => {
   const objectNode = createElement({ element: 'span', class: 'object' });

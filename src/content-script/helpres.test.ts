@@ -1,5 +1,5 @@
 import { describe, test } from '@jest/globals';
-import { isNotNil, throws } from './helpres';
+import { isNotNil, throws } from './helpers';
 
 describe('helpers', () => {
   test('should work', () => {

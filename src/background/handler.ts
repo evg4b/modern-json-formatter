@@ -1,6 +1,6 @@
 import type { Message, TokenizerResponse } from '@core/background';
 import { ErrorNode, format, jq, tokenize } from '@worker-core';
-import { is } from './helpres';
+import { is } from './helpers';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string;
 export const handler = (message: Message): HandlerResult => {

@@ -3,7 +3,7 @@ import { createElement, CustomElement, StyledComponentElement } from '@core/dom'
 import { isNotNil } from '../../helpres';
 import { InfoButtonElement } from '../info-button';
 import { HistoryManager } from './history-manager';
-import { isPrintableKey, isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
 import queryInputStyles from './query-input.module.scss';
 
 const brackets: Record<string, string> = {
@@ -40,6 +40,7 @@ export class QueryInputElement extends StyledComponentElement {
     super(queryInputStyles);
     this.shadow.append(this.infoIcons, this.wrapper);
     this.setupEventHandlers(this.input);
+    this.saveState();
   }
 
   public setErrorMessage(errorMessage: string | null): void {
@@ -100,10 +101,8 @@ export class QueryInputElement extends StyledComponentElement {
       }
     });
 
-    input.addEventListener('keypress', event => {
-      if (isPrintableKey(event) && !isSubmitEvent(event) && !isUndoEvent(event) && !isRedoEvent(event)) {
-        this.saveState();
-      }
+    input.addEventListener('input', () => {
+      this.saveState();
     });
   }
 

@@ -1,6 +1,6 @@
 import type { Message } from '@core/background';
-import { jq } from '@packages/jq';
-import { format, tokenize } from '@packages/tokenizer';
+import { jq } from '@worker-core';
+import { format, tokenize } from '@worker-core';
 import { is } from './helpres';
 
 export const handler = async (message: Message, sendResponse: (resp: unknown) => void): Promise<void> => {

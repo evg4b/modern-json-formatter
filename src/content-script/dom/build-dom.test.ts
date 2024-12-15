@@ -1,4 +1,4 @@
-import { type TokenNode } from '@packages/tokenizer';
+import { type TokenNode } from '@worker-core';
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import assert from 'node:assert';
 import { buildDom } from './build-dom';

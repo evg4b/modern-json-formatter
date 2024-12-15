@@ -1,5 +1,5 @@
 import { createElement } from '@core/dom';
-import { TokenNode, TupleNode } from '@packages/tokenizer';
+import { TokenNode, TupleNode } from '@worker-core';
 import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';

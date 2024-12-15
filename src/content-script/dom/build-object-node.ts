@@ -1,5 +1,5 @@
 import { createElement } from '@core/dom';
-import { type ObjectNode } from '@packages/tokenizer';
+import { type ObjectNode } from '@worker-core';
 import { buildNode } from './build-dom';
 import { bracket, colon, comma, ellipsis, toggle } from './elements';
 import { buildInfoNode, isValueExpandable } from './helpres';

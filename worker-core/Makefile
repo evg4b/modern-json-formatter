@@ -1,9 +1,5 @@
 default: clean build optimize
 
-test:
-	@echo "Testing..."
-	go test -v ./pkg/...
-
 exec-script:
 	@echo "Copying exec scripts..."
 	rm -f ./wasm_exec.js

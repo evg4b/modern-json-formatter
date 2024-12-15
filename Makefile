@@ -11,7 +11,7 @@ build-extension:
 
 build-packages:
 	@echo "Building wasms..."
-	cd packages && $(MAKE)
+	cd worker-core && $(MAKE)
 
 pack-extension:
 	cd ./dist && zip -r -X ../extention.zip *

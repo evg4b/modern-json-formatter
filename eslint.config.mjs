@@ -10,7 +10,7 @@ export default tseslint.config(
       'dist/',
       'jest.config.js',
       'media_data/',
-      'packages/wasm_exec.js',
+      'worker-core/wasm_exec.js',
       'eslint.config.mjs',
       'coverage/',
       'tsup.config.mjs',

@@ -1,45 +1,37 @@
 export class HistoryManager<T> {
   private history: T[] = [];
-  private future: T[] = [];
   private current: T | null = null;
+  private future: T[] = [];
 
   public undo(): T | null {
-    const item = this.history.pop() ?? null;
-    if (item) {
-      this.future.push(item);
+    if (!this.history.length) {
+      return null;
     }
 
-    this.print();
-    return item;
+    if (this.current) {
+      this.future.push(this.current);
+    }
+
+    return this.current = this.history.pop() ?? null;
   }
 
   public redo(): T | null {
-    let item = this.future.pop() ?? null;
-    if (item) {
-      this.history.push(item);
-    } else {
-      item = this.current as any;
+    if (!this.future.length) {
+      return null;
     }
 
-    this.print();
-    return item;
+    if (this.current) {
+      this.history.push(this.current);
+    }
+
+    return this.current = this.future.pop() ?? null;
   }
 
   public save(item: T) {
     if (this.current) {
-      this.history.push(this.current)
+      this.history.push(this.current);
     }
-
-    this.future = [];
     this.current = item;
-    this.print();
-  }
-
-  private print() {
-    console.clear();
-    console.info('History')
-    console.table(this.history);
-    console.info('Future')
-    console.table(this.future);
+    this.future = [];
   }
 }

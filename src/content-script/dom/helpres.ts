@@ -9,7 +9,7 @@ export const isToggleElement = (element: EventTarget | null): element is HTMLEle
 };
 
 export const isLinkElement = (element: EventTarget | null): element is HTMLElement => {
-  return element instanceof HTMLElement && element.classList.contains('url');
+  return element instanceof HTMLElement && (element.classList.contains('url') || element.classList.contains('email'));
 };
 
 export const buildInfoNode = (value: TokenNode): HTMLSpanElement | null => {

@@ -216,6 +216,7 @@ pre {
   color: #5dd9ff;
   word-wrap: break-word;
 
+  &.email,
   &.url {
     text-decoration: none;
     cursor: var(--link-cursor);

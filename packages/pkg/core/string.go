@@ -1,6 +1,7 @@
 package core
 
 import (
+	"net/mail"
 	"strings"
 )
 
@@ -10,6 +11,11 @@ const httpPrefix = "http://"
 const httpsPrefix = "https://"
 const relativeUrlPrefix = "/"
 
+func isEmail(value string) bool {
+	_, err := mail.ParseAddress(value)
+	return err == nil
+}
+
 func hasUrlPrefix(value string) bool {
 	return strings.HasPrefix(value, httpPrefix) ||
 		strings.HasPrefix(value, httpsPrefix) ||
@@ -17,8 +23,13 @@ func hasUrlPrefix(value string) bool {
 }
 
 func BuildStringNode(value string) map[string]any {
-	if hasUrlPrefix(strings.Trim(value, cutset)) {
+	trimmed := strings.Trim(value, cutset)
+	if hasUrlPrefix(trimmed) {
 		return UrlNode(value)
+	}
+
+	if isEmail(trimmed) {
+		return EmailNode(value)
 	}
 
 	return StringNode(value)

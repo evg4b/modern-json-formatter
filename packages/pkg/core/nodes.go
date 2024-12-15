@@ -36,6 +36,14 @@ func UrlNode(token string) map[string]any {
 	}
 }
 
+func EmailNode(token string) map[string]any {
+	return map[string]any{
+		"type":    "string",
+		"value":   token,
+		"variant": "email",
+	}
+}
+
 func StringNode(token string) map[string]any {
 	return map[string]any{
 		"type":  "string",

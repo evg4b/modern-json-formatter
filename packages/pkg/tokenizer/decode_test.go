@@ -2,11 +2,12 @@ package tokenizer_test
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"io"
 	"packages/pkg/tokenizer"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestTokenizer(t *testing.T) {
@@ -47,7 +48,7 @@ func TestTokenizer(t *testing.T) {
 				t.Run(variant.name, func(t *testing.T) {
 					runTestCasesTokenizer(t, []testCases{
 						{
-							name:     "tokenizer directly",
+							name:     "token directly",
 							input:    fmt.Sprintf(`"%s"`, variant.url),
 							expected: tUrl(variant.url),
 						},
@@ -59,6 +60,21 @@ func TestTokenizer(t *testing.T) {
 					})
 				})
 			}
+		})
+
+		t.Run("email detecting", func(t *testing.T) {
+			runTestCasesTokenizer(t, []testCases{
+				{
+					name:     "emal directly",
+					input:    `"test_user@mail.com"`,
+					expected: tEmail("test_user@mail.com"),
+				},
+				{
+					name:     "email with empty symbols",
+					input:    `" \t\n\rtest_user@mail.com \t\n\r"`,
+					expected: tEmail(" \t\n\rtest_user@mail.com \t\n\r"),
+				},
+			})
 		})
 	})
 
@@ -261,6 +277,14 @@ func tUrl(value string) map[string]any {
 		"type":    "string",
 		"value":   value,
 		"variant": "url",
+	}
+}
+
+func tEmail(value string) map[string]any {
+	return map[string]any{
+		"type":    "string",
+		"value":   value,
+		"variant": "email",
 	}
 }
 

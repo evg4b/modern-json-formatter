@@ -35,6 +35,17 @@ export const buildStringNode = ({ value, variant }: StringNode) => {
     });
   }
 
+  if (variant === 'email') {
+    return createElement({
+      element: 'span',
+      content: JSON.stringify(value),
+      class: ['string', 'email'],
+      attributes: {
+        href: `mailto:${value}`,
+      },
+    });
+  }
+
   return createElement({
     element: 'span',
     content: JSON.stringify(value),

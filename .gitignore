@@ -130,6 +130,6 @@ dist
 .pnp.*
 .idea
 .DS_Store
-extention.zip
+*.zip
 packages/coverage.out
 packages/test-report.out

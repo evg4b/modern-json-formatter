@@ -15,3 +15,5 @@ build-packages:
 
 pack-extension:
 	cd ./dist && zip -r -X ../extention.zip *
+	cat ./dist/manifest.json | jq 'del(.key)' > ./dist/manifest.json
+	cd ./dist && zip -r -X ../extention-msdn.zip *

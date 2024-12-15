@@ -34,7 +34,7 @@ export class QueryInputElement extends StyledComponentElement {
   private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
 
   private onSubmitCallback: ((s: string) => unknown) | null = null;
-  private history = new HistoryManager<HistoryItem>();
+  private readonly history = new HistoryManager<HistoryItem>();
 
   constructor() {
     super(queryInputStyles);
@@ -115,10 +115,10 @@ export class QueryInputElement extends StyledComponentElement {
     const end = this.input.selectionEnd ?? 0;
     if (isNotNil(start) && isNotNil(end) && start !== end) {
       event.preventDefault();
-      this.saveState();
       const selectedText = this.input.value.substring(start, end);
       this.input.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
       this.input.setSelectionRange(start + 1, end + 1);
+      this.saveState();
     }
   }
 

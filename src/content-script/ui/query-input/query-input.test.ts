@@ -33,12 +33,9 @@ describe('QueryInputElement', () => {
     keyPress('z', { ctrlKey: true, shiftKey: true });
   };
 
-  const times = async (n: number, fn: () => void) => {
-    const times = Array.from({ length: n });
-    for (const _ of times) {
-      fn();
-      await new Promise((resolve) => setTimeout(resolve));
-    }
+  const times = (n: number, fn: () => void) => {
+    Array.from({ length: n })
+      .forEach(fn);
   };
 
   beforeEach(() => {
@@ -230,22 +227,22 @@ describe('QueryInputElement', () => {
         expect(innerInput.value).toEqual('1234');
       });
 
-      test('should undo value multiple times', async () => {
-        await times(3, () => undo());
+      test('should undo value multiple times', () => {
+        times(3, () => undo());
 
         expect(innerInput.value).toEqual('12');
       });
 
-      test('should not undo if no more states', async () => {
-        await times(10, () => undo());
+      test('should not undo if no more states', () => {
+        times(10, () => undo());
 
         expect(innerInput.value).toEqual('');
       });
     });
 
     describe('redo', () => {
-      beforeEach(async () => {
-        await times(3, () => undo());
+      beforeEach(() => {
+        times(3, () => undo());
       });
 
       test('should redo value', () => {
@@ -253,20 +250,20 @@ describe('QueryInputElement', () => {
         expect(innerInput.value).toEqual('123');
       });
 
-      test('should redo multiple times', async () => {
-        await times(2, () => redo());
+      test('should redo multiple times', () => {
+        times(2, () => redo());
 
         expect(innerInput.value).toEqual('1234');
       });
 
-      test('should not redo if no more states', async () => {
-        await times(10, () => redo());
+      test('should not redo if no more states', () => {
+        times(10, () => redo());
 
         expect(innerInput.value).toEqual('12345');
       });
 
-      test('should not redo after changing', async () => {
-        await times(3, () => keyPress('#'));
+      test('should not redo after changing', () => {
+        times(3, () => keyPress('#'));
         redo();
 
         expect(innerInput.value).toEqual('12###');

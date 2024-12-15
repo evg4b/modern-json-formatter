@@ -4,9 +4,9 @@
  * @template T The type of items being managed.
  */
 export class HistoryManager<T> {
-  private history: T[] = [];
+  private readonly history: T[] = [];
+  private readonly future: T[] = [];
   private current: T | null = null;
-  private future: T[] = [];
 
   /**
    * Undoes the last change, returning the previous state.
@@ -36,7 +36,7 @@ export class HistoryManager<T> {
       this.history.push(this.current);
     }
     this.current = item;
-    this.future = [];
+    this.future.length = 0;
   }
 
   private swap(a: T[], b: T[]): T | null {
@@ -48,6 +48,8 @@ export class HistoryManager<T> {
       b.push(this.current);
     }
 
-    return this.current = a.pop() ?? null;
+    this.current = a.pop() ?? null;
+
+    return this.current;
   }
 }

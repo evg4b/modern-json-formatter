@@ -6,7 +6,7 @@ import { HistoryManager } from './history-manager';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
 import queryInputStyles from './query-input.module.scss';
 
-const brackets: Record<string, string> = {
+export const brackets: Record<string, string> = {
   '[': ']',
   '(': ')',
   '{': '}',

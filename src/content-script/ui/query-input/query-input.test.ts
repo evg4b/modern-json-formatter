@@ -3,8 +3,8 @@ import '@testing/browser.mock';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
 import { throws } from '../../helpres';
-import { QueryInputElement } from './query-input';
-import { isPrintableKey } from './query-input.helpres';
+import { brackets, QueryInputElement } from './query-input';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpres';
 
 describe('QueryInputElement', () => {
   let input: QueryInputElement;
@@ -12,17 +12,33 @@ describe('QueryInputElement', () => {
   let shadowRoot: ShadowRoot;
 
   const keyPress = (key: string, options?: KeyboardEventInit) => {
-    innerInput.dispatchEvent(new KeyboardEvent('keydown', { key, ...(options ?? {}) }));
-    innerInput.dispatchEvent(new KeyboardEvent('keypress', { key, ...(options ?? {}) }));
-    if (isPrintableKey(new KeyboardEvent('keypress', { key, ...(options ?? {}) }))) {
+    const fakeEvent = new KeyboardEvent('keydown', { key, ...(options ?? {}) });
+    innerInput.dispatchEvent(fakeEvent);
+    if (
+      !isRedoEvent(fakeEvent)
+      && !isUndoEvent(fakeEvent)
+      && !isSubmitEvent(fakeEvent)
+      && !isWrapEvent(fakeEvent, brackets)
+    ) {
       innerInput.value += key;
+      innerInput.dispatchEvent(new Event('input', { bubbles: true }));
     }
-    innerInput.dispatchEvent(new Event('input', { bubbles: true }));
-    innerInput.dispatchEvent(new KeyboardEvent('keyup', { key, ...(options ?? {}) }));
   };
 
-  const times = (n: number, fn: () => void) => {
-    Array.from({ length: n }).forEach(fn);
+  const undo = () => {
+    keyPress('z', { ctrlKey: true });
+  };
+
+  const redo = () => {
+    keyPress('z', { ctrlKey: true, shiftKey: true });
+  };
+
+  const times = async (n: number, fn: () => void) => {
+    const times = Array.from({ length: n });
+    for (const _ of times) {
+      fn();
+      await new Promise((resolve) => setTimeout(resolve));
+    }
   };
 
   beforeEach(() => {
@@ -191,10 +207,6 @@ describe('QueryInputElement', () => {
   });
 
   describe('history', () => {
-    const change = (value: string) => {
-      Array.from(value).forEach((key) => key);
-    };
-
     const select = (start: number, end: number) => {
       innerInput.setSelectionRange(start, end);
     };
@@ -213,51 +225,51 @@ describe('QueryInputElement', () => {
 
     describe('undo', () => {
       test('should undo value', () => {
-        keyPress('z', { ctrlKey: true });
+        undo();
 
         expect(innerInput.value).toEqual('1234');
       });
 
-      test('should undo value multiple times', () => {
-        times(3, () => keyPress('z', { ctrlKey: true }));
+      test('should undo value multiple times', async () => {
+        await times(3, () => undo());
 
         expect(innerInput.value).toEqual('12');
       });
 
-      test('should not undo if no more states', () => {
-        times(10, () => keyPress('z', { ctrlKey: true }));
+      test('should not undo if no more states', async () => {
+        await times(10, () => undo());
 
         expect(innerInput.value).toEqual('');
       });
     });
 
     describe('redo', () => {
-      beforeEach(() => {
-        times(3, () => keyPress('z', { ctrlKey: true }));
+      beforeEach(async () => {
+        await times(3, () => undo());
       });
 
       test('should redo value', () => {
-        keyPress('z', { ctrlKey: true, shiftKey: true });
+        redo();
         expect(innerInput.value).toEqual('123');
       });
 
-      test('should redo multiple times', () => {
-        times(2, () => keyPress('z', { ctrlKey: true, shiftKey: true }));
+      test('should redo multiple times', async () => {
+        await times(2, () => redo());
 
         expect(innerInput.value).toEqual('1234');
       });
 
-      test('should not redo if no more states', () => {
-        times(10, () => keyPress('z', { ctrlKey: true, shiftKey: true }));
+      test('should not redo if no more states', async () => {
+        await times(10, () => redo());
 
         expect(innerInput.value).toEqual('12345');
       });
 
-      test('should not redo after changing', () => {
-        change('###');
-        keyPress('z', { ctrlKey: true, shiftKey: true });
+      test('should not redo after changing', async () => {
+        await times(3, () => keyPress('#'));
+        redo();
 
-        expect(innerInput.value).toEqual('###');
+        expect(innerInput.value).toEqual('12###');
       });
     });
   });

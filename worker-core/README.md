@@ -1,10 +1,10 @@
 # WASMs for modern-json-formatter
 
-Custom json tokenizer written in GO and compiled to WASM.
+Custom JSON tokenizer written in GO and compiled to WASM.
 
 ## Schema
 
-The output of the tokenizer is a schema that represents the json structure and values.
+The output of the tokenizer is a schema that represents the JSON structure and values.
 
 ### Primitive nodes
 

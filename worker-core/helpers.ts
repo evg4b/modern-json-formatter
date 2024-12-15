@@ -1,5 +1,3 @@
-import { getURL } from '@core/browser';
-
 type Imports = WebAssembly.Imports;
 type WebAssemblyInstantiatedSource = WebAssembly.WebAssemblyInstantiatedSource;
 

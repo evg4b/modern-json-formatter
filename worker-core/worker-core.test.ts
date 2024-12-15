@@ -4,7 +4,8 @@ import { tNumber, tObject, tProperty } from '@testing';
 import { tokenize, jq, format } from './index';
 
 jest.mock('./helpers.ts', () => ({
-  loadWasm: (_: string, imports: WebAssembly.Imports) => {
+  loadWasm: (file: string, imports: WebAssembly.Imports) => {
+    expect(file).toBe('worker-core.wasm');
     const data = readFileSync('worker-core/worker-core.wasm');
     return WebAssembly.instantiate(data, imports);
   },

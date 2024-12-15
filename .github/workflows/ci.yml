@@ -19,14 +19,6 @@ jobs:
         with:
           go-version: '1.23.0'
 
-      - name: Build JSON Tokenizer
-        working-directory: ./worker-core
-        run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./tokenizer
-
-      - name: Build JQ
-        working-directory: ./worker-core
-        run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./jq
-
       - name: Build worker wasm
         working-directory: ./worker-core
         run: GOOS=js GOARCH=wasm go build -o worker.wasm -v .
@@ -34,10 +26,6 @@ jobs:
       - name: Test GO code
         working-directory: ./worker-core
         run: go test -v -timeout 1m -coverprofile=coverage.out -json ./internal/... > test-report.out
-
-      - name: Test GO code legacy
-        working-directory: ./worker-core
-        run: go test -v -timeout 1m -coverprofile=coverage.out -json ./pkg/... > test-report.out
 
       - name: Use Node.js
         uses: actions/setup-node@v3

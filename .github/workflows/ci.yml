@@ -27,7 +27,15 @@ jobs:
         working-directory: ./packages
         run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./jq
 
+      - name: Build worker wasm
+        working-directory: ./worker-core
+        run: GOOS=js GOARCH=wasm go build -o worker.wasm -v .
+
       - name: Test GO code
+        working-directory: ./worker-core
+        run: go test -v -timeout 1m -coverprofile=coverage.out -json ./internal/... > test-report.out
+
+      - name: Test GO code legacy
         working-directory: ./packages
         run: go test -v -timeout 1m -coverprofile=coverage.out -json ./pkg/... > test-report.out
 

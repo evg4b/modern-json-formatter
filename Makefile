@@ -15,7 +15,8 @@ build-worker-core:
 
 pack-extension:
 	@echo "Packing extension for Chrome Store..."
-	@cd ./dist && zip -r -X ../extention.zip *
+	cd ./dist && zip -r -X ../extention.zip *
 	@echo "Packing extension for Microsoft Store..."
-	@cat ./dist/manifest.json | jq 'del(.key)' > ./dist/manifest.json
-	@cd ./dist && zip -r -X ../extention-msdn.zip *
+	cat ./dist/manifest.json | jq 'del(.key)' > ./dist/manifest.back.json
+	mv ./dist/manifest.back.json ./dist/manifest.json
+	cd ./dist && zip -r -X ../extention-msdn.zip *

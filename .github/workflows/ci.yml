@@ -15,9 +15,12 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
-          go-version: '1.23.0'
+          go-version-file: 'worker-core/go.mod'
+          cache-dependency-path: |
+            worker-core/go.mod
+            worker-core/go.sum
 
       - name: Build worker wasm
         working-directory: ./worker-core

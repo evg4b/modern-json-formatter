@@ -1,4 +1,4 @@
-default: clean build
+default: clean build optimize
 
 test:
 	@echo "Testing..."
@@ -25,3 +25,7 @@ optimize:
 clean:
 	@echo "Cleaning..."
 	rm -f ${WASM_FILE} ${WASM_FILE_BAK}
+
+test:
+	@echo "Testing..."
+	go test -v ./internal/...

@@ -1,33 +1,22 @@
 import { type ErrorNode, type TokenizerResponse } from './models';
 import { importWasm } from './wasm';
 
-let go = new Go();
+const go = new Go();
 
 export * from './models';
 
-export const jq = async (data: string, query: string): Promise<TokenizerResponse> => {
-  if (!('___jq' in globalThis) || go.exited) {
-    go = new Go();
-    await importWasm(go, 'worker-core.wasm');
-  }
+export const initialize = async (): Promise<void> => {
+  await importWasm(go, 'worker-core.wasm');
+};
 
+export const jq = (data: string, query: string): TokenizerResponse => {
   return globalThis.___jq(data, query);
 };
 
-export const tokenize = async (data: string): Promise<TokenizerResponse> => {
-  if (!('___tokenizeJSON' in globalThis) || go.exited) {
-    go = new Go();
-    await importWasm(go, 'worker-core.wasm');
-  }
-
+export const tokenize = (data: string): TokenizerResponse => {
   return globalThis.___tokenizeJSON(data);
 };
 
-export const format = async (data: string): Promise<ErrorNode | string> => {
-  if (!('___formatJSON' in globalThis) || go.exited) {
-    go = new Go();
-    await importWasm(go, 'worker-core.wasm');
-  }
-
+export const format = (data: string): ErrorNode | string => {
   return globalThis.___formatJSON(data);
 };

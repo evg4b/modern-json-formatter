@@ -5,7 +5,7 @@ const jqMock = jest.fn();
 jest.mock('@worker-core', () => ({
   format: formatMock,
   tokenize: tokenizeMock,
-  jq: jqMock
+  jq: jqMock,
 }));
 
 import { type Message } from '@core/background';
@@ -13,49 +13,45 @@ import { describe, test } from '@jest/globals';
 import { handler } from './handler';
 
 describe('handler', () => {
-  test('should handle tokenize message', async () => {
+  test('should handle tokenize message', () => {
     const message: Message = { json: 'json', action: 'tokenize' };
-    tokenizeMock.mockResolvedValue('tokenized');
+    tokenizeMock.mockReturnValue('tokenized');
 
-    const sendResponse = jest.fn();
-
-    await handler(message, sendResponse);
+    const response = handler(message);
 
     expect(tokenizeMock).toHaveBeenCalledWith(message.json);
-    expect(sendResponse).toHaveBeenCalledWith('tokenized');
+    expect(response).toEqual('tokenized');
   });
 
-  test('should handle format message', async () => {
+  test('should handle format message', () => {
     const message: Message = { json: 'json', action: 'format' };
-    formatMock.mockResolvedValue('formatted');
+    formatMock.mockReturnValue('formatted');
 
-    const sendResponse = jest.fn();
-
-    await handler(message, sendResponse);
+    const response = handler(message);
 
     expect(formatMock).toHaveBeenCalledWith(message.json);
-    expect(sendResponse).toHaveBeenCalledWith('formatted');
+    expect(response).toEqual('formatted');
   });
 
-  test('should handle jq message', async () => {
+  test('should handle jq message', () => {
     const message: Message = { json: 'json', query: '.query', action: 'jq' };
-    jqMock.mockResolvedValue('jq');
+    jqMock.mockReturnValue('jq');
 
-    const sendResponse = jest.fn();
-
-    await handler(message, sendResponse);
+    const response = handler(message);
 
     expect(jqMock).toHaveBeenCalledWith(message.json, message.query);
-    expect(sendResponse).toHaveBeenCalledWith('jq');
+    expect(response).toEqual('jq');
   });
 
-  test('should do nothing if message is not recognized', async () => {
+  test('should throw error', () => {
     const message = { json: 'json', action: 'unknown' } as unknown as Message;
 
-    const sendResponse = jest.fn();
+    const response = handler(message);
 
-    await handler(message, sendResponse);
-
-    expect(sendResponse).not.toHaveBeenCalled();
+    expect(response).toEqual({
+      type: 'error',
+      scope: 'worker',
+      error: 'Unknown message',
+    });
   });
 });

@@ -1,18 +1,36 @@
-import type { Message } from '@core/background';
-import { jq } from '@worker-core';
-import { format, tokenize } from '@worker-core';
+import type { Message, TokenizerResponse } from '@core/background';
+import { ErrorNode, format, jq, tokenize } from '@worker-core';
 import { is } from './helpres';
 
-export const handler = async (message: Message, sendResponse: (resp: unknown) => void): Promise<void> => {
-  if (is(message, 'tokenize')) {
-    await tokenize(message.json)
-      .then(sendResponse);
-  } else if (is(message, 'format')) {
-    await format(message.json)
-      .then(sendResponse);
-  } else if (is(message, 'jq')) {
-    await jq(message.json, message.query)
-      .then(sendResponse);
+type HandlerResult = ErrorNode | TokenizerResponse | string;
+export const handler = (message: Message): HandlerResult => {
+  try {
+    if (is(message, 'tokenize')) {
+      return tokenize(message.json);
+    } else if (is(message, 'format')) {
+      return format(message.json);
+    } else if (is(message, 'jq')) {
+      return jq(message.json, message.query);
+    }
+  } catch (err: unknown) {
+    return err instanceof Error
+      ? {
+        type: 'error',
+        scope: 'worker',
+        stack: err.stack,
+        error: err.message,
+      }
+      : {
+        type: 'error',
+        scope: 'worker',
+        error: `Unknown error: ${String(err)}`,
+      };
   }
+
+  return {
+    type: 'error',
+    scope: 'worker',
+    error: 'Unknown message',
+  } as ErrorNode;
 };
 

@@ -1,5 +1,4 @@
-default:
-	@echo "Please specify a target to build"
+default: clean build
 
 test:
 	@echo "Testing..."
@@ -16,3 +15,13 @@ WASM_FILE_BAK=${WASM_FILE}.bak
 build:
 	@echo "Building..."
 	GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" -o ${WASM_FILE} .
+
+optimize:
+	@echo "Optimizing..."
+	cp ${WASM_FILE} ${WASM_FILE_BAK}
+	wasm-opt --enable-bulk-memory -Oz -o ${WASM_FILE} ${WASM_FILE_BAK}
+	rm -f ${WASM_FILE_BAK}
+
+clean:
+	@echo "Cleaning..."
+	rm -f ${WASM_FILE} ${WASM_FILE_BAK}

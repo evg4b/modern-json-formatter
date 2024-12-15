@@ -1,7 +1,0 @@
-# Ignore artifacts:
-dist
-coverage
-.yarn
-.idea
-media_data/data/**/*.json
-worker-core/wasm_exec.js

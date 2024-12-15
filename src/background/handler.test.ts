@@ -2,10 +2,10 @@ const formatMock = jest.fn();
 const tokenizeMock = jest.fn();
 const jqMock = jest.fn();
 
-jest.mock('@packages/jq', () => ({ jq: jqMock }));
-jest.mock('@packages/tokenizer', () => ({
+jest.mock('@worker-core', () => ({
   format: formatMock,
   tokenize: tokenizeMock,
+  jq: jqMock
 }));
 
 import { type Message } from '@core/background';

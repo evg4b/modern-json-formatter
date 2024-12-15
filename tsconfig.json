@@ -12,10 +12,10 @@
     "sourceRoot": ".",
     "strictNullChecks": true,
     "paths": {
-      "@packages/*": ["packages/*"],
       "@core/*": ["src/core/*"],
       "@testing/*": ["testing/*"],
-      "@testing": ["testing"]
+      "@testing": ["testing"],
+      "@worker-core": ["worker-core"]
     }
   },
   "references": [

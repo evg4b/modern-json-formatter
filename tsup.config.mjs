@@ -4,15 +4,16 @@ import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 import htmlPlugin from '@chialab/esbuild-plugin-html';
+import { resolve } from "node:path";
 
 const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
 const production = process.env.NODE_ENV === 'production';
 
-const assets = path =>
+const assets = (path, to) =>
   copy({
     resolveFrom: 'cwd',
-    assets: { from: [path], to: ['dist'] },
+    assets: { from: [path], to: [resolve('dist', to ?? '')] },
     watch: !production,
   });
 
@@ -64,9 +65,10 @@ export default defineConfig({
       sourceMap: !production,
       sourceMapIncludeSources: !production,
     }),
-    assets('packages/tokenizer/*.wasm'),
-    assets('packages/jq/*.wasm'),
+    assets('worker-core/worker-core.wasm', 'worker-core.wasm'),
     assets('assets/*'),
-    production ? assets('assets/production/*') : assets('assets/debug/*'),
+    production
+      ? assets('assets/production/*')
+      : assets('assets/debug/*'),
   ],
 });

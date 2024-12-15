@@ -13,11 +13,3 @@ export const isWrapEvent = (event: KeyboardEvent, brackets: Record<string, strin
 export const isSubmitEvent = (event: KeyboardEvent) => {
   return event.key === 'Enter';
 };
-
-export const isPrintableKey = (event: KeyboardEvent) => {
-  return event.key.length === 1
-    && !event.shiftKey
-    && !event.ctrlKey
-    && !event.metaKey
-    && !event.altKey;
-}

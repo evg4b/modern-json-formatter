@@ -24,10 +24,7 @@ module.exports = {
   setupFiles: ['<rootDir>/jest.setup.ts'],
   verbose: true,
   moduleNameMapper: {
-    '^@packages/jq/(.*)$': '<rootDir>packages/jq/$1',
-    '^@packages/tokenizer/(.*)$': '<rootDir>packages/tokenizer/$1',
-    '^@packages/jq$': '<rootDir>packages/jq',
-    '^@packages/tokenizer$': '<rootDir>packages/tokenizer',
+    '^@worker-core$': '<rootDir>worker-core',
     '^@core/(.*)$': '<rootDir>src/core/$1',
     '^@testing/(.*)$': '<rootDir>testing/$1',
     '^@testing$': '<rootDir>testing',

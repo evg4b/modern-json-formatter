@@ -1,4 +1,4 @@
-default: build-packages build-extension pack-extension
+default: build-worker-core build-extension pack-extension
 
 check:
 	@echo "Checking packages..."
@@ -9,11 +9,13 @@ check:
 build-extension:
 	yarn build:production
 
-build-packages:
+build-worker-core:
 	@echo "Building wasms..."
-	cd packages && $(MAKE)
+	cd worker-core && $(MAKE)
 
 pack-extension:
-	cd ./dist && zip -r -X ../extention.zip *
-	cat ./dist/manifest.json | jq 'del(.key)' > ./dist/manifest.json
-	cd ./dist && zip -r -X ../extention-msdn.zip *
+	@echo "Packing extension for Chrome Store..."
+	@cd ./dist && zip -r -X ../extention.zip *
+	@echo "Packing extension for Microsoft Store..."
+	@cat ./dist/manifest.json | jq 'del(.key)' > ./dist/manifest.json
+	@cd ./dist && zip -r -X ../extention-msdn.zip *

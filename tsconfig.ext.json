@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["packages/**/*.ts", "packages/**/*.d.ts", "src/**/*.ts", "src/**/*.d.ts"],
-  "exclude": ["src/**/*.test.ts", "packages/**/*.test.ts"]
+  "include": ["worker-core/**/*.ts", "worker-core/**/*.d.ts", "src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["src/**/*.test.ts", "worker-core/**/*.test.ts"]
 }

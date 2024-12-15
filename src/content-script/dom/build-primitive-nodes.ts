@@ -1,6 +1,6 @@
 import { createElement } from '@core/dom';
 import { trim } from '@core/helpers';
-import { type BooleanNode, type NumberNode, type StringNode } from '@packages/tokenizer';
+import { type BooleanNode, type NumberNode, type StringNode } from '@worker-core';
 
 export const buildNullNode = () =>
   createElement({

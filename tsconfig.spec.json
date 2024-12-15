@@ -2,12 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "allowJs": true,
+    "allowJs": false,
     "types": ["jest", "node", "chrome", "golang-wasm-exec"]
   },
   "include": [
-    "packages/**/*.test.ts",
-    "packages/**/*.d.ts",
+    "worker-core/**/*.test.ts",
+    "worker-core/**/*.d.ts",
     "src/**/*.test.ts",
     "src/**/*.d.ts",
     "testing/**/*.ts",

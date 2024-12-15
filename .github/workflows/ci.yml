@@ -2,9 +2,9 @@ name: CI (nodejs and golang)
 
 on:
   push:
-    branches: ['main']
+    branches: [ 'main' ]
   pull_request:
-    branches: ['main']
+    branches: [ 'main' ]
 
 jobs:
   build:
@@ -19,17 +19,13 @@ jobs:
         with:
           go-version: '1.23.0'
 
-      - name: Build JSON Tokenizer
-        working-directory: ./packages
-        run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./tokenizer
-
-      - name: Build JQ
-        working-directory: ./packages
-        run: GOOS=js GOARCH=wasm go build -o tokenizer.wasm -v ./jq
+      - name: Build worker wasm
+        working-directory: ./worker-core
+        run: GOOS=js GOARCH=wasm go build -o worker.wasm -v .
 
       - name: Test GO code
-        working-directory: ./packages
-        run: go test -v -timeout 1m -coverprofile=coverage.out -json ./pkg/... > test-report.out
+        working-directory: ./worker-core
+        run: go test -v -timeout 1m -coverprofile=coverage.out -json ./internal/... > test-report.out
 
       - name: Use Node.js
         uses: actions/setup-node@v3

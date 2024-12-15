@@ -1,4 +1,4 @@
-import { type TokenizerResponse } from '@packages/tokenizer';
+import { type TokenizerResponse } from '@worker-core';
 
 export interface TokenizeParams {
   action: 'tokenize';

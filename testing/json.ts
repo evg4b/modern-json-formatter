@@ -7,7 +7,7 @@ import {
   PropertyNode,
   StringNode,
   TokenNode,
-} from '@packages/tokenizer';
+} from '@worker-core';
 
 export const tNull = (): NullNode => ({ type: 'null' });
 export const tBool = (value: boolean): BooleanNode => ({

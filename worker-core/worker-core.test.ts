@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { tNumber, tObject, tProperty } from '@testing';
 import { tokenize, jq, format } from './index';
 
-jest.mock('../shared/wasm_helpers.ts', () => ({
+jest.mock('./helpers.ts', () => ({
   loadWasm: (_: string, imports: WebAssembly.Imports) => {
     const data = readFileSync('worker-core/worker-core.wasm');
     return WebAssembly.instantiate(data, imports);
@@ -30,6 +30,6 @@ describe('format', () => {
   test('should return a TokenizerResponse', async () => {
     const data = await format('{"data":123}');
 
-    expect(data).toEqual(`tObject(tProperty('data', tNumber(123)))`);
+    expect(data).toEqual(`{\n    "data": 123\n}`);
   });
 });

@@ -20,3 +20,10 @@ pack-extension:
 	cat ./dist/manifest.json | jq 'del(.key)' > ./dist/manifest.back.json
 	mv ./dist/manifest.back.json ./dist/manifest.json
 	cd ./dist && zip -r -X ../extention-msdn.zip *
+
+clean:
+	@echo "Cleaning..."
+	rm -rf ./dist
+	rm -f ./extention.zip
+	rm -f ./extention-msdn.zip
+	cd worker-core && $(MAKE) clean

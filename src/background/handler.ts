@@ -3,14 +3,14 @@ import { ErrorNode, format, jq, tokenize } from '@worker-core';
 import { is } from './helpers';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string;
-export const handler = (message: Message): HandlerResult => {
+export const handler = async (message: Message): Promise<HandlerResult> => {
   try {
     if (is(message, 'tokenize')) {
-      return tokenize(message.json);
+      return await tokenize(message.json);
     } else if (is(message, 'format')) {
-      return format(message.json);
+      return await format(message.json);
     } else if (is(message, 'jq')) {
-      return jq(message.json, message.query);
+      return await jq(message.json, message.query);
     }
   } catch (err: unknown) {
     return err instanceof Error

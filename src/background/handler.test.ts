@@ -13,40 +13,40 @@ import { describe, test } from '@jest/globals';
 import { handler } from './handler';
 
 describe('handler', () => {
-  test('should handle tokenize message', () => {
+  test('should handle tokenize message', async () => {
     const message: Message = { json: 'json', action: 'tokenize' };
-    tokenizeMock.mockReturnValue('tokenized');
+    tokenizeMock.mockResolvedValue('tokenized');
 
-    const response = handler(message);
+    const response = await handler(message);
 
     expect(tokenizeMock).toHaveBeenCalledWith(message.json);
     expect(response).toEqual('tokenized');
   });
 
-  test('should handle format message', () => {
+  test('should handle format message', async () => {
     const message: Message = { json: 'json', action: 'format' };
-    formatMock.mockReturnValue('formatted');
+    formatMock.mockResolvedValue('formatted');
 
-    const response = handler(message);
+    const response = await handler(message);
 
     expect(formatMock).toHaveBeenCalledWith(message.json);
     expect(response).toEqual('formatted');
   });
 
-  test('should handle jq message', () => {
+  test('should handle jq message', async () => {
     const message: Message = { json: 'json', query: '.query', action: 'jq' };
-    jqMock.mockReturnValue('jq');
+    jqMock.mockResolvedValue('jq');
 
-    const response = handler(message);
+    const response = await handler(message);
 
     expect(jqMock).toHaveBeenCalledWith(message.json, message.query);
     expect(response).toEqual('jq');
   });
 
-  test('should throw error', () => {
+  test('should throw error', async () => {
     const message = { json: 'json', action: 'unknown' } as unknown as Message;
 
-    const response = handler(message);
+    const response = await handler(message);
 
     expect(response).toEqual({
       type: 'error',

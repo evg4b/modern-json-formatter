@@ -18,24 +18,24 @@ describe('worker-core.wasm', () => {
   });
 
   describe('tokenize', () => {
-    test('should return a TokenizerResponse', () => {
-      const data = tokenize('{"data":123}');
+    test('should return a TokenizerResponse', async () => {
+      const data = await tokenize('{"data":123}');
 
       expect(data).toEqual(tObject(tProperty('data', tNumber(`123`))));
     });
   });
 
   describe('jq', () => {
-    test('should return a TokenizerResponse', () => {
-      const data = jq('{ "data": 123 }', '.data');
+    test('should return a TokenizerResponse', async () => {
+      const data = await jq('{ "data": 123 }', '.data');
 
       expect(data).toEqual(tNumber(`123`));
     });
   });
 
   describe('format', () => {
-    test('should return a TokenizerResponse', () => {
-      const data = format('{"data":123}');
+    test('should return a TokenizerResponse', async () => {
+      const data = await format('{"data":123}');
 
       expect(data).toEqual(`{\n    "data": 123\n}`);
     });

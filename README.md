@@ -53,12 +53,6 @@
 - Safe for selecting and copying JSON
 - Clickable links
 
-# Privacy policy:
-
-- We do not collect or store your personal or sensitive data.
-- We do not transmit personal or sensitive data.
-- We do not collect or transmit non-personally identifiable information.
-
 # Installation:
 
 <p align="center">

@@ -22,9 +22,14 @@ jobs:
             worker-core/go.mod
             worker-core/go.sum
 
+      - name: Set up TinyGo
+        uses: acifani/setup-tinygo@v2
+        with:
+          tinygo-version: '0.35.0'
+
       - name: Build worker wasm
         working-directory: ./worker-core
-        run: GOOS=js GOARCH=wasm go build -o worker.wasm -v .
+        run: tinygo build -o worker-core.wasm -target wasm .
 
       - name: Test Go code
         working-directory: ./worker-core

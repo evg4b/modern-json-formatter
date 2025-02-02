@@ -6,7 +6,6 @@ let go = new Go();
 export * from './models';
 
 export const initialize = async (): Promise<void> => {
-  go.exit(0);
   go = new Go();
   await importWasm(go, 'worker-core.wasm');
 };

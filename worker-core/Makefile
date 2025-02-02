@@ -3,7 +3,7 @@ default: clean build optimize
 exec-script:
 	@echo "Copying exec scripts..."
 	rm -f ./wasm_exec.js
-	cp "$(shell go env GOROOT)/misc/wasm/wasm_exec.js" .
+	cp "$(shell tinygo env TINYGOROOT)/targets/wasm_exec.js" .
 
 WASM_FILE=worker-core.wasm
 WASM_FILE_BAK=${WASM_FILE}.bak

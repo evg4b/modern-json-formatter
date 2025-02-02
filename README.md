@@ -28,6 +28,16 @@
         <img alt="Chrome Web Store Users" src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff">
     </a>
     <br>
+    <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
+        <img alt="Microsoft Store" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=version&prefix=v&label=microsoft%20store">    
+    </a>
+    <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
+        <img alt="Microsoft Store Rating" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=averageRating&label=rating">
+    </a>
+    <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
+        <img alt="Microsoft Store Users" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=activeInstallCount&label=users">
+    </a>
+    <br>
     <a href="https://sonarcloud.io/project/overview?id=evg4b_modern-json-formatter">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=alert_status" alt="Quality Gate Status">    
     </a>

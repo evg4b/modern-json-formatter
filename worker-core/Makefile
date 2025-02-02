@@ -10,7 +10,7 @@ WASM_FILE_BAK=${WASM_FILE}.bak
 
 build:
 	@echo "Building..."
-	@tinygo build -o ${WASM_FILE} -target wasm .
+	@tinygo build -o ${WASM_FILE} -no-debug -target wasm .
 
 optimize:
 	@echo "Optimizing..."

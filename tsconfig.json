@@ -3,7 +3,7 @@
     "target": "es2020",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "allowJs": false,
+    "allowJs": true,
     "module": "esnext",
     "types": ["node", "chrome", "golang-wasm-exec"],
     "baseUrl": ".",

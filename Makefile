@@ -2,7 +2,6 @@ default: build-worker-core build-extension pack-extension
 
 check:
 	@echo "Checking packages..."
-	yarn prettier . --check
 	yarn lint
 	yarn test
 

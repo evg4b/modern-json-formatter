@@ -21,7 +21,7 @@ pack-extension:
 	@cd ./dist && zip -r -X ../extention-msdn.zip *
 
 clean:
-	@echo "Cleaning..."
+	@echo "Cleaning extension..."
 	@rm -rf ./dist
 	@rm -f ./extention.zip
 	@rm -f ./extention-msdn.zip

@@ -36,7 +36,7 @@ export default defineConfig({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
-  noExternal: ['@webcomponents/custom-elements'],
+  noExternal: ['@webcomponents/custom-elements', 'lodash-es'],
   loader: {
     '.svg': 'text',
   },

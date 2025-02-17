@@ -1,7 +1,9 @@
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
+import { debounce } from 'lodash-es';
 import { isNotNil } from '../../helpers';
 import { InfoButtonElement } from '../info-button';
+import { QueryHistory } from '../query-history/query-history';
 import { HistoryManager } from './history-manager';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import queryInputStyles from './query-input.module.scss';
@@ -23,33 +25,46 @@ interface HistoryItem {
 
 @CustomElement('query-input')
 export class QueryInputElement extends StyledComponentElement {
-  private readonly input = this.createInput();
-  private readonly errorMessage = this.createErrorMessage();
-  private readonly wrapper = createElement({
+  private readonly inputElement = this.createInput();
+  private readonly errorMessageElement = createElement({
+    element: 'span',
+    class: ['error-message', 'hidden'],
+  });
+  private readonly queryHistoryElement = new QueryHistory();
+  private readonly wrapperElement = createElement({
     element: 'div',
     class: 'input-wrapper',
-    children: [this.input, this.errorMessage],
+    children: [
+      this.inputElement,
+      this.errorMessageElement,
+      this.queryHistoryElement,
+    ],
   });
 
   private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
+  private readonly history = new HistoryManager<HistoryItem>();
 
   private onSubmitCallback: ((s: string) => unknown) | null = null;
-  private readonly history = new HistoryManager<HistoryItem>();
 
   constructor() {
     super(queryInputStyles);
-    this.shadow.append(this.infoIcons, this.wrapper);
-    this.setupEventHandlers(this.input);
+    this.shadow.append(this.infoIcons, this.wrapperElement);
+    this.setupEventHandlers(this.inputElement);
     this.saveState();
+    this.queryHistoryElement.onSelectedQuery(query => {
+      this.inputElement.value = query;
+      this.onSubmitEvent();
+    });
+    this.loadHistory = debounce(this.loadHistory, 500);
   }
 
   public setErrorMessage(errorMessage: string | null): void {
     if (errorMessage) {
-      this.errorMessage.textContent = errorMessage;
-      this.errorMessage.classList.remove('hidden');
+      this.errorMessageElement.textContent = errorMessage;
+      this.errorMessageElement.classList.remove('hidden');
     } else {
-      this.errorMessage.textContent = '';
-      this.errorMessage.classList.add('hidden');
+      this.errorMessageElement.textContent = '';
+      this.errorMessageElement.classList.add('hidden');
     }
   }
 
@@ -58,11 +73,11 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   public focus(): void {
-    this.input.focus();
+    this.inputElement.focus();
   }
 
   public blur(): void {
-    this.input.blur();
+    this.inputElement.blur();
   }
 
   public hide(): void {
@@ -81,12 +96,6 @@ export class QueryInputElement extends StyledComponentElement {
     return input;
   }
 
-  private createErrorMessage(): HTMLSpanElement {
-    const errorMessage = document.createElement('span');
-    errorMessage.classList.add('error-message', 'hidden');
-    return errorMessage;
-  }
-
   private setupEventHandlers(input: HTMLInputElement) {
     input.addEventListener('keydown', event => {
       this.setErrorMessage(null);
@@ -103,21 +112,44 @@ export class QueryInputElement extends StyledComponentElement {
 
     input.addEventListener('input', () => {
       this.saveState();
+      void this.loadHistory();
+    });
+
+    input.addEventListener('focus', () => {
+      this.queryHistoryElement.open();
     });
   }
 
   private onSubmitEvent() {
-    this.onSubmitCallback?.(this.input.value);
+    this.onSubmitCallback?.(this.inputElement.value);
+    this.queryHistoryElement.close();
   }
 
+  private loadHistory = async () => {
+    const history = await new Promise<string[]>(resolve => {
+      setTimeout(() => {
+        resolve([
+          '.[] | key, value',
+          '.[] | keys',
+          '.[] | values',
+          '.[] | keys_unsorted',
+          '.[] | to_entries',
+          '.'
+        ])
+      }, 300)
+    });
+    this.queryHistoryElement.setHistory(history);
+    this.queryHistoryElement.open();
+  };
+
   private onWrapEvent(event: KeyboardEvent) {
-    const start = this.input.selectionStart ?? 0;
-    const end = this.input.selectionEnd ?? 0;
+    const start = this.inputElement.selectionStart ?? 0;
+    const end = this.inputElement.selectionEnd ?? 0;
     if (isNotNil(start) && isNotNil(end) && start !== end) {
       event.preventDefault();
-      const selectedText = this.input.value.substring(start, end);
-      this.input.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
-      this.input.setSelectionRange(start + 1, end + 1);
+      const selectedText = this.inputElement.value.substring(start, end);
+      this.inputElement.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
+      this.inputElement.setSelectionRange(start + 1, end + 1);
       this.saveState();
     }
   }
@@ -136,16 +168,16 @@ export class QueryInputElement extends StyledComponentElement {
 
   private saveState() {
     this.history.save({
-      query: this.input.value,
-      start: this.input.selectionStart,
-      end: this.input.selectionEnd,
+      query: this.inputElement.value,
+      start: this.inputElement.selectionStart,
+      end: this.inputElement.selectionEnd,
     });
   }
 
   private restoreState(state: HistoryItem | null) {
     if (state) {
-      this.input.value = state.query;
-      this.input.setSelectionRange(state.start, state.end);
+      this.inputElement.value = state.query;
+      this.inputElement.setSelectionRange(state.start, state.end);
     }
   }
 }

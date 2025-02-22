@@ -39,6 +39,23 @@ describe('getHistory', () => {
       expect(history).toEqual(['.[]']);
     });
   });
+
+  describe('when history has many records', () => {
+    beforeEach(async () => {
+      for (let i = 0; i < 50; i++) {
+        await pushHistory('example.com', `.[${i}]`);
+      }
+    })
+
+    test('should return only 10 records', async () => {
+      const history = await getHistory('example.com', '');
+      expect(history).toHaveLength(10);
+      expect(history).toEqual([
+        '.[49]', '.[48]', '.[47]', '.[46]', '.[45]',
+        '.[44]', '.[43]', '.[42]', '.[41]', '.[40]',
+      ]);
+    });
+  })
 });
 
 

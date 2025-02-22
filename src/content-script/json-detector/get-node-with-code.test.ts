@@ -9,8 +9,8 @@ describe('getNodeWithCode', () => {
       if (node instanceof HTMLElement) {
         node.innerText = node.innerHTML;
       }
-    })
-  }
+    });
+  };
 
   describe('detects pre element in base chrome view', () => {
     const cases = [
@@ -91,7 +91,7 @@ describe('getNodeWithCode', () => {
     ];
 
     test.each(cases)('%p', ({ markup, expected }) => {
-      addMarkup(markup)
+      addMarkup(markup);
       const div = getNodeWithCode(document.body.childNodes);
       expect(div).not.toBeNull();
       expect(div?.textContent).toBe(expected);
@@ -118,7 +118,7 @@ describe('getNodeWithCode', () => {
       ];
 
       test.each(cases)('%p', ({ markup }) => {
-        addMarkup(markup)
+        addMarkup(markup);
         const pre = getNodeWithCode(document.body.childNodes);
         expect(pre).toBeNull();
       });

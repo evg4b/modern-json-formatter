@@ -1,5 +1,6 @@
 import { sendMessage } from '@core/browser';
 import type { ErrorNode, TokenizerResponse } from '@worker-core';
+import { isErrorNode } from '../../content-script/helpers';
 import type {
   ClearHistoryParams,
   FormatParams,
@@ -13,7 +14,7 @@ import type {
 
 const bridge = async <M, R>(request: M) => {
   const response = await sendMessage<M, R | ErrorNode>(request);
-  if (typeof response === 'object' && response && 'type' in response && response.type === 'error') {
+  if (isErrorNode(response)) {
     return Promise.reject(response);
   }
 

@@ -1,9 +1,9 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
 import { createElement } from '@core/dom';
 import { registerStyles } from '@core/ui/helpers';
-import { ErrorNode } from '@worker-core';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
+import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import styles from './styles.module.scss';
 import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
@@ -69,9 +69,8 @@ export const runExtension = async () => {
       queryContainer.innerHTML = '';
       queryContainer.appendChild(prepareResponse(info));
       await pushHistory(window.location.hostname, query);
-      // @ts-ignore
-    } catch (error: ErrorNode) {
-      if (error.scope === 'jq') {
+    } catch (error: unknown) {
+      if (isErrorNode(error) && error.scope === 'jq') {
         toolbox.setErrorMessage(error.error);
         return;
       }
@@ -111,3 +110,4 @@ const prepareResponse = (response: TokenizerResponse): HTMLElement => {
     ? buildErrorNode('Invalid JSON file.', response.error)
     : buildDom(response);
 };
+

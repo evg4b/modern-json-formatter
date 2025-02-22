@@ -90,7 +90,7 @@ export const getDomains = async (): Promise<string[]> => {
     const index = db.transaction(STORE_NAME, 'readonly')
       .objectStore(STORE_NAME)
       .index(DOMAIN_INDEX);
-    const results = await wait(index.getAll());
+    const results = await wait(index.getAll() as IDBRequest<QueryRecord[]>);
 
     return Array.from(new Set(results.map(({ domain }) => domain)));
   } finally {

@@ -43,9 +43,9 @@ describe('getHistory', () => {
   describe('when history has many records', () => {
     beforeEach(async () => {
       for (let i = 0; i < 50; i++) {
-        await pushHistory('example.com', `.[${i}]`);
+        await pushHistory('example.com', `.[${ i }]`);
       }
-    })
+    });
 
     test('should return only 10 records', async () => {
       const history = await getHistory('example.com', '');
@@ -55,7 +55,7 @@ describe('getHistory', () => {
         '.[44]', '.[43]', '.[42]', '.[41]', '.[40]',
       ]);
     });
-  })
+  });
 });
 
 

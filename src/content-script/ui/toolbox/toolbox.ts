@@ -51,7 +51,7 @@ export class ToolboxElement extends StyledComponentElement {
 
   private activateButton(tab: TabType): void {
     this.buttonList.forEach(([key, value]) =>
-      key === tab ? value.classList.add('active') : value.classList.remove('active')
+      key === tab ? value.classList.add('active') : value.classList.remove('active'),
     );
     this.tabChangedCallback?.(tab);
     if (tab === 'query') {

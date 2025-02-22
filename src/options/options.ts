@@ -17,7 +17,7 @@ const load = async () => {
 
     container.appendChild(row);
   }
-}
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
   document.querySelector('.clear')?.addEventListener('click', async () => {

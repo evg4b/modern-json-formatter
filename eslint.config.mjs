@@ -9,6 +9,7 @@ export default tseslint.config(
       '.yarn/',
       'dist/',
       'jest.config.js',
+      'jest.setup.ts',
       'media_data/',
       'worker-core/wasm_exec.js',
       'eslint.config.mjs',
@@ -23,6 +24,10 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
+      '@typescript-eslint/no-invalid-void-type': 'off',
+      '@typescript-eslint/prefer-promise-reject-errors': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         {

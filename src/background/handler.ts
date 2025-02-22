@@ -3,8 +3,8 @@ import { ErrorNode, format, jq, tokenize } from '@worker-core';
 import { is } from './helpers';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
-type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | void;
-export const handler = async (message: Message): Promise<HandlerResult> => {
+type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse;
+export const handler = async (message: Message): Promise<HandlerResult | void> => {
   try {
     if (is(message, 'tokenize')) {
       return await tokenize(message.json);
@@ -19,7 +19,7 @@ export const handler = async (message: Message): Promise<HandlerResult> => {
     }
 
     if (is(message, 'get-history')) {
-      return getHistory(message.domain, message.prefix);
+      return await getHistory(message.domain, message.prefix);
     }
 
     if (is(message, 'push-history')) {
@@ -45,7 +45,7 @@ export const handler = async (message: Message): Promise<HandlerResult> => {
       : {
         type: 'error',
         scope: 'worker',
-        error: `Unknown error: ${String(err)}`,
+        error: `Unknown error: ${ String(err) }`,
       };
   }
 

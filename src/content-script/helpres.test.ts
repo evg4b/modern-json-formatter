@@ -25,4 +25,4 @@ describe('isNotNil', () => {
   test.each(cases)(`should return $value for $expected`, ({ value, expected }) => {
     expect(isNotNil(value)).toBe(expected);
   });
-})
+});

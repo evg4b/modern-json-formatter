@@ -120,7 +120,7 @@ export class QueryInputElement extends StyledComponentElement {
     });
   }
 
-  private async onSubmitEvent() {
+  private onSubmitEvent() {
     this.onSubmitCallback?.(this.inputElement.value);
   }
 

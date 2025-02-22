@@ -1,3 +1,4 @@
+import { getHistory, pushHistory } from '@core/background';
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { debounce } from 'lodash-es';
@@ -55,7 +56,6 @@ export class QueryInputElement extends StyledComponentElement {
       this.inputElement.value = query;
       this.onSubmitEvent();
     });
-    this.loadHistory = debounce(this.loadHistory, 500);
   }
 
   public setErrorMessage(errorMessage: string | null): void {
@@ -112,7 +112,8 @@ export class QueryInputElement extends StyledComponentElement {
 
     input.addEventListener('input', () => {
       this.saveState();
-      void this.loadHistory();
+      void this.loadHistory(this.inputElement.value);
+      console.log('input', this.inputElement.value);
     });
 
     input.addEventListener('focus', () => {
@@ -123,24 +124,14 @@ export class QueryInputElement extends StyledComponentElement {
   private onSubmitEvent() {
     this.onSubmitCallback?.(this.inputElement.value);
     this.queryHistoryElement.close();
+    pushHistory(window.location.hostname, this.inputElement.value);
   }
 
-  private loadHistory = async () => {
-    const history = await new Promise<string[]>(resolve => {
-      setTimeout(() => {
-        resolve([
-          '.[] | key, value',
-          '.[] | keys',
-          '.[] | values',
-          '.[] | keys_unsorted',
-          '.[] | to_entries',
-          '.'
-        ])
-      }, 300)
-    });
+  private readonly loadHistory = debounce(async (prefix: string) => {
+    const history = await getHistory(window.location.hostname, prefix);
     this.queryHistoryElement.setHistory(history);
     this.queryHistoryElement.open();
-  };
+  }, 300);
 
   private onWrapEvent(event: KeyboardEvent) {
     const start = this.inputElement.selectionStart ?? 0;

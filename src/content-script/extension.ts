@@ -1,16 +1,14 @@
 import { format, jq, tokenize, type TokenizerResponse } from '@core/background';
 import { createElement } from '@core/dom';
 import { registerStyles } from '@core/ui/helpers';
+import { ErrorNode } from '@worker-core';
 import { isNotNull } from 'typed-assert';
-import { buildDom } from './dom';
-import { buildErrorNode } from './dom/build-error-node';
+import { buildDom, buildErrorNode } from './dom';
 import { findNodeWithCode } from './json-detector';
 import styles from './styles.module.scss';
-import { buildContainers } from './ui/containers';
-import { FloatingMessageElement } from './ui/floating-message';
-import { ToolboxElement } from './ui/toolbox';
+import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 
-const ONE_MEGABYTE_LENGTH = 927182;
+const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 const LIMIT = ONE_MEGABYTE_LENGTH * 3;
 
 export const runExtension = async () => {
@@ -65,19 +63,24 @@ export const runExtension = async () => {
   const toolbox = new ToolboxElement();
   shadowRoot.appendChild(toolbox);
 
-  toolbox.onQueryChanged(async query => {
-    await wrapper(
-      (async (query: string) => {
-        const info = await jq(preNode.innerText, query);
-        if (info.type === 'error' && info.scope === 'jq') {
-          toolbox.setErrorMessage(info.error);
-          return;
-        }
+  const jqQuery = async (query: string) => {
+    try {
+      const info = await jq(preNode.innerText, query);
+      queryContainer.innerHTML = '';
+      queryContainer.appendChild(prepareResponse(info));
+      // @ts-ignore
+    } catch (error: ErrorNode) {
+      if (error.scope === 'jq') {
+        toolbox.setErrorMessage(error.error);
+        return;
+      }
 
-        queryContainer.innerHTML = '';
-        queryContainer.appendChild(prepareResponse(info));
-      })(query),
-    );
+      console.error(error);
+    }
+  };
+
+  toolbox.onQueryChanged(async query => {
+    await wrapper(jqQuery(query));
   });
 
   toolbox.onTabChanged(tab => {
@@ -97,9 +100,13 @@ export const runExtension = async () => {
     }
   });
 
-  await wrapper(tokenize(preNode.innerText).then(response => formatContainer.appendChild(prepareResponse(response))));
+  await wrapper(tokenize(preNode.innerText)
+    .then(response => prepareResponse(response))
+    .then(element => formatContainer.appendChild(element)));
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
-  return response.type === 'error' ? buildErrorNode('Invalid JSON file.', response.error) : buildDom(response);
+  return response.type === 'error'
+    ? buildErrorNode('Invalid JSON file.', response.error)
+    : buildDom(response);
 };

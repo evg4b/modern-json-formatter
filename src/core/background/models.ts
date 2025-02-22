@@ -1,4 +1,4 @@
-import { type TokenizerResponse } from '@worker-core';
+export { type TokenizerResponse } from '@worker-core';
 
 export interface TokenizeParams {
   action: 'tokenize';
@@ -16,6 +16,36 @@ export interface JqParams {
   query: string;
 }
 
-export type Message = TokenizeParams | JqParams | FormatParams;
+export interface GetHistoryParams {
+  action: 'get-history';
+  domain: string;
+  prefix: string;
+}
 
-export { TokenizerResponse };
+export type HistoryResponse = string[];
+
+export interface PushHistoryParams {
+  action: 'push-history';
+  domain: string;
+  query: string;
+}
+
+export interface ClearHistoryParams {
+  action: 'clear-history';
+  domain: string;
+}
+
+export interface GetDomainsParams {
+  action: 'get-domains';
+}
+
+export type Message =
+  TokenizeParams
+  | JqParams
+  | FormatParams
+  | GetHistoryParams
+  | PushHistoryParams
+  | ClearHistoryParams
+  | GetDomainsParams;
+
+

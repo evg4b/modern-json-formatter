@@ -1,0 +1,49 @@
+:root {
+  --sidebar-width: 25%;
+  --v-padding: 15px;
+  --h-padding: 20px;
+}
+
+html,
+body {
+  font-size: 15px;
+  margin: 0;
+  background: #282828;
+  color: #eee;
+  scrollbar-width: thin;
+  scrollbar-color: #757575 #3c3c3c;
+  font-family: sans-serif;
+  width: 600px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+body {
+  padding: 1em 2em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: #a8c7fa;
+
+  &:hover {
+    color: #b3ceff;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+  }
+}

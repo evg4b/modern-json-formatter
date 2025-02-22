@@ -58,7 +58,7 @@ export class QueryHistory extends StyledComponentElement {
   }
 
   private onQueryClick({ target }: MouseEvent): void {
-    if (target instanceof HTMLDivElement) {
+    if (target instanceof HTMLDivElement && target.classList.contains('query')) {
       const query = target.getAttribute('value') ?? throws('Query value is not set');
       defer(() => {
         this.onQueryClickHandler?.(query);

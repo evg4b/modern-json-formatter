@@ -22,6 +22,7 @@ export default defineConfig({
     'content-script': 'src/content-script/main.ts',
     faq: 'src/faq/faq.html',
     background: 'src/background/background.ts',
+    options: 'src/options/options.html',
   },
   splitting: false,
   sourcemap: !production,
@@ -47,6 +48,7 @@ export default defineConfig({
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, description }],
       outfile: 'manifest.json',
+      watch: !production,
     }),
     sassPlugin({
       type: 'css-text',
@@ -54,8 +56,9 @@ export default defineConfig({
       syntax: 'scss',
       verbose: true,
       sourceMap: !production,
-      sourceMapIncludeSources: !production,
+      sourceMapIncludeSources: true,
       filter: /^.*\.module.scss$/,
+      watch: !production,
     }),
     sassPlugin({
       type: 'css',
@@ -63,7 +66,9 @@ export default defineConfig({
       syntax: 'scss',
       verbose: true,
       sourceMap: !production,
-      sourceMapIncludeSources: !production,
+      sourceMapIncludeSources: true,
+      filter: /^.*\.page.scss$/,
+      watch: !production,
     }),
     assets('worker-core/worker-core.wasm', 'worker-core.wasm'),
     assets('assets/*'),

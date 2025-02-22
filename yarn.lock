@@ -1569,16 +1569,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash-es@npm:^4.17.12":
-  version: 4.17.12
-  resolution: "@types/lodash-es@npm:4.17.12"
-  dependencies:
-    "@types/lodash": "npm:*"
-  checksum: 10c0/5d12d2cede07f07ab067541371ed1b838a33edb3c35cb81b73284e93c6fd0c4bbeaefee984e69294bffb53f62d7272c5d679fdba8e595ff71e11d00f2601dde0
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
+"@types/lodash@npm:^4.17.15":
   version: 4.17.15
   resolution: "@types/lodash@npm:4.17.15"
   checksum: 10c0/2eb2dc6d231f5fb4603d176c08c8d7af688f574d09af47466a179cd7812d9f64144ba74bb32ca014570ffdc544eedc51b7a5657212bad083b6eecbd72223f9bb
@@ -2827,6 +2818,13 @@ __metadata:
   peerDependencies:
     esbuild: "*"
   checksum: 10c0/9409269c2ab2cad31bb6b8cd5438da8529e7820c53de7c2b46d0eb8e0525133b6c43d413a6bbd032920f2d2dc22d4b92897957e821745be82e86deab0e626c9d
+  languageName: node
+  linkType: hard
+
+"esbuild-plugin-lodash@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "esbuild-plugin-lodash@npm:1.2.0"
+  checksum: 10c0/a8ef389dd9ae98b7ecaa36cff98ea9c532614436aed011ef0f86d23bc626ac32e8c1926287c2d954c0b2164c534691397743b3f0cd9864403daa57f07240a2fe
   languageName: node
   linkType: hard
 
@@ -4621,13 +4619,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash-es@npm:4.17.21"
-  checksum: 10c0/fb407355f7e6cd523a9383e76e6b455321f0f153a6c9625e21a8827d10c54c2a2341bd2ae8d034358b60e07325e1330c14c224ff582d04612a46a4f0479ff2f2
-  languageName: node
-  linkType: hard
-
 "lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
@@ -4646,6 +4637,13 @@ __metadata:
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
   checksum: 10c0/fc48fb54ff7669f33bb32997cab9460757ee99fafaf72400b261c3e10fde21538e47d8cfcbe6a25a31bcb5b7b727c27d52626386fc2de24eb059a6d64a89cdf5
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
   languageName: node
   linkType: hard
 
@@ -4900,12 +4898,13 @@ __metadata:
     "@types/chrome": "npm:^0.0.306"
     "@types/golang-wasm-exec": "npm:^1.15.2"
     "@types/jest": "npm:^29.5.14"
-    "@types/lodash-es": "npm:^4.17.12"
+    "@types/lodash": "npm:^4.17.15"
     "@types/node": "npm:^20.17.19"
     "@webcomponents/custom-elements": "npm:^1.6.0"
     esbuild: "npm:^0.25.0"
     esbuild-plugin-copy: "npm:^2.1.1"
     esbuild-plugin-json-merge: "npm:^0.1.0"
+    esbuild-plugin-lodash: "npm:^1.2.0"
     esbuild-sass-plugin: "npm:^3.3.1"
     eslint: "npm:^9.21.0"
     fake-indexeddb: "npm:^6.0.0"
@@ -4914,7 +4913,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
-    lodash-es: "npm:^4.17.21"
+    lodash: "npm:^4.17.21"
     sass-embedded: "npm:^1.85.0"
     svgo: "npm:^3.3.2"
     ts-jest: "npm:^29.2.5"

@@ -1,7 +1,7 @@
 import { getHistory, pushHistory } from '@core/background';
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { debounce } from 'lodash-es';
+import { debounce } from 'lodash';
 import { isNotNil } from '../../helpers';
 import { InfoButtonElement } from '../info-button';
 import { QueryHistory } from '../query-history/query-history';

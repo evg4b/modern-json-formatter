@@ -1,5 +1,5 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { defer } from 'lodash-es';
+import { defer } from 'lodash';
 import { throws } from '../../helpers';
 import styles from './query-history.module.scss';
 

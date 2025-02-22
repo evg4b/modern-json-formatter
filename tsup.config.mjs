@@ -5,10 +5,12 @@ import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 import htmlPlugin from '@chialab/esbuild-plugin-html';
 import { resolve } from "node:path";
+import lodashTransformer from 'esbuild-plugin-lodash';
+
+const production = process.env.NODE_ENV === 'production';
 
 const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
-const production = process.env.NODE_ENV === 'production';
 
 const assets = (path, to) =>
   copy({
@@ -37,7 +39,8 @@ export default defineConfig({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
-  noExternal: ['@webcomponents/custom-elements', 'lodash-es'],
+  noExternal: ['@webcomponents/custom-elements', 'lodash'],
+  metafile: !production,
   loader: {
     '.svg': 'text',
   },
@@ -75,5 +78,8 @@ export default defineConfig({
     production
       ? assets('assets/production/*')
       : assets('assets/debug/*'),
+    lodashTransformer({
+      filter: /\.(js|mjs|ts|tsx|mts)$/,
+    }),
   ],
 });

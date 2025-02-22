@@ -2,6 +2,7 @@ export interface Options<K extends keyof HTMLElementTagNameMap = 'span'> {
   element: K;
   content?: string;
   class?: string | string[];
+  id?: string;
   children?: HTMLElement[] | HTMLElement;
   attributes?: Record<string, string>;
   html?: string;
@@ -19,6 +20,9 @@ export const createElement = <K extends keyof HTMLElementTagNameMap>(options: Op
   if (options.children) {
     const children = [options.children].flat();
     element.append(...children);
+  }
+  if (options.id) {
+    element.id = options.id;
   }
   if (options.attributes) {
     Object.entries(options.attributes).forEach(([key, value]) => {

@@ -1,4 +1,4 @@
-import { format, jq, tokenize, type TokenizerResponse } from '@core/background';
+import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
 import { createElement } from '@core/dom';
 import { registerStyles } from '@core/ui/helpers';
 import { ErrorNode } from '@worker-core';
@@ -68,6 +68,7 @@ export const runExtension = async () => {
       const info = await jq(preNode.innerText, query);
       queryContainer.innerHTML = '';
       queryContainer.appendChild(prepareResponse(info));
+      await pushHistory(window.location.hostname, query);
       // @ts-ignore
     } catch (error: ErrorNode) {
       if (error.scope === 'jq') {

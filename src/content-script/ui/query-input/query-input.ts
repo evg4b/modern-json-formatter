@@ -1,10 +1,9 @@
-import { getHistory, pushHistory } from '@core/background';
+import { getHistory } from '@core/background';
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { debounce } from 'lodash';
 import { isNotNil } from '../../helpers';
 import { InfoButtonElement } from '../info-button';
-import { QueryHistory } from '../query-history/query-history';
 import { HistoryManager } from './history-manager';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import queryInputStyles from './query-input.module.scss';
@@ -31,14 +30,17 @@ export class QueryInputElement extends StyledComponentElement {
     element: 'span',
     class: ['error-message', 'hidden'],
   });
-  private readonly queryHistoryElement = new QueryHistory();
+  private readonly historyList = createElement({
+    element: 'datalist',
+    id: 'history-list',
+  });
   private readonly wrapperElement = createElement({
     element: 'div',
     class: 'input-wrapper',
     children: [
       this.inputElement,
       this.errorMessageElement,
-      this.queryHistoryElement,
+      this.historyList,
     ],
   });
 
@@ -52,10 +54,6 @@ export class QueryInputElement extends StyledComponentElement {
     this.shadow.append(this.infoIcons, this.wrapperElement);
     this.setupEventHandlers(this.inputElement);
     this.saveState();
-    this.queryHistoryElement.onSelectedQuery(query => {
-      this.inputElement.value = query;
-      this.onSubmitEvent();
-    });
   }
 
   public setErrorMessage(errorMessage: string | null): void {
@@ -89,7 +87,12 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   private createInput(): HTMLInputElement {
-    const input = createElement({ element: 'input' });
+    const input = createElement({
+      element: 'input',
+      attributes: {
+        list: 'history-list',
+      },
+    });
     input.type = 'text';
     input.placeholder = 'Input jq query...';
 
@@ -115,23 +118,24 @@ export class QueryInputElement extends StyledComponentElement {
       void this.loadHistory(this.inputElement.value);
       console.log('input', this.inputElement.value);
     });
-
-    input.addEventListener('focus', () => {
-      this.queryHistoryElement.open();
-    });
   }
 
-  private onSubmitEvent() {
+  private async onSubmitEvent() {
     this.onSubmitCallback?.(this.inputElement.value);
-    this.queryHistoryElement.close();
-    pushHistory(window.location.hostname, this.inputElement.value);
   }
 
   private readonly loadHistory = debounce(async (prefix: string) => {
     const history = await getHistory(window.location.hostname, prefix);
-    this.queryHistoryElement.setHistory(history);
-    this.queryHistoryElement.open();
-  }, 300);
+    this.historyList.querySelectorAll('option').forEach(option => option.remove());
+    history.forEach(query => {
+      const option = createElement({
+        element: 'option',
+        attributes: { value: query },
+        content: query,
+      });
+      this.historyList.appendChild(option);
+    });
+  }, 150);
 
   private onWrapEvent(event: KeyboardEvent) {
     const start = this.inputElement.selectionStart ?? 0;

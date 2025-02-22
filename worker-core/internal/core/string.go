@@ -9,6 +9,7 @@ const cutset = " \t\n\r"
 
 const httpPrefix = "http://"
 const httpsPrefix = "https://"
+const ftpPrefix = "ftp://"
 const relativeUrlPrefix = "/"
 
 func isEmail(value string) bool {
@@ -19,11 +20,13 @@ func isEmail(value string) bool {
 func hasUrlPrefix(value string) bool {
 	return strings.HasPrefix(value, httpPrefix) ||
 		strings.HasPrefix(value, httpsPrefix) ||
+		strings.HasPrefix(value, ftpPrefix) ||
 		strings.HasPrefix(value, relativeUrlPrefix)
 }
 
 func BuildStringNode(value string) map[string]any {
 	trimmed := strings.Trim(value, cutset)
+
 	if hasUrlPrefix(trimmed) {
 		return UrlNode(value)
 	}

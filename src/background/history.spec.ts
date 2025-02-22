@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { throws } from '../content-script/helpers';
 import { wait } from './helpers';
-import { getHistory, pushHistory } from './history';
+import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
 const cleanup = async () => {
   const items = await indexedDB.databases();
@@ -74,5 +74,54 @@ describe('pushHistory', () => {
     await pushHistory('example.com', '.');
     const history = await getHistory('example.com', '');
     expect(history).toEqual(['.', '.[]']);
+  });
+});
+
+describe('clearHistory', () => {
+  beforeEach(cleanup);
+
+  beforeEach(async () => {
+    for (let i = 0; i < 50; i++) {
+      await pushHistory('example.com', `.[${ i }]`);
+    }
+  });
+
+  test('should clear history', async () => {
+    await clearHistory();
+    const history = await getHistory('example.com', '');
+    expect(history).toEqual([]);
+  });
+});
+
+
+describe('getDomains', () => {
+  beforeEach(cleanup);
+
+  beforeEach(async () => {
+    for (let i = 0; i < 3; i++) {
+      await pushHistory('example.com', `.[${ i }]`);
+    }
+
+    for (let i = 0; i < 3; i++) {
+      await pushHistory('sub.example.com', `.[${ i }]`);
+    }
+
+    for (let i = 0; i < 3; i++) {
+      await pushHistory('test.com', `.[${ i }]`);
+    }
+
+    for (let i = 0; i < 3; i++) {
+      await pushHistory('other.net', `.[${ i }]`);
+    }
+  });
+
+  test('should return all domains', async () => {
+    const domains = await getDomains();
+    expect(domains).toEqual([
+      'example.com',
+      'other.net',
+      'sub.example.com',
+      'test.com',
+    ]);
   });
 });

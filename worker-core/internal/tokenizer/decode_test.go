@@ -39,6 +39,10 @@ func TestTokenizer(t *testing.T) {
 					url:  "https://test.com",
 				},
 				{
+					name: "string with ftp url",
+					url:  "ftp://test.com",
+				},
+				{
 					name: "string with relative url",
 					url:  "/path/to/resource",
 				},

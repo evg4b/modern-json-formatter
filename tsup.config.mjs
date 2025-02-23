@@ -19,7 +19,8 @@ const assets = (path, to) =>
     watch: !production,
   });
 
-export default defineConfig({
+export default defineConfig((base) => ({
+  ...base,
   entry: {
     'content-script': 'src/content-script/main.ts',
     faq: 'src/faq/faq.html',
@@ -59,7 +60,7 @@ export default defineConfig({
       syntax: 'scss',
       sourceMap: !production,
       sourceMapIncludeSources: !production,
-      watch: !production,
+      watch: !!base.watch,
       filter: /^.*\.module.scss$/,
     }),
     sassPlugin({
@@ -68,7 +69,7 @@ export default defineConfig({
       syntax: 'scss',
       sourceMap: !production,
       sourceMapIncludeSources: true,
-      watch: !production,
+      watch: !!base.watch,
       filter: /^.*\.page.scss$/,
     }),
     assets('worker-core/worker-core.wasm', 'worker-core.wasm'),
@@ -80,4 +81,4 @@ export default defineConfig({
       filter: /\.(js|mjs|ts|tsx|mts)$/,
     }),
   ],
-});
+}));

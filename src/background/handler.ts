@@ -52,7 +52,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
   return {
     type: 'error',
     scope: 'worker',
-    error: 'Unknown message',
+    error: 'Unknown message type',
   } as ErrorNode;
 };
 

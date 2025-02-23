@@ -35,7 +35,6 @@ export interface PushHistoryParams {
 
 export interface ClearHistoryParams {
   action: 'clear-history';
-  domain: string;
 }
 
 export interface GetDomainsParams {

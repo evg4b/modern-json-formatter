@@ -32,6 +32,8 @@ export class FloatingMessageElement extends StyledComponentElement {
 
   private closeMessage() {
     this.classList.add('hidden');
-    setTimeout(() => this.remove(), 250);
+    setTimeout(() => {
+      this.remove();
+    }, 250);
   }
 }

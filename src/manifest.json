@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/chrome-manifest.json",
   "name": "Modern JSON Formatter",
   "description": "Format JSON in a modern way. With guaranteed order of keys, big numbers, expandable/collapsable properties and more.",
   "version": "0.0.0",
@@ -22,8 +23,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "tokenizer.wasm",
-        "jq.wasm",
+        "worker-core.wasm",
         "invalid.svg",
         "faq.html"
       ],

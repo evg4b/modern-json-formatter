@@ -54,6 +54,7 @@ export class QueryInputElement extends StyledComponentElement {
     this.shadow.append(this.infoIcons, this.wrapperElement);
     this.setupEventHandlers(this.inputElement);
     this.saveState();
+    void this.loadHistory('');
   }
 
   public setErrorMessage(errorMessage: string | null): void {

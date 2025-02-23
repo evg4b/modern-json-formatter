@@ -2,7 +2,6 @@
 module.exports = {
   cache: true,
   testEnvironment: 'jsdom',
-  collectCoverage: true,
   showSeed: true,
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['/node_modules/', '/.yarn/'],

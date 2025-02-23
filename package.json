@@ -21,7 +21,8 @@
     "build:production": "NODE_ENV=production tsup",
     "lint": "eslint .",
     "dev": "tsup --watch",
-    "test": "jest"
+    "test": "jest",
+    "test:cover": "jest --collect-coverage"
   },
   "devDependencies": {
     "@chialab/esbuild-plugin-html": "^0.18.2",

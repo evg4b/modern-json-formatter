@@ -8,8 +8,8 @@ import { findNodeWithCode } from './json-detector';
 import styles from './styles.module.scss';
 import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 
-const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
-const LIMIT = ONE_MEGABYTE_LENGTH * 3;
+export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
+export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
 
 export const runExtension = async () => {
   const preNode = await findNodeWithCode();
@@ -100,9 +100,10 @@ export const runExtension = async () => {
     }
   });
 
-  await wrapper(tokenize(preNode.innerText)
-    .then(response => prepareResponse(response))
-    .then(element => formatContainer.appendChild(element)));
+  const response = await wrapper(tokenize(preNode.innerText));
+  formatContainer.appendChild(
+    prepareResponse(response),
+  );
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {

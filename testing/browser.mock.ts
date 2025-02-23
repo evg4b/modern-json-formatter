@@ -1,3 +1,4 @@
 jest.mock('@core/browser', () => ({
-  getURL: (s: string) => s,
+  getURL: jest.fn((s: string) => s),
+  sendMessage: jest.fn(() => Promise.resolve()),
 }));

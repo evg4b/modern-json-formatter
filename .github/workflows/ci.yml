@@ -51,7 +51,7 @@ jobs:
         run: yarn build:production
 
       - name: Test
-        run: yarn test --color=true
+        run: yarn test:cover --color=true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@master

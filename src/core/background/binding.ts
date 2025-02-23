@@ -39,8 +39,8 @@ export const getHistory = async (domain: string, prefix: string): Promise<Histor
   return bridge<GetHistoryParams, HistoryResponse>({ action: 'get-history', domain, prefix });
 };
 
-export const clearHistory = async (domain: string): Promise<void> => {
-  return bridge<ClearHistoryParams, void>({ action: 'clear-history', domain });
+export const clearHistory = async (): Promise<void> => {
+  return bridge<ClearHistoryParams, void>({ action: 'clear-history' });
 };
 
 export const pushHistory = async (domain: string, query: string): Promise<void> => {

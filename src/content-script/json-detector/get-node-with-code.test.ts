@@ -46,7 +46,7 @@ describe('getNodeWithCode', () => {
       { markup: `<div>toolbox</div><pre>some text</pre><button>click me</button>` },
     ];
 
-    test.each(cases)('%p', ({ markup }) => {
+    test.each(cases)('$markup', ({ markup }) => {
       addMarkup(markup);
       const pre = getNodeWithCode(document.body.childNodes);
       expect(pre).toBeNull();

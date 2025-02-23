@@ -1,7 +1,8 @@
+import { createElement } from '@core/dom';
 import { describe, test } from '@jest/globals';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { ErrorNode } from '@worker-core';
-import { assetTabType, isErrorNode, isNotNil, throws } from './helpers';
+import { assetTabType, isErrorNode, isNotNil, query, throws } from './helpers';
 
 describe('helpers', () => {
   test('should work', () => {
@@ -30,19 +31,20 @@ describe('isNotNil', () => {
 });
 
 describe('assetTabType', () => {
-  const validCases = ['raw', 'query', 'formatted'];
-  const invalidCases = ['invalid', null, undefined];
+  const validCases = [
+    'raw',
+    'query',
+    'formatted',
+    null,
+    undefined,
+  ];
 
   test.each(validCases)('should not throw an error for valid tab type %s', (tabType) => {
     expect(() => assetTabType(tabType)).not.toThrow();
   });
 
-  test.each(invalidCases)('should throw an error for invalid tab type %s', (tabType) => {
-    if (tabType === 'invalid') {
-      expect(() => assetTabType(tabType)).toThrow(`Invalid tab type '${tabType}'`);
-    } else {
-      expect(() => assetTabType(tabType)).not.toThrow();
-    }
+  test('should throw an error for invalid tab type %s', () => {
+    expect(() => assetTabType('invalid')).toThrow(`Invalid tab type 'invalid'`);
   });
 });
 
@@ -90,4 +92,41 @@ describe('isErrorNode', () => {
       expect(isErrorNode(value)).toBe(false);
     });
   });
+});
+
+describe('throws', () => {
+  const cases = [
+    { value: undefined, expected: 'Unexpected value' },
+    { value: 'Custom error', expected: 'Custom error' },
+  ];
+
+  test.each(cases)('should throw error with message $expected', ({ value, expected }) => {
+    expect(() => throws(value)).toThrow(expected);
+  });
+});
+
+describe('query', () => {
+  let container: HTMLElement;
+  let element: HTMLElement;
+
+  beforeEach(() => {
+    element = createElement({
+      element: 'div',
+      class: 'test-element',
+      content: 'Test',
+    });
+
+    container = createElement({
+      element: 'div',
+      children: [element],
+    });
+  });
+
+  test('should query element with selector .test-element', () => {
+    expect(query(container, '.test-element')).toBe(element);
+  });
+
+  test('should throw error if element not found', () => {
+    expect(() => query(container, '.non-existent-element')).toThrow('Element .non-existent-element not found');
+  })
 });

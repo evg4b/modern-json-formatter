@@ -1,11 +1,17 @@
+import '../faq/buttons/github-button';
+import '../faq/buttons/chrome-web-store-button';
+import '../faq/buttons/ko-fi-button';
 import { clearHistory, getDomains } from '@core/background';
 import { createElement } from '@core/dom';
 import { throws } from '../content-script/helpers';
 
 const load = async () => {
   const domains = await getDomains();
-  const container = document.querySelector('.history tbody') ?? throws('No .domains element found');
-  container.childNodes.forEach((node) => node.remove());
+  const tbody = document.querySelector('.history tbody') ?? throws('No .domains element found');
+  tbody.innerHTML = '';
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
   for (const domain of domains) {
     const row = createElement({
       element: 'tr',
@@ -15,7 +21,23 @@ const load = async () => {
       ],
     });
 
-    container.appendChild(row);
+    tbody.appendChild(row);
+  }
+
+  if (domains.length === 0) {
+    const row = createElement({
+      element: 'tr',
+      class: 'empty-row',
+      children: [
+        createElement({
+          element: 'td',
+          content: 'No history',
+          attributes: { colspan: '2' },
+        }),
+      ],
+    });
+
+    tbody.appendChild(row);
   }
 };
 

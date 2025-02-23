@@ -3,31 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Modern JSON Formatter Options</title>
-    <style href="./options.page.scss"></style>
+    <link rel="stylesheet" href="options.page.scss">
+    <script src="options.ts"></script>
 </head>
 <body>
-<div class="section">
-    <div class="header">
+  <div class="wrapper">
+    <div class="page-header">
+      <div class="info">
+        <div class="logo"></div>
+        <h1>Modern JSON Formatter Options</h1>
+      </div>
+      <div class="links">
+        <github-button href="https://github.com/evg4b/modern-json-formatter" title="Github Repo"></github-button>
+        <chrome-web-store-button
+          href="https://chromewebstore.google.com/detail/modern-json-formatter/dmofgolehdakghahlgibeaodbahpfkpf"
+          title="Chrome Web Store"></chrome-web-store-button>
+        <ko-fi-button href="https://ko-fi.com/evg4b" title="Support project on KO-FI"></ko-fi-button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="header">
         <h3>Query History</h3>
         <button class="clear">
-            Clear
+          Clear
         </button>
-    </div>
-    <table class="history">
+      </div>
+      <table class="history">
         <thead>
         <tr>
-            <th>Domain</th>
-            <th>Count</th>
+          <th>Domain</th>
+          <th>Count</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Query</td>
-            <td>Result</td>
+        <tr class="empty-row">
+          <td colspan="2">
+            No history
+          </td>
         </tr>
         </tbody>
-    </table>
-</div>
-<script src="./options.ts"></script>
+      </table>
+    </div>
+  </div>
 </body>
 </html>

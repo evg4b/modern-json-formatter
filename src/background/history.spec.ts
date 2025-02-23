@@ -102,15 +102,13 @@ describe('getDomains', () => {
       await pushHistory('example.com', `.[${ i }]`);
     }
 
-    for (let i = 0; i < 3; i++) {
-      await pushHistory('sub.example.com', `.[${ i }]`);
-    }
+    await pushHistory('sub.example.com', `.[0]`);
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       await pushHistory('test.com', `.[${ i }]`);
     }
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       await pushHistory('other.net', `.[${ i }]`);
     }
   });
@@ -118,10 +116,10 @@ describe('getDomains', () => {
   test('should return all domains', async () => {
     const domains = await getDomains();
     expect(domains).toEqual([
-      'example.com',
-      'other.net',
-      'sub.example.com',
-      'test.com',
+      { domain: 'test.com', count: 5 },
+      { domain: 'example.com', count: 3 },
+      { domain: 'other.net', count: 2 },
+      { domain: 'sub.example.com', count: 1 },
     ]);
   });
 });

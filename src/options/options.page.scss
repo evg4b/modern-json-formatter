@@ -1,3 +1,5 @@
+@use "_table";
+
 :root {
   --sidebar-width: 25%;
   --v-padding: 15px;
@@ -13,7 +15,39 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #757575 #3c3c3c;
   font-family: sans-serif;
-  width: 600px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .wrapper {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .info {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .links {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+    }
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -41,9 +75,32 @@ a {
   flex-direction: column;
 
   .header {
+
     display: flex;
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.logo {
+  height: 66px;
+  width: 66px;
+  background: url(https://raw.githubusercontent.com/evg4b/modern-json-formatter/main/.github/readme-logo.png) no-repeat center;
+  background-size: contain;
+}
+
+button {
+  height: 20px;
+  border-radius: 15px;
+  background: transparent;
+  color: #a8c7fa;
+  border: 1px solid #a8c7fa;
+  cursor: pointer;
+
+  &:hover {
+    background: #a8c7fa;
+    color: #282828;
   }
 }

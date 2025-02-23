@@ -84,7 +84,8 @@ export const clearHistory = async (): Promise<void> => {
   }
 };
 
-export const getDomains = async (): Promise<string[]> => {
+export interface DomainCount { domain: string, count: number }
+export const getDomains = async (): Promise<DomainCount[]> => {
   const db = await openDB();
   try {
     const index = db.transaction(STORE_NAME, 'readonly')
@@ -93,8 +94,13 @@ export const getDomains = async (): Promise<string[]> => {
 
     const results = await wait(index.getAll() as IDBRequest<QueryRecord[]>);
 
-    return uniq(results.map(({ domain }) => domain))
-      .sort((a, b) => a.localeCompare(b));
+    const rsp: DomainCount[]  = []
+    for (const domain of uniq(results.map(({ domain }) => domain))) {
+      const count = await wait(index.count(domain));
+      rsp.push({ domain, count });
+    }
+
+    return sortBy(rsp, p => -p.count);
   } finally {
     db.close();
   }

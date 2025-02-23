@@ -1,6 +1,6 @@
 import {
   ArrayNode,
-  BooleanNode,
+  BooleanNode, ErrorNode,
   NullNode,
   NumberNode,
   ObjectNode,
@@ -33,4 +33,9 @@ export const tObject = (...properties: PropertyNode[]): ObjectNode => ({
 export const tProperty = (key: string, value: TokenNode): PropertyNode => ({
   key,
   value: value,
+});
+export const tErrorNode = (error: string, scope?: ErrorNode['scope']): ErrorNode => ({
+  type: 'error',
+  error,
+  scope: scope ?? 'worker',
 });

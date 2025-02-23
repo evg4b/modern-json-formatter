@@ -26,3 +26,17 @@ clean:
 	@rm -f ./extention.zip
 	@rm -f ./extention-msdn.zip
 	@cd worker-core && $(MAKE) clean
+
+release:
+	@echo "Updating version ($(TYPE))..."
+	@VERSION=$$(jq -r '.version' package.json) && \
+	NEW_VERSION=$$(semver -i $(TYPE) $$VERSION) && \
+		jq --arg v "$$NEW_VERSION" '.version = $$v' package.json > package.tmp && mv package.tmp package.json && \
+		echo "Updated version: $$NEW_VERSION"
+	@$(MAKE) check
+	@$(MAKE) default
+	@NEW_VERSION=$$(jq -r '.version' package.json) && \
+		git add . && \
+		git commit -m "Bump new version $$NEW_VERSION" && \
+		git tag -a "v$$NEW_VERSION" -m "Release $$NEW_VERSION"
+	@git push --tags

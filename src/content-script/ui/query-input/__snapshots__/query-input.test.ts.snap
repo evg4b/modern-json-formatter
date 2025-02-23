@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QueryInputElement query history should load history on focus 1`] = `
+<datalist
+  id="history-list"
+>
+  <option
+    value=".[]"
+  >
+    .[]
+  </option>
+  <option
+    value=".[0]"
+  >
+    .[0]
+  </option>
+</datalist>
+`;

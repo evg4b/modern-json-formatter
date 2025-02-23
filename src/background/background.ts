@@ -3,7 +3,6 @@ import { type Message } from '@core/background';
 import { initialize } from '@worker-core';
 import { handler } from './handler';
 
-
 chrome.runtime.onMessage.addListener((message: Message, _, sendResponse): unknown => {
   void handler(message)
     .then(sendResponse)
@@ -16,7 +15,6 @@ chrome.runtime.onMessage.addListener((message: Message, _, sendResponse): unknow
 
   return true;
 });
-
 
 chrome.runtime.onInstalled.addListener(() => {
   void initialize()

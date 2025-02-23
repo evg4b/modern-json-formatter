@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/chrome-manifest.json",
   "name": "Modern JSON Formatter",
   "description": "Format JSON in a modern way. With guaranteed order of keys, big numbers, expandable/collapsable properties and more.",
   "version": "0.0.0",
@@ -7,24 +8,42 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl7zH0Usx624mtBGBvMgEaAqBYmVwA6e/5MEPdGEwOjDG6ozNldorSPKRd/eaOzkwqvnnrHpYsHVhHA/9lp/oEJ0UEdoqJI9GhIeXnS5FTg6ZsmQEBa5exnT+goRRzGP6FkHJC5KP763bc6KtwfrQxtu4aVXbVK6BFDH3au1t3IEuESQaF87ZyguQYJaQx7WLL0aPXuJpmVT6cUWvryDXkwoTsDt/3bnmgzl9DFCHDMDlnpAlU+h90Vriof6yoeQlqve5Jk1y86k7HNyLLpdfT1ohkWGt19e+GGXT8xSD7+AaLU6sHdRdNX6ftStpBoSLtF1C9ScsC/WZuH28BJggRQIDAQAB",
   "short_name": "JSON fmt",
   "minimum_chrome_version": "88",
+  "options_page": "options.html",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content-script.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.js"
+      ],
       "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["tokenizer.wasm", "jq.wasm", "invalid.svg", "faq.html"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "worker-core.wasm",
+        "invalid.svg",
+        "faq.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     },
     {
-      "resources": ["*.map"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "*.map"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
-  "host_permissions": ["*://*/*", "<all_urls>"],
+  "host_permissions": [
+    "*://*/*",
+    "<all_urls>"
+  ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
   },

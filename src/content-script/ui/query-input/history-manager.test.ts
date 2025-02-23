@@ -41,7 +41,7 @@ describe('HistoryManager', () => {
       historyManager.save(3);
       historyManager.undo();
       historyManager.undo();
-      historyManager.save(10)
+      historyManager.save(10);
       expect(historyManager.redo()).toEqual(null);
     });
   });

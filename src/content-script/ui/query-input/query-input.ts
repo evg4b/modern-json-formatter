@@ -1,5 +1,7 @@
+import { getHistory } from '@core/background';
 import { getURL } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
+import { debounce } from 'lodash';
 import { isNotNil } from '../../helpers';
 import { InfoButtonElement } from '../info-button';
 import { HistoryManager } from './history-manager';
@@ -23,33 +25,45 @@ interface HistoryItem {
 
 @CustomElement('query-input')
 export class QueryInputElement extends StyledComponentElement {
-  private readonly input = this.createInput();
-  private readonly errorMessage = this.createErrorMessage();
-  private readonly wrapper = createElement({
+  private readonly inputElement = this.createInput();
+  private readonly errorMessageElement = createElement({
+    element: 'span',
+    class: ['error-message', 'hidden'],
+  });
+  private readonly historyList = createElement({
+    element: 'datalist',
+    id: 'history-list',
+  });
+  private readonly wrapperElement = createElement({
     element: 'div',
     class: 'input-wrapper',
-    children: [this.input, this.errorMessage],
+    children: [
+      this.inputElement,
+      this.errorMessageElement,
+      this.historyList,
+    ],
   });
 
   private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
+  private readonly history = new HistoryManager<HistoryItem>();
 
   private onSubmitCallback: ((s: string) => unknown) | null = null;
-  private readonly history = new HistoryManager<HistoryItem>();
 
   constructor() {
     super(queryInputStyles);
-    this.shadow.append(this.infoIcons, this.wrapper);
-    this.setupEventHandlers(this.input);
+    this.shadow.append(this.infoIcons, this.wrapperElement);
+    this.setupEventHandlers(this.inputElement);
     this.saveState();
+    void this.loadHistory('');
   }
 
   public setErrorMessage(errorMessage: string | null): void {
     if (errorMessage) {
-      this.errorMessage.textContent = errorMessage;
-      this.errorMessage.classList.remove('hidden');
+      this.errorMessageElement.textContent = errorMessage;
+      this.errorMessageElement.classList.remove('hidden');
     } else {
-      this.errorMessage.textContent = '';
-      this.errorMessage.classList.add('hidden');
+      this.errorMessageElement.textContent = '';
+      this.errorMessageElement.classList.add('hidden');
     }
   }
 
@@ -58,11 +72,11 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   public focus(): void {
-    this.input.focus();
+    this.inputElement.focus();
   }
 
   public blur(): void {
-    this.input.blur();
+    this.inputElement.blur();
   }
 
   public hide(): void {
@@ -74,17 +88,16 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   private createInput(): HTMLInputElement {
-    const input = createElement({ element: 'input' });
+    const input = createElement({
+      element: 'input',
+      attributes: {
+        list: 'history-list',
+      },
+    });
     input.type = 'text';
     input.placeholder = 'Input jq query...';
 
     return input;
-  }
-
-  private createErrorMessage(): HTMLSpanElement {
-    const errorMessage = document.createElement('span');
-    errorMessage.classList.add('error-message', 'hidden');
-    return errorMessage;
   }
 
   private setupEventHandlers(input: HTMLInputElement) {
@@ -103,21 +116,35 @@ export class QueryInputElement extends StyledComponentElement {
 
     input.addEventListener('input', () => {
       this.saveState();
+      void this.loadHistory(this.inputElement.value);
     });
   }
 
   private onSubmitEvent() {
-    this.onSubmitCallback?.(this.input.value);
+    this.onSubmitCallback?.(this.inputElement.value);
   }
 
+  private readonly loadHistory = debounce(async (prefix: string) => {
+    const history = await getHistory(window.location.hostname, prefix);
+    this.historyList.querySelectorAll('option').forEach(option => option.remove());
+    history.forEach(query => {
+      const option = createElement({
+        element: 'option',
+        attributes: { value: query },
+        content: query,
+      });
+      this.historyList.appendChild(option);
+    });
+  }, 150);
+
   private onWrapEvent(event: KeyboardEvent) {
-    const start = this.input.selectionStart ?? 0;
-    const end = this.input.selectionEnd ?? 0;
+    const start = this.inputElement.selectionStart ?? 0;
+    const end = this.inputElement.selectionEnd ?? 0;
     if (isNotNil(start) && isNotNil(end) && start !== end) {
       event.preventDefault();
-      const selectedText = this.input.value.substring(start, end);
-      this.input.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
-      this.input.setSelectionRange(start + 1, end + 1);
+      const selectedText = this.inputElement.value.substring(start, end);
+      this.inputElement.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
+      this.inputElement.setSelectionRange(start + 1, end + 1);
       this.saveState();
     }
   }
@@ -136,16 +163,16 @@ export class QueryInputElement extends StyledComponentElement {
 
   private saveState() {
     this.history.save({
-      query: this.input.value,
-      start: this.input.selectionStart,
-      end: this.input.selectionEnd,
+      query: this.inputElement.value,
+      start: this.inputElement.selectionStart,
+      end: this.inputElement.selectionEnd,
     });
   }
 
   private restoreState(state: HistoryItem | null) {
     if (state) {
-      this.input.value = state.query;
-      this.input.setSelectionRange(state.start, state.end);
+      this.inputElement.value = state.query;
+      this.inputElement.setSelectionRange(state.start, state.end);
     }
   }
 }

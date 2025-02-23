@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import '@testing/browser.mock';
-import { beforeEach, describe, expect, test } from '@jest/globals';
+import '@testing/background.mock';
+
+jest.useFakeTimers();
+
+import { getHistory } from '@core/background';
+import { beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { wrapMock } from '@testing/helpers';
 import { getShadowRoot } from '@testing/styled-component';
 import { throws } from '../../helpers';
 import { brackets, QueryInputElement } from './query-input';
@@ -10,6 +16,11 @@ describe('QueryInputElement', () => {
   let input: QueryInputElement;
   let innerInput: HTMLInputElement;
   let shadowRoot: ShadowRoot;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.clearAllTimers();
+  });
 
   const keyPress = (key: string, options?: KeyboardEventInit) => {
     const fakeEvent = new KeyboardEvent('keydown', { key, ...(options ?? {}) });
@@ -121,7 +132,8 @@ describe('QueryInputElement', () => {
 
   describe('typing', () => {
     test('should call onSubmitCallback on Enter', () => {
-      const onSubmitCallback = jest.fn();
+      const onSubmitCallback = jest.fn<(s: string) => (void | Promise<void>)>();
+
       input.onSubmit(onSubmitCallback);
       keyPress('Enter');
 
@@ -129,7 +141,8 @@ describe('QueryInputElement', () => {
     });
 
     test('should not call onSubmitCallback on other key', () => {
-      const onSubmitCallback = jest.fn();
+      const onSubmitCallback = jest.fn<(s: string) => (void | Promise<void>)>();
+
       input.onSubmit(onSubmitCallback);
       keyPress('a');
 
@@ -268,6 +281,28 @@ describe('QueryInputElement', () => {
 
         expect(innerInput.value).toEqual('12###');
       });
+    });
+  });
+
+  describe('query history', () => {
+    let historyDatalist: HTMLDataListElement | null;
+
+    beforeEach(() => {
+      wrapMock(getHistory).mockResolvedValue(['.[]', '.[0]']);
+      historyDatalist = shadowRoot.querySelector('datalist');
+      jest.runAllTimers();
+    });
+
+    test('should have datalist', () => {
+      expect(historyDatalist).not.toBeNull();
+    });
+
+    test('should load history', () => {
+      expect(getHistory).toBeCalledWith(window.location.hostname, '');
+    });
+
+    test('should load history on focus', () => {
+      expect(historyDatalist).toMatchSnapshot();
     });
   });
 });

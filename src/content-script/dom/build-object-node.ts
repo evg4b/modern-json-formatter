@@ -21,7 +21,7 @@ export const buildObjectNode = (object: ObjectNode) => {
       propertyNode.append(
         createElement({ element: 'span', content: JSON.stringify(key), class: 'key' }),
         colon(),
-        buildNode(value)
+        buildNode(value),
       );
       if (index !== lastIndex) {
         propertyNode.appendChild(comma());

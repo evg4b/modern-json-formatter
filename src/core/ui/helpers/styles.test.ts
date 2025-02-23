@@ -16,7 +16,7 @@ describe('', () => {
         align-items: center;
         justify-content: center;  
       }
-    `
+    `,
     );
 
     expect(shadow.innerHTML).toMatchSnapshot();

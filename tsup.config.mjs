@@ -5,10 +5,12 @@ import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 import htmlPlugin from '@chialab/esbuild-plugin-html';
 import { resolve } from "node:path";
+import lodashTransformer from 'esbuild-plugin-lodash';
+
+const production = process.env.NODE_ENV === 'production';
 
 const packageJson = readFileSync('./package.json', 'utf8');
 const { description, version } = JSON.parse(packageJson);
-const production = process.env.NODE_ENV === 'production';
 
 const assets = (path, to) =>
   copy({
@@ -17,11 +19,13 @@ const assets = (path, to) =>
     watch: !production,
   });
 
-export default defineConfig({
+export default defineConfig((base) => ({
+  ...base,
   entry: {
     'content-script': 'src/content-script/main.ts',
     faq: 'src/faq/faq.html',
     background: 'src/background/background.ts',
+    options: 'src/options/options.html',
   },
   splitting: false,
   sourcemap: !production,
@@ -36,7 +40,8 @@ export default defineConfig({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
-  noExternal: ['@webcomponents/custom-elements'],
+  noExternal: ['@webcomponents/custom-elements', 'lodash'],
+  metafile: !production,
   loader: {
     '.svg': 'text',
   },
@@ -47,28 +52,33 @@ export default defineConfig({
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, description }],
       outfile: 'manifest.json',
+      watch: !production,
     }),
     sassPlugin({
       type: 'css-text',
       style: 'compressed',
       syntax: 'scss',
-      verbose: true,
       sourceMap: !production,
       sourceMapIncludeSources: !production,
+      watch: !!base.watch,
       filter: /^.*\.module.scss$/,
     }),
     sassPlugin({
       type: 'css',
       style: 'compressed',
       syntax: 'scss',
-      verbose: true,
       sourceMap: !production,
-      sourceMapIncludeSources: !production,
+      sourceMapIncludeSources: true,
+      watch: !!base.watch,
+      filter: /^.*\.page.scss$/,
     }),
     assets('worker-core/worker-core.wasm', 'worker-core.wasm'),
     assets('assets/*'),
     production
       ? assets('assets/production/*')
       : assets('assets/debug/*'),
+    lodashTransformer({
+      filter: /\.(js|mjs|ts|tsx|mts)$/,
+    }),
   ],
-});
+}));

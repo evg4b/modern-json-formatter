@@ -116,7 +116,6 @@ export class QueryInputElement extends StyledComponentElement {
     input.addEventListener('input', () => {
       this.saveState();
       void this.loadHistory(this.inputElement.value);
-      console.log('input', this.inputElement.value);
     });
   }
 

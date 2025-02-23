@@ -6,25 +6,30 @@ import { createElement } from '@core/dom';
 import { throws } from '../content-script/helpers';
 
 const load = async () => {
-  const domains = await getDomains();
+  const domainInfos = await getDomains();
   const tbody = document.querySelector('.history tbody') ?? throws('No .domains element found');
   tbody.innerHTML = '';
   while (tbody.firstChild) {
     tbody.removeChild(tbody.firstChild);
   }
-  for (const domain of domains) {
+  for (const info of domainInfos) {
     const row = createElement({
       element: 'tr',
       children: [
-        createElement({ element: 'td', content: domain }),
-        createElement({ element: 'td', content: domain }),
+        createElement({ element: 'td', content: info.domain }),
+        createElement({
+          element: 'td',
+          content: info.count > 1
+            ? `${ info.count } queries`
+            : `${ info.count } query`,
+        }),
       ],
     });
 
     tbody.appendChild(row);
   }
 
-  if (domains.length === 0) {
+  if (domainInfos.length === 0) {
     const row = createElement({
       element: 'tr',
       class: 'empty-row',

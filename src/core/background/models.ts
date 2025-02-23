@@ -1,3 +1,5 @@
+import { DomainCount } from '../../background/history';
+
 export { type TokenizerResponse } from '@worker-core';
 
 export interface TokenizeParams {
@@ -23,6 +25,7 @@ export interface GetHistoryParams {
 }
 
 export type HistoryResponse = string[];
+export type DomainCountResponse = DomainCount[];
 
 export interface PushHistoryParams {
   action: 'push-history';

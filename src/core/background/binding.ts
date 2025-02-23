@@ -1,8 +1,9 @@
 import { sendMessage } from '@core/browser';
 import type { ErrorNode, TokenizerResponse } from '@worker-core';
 import { isErrorNode } from '../../content-script/helpers';
-import type {
+import {
   ClearHistoryParams,
+  DomainCountResponse,
   FormatParams,
   GetDomainsParams,
   GetHistoryParams,
@@ -46,6 +47,6 @@ export const pushHistory = async (domain: string, query: string): Promise<void> 
   return bridge<PushHistoryParams, void>({ action: 'push-history', domain, query });
 };
 
-export const getDomains = async (): Promise<string[]> => {
-  return bridge<GetDomainsParams, string[]>({ action: 'get-domains' });
+export const getDomains = async (): Promise<DomainCountResponse> => {
+  return bridge<GetDomainsParams, DomainCountResponse>({ action: 'get-domains' });
 };

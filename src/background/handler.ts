@@ -1,9 +1,9 @@
-import type { HistoryResponse, Message, TokenizerResponse } from '@core/background';
+import { DomainCountResponse, HistoryResponse, Message, TokenizerResponse } from '@core/background';
 import { ErrorNode, format, jq, tokenize } from '@worker-core';
 import { is } from './helpers';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
-type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse;
+type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
 export const handler = async (message: Message): Promise<HandlerResult | void> => {
   try {
     if (is(message, 'tokenize')) {

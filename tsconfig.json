@@ -11,6 +11,10 @@
     "skipLibCheck": true,
     "sourceRoot": ".",
     "strictNullChecks": true,
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "jsxImportSource": "preact",
+    "jsx": "react-jsx",
     "paths": {
       "@core/*": ["src/core/*"],
       "@testing/*": ["testing/*"],

@@ -6,6 +6,7 @@ import { defineConfig } from 'tsup';
 import htmlPlugin from '@chialab/esbuild-plugin-html';
 import { resolve } from "node:path";
 import lodashTransformer from 'esbuild-plugin-lodash';
+import InlineCss from 'esbuild-plugin-inline-css';
 
 const production = process.env.NODE_ENV === 'production';
 
@@ -40,12 +41,13 @@ export default defineConfig((base) => ({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
-  noExternal: ['@webcomponents/custom-elements', 'lodash'],
+  noExternal: [/.*/],
   metafile: !production,
   loader: {
     '.svg': 'text',
   },
   esbuildPlugins: [
+    InlineCss(),
     htmlPlugin({
       modulesTarget: 'es2020',
     }),

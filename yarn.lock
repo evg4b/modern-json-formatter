@@ -1594,6 +1594,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/preact-custom-element@npm:^4":
+  version: 4.0.4
+  resolution: "@types/preact-custom-element@npm:4.0.4"
+  dependencies:
+    preact: "npm:^10.0.0"
+  checksum: 10c0/b336bc6b851cce17a12117b1f0a4d192114316ffc11d5a5a2c91a316a77feb8fecc0c9556ca05a97ba629f2d30673bc0a2036bfdb4ba172bd741ef7318cce44f
+  languageName: node
+  linkType: hard
+
 "@types/stack-utils@npm:^2.0.0":
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
@@ -2341,10 +2350,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"convert-hex@npm:~0.1.0":
+  version: 0.1.0
+  resolution: "convert-hex@npm:0.1.0"
+  checksum: 10c0/80b5c3f4db67b9fcad6c7539997117c5ee41f8142bc82bddda5da0d699dbed33ab8c1e86a075867468766702330cac4c559930ae371c953e4ae46118f3578d06
+  languageName: node
+  linkType: hard
+
 "convert-source-map@npm:^2.0.0":
   version: 2.0.0
   resolution: "convert-source-map@npm:2.0.0"
   checksum: 10c0/8f2f7a27a1a011cc6cc88cc4da2d7d0cfa5ee0369508baae3d98c260bb3ac520691464e5bbe4ae7cdf09860c1d69ecc6f70c63c6e7c7f7e3f18ec08484dc7d9b
+  languageName: node
+  linkType: hard
+
+"convert-string@npm:~0.1.0":
+  version: 0.1.0
+  resolution: "convert-string@npm:0.1.0"
+  checksum: 10c0/eb737865fbb216cb823e465d819452c2c5a60cc0ad9da9bd9d699ba8178c4ff6186501f75af43c420bbe25e5ccac7f27ff1011640ab77e0227f6b992bfb043bd
   languageName: node
   linkType: hard
 
@@ -2806,6 +2829,17 @@ __metadata:
   peerDependencies:
     esbuild: ">= 0.14.0"
   checksum: 10c0/ae0cb7cbac7328de54cbdfbfc9d47a600a16ee7fff20d8b77afaa8c2999921fff21506db3be2c20e05fd76448f098ae76d1aaae4ccfa73293247a07931c9c3e2
+  languageName: node
+  linkType: hard
+
+"esbuild-plugin-inline-css@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "esbuild-plugin-inline-css@npm:0.0.1"
+  dependencies:
+    fs-extra: "npm:^10.0.0"
+    path: "npm:^0.12.7"
+    sha256: "npm:^0.2.0"
+  checksum: 10c0/7c4c81d3c19d178844435ac45e188256b3a144957af1da8063c0c77124608c2a4ec808c3f15a6e202527e7c7ef90aed0b057128150bbafce11f6ebfa84ace895
   languageName: node
   linkType: hard
 
@@ -3294,7 +3328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^10.0.1":
+"fs-extra@npm:^10.0.0, fs-extra@npm:^10.0.1":
   version: 10.1.0
   resolution: "fs-extra@npm:10.1.0"
   dependencies:
@@ -3736,6 +3770,13 @@ __metadata:
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 10c0/4e531f648b29039fb7426fb94075e6545faa1eb9fe83c29f0b6d9e7263aceb4289d2d4557db0d428188eeb449cc7c5e77b0a0b2c4e248ff2a65933a0dee49ef2
+  languageName: node
+  linkType: hard
+
+"inherits@npm:2.0.3":
+  version: 2.0.3
+  resolution: "inherits@npm:2.0.3"
+  checksum: 10c0/6e56402373149ea076a434072671f9982f5fad030c7662be0332122fe6c0fa490acb3cc1010d90b6eff8d640b1167d77674add52dfd1bb85d545cf29e80e73e7
   languageName: node
   linkType: hard
 
@@ -4900,9 +4941,11 @@ __metadata:
     "@types/jest": "npm:^29.5.14"
     "@types/lodash": "npm:^4.17.15"
     "@types/node": "npm:^20.17.19"
+    "@types/preact-custom-element": "npm:^4"
     "@webcomponents/custom-elements": "npm:^1.6.0"
     esbuild: "npm:^0.25.0"
     esbuild-plugin-copy: "npm:^2.1.1"
+    esbuild-plugin-inline-css: "npm:^0.0.1"
     esbuild-plugin-json-merge: "npm:^0.1.0"
     esbuild-plugin-lodash: "npm:^1.2.0"
     esbuild-sass-plugin: "npm:^3.3.1"
@@ -4914,6 +4957,8 @@ __metadata:
     jest-environment-jsdom: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
     lodash: "npm:^4.17.21"
+    preact: "npm:^10.26.2"
+    preact-custom-element: "npm:^4.3.0"
     sass-embedded: "npm:^1.85.0"
     svgo: "npm:^3.3.2"
     ts-jest: "npm:^29.2.6"
@@ -5213,6 +5258,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"path@npm:^0.12.7":
+  version: 0.12.7
+  resolution: "path@npm:0.12.7"
+  dependencies:
+    process: "npm:^0.11.1"
+    util: "npm:^0.10.3"
+  checksum: 10c0/f795ce5438a988a590c7b6dfd450ec9baa1c391a8be4c2dea48baa6e0f5b199e56cd83b8c9ebf3991b81bea58236d2c32bdafe2c17a2e70c3a2e4c69891ade59
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0, picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
@@ -5301,6 +5356,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"preact-custom-element@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "preact-custom-element@npm:4.3.0"
+  peerDependencies:
+    preact: 10.x
+  checksum: 10c0/5c74d7a3937349b9a108230f019abe972fd9a4ce3dc620b81922db06cde24aab817f5eb88fb4408ad1361642476fdbaa149a93b7a163ac36c565eed4540d6e62
+  languageName: node
+  linkType: hard
+
+"preact@npm:^10.0.0, preact@npm:^10.26.2":
+  version: 10.26.2
+  resolution: "preact@npm:10.26.2"
+  checksum: 10c0/a301eaf1fb0b471f6bdbf0236707499a64e59d887b308286fc3b3180250a7d0b1040ddc293a602ec8f27d4259c3220b6bd37661975e3a6719636a74b08f44236
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -5323,6 +5394,13 @@ __metadata:
   version: 5.0.0
   resolution: "proc-log@npm:5.0.0"
   checksum: 10c0/bbe5edb944b0ad63387a1d5b1911ae93e05ce8d0f60de1035b218cdcceedfe39dbd2c697853355b70f1a090f8f58fe90da487c85216bf9671f9499d1a897e9e3
+  languageName: node
+  linkType: hard
+
+"process@npm:^0.11.1":
+  version: 0.11.10
+  resolution: "process@npm:0.11.10"
+  checksum: 10c0/40c3ce4b7e6d4b8c3355479df77aeed46f81b279818ccdc500124e6a5ab882c0cc81ff7ea16384873a95a74c4570b01b120f287abbdd4c877931460eca6084b3
   languageName: node
   linkType: hard
 
@@ -5874,6 +5952,16 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/97d3441e97ace8be4b1976433d1c32658f6afaff09f143e52c593bae7eef33de19e3e369c88bd985ce1042c6f441c80c6803078d1de2a9988080b66684cbb30c
+  languageName: node
+  linkType: hard
+
+"sha256@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "sha256@npm:0.2.0"
+  dependencies:
+    convert-hex: "npm:~0.1.0"
+    convert-string: "npm:~0.1.0"
+  checksum: 10c0/4ba9822cb88138b8416c1a428779e7aebeae3e317cb428d99cb254e6f841869fb8f868cf2ba965e1a7070ce5bbeccb625947caa983a0df7355cad8f014e35060
   languageName: node
   linkType: hard
 
@@ -6531,6 +6619,15 @@ __metadata:
     querystringify: "npm:^2.1.1"
     requires-port: "npm:^1.0.0"
   checksum: 10c0/bd5aa9389f896974beb851c112f63b466505a04b4807cea2e5a3b7092f6fbb75316f0491ea84e44f66fed55f1b440df5195d7e3a8203f64fcefa19d182f5be87
+  languageName: node
+  linkType: hard
+
+"util@npm:^0.10.3":
+  version: 0.10.4
+  resolution: "util@npm:0.10.4"
+  dependencies:
+    inherits: "npm:2.0.3"
+  checksum: 10c0/d29f6893e406b63b088ce9924da03201df89b31490d4d011f1c07a386ea4b3dbe907464c274023c237da470258e1805d806c7e4009a5974cd6b1d474b675852a
   languageName: node
   linkType: hard
 

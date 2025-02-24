@@ -54,13 +54,17 @@
     "tsup": "^8.3.6",
     "typed-assert": "^1.0.9",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.24.1"
+    "typescript-eslint": "^8.24.1",
+    "typescript-plugin-css-modules": "^5.1.0"
   },
   "resolutions": {
     "esbuild": "^0.25.0"
   },
   "dependencies": {
+    "@craftamap/esbuild-plugin-html": "^0.8.0",
+    "clsx": "^2.1.1",
     "esbuild-plugin-inline-css": "^0.0.1",
+    "eslint-plugin-css-modules": "^2.12.0",
     "preact": "^10.26.2",
     "preact-custom-element": "^4.3.0"
   }

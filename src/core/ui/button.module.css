@@ -1,5 +1,11 @@
-div {
-  background-color: red;
-  color: white;
-  padding: 10px;
+.buttonLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease-in-out;
+}
+
+.buttonLink:hover {
+    transform: scale(1.2);
 }

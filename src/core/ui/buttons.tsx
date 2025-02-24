@@ -1,8 +1,8 @@
+import { clsx } from 'clsx';
 import chromeWebStoreIcon from './chrome-web-store-button-icon.svg';
 import githubIcon from './github-button-icon.svg';
 import kofiIcon from './ko-fi-button-icon.svg';
-import test from './button.module.css';
-console.log(test);
+import { buttonLink } from './button.module.css';
 
 export interface ButtonProps {
   title: string;
@@ -13,13 +13,13 @@ const factory = (icon: string) => {
   const innerHtml = { __html: icon };
 
   return ({ href, title }: ButtonProps) => (
-    <div>
-      <a target="_blank"
-         href={ href }
-         title={ title }
-         dangerouslySetInnerHTML={ innerHtml }
-      />
-    </div>
+    <a target="_blank"
+       href={ href }
+       class={ clsx(buttonLink, 'button-link') }
+       title={ title }
+       dangerouslySetInnerHTML={ innerHtml }
+    >
+    </a>
   );
 };
 

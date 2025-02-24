@@ -11,10 +11,14 @@ type ima = keyof typeof imagesMap;
 interface LogoProps {
   size: ima;
   alt?: string;
+  class?: string;
 }
 
-export const Logo = ({ size, alt }: LogoProps) => {
+export const Logo = ({ size, alt, class: className }: LogoProps) => {
   return (
-    <img src={ imagesMap[size] } alt={ alt ?? 'Modern JSON Formatter' }/>
+    <img src={ imagesMap[size] }
+         alt={ alt ?? 'Modern JSON Formatter' }
+         class={ className }
+    />
   );
 };

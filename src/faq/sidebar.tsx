@@ -1,7 +1,8 @@
+import { BUTTONS } from '@core/constants';
 import { ChromeWebStoreButton, GithubButton, KoFiButton } from '@core/ui/buttons';
 import { Column, Row } from '@core/ui/flex';
 import { Logo } from '@core/ui/logo';
-import { logo } from './sidebar.module.css'
+import { logo } from './sidebar.module.css';
 
 export const Sidebar = ({ class: ddd }: {class: string}) => (
   <div className="sidebar" class={ddd}>
@@ -13,18 +14,9 @@ export const Sidebar = ({ class: ddd }: {class: string}) => (
         </div>
       </Column>
       <Row className="links" justify="center">
-        <GithubButton
-          href="https://github.com/evg4b/modern-json-formatter"
-          title="Github Repo"
-        />
-        <ChromeWebStoreButton
-          href="https://chromewebstore.google.com/detail/modern-json-formatter/dmofgolehdakghahlgibeaodbahpfkpf"
-          title="Chrome Web Store"
-        />
-        <KoFiButton
-          href="https://ko-fi.com/evg4b"
-          title="Support project on KO-FI"
-        />
+        <GithubButton href={ BUTTONS.GITHUB.URL } title={ BUTTONS.GITHUB.TITLE }/>
+        <ChromeWebStoreButton href={ BUTTONS.CHROME_WEB_STORE.URL } title={ BUTTONS.CHROME_WEB_STORE.TITLE }/>
+        <KoFiButton href={ BUTTONS.KO_FI.URL } title={ BUTTONS.KO_FI.TITLE }/>
       </Row>
     </div>
     <div className="menu">

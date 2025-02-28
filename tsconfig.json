@@ -11,6 +11,11 @@
     "skipLibCheck": true,
     "sourceRoot": ".",
     "strictNullChecks": true,
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "jsxImportSource": "preact",
+    "jsx": "react-jsx",
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "paths": {
       "@core/*": ["src/core/*"],
       "@testing/*": ["testing/*"],

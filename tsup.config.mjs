@@ -3,7 +3,7 @@ import jsonMerge from 'esbuild-plugin-json-merge';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
-import htmlPlugin from '@chialab/esbuild-plugin-html';
+import { htmlPlugin } from '@craftamap/esbuild-plugin-html';
 import { resolve } from "node:path";
 import lodashTransformer from 'esbuild-plugin-lodash';
 
@@ -23,9 +23,9 @@ export default defineConfig((base) => ({
   ...base,
   entry: {
     'content-script': 'src/content-script/main.ts',
-    faq: 'src/faq/faq.html',
+    faq: 'src/faq/faq.tsx',
     background: 'src/background/background.ts',
-    options: 'src/options/options.html',
+    options: 'src/options/options.tsx',
   },
   splitting: false,
   sourcemap: !production,
@@ -40,14 +40,29 @@ export default defineConfig((base) => ({
   minifyWhitespace: production,
   minifyIdentifiers: production,
   minifySyntax: production,
-  noExternal: ['@webcomponents/custom-elements', 'lodash'],
+  noExternal: [/.*/],
   metafile: !production,
   loader: {
     '.svg': 'text',
+    '.css': 'local-css',
+    '.html': 'text',
   },
   esbuildPlugins: [
     htmlPlugin({
-      modulesTarget: 'es2020',
+      files: [
+        {
+          entryPoints: ['src/options/options.tsx',],
+          filename: 'options.html',
+          title: 'Modern JSON Formatter Options',
+          scriptLoading: 'module',
+        },
+        {
+          entryPoints: ['src/faq/faq.tsx',],
+          filename: 'faq.html',
+          title: 'JQ Queries Manual',
+          scriptLoading: 'module',
+        },
+      ],
     }),
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, description }],

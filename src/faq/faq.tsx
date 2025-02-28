@@ -1,13 +1,26 @@
-import './buttons/github-button';
-import './buttons/chrome-web-store-button';
-import './buttons/ko-fi-button';
+import 'preact/debug';
+import { render } from 'preact';
+import text from './faq.html';
+import { sidebar } from './faq.module.css';
+import { Sidebar } from './sidebar';
+
+const OptionsPage = () => (
+  <>
+    <Sidebar class={`${sidebar} sidebar`  }/>
+    <main
+      dangerouslySetInnerHTML={ { __html: text } }
+    />
+  </>
+);
+
+render(<OptionsPage/>, document.body);
 
 document.addEventListener('DOMContentLoaded', () => {
   const sections: NodeListOf<HTMLElement> = document.querySelectorAll('main section');
   const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('a.item');
 
   const sectionsMap = new Map<string, HTMLElement>();
-  sections.forEach(section => sectionsMap.set(`#${section.id}`, section));
+  sections.forEach(section => sectionsMap.set(`#${ section.id }`, section));
 
   const linksMap = new Map<string, HTMLAnchorElement>();
   links.forEach(link => linksMap.set(link.hash, link));
@@ -38,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(section => {
       const top = section.offsetTop;
       const bottom = top + section.offsetHeight;
-      const link = linksMap.get(`#${section.id}`);
+      const link = linksMap.get(`#${ section.id }`);
       if (link) {
         if (scrollPosition >= top && scrollPosition <= bottom) {
           link.classList.add('active');

@@ -28,6 +28,8 @@ export default tseslint.config(
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         {

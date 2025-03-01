@@ -3,6 +3,11 @@ declare module '*.module.scss' {
   export default styles;
 }
 
+declare module '*.css' {
+  const styles: string;
+  export default styles;
+}
+
 declare module '*.svg' {
   const styles: string;
   export default styles;

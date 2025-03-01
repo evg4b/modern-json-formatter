@@ -1,11 +1,9 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
 import { createElement } from '@core/dom';
-import { registerStyles } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import styles from './styles.module.scss';
 import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
@@ -17,8 +15,16 @@ export const runExtension = async () => {
     return;
   }
 
-  const shadowRoot = document.body.attachShadow({ mode: 'open' });
-  registerStyles(shadowRoot, styles);
+  const shadowRoot = document.body.attachShadow({ mode: 'closed' });
+  // registerStyles(shadowRoot, styles);
+
+  const styleNode = document.createElement('link');
+  styleNode.href = chrome.runtime.getURL('content-styles.css');
+  styleNode.setAttribute('type', 'text/css');
+  styleNode.setAttribute('rel', 'stylesheet');
+  styleNode.setAttribute('role', 'presentation');
+  shadowRoot.appendChild(styleNode);
+  document.body.style.setProperty('--blue', 'green');
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');

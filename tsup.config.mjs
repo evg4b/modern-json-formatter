@@ -23,6 +23,7 @@ export default defineConfig((base) => ({
   ...base,
   entry: {
     'content-script': 'src/content-script/main.ts',
+    'content-styles': 'src/content-script/styles.css',
     faq: 'src/faq/faq.html',
     background: 'src/background/background.ts',
     options: 'src/options/options.html',

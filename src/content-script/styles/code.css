@@ -1,0 +1,21 @@
+:host {
+  --string-literal: #5dd9ff;
+
+  --link-decoration: none;
+  --link-cursor: auto;
+
+  .string {
+    color: var(--string-literal, #5dd9ff);
+    word-wrap: break-word;
+
+    &.email,
+    &.url {
+      text-decoration: none;
+      cursor: var(--link-cursor);
+
+      &:hover {
+        text-decoration: var(--link-decoration);
+      }
+    }
+  }
+}

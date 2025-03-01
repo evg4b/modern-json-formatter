@@ -1,0 +1,24 @@
+:host {
+  --indentation: 30px;
+  --font-size: 14px;
+
+  display: flex;
+  flex-direction: column;
+  font-family: 'Monaco', Arial, sans-serif;
+  padding: var(--indentation, 30px);
+  background: #282828;
+  color: #eeeeee;
+  font-size: var(--font-size, 14px);
+  width: 100%;
+  box-sizing: border-box;
+
+  pre {
+    margin: 0;
+    padding: 0;
+    text-wrap: pretty;
+    word-wrap: break-word;
+    font-family: 'Monaco', Arial, sans-serif;
+    font-size: var(--font-size, 14px);
+  }
+}
+

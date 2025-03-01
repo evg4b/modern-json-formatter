@@ -1,3 +1,4 @@
+export default `
 :host {
   display: inline-flex;
 
@@ -13,3 +14,4 @@
     }
   }
 }
+`

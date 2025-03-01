@@ -1,3 +1,4 @@
+export default `
 :host {
   display: flex;
   flex-direction: row;
@@ -38,3 +39,4 @@
     }
   }
 }
+`

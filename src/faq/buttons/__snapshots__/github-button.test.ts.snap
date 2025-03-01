@@ -1,3 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`github-button should render button link 1`] = `"<style type="text/css" rel="stylesheet" role="presentation"></style><a target="_blank" href="https://githib.com" title="Github Repo"><svg>github-button-icon</svg></a>"`;
+exports[`github-button should render button link 1`] = `
+"<style type="text/css" rel="stylesheet" role="presentation">
+:host {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
+</style><a target="_blank" href="https://githib.com" title="Github Repo"><svg>github-button-icon</svg></a>"
+`;

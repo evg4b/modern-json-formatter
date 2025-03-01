@@ -1,11 +1,11 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
+import { getURL } from '@core/browser';
 import { createElement } from '@core/dom';
-import { registerStyles } from '@core/ui/helpers';
+import { importStyles, registerStyles } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import styles from './styles.module.scss';
 import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
@@ -17,8 +17,9 @@ export const runExtension = async () => {
     return;
   }
 
-  const shadowRoot = document.body.attachShadow({ mode: 'open' });
-  registerStyles(shadowRoot, styles);
+  const shadowRoot = document.body.attachShadow({ mode: 'closed' });
+  registerStyles(shadowRoot, `:host { background-color: #282828; color: #282828; display: block; }`);
+  importStyles(shadowRoot, getURL('content-styles.css'));
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');
@@ -45,6 +46,8 @@ export const runExtension = async () => {
       'File is too large',
       'File is too large to be processed (More than 3MB). It has been formatted instead.',
     ));
+
+    rootContainer.classList.remove('loading');
 
     return;
   }
@@ -104,6 +107,7 @@ export const runExtension = async () => {
   formatContainer.appendChild(
     prepareResponse(response),
   );
+  rootContainer.classList.remove('loading');
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {

@@ -31,11 +31,9 @@ module.exports = {
   transform: {
     '^.+\\.[tj]sx?$': [
       'ts-jest',
-      {
-        tsconfig: 'tsconfig.spec.json',
-      },
+      { tsconfig: 'tsconfig.spec.json' },
     ],
-    '^.+\\.scss$': 'jest-transform-stub',
+    '^.+\\.styles': 'jest-transform-stub',
     '^.+\\.svg': 'jest-transform-stub',
   },
 };

@@ -1,3 +1,4 @@
+export default `
 :host {
   display: flex;
   flex-direction: column;
@@ -12,3 +13,4 @@
     }
   }
 }
+`

@@ -1,3 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`info-button should render button link 1`] = `"<style type="text/css" rel="stylesheet" role="presentation"></style><a target="_blank" href="https://test.com"><svg>info-button-icon</svg></a>"`;
+exports[`info-button should render button link 1`] = `
+"<style type="text/css" rel="stylesheet" role="presentation">
+:host {
+  display: inline-flex;
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c6c6c;
+    transition: all 150ms ease;
+
+    &:hover {
+      color: #b0b0b0;
+    }
+  }
+}
+</style><a target="_blank" href="https://test.com"><svg>info-button-icon</svg></a>"
+`;

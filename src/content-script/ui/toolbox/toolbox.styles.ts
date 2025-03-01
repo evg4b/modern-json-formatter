@@ -1,3 +1,4 @@
+export default `
 :host {
   display: flex;
   justify-content: space-between;
@@ -50,3 +51,4 @@
     }
   }
 }
+`

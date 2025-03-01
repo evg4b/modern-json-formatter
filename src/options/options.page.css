@@ -1,4 +1,4 @@
-@use "_table";
+@import "_table.css";
 
 :root {
   --sidebar-width: 25%;

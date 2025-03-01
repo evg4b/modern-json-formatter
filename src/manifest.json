@@ -25,6 +25,7 @@
       "resources": [
         "worker-core.wasm",
         "invalid.svg",
+        "content-styles.css",
         "faq.html"
       ],
       "matches": [

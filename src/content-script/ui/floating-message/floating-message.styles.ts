@@ -1,3 +1,4 @@
+export default `
 :host {
   display: flex;
   position: fixed;
@@ -64,3 +65,4 @@
   opacity: 0;
   transform: translateY(50%);
 }
+`

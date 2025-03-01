@@ -1,7 +1,7 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { assetTabType } from '../../helpers';
 import { QueryInputElement } from '../query-input';
-import toolboxStyles from './toolbox.module.scss';
+import toolboxStyles from './toolbox.styles';
 
 @CustomElement('extension-toolbox')
 export class ToolboxElement extends StyledComponentElement {

@@ -1,6 +1,5 @@
 import copy from 'esbuild-plugin-copy';
 import jsonMerge from 'esbuild-plugin-json-merge';
-import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 import htmlPlugin from '@chialab/esbuild-plugin-html';
@@ -23,6 +22,7 @@ export default defineConfig((base) => ({
   ...base,
   entry: {
     'content-script': 'src/content-script/main.ts',
+    'content-styles': 'src/content-script/styles.css',
     faq: 'src/faq/faq.html',
     background: 'src/background/background.ts',
     options: 'src/options/options.html',
@@ -41,6 +41,7 @@ export default defineConfig((base) => ({
   minifyIdentifiers: production,
   minifySyntax: production,
   noExternal: ['@webcomponents/custom-elements', 'lodash'],
+  external: ['chrome-extension://__MSG_@@extension_id__/Monaco.woff'],
   metafile: !production,
   loader: {
     '.svg': 'text',
@@ -53,24 +54,6 @@ export default defineConfig((base) => ({
       entryPoints: ['src/manifest.json', { version, description }],
       outfile: 'manifest.json',
       watch: !production,
-    }),
-    sassPlugin({
-      type: 'css-text',
-      style: 'compressed',
-      syntax: 'scss',
-      sourceMap: !production,
-      sourceMapIncludeSources: !production,
-      watch: !!base.watch,
-      filter: /^.*\.module.scss$/,
-    }),
-    sassPlugin({
-      type: 'css',
-      style: 'compressed',
-      syntax: 'scss',
-      sourceMap: !production,
-      sourceMapIncludeSources: true,
-      watch: !!base.watch,
-      filter: /^.*\.page.scss$/,
     }),
     assets('worker-core/worker-core.wasm', 'worker-core.wasm'),
     assets('assets/*'),

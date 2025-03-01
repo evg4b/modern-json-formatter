@@ -1,2 +1,8 @@
 @import "./styles/host.css";
 @import "./styles/code.css";
+@import "./styles/containers.css";
+
+:host {
+  --indentation: 30px;
+  --font-size: 14px;
+}

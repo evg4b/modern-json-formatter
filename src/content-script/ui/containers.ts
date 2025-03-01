@@ -3,7 +3,7 @@ import { createElement } from '@core/dom';
 export const buildContainers = (root: ShadowRoot) => {
   const rootContainer = createElement({
     element: 'div',
-    class: 'root-container',
+    class: ['root-container', 'formatted'],
   });
 
   rootContainer.appendChild(createElement({ element: 'div', class: 'loader' }));

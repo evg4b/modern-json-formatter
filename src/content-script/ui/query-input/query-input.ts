@@ -6,7 +6,7 @@ import { isNotNil } from '../../helpers';
 import { InfoButtonElement } from '../info-button';
 import { HistoryManager } from './history-manager';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
-import queryInputStyles from './query-input.module.scss';
+import queryInputStyles from './query-input.styles.txt';
 
 export const brackets: Record<string, string> = {
   '[': ']',

@@ -1,5 +1,5 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import infoButtonStyles from './info-buton.module.scss';
+import infoButtonStyles from './info-buton.styles.txt';
 import icon from './info-button-icon.svg';
 
 @CustomElement('info-button')

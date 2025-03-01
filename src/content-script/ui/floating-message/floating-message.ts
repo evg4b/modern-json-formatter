@@ -1,5 +1,5 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import floatingMessageStyles from './floating-message.module.scss';
+import floatingMessageStyles from './floating-message.styles.txt';
 
 @CustomElement('floating-message')
 export class FloatingMessageElement extends StyledComponentElement {

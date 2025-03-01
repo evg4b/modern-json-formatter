@@ -1,14 +1,14 @@
 :host {
-
   display: flex;
   flex-direction: column;
   font-family: 'Monaco', Arial, sans-serif;
-  padding: var(--indentation, 30px);
-  background: #282828;
-  color: #eeeeee;
+  padding: var(--container-padding, 30px);
+  background: var(--background);
+  color: var(--base-text-color);
   font-size: var(--font-size, 14px);
   width: 100%;
   box-sizing: border-box;
+  margin: 0;
 
   pre {
     margin: 0;

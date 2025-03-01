@@ -48,7 +48,7 @@ const load = async () => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   document.querySelector('.clear')?.addEventListener('click', async () => {
-    await clearHistory('domains');
+    await clearHistory();
     await load();
   });
 

@@ -1,5 +1,7 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
+import { getURL } from '@core/browser';
 import { createElement } from '@core/dom';
+import { importStyles, registerStyles } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
@@ -16,15 +18,8 @@ export const runExtension = async () => {
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  // registerStyles(shadowRoot, styles);
-
-  const styleNode = document.createElement('link');
-  styleNode.href = chrome.runtime.getURL('content-styles.css');
-  styleNode.setAttribute('type', 'text/css');
-  styleNode.setAttribute('rel', 'stylesheet');
-  styleNode.setAttribute('role', 'presentation');
-  shadowRoot.appendChild(styleNode);
-  document.body.style.setProperty('--blue', 'green');
+  registerStyles(shadowRoot, `:host { background-color: #282828; color: #282828; display: block; }`);
+  importStyles(shadowRoot, getURL('content-styles.css'));
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');
@@ -51,6 +46,8 @@ export const runExtension = async () => {
       'File is too large',
       'File is too large to be processed (More than 3MB). It has been formatted instead.',
     ));
+
+    rootContainer.classList.remove('loading');
 
     return;
   }
@@ -110,6 +107,7 @@ export const runExtension = async () => {
   formatContainer.appendChild(
     prepareResponse(response),
   );
+  rootContainer.classList.remove('loading');
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {

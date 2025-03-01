@@ -1,21 +1,4 @@
 :host {
-  --meta-info-color: #717171;
-  --guideline-сolor: #3b3b3b;
-  --guideline-style: dotted;
-
-  --string-literal-color: #5dd9ff;
-  --boolean-literal-color: #9f84ff;
-  --number-literal-color: #9f84ff;
-  --null-literal-color: #717171;
-
-  --object-key-color: #7dadf9;
-  --bracket-color: #eeeeee;
-  --colon-color: #eeeeee;
-
-  --toggle-color: #575757;
-  --toggle-hover-color: #a6a6a6;
-  --toggle-size: 17px;
-
   /* ROOT */
 
   .root {
@@ -26,6 +9,12 @@
     &.active-links {
       --internal-link-decoration: underline;
       --internal-link-cursor: pointer;
+    }
+
+    .inner {
+      display: block;
+      padding-left: var(--indentation, 30px);
+      border-left: 1px var(--guideline-style, dotted) var(--guideline-сolor, #3b3b3b);
     }
   }
 
@@ -83,15 +72,9 @@
       word-wrap: break-word;
     }
 
-    .inner {
+    .property {
       display: block;
-      padding-left: 15px;
-      border-left: 1px var(--guideline-style, dotted) var(--guideline-сolor, #3b3b3b);
-
-      .property {
-        display: block;
-        margin: 2px 0 2px 0;
-      }
+      margin: 2px 0 2px 0;
     }
   }
 
@@ -129,7 +112,6 @@
   }
 
   /* BRACKET AND META INFO */
-
   .bracket {
     color: var(--bracket-color, #eeeeee);
 
@@ -141,6 +123,10 @@
   .colon {
     color: var(--colon-color, #eeeeee);
     padding: 0 7px 0 0;
+  }
+
+  .comma {
+    color: var(--comma-color, #eeeeee);
   }
 
   .ellipsis {

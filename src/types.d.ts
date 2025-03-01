@@ -3,7 +3,7 @@ declare module '*.module.scss' {
   export default styles;
 }
 
-declare module '*.css' {
+declare module '*.styles.txt' {
   const styles: string;
   export default styles;
 }

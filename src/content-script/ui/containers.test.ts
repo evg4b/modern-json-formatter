@@ -16,7 +16,8 @@ describe('buildContainers', () => {
     });
 
     it('should have a class name of root-container', () => {
-      expect(result.rootContainer.className).toBe('root-container');
+      expect(result.rootContainer.className)
+        .toEqual('root-container formatted loading');
     });
 
     it('should be deattached', () => {

@@ -46,6 +46,7 @@ export default defineConfig((base) => ({
   metafile: !production,
   loader: {
     '.svg': 'text',
+    '.html': 'text',
     '.css': 'local-css',
   },
   esbuildPlugins: [

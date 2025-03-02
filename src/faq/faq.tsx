@@ -1,9 +1,13 @@
-import './faq.module.css';
+import 'preact/debug';
+import text from './faq.html';
+import { sidebar } from './faq.module.css';
+import { Sidebar } from './sidebar';
 
-export const Faq = () => {
-  return (
-    <div>
-      <h1>FAQ</h1>
-    </div>
-  );
-};
+export const Faq = () => (
+  <>
+    <Sidebar class={ `${ sidebar } sidebar` }/>
+    <main
+      dangerouslySetInnerHTML={ { __html: text } }
+    />
+  </>
+);

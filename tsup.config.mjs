@@ -2,9 +2,10 @@ import copy from 'esbuild-plugin-copy';
 import jsonMerge from 'esbuild-plugin-json-merge';
 import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
-import htmlPlugin from '@chialab/esbuild-plugin-html';
+import { htmlPlugin } from '@craftamap/esbuild-plugin-html';
 import { resolve } from "node:path";
 import lodashTransformer from 'esbuild-plugin-lodash';
+import { esbuildPluginPreact } from '@davezuko/esbuild-plugin-preact';
 
 const production = process.env.NODE_ENV === 'production';
 
@@ -23,9 +24,9 @@ export default defineConfig((base) => ({
   entry: {
     'content-script': 'src/content-script/main.ts',
     'content-styles': 'src/content-script/styles.css',
-    faq: 'src/faq/faq.html',
+    faq: 'src/faq/index.tsx',
     background: 'src/background/background.ts',
-    options: 'src/options/options.html',
+    options: 'src/options/index.tsx',
   },
   splitting: false,
   sourcemap: !production,
@@ -45,10 +46,30 @@ export default defineConfig((base) => ({
   metafile: !production,
   loader: {
     '.svg': 'text',
+    '.css': 'local-css',
   },
   esbuildPlugins: [
     htmlPlugin({
-      modulesTarget: 'es2020',
+      files: [
+        {
+          entryPoints: ['src/options/index.tsx',],
+          filename: 'options.html',
+          title: 'Modern JSON Formatter Options',
+          scriptLoading: 'module',
+        },
+        {
+          entryPoints: ['src/faq/index.tsx',],
+          filename: 'faq.html',
+          title: 'JQ Queries Manual',
+          scriptLoading: 'module',
+        },
+      ],
+    }),
+    esbuildPluginPreact({
+      /** replace "react" imports with "preact"? (default: true) */
+      replaceReact: true,
+      /** preserve "preact/debug"? (default: true) */
+      keepDevtools: true,
     }),
     jsonMerge({
       entryPoints: ['src/manifest.json', { version, description }],

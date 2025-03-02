@@ -4,7 +4,6 @@ import eslint from '@eslint/js';
 export default tseslint.config(
   {
     ignores: [
-      '**/node_modules/',
       '.git/',
       '.yarn/',
       'dist/',
@@ -15,6 +14,8 @@ export default tseslint.config(
       'eslint.config.mjs',
       'coverage/',
       'tsup.config.mjs',
+      '.pnp.cjs',
+      '.pnp.loader.mjs',
     ],
   },
   eslint.configs.recommended,

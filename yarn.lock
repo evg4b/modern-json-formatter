@@ -4744,6 +4744,7 @@ __metadata:
     htmlnano: "npm:^2.1.1"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
+    jest-mock: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
     lodash: "npm:^4.17.21"
     sass-embedded: "npm:^1.85.0"

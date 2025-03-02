@@ -2915,6 +2915,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-plugin-raw-css@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "esbuild-plugin-raw-css@npm:0.1.0"
+  peerDependencies:
+    esbuild: ^0.14.36 || ^0.15.0 || ^0.16.0
+  checksum: 10c0/d662fafd9fe5bda1593b31e2974bc0787bf9996e88db56692b3e5ce1142609561158b605658148946154ec2aeb4f0e6cad9722c0a4426bad679d15f242bdddd2
+  languageName: node
+  linkType: hard
+
 "esbuild@npm:^0.25.0":
   version: 0.25.0
   resolution: "esbuild@npm:0.25.0"
@@ -5149,6 +5158,7 @@ __metadata:
     esbuild-plugin-copy: "npm:^2.1.1"
     esbuild-plugin-json-merge: "npm:^0.1.0"
     esbuild-plugin-lodash: "npm:^1.2.0"
+    esbuild-plugin-raw-css: "npm:^0.1.0"
     eslint: "npm:^9.21.0"
     fake-indexeddb: "npm:^6.0.0"
     globals: "npm:^16.0.0"

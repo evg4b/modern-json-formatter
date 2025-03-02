@@ -61,5 +61,8 @@
   },
   "resolutions": {
     "esbuild": "^0.25.0"
+  },
+  "dependencies": {
+    "esbuild-plugin-raw-css": "^0.1.0"
   }
 }

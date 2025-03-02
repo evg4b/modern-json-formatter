@@ -6,6 +6,7 @@ import { htmlPlugin } from '@craftamap/esbuild-plugin-html';
 import { resolve } from "node:path";
 import lodashTransformer from 'esbuild-plugin-lodash';
 import { esbuildPluginPreact } from '@davezuko/esbuild-plugin-preact';
+import rawCssPlugin from 'esbuild-plugin-raw-css';
 
 const production = process.env.NODE_ENV === 'production';
 
@@ -50,6 +51,7 @@ export default defineConfig((base) => ({
     '.css': 'local-css',
   },
   esbuildPlugins: [
+    rawCssPlugin({ minify: production, }),
     htmlPlugin({
       files: [
         {

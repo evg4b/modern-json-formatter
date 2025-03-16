@@ -33,20 +33,20 @@
     <br>
     <br>
     <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img src="https://img.shields.io/chrome-web-store/v/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff" alt="Chrome Web Store Version">
+        <img src="https://img.shields.io/chrome-web-store/v/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff" alt="Chrome Web Store Version">
     </a>
     <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img alt="Chrome Web Store Rating" src="https://img.shields.io/chrome-web-store/rating/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff">
+        <img alt="Chrome Web Store Rating" src="https://img.shields.io/chrome-web-store/rating/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff">
     </a>
     <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img alt="Chrome Web Store Users" src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logo=googlechrome&logoColor=%23fff">
+        <img alt="Chrome Web Store Users" src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff">
     </a>
     <br>
     <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
         <img alt="Microsoft Store" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=version&prefix=v&label=microsoft%20store">    
     </a>
     <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
-        <img alt="Microsoft Store Rating" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=averageRating&label=rating">
+        <img alt="Microsoft Store Rating" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=averageRating&label=rating&suffix=/5">
     </a>
     <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
         <img alt="Microsoft Store Users" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=activeInstallCount&label=users">

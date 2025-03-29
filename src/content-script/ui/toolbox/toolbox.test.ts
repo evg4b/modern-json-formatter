@@ -4,14 +4,14 @@ import '@testing/query-input.mock';
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
 import { type QueryInputElement } from '../query-input';
-import { ToolboxElement } from './toolbox';
+import { ToolboxElementOld } from './toolbox-old';
 
 describe('Toolbox', () => {
-  let toolbox: ToolboxElement;
+  let toolbox: ToolboxElementOld;
   let shadowRoot: ShadowRoot;
 
   beforeEach(() => {
-    toolbox = new ToolboxElement();
+    toolbox = new ToolboxElementOld();
     shadowRoot = getShadowRoot(toolbox);
   });
 

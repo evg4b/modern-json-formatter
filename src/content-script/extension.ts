@@ -6,7 +6,7 @@ import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
+import { buildContainers, FloatingMessageElement, ToolboxElementOld } from './ui';
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
@@ -63,7 +63,7 @@ export const runExtension = async () => {
     }
   };
 
-  const toolbox = new ToolboxElement();
+  const toolbox = new ToolboxElementOld();
   shadowRoot.appendChild(toolbox);
 
   const jqQuery = async (query: string) => {

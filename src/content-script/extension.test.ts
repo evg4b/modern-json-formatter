@@ -8,7 +8,7 @@ import { tNull, tObject, tProperty, tString } from '@testing';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
+import { buildContainers, FloatingMessageElement, ToolboxElementOld } from './ui';
 
 jest.mock('./json-detector');
 jest.mock('./ui');
@@ -35,7 +35,7 @@ describe('runExtension', () => {
     wrapMock(buildContainers)
       .mockReturnValue({ rootContainer, formatContainer, rawContainer, queryContainer });
 
-    wrapMock(ToolboxElement).mockReturnValue(
+    wrapMock(ToolboxElementOld).mockReturnValue(
       Object.assign(document.createElement('div'), {
         onQueryChanged: jest.fn(),
         onTabChanged: jest.fn(),

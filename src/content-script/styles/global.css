@@ -1,4 +1,4 @@
-:host {
+:global :host {
   --container-padding: 30px;
 
   --background: #282828;

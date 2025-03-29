@@ -1,8 +1,8 @@
-.loader {
+:global .loader {
   display: none;
 }
 
-.loading .loader {
+:global .loading .loader {
   display: block;
   width: 30px;
   height: 30px;

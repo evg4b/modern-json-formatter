@@ -7,6 +7,10 @@
     "module": "esnext",
     "types": ["node", "chrome", "golang-wasm-exec"],
     "baseUrl": ".",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
     "strict": true,
     "skipLibCheck": true,
     "sourceRoot": ".",
@@ -16,7 +20,8 @@
       "@testing/*": ["testing/*"],
       "@testing": ["testing"],
       "@worker-core": ["worker-core"]
-    }
+    },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "references": [
     {

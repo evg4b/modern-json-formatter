@@ -305,12 +305,7 @@
 					"syscall/js.finalizeRef": (v_ref) => {
             // Note: TinyGo does not support finalizers so this is only called
             // for one specific case, by js.go:jsString. and can/might leak memory.
-            // This is a workaround for the lack of finalizers in TinyGo.
-            // https://github.com/tinygo-org/tinygo/issues/1140#issuecomment-2529705551
-
-            // magicValue taken from `unboxValue` function.
-            const magicValue = 0xffffffffn;
-            const id = v_ref & magicValue;
+            const id = v_ref & 0xffffffffn;
             if (this._goRefCounts?.[id] !== undefined) {
               this._goRefCounts[id]--;
               if (this._goRefCounts[id] === 0) {
@@ -320,12 +315,13 @@
                 this._idPool.push(id);
               }
             } else {
-              console.log("syscall/js.finalizeRef: unknown id", id);
+              console.error("syscall/js.finalizeRef: unknown id", id);
             }
 					},
 
 					// func stringVal(value string) ref
 					"syscall/js.stringVal": (value_ptr, value_len) => {
+            value_ptr >>>= 0;
 						const s = loadString(value_ptr, value_len);
 						return boxValue(s);
 					},

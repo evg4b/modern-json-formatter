@@ -4,7 +4,6 @@ exec-script:
 	@echo "Copying exec scripts..."
 	@rm -f ./wasm_exec.js
 	@cp "$(shell tinygo env TINYGOROOT)/targets/wasm_exec.js" .
-	git apply --whitespace=fix ./wasm_exec.js.patch
 
 WASM_FILE=worker-core.wasm
 WASM_FILE_BAK=${WASM_FILE}.bak

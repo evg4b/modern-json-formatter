@@ -1,5 +1,4 @@
 import { createElement, StyledComponentElement } from '@core/dom';
-import styles from './button.styles';
 
 export abstract class BaseButtonElement extends StyledComponentElement {
   private readonly link = createElement({
@@ -10,7 +9,7 @@ export abstract class BaseButtonElement extends StyledComponentElement {
   });
 
   protected constructor(icon: string) {
-    super(styles);
+    super('');
     this.link.innerHTML = icon;
     this.shadow.appendChild(this.link);
   }

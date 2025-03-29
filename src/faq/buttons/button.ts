@@ -1,5 +1,4 @@
 import { createElement, StyledComponentElement } from '@core/dom';
-// import styles from './button.module.scss';
 
 export abstract class BaseButtonElement extends StyledComponentElement {
   private readonly link = createElement({

@@ -8,8 +8,8 @@ export interface TableColumn {
 }
 
 interface TableProps<T> {
-  data: T[];
-  columns: TableColumn[],
+  readonly data: T[];
+  readonly columns: TableColumn[],
 }
 
 export function Table<T>({ data, columns }: TableProps<T>) {

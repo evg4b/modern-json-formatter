@@ -1,10 +1,7 @@
 import { clearHistory, DomainCountResponse, getDomains } from '@core/background';
-import { BUTTONS } from '@core/constants';
 import { useAsyncEffect } from '@core/hooks';
-import { Button, Table, TableColumn } from '@core/ui';
+import { Button, Column, Logo, Row, Table, TableColumn } from '@core/ui';
 import { ChromeWebStoreButton, GithubButton, KoFiButton } from '@core/ui/buttons';
-import { Column, Row } from '@core/ui/flex';
-import { Logo } from '@core/ui/logo';
 import { useCallback, useState } from 'preact/hooks';
 import { container, header, logo, separator, title } from './options.module.css';
 
@@ -16,13 +13,16 @@ const columns: TableColumn[] = [
 export const Options = () => {
   const [state, setState] = useState<DomainCountResponse>([]);
 
-  useAsyncEffect(async () => {
-    setState(await getDomains());
-  });
+  const update = useCallback(
+    async () => setState(await getDomains()),
+    [setState, getDomains],
+  );
 
-  const clear = useCallback(() => {
+  useAsyncEffect(async () => await update());
+
+  const clear = useCallback(async () => {
     void clearHistory();
-    setState([]);
+    await update();
   }, []);
 
   return (
@@ -32,18 +32,9 @@ export const Options = () => {
         <h2>Modern JSON Formatter Options</h2>
       </Row>
       <Row>
-        <GithubButton
-          href={ BUTTONS.GITHUB.URL }
-          title={ BUTTONS.GITHUB.TITLE }
-        />
-        <ChromeWebStoreButton
-          href={ BUTTONS.CHROME_WEB_STORE.URL }
-          title={ BUTTONS.CHROME_WEB_STORE.TITLE }
-        />
-        <KoFiButton
-          href={ BUTTONS.KO_FI.URL }
-          title={ BUTTONS.KO_FI.TITLE }
-        />
+        <GithubButton/>
+        <ChromeWebStoreButton/>
+        <KoFiButton/>
       </Row>
       <hr class={ separator }/>
       <Row align="center" justify="space-between" class={ header }>

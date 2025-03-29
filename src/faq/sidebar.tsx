@@ -1,4 +1,3 @@
-import { BUTTONS } from '@core/constants';
 import { ChromeWebStoreButton, GithubButton, KoFiButton } from '@core/ui/buttons';
 import { Column, Row } from '@core/ui/flex';
 import { Logo } from '@core/ui/logo';
@@ -14,9 +13,9 @@ export const Sidebar = ({ class: ddd }: {class: string}) => (
         </div>
       </Column>
       <Row className="links" justify="center">
-        <GithubButton href={ BUTTONS.GITHUB.URL } title={ BUTTONS.GITHUB.TITLE }/>
-        <ChromeWebStoreButton href={ BUTTONS.CHROME_WEB_STORE.URL } title={ BUTTONS.CHROME_WEB_STORE.TITLE }/>
-        <KoFiButton href={ BUTTONS.KO_FI.URL } title={ BUTTONS.KO_FI.TITLE }/>
+        <GithubButton />
+        <ChromeWebStoreButton />
+        <KoFiButton />
       </Row>
     </div>
     <div className="menu">

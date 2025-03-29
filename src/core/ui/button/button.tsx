@@ -3,13 +3,11 @@ import { ComponentChildren, ComponentProps } from 'preact';
 import { button } from './button.module.css';
 
 interface ButtonProps extends ComponentProps<'button'> {
-  children: ComponentChildren,
+  readonly children: ComponentChildren,
 }
 
-export function Button({ children, class: className, ...props }: ButtonProps) {
-  return (
-    <button class={ clsx(button, className) } { ...props }>
-      { children }
-    </button>
-  );
-}
+export const Button = ({ children, class: className, ...props }: ButtonProps) => (
+  <button class={ clsx(button, className) } { ...props }>
+    { children }
+  </button>
+);

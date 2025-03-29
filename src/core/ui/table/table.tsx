@@ -1,6 +1,8 @@
+import { When } from '@core/ui';
 import { clsx } from 'clsx';
-import { get } from 'lodash';
-import { empty, table, td, th } from './table.module.css';
+import { Header } from './table-header';
+import { Row } from './table-row';
+import { empty, table, td } from './table.module.css';
 
 export interface TableColumn {
   name: string;
@@ -17,27 +19,22 @@ export function Table<T>({ data, columns }: TableProps<T>) {
     <table className={ table }>
       <thead>
       <tr>
-        { columns.map(col => (
-          <th className={ th }>{ col.name }</th>
-        )) }
+        { columns.map(col => <Header column={ col }/>) }
       </tr>
       </thead>
       <tbody>
-      { data.length ? (
-        data.map(item => (
-          <tr>
-            { columns.map(col => (
-              <td className={ td }>{ get(item, col.path) }</td>
-            )) }
-          </tr>
-        ))
-      ) : (
+      <When condition={ data.length > 0 }>
+        { data.map(item => (
+          <Row item={ item } columns={ columns }/>
+        )) }
+      </When>
+      <When condition={ data.length === 0 }>
         <tr>
           <td className={ clsx(empty, td) } colSpan={ columns.length }>
             No rows
           </td>
         </tr>
-      ) }
+      </When>
       </tbody>
     </table>
   );

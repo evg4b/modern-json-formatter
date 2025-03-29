@@ -8,29 +8,34 @@ import kofiIcon from './ko-fi-button-icon.svg';
 interface ButtonProps {
   title: string;
   href: string;
+  icon: string;
 }
 
-const factory = (icon: string, { href, title }: ButtonProps) => () => (
-  <a target="_blank"
-     href={ href }
-     className={ clsx(buttonLink, 'button-link') }
-     title={ title }
-     dangerouslySetInnerHTML={ { __html: icon } }
-  >
-  </a>
-);
+const factory = ({ icon, href, title }: ButtonProps) =>
+  () => (
+    <a target="_blank"
+       href={ href }
+       className={ clsx(buttonLink, 'button-link') }
+       title={ title }
+       dangerouslySetInnerHTML={ { __html: icon } }
+    >
+    </a>
+  );
 
-export const ChromeWebStoreButton = factory(chromeWebStoreIcon, {
+export const ChromeWebStoreButton = factory({
+  icon: chromeWebStoreIcon,
   title: BUTTONS.CHROME_WEB_STORE.TITLE,
   href: BUTTONS.CHROME_WEB_STORE.URL,
 });
 
-export const GithubButton = factory(githubIcon, {
+export const GithubButton = factory({
+  icon: githubIcon,
   title: BUTTONS.GITHUB.TITLE,
   href: BUTTONS.GITHUB.URL,
 });
 
-export const KoFiButton = factory(kofiIcon, {
+export const KoFiButton = factory({
+  icon: kofiIcon,
   title: BUTTONS.KO_FI.TITLE,
   href: BUTTONS.KO_FI.URL,
 });

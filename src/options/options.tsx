@@ -18,11 +18,11 @@ export const Options = () => {
     [setState, getDomains],
   );
 
-  useAsyncEffect(async () => await update());
+  useAsyncEffect(() => update());
 
-  const clear = useCallback(async () => {
+  const clear = useCallback(() => {
     void clearHistory();
-    await update();
+    void update();
   }, []);
 
   return (

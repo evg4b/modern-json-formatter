@@ -61,6 +61,13 @@ export const Faq = () => {
     window.addEventListener('scroll', handleScroll);
 
     handleScroll();
+
+    return () => {
+      links.forEach(link => {
+        link.removeEventListener('click', handleClick);
+      });
+      window.removeEventListener('scroll', handleScroll);
+    };
   })
 
 

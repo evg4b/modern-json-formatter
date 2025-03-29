@@ -6,7 +6,4 @@ const defineSvgMock = (path: string) => {
   jest.mock(path, () => `<svg>${name}</svg>`);
 };
 
-defineSvgMock('../src/faq/buttons/chrome-web-store-button-icon.svg');
-defineSvgMock('../src/faq/buttons/ko-fi-button-icon.svg');
-defineSvgMock('../src/faq/buttons/github-button-icon.svg');
 defineSvgMock('../src/content-script/ui/info-button/info-button-icon.svg');

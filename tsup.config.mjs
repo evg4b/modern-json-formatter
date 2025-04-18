@@ -27,6 +27,7 @@ export default defineConfig((base) => ({
     faq: 'src/faq/index.tsx',
     background: 'src/background/background.ts',
     options: 'src/options/index.tsx',
+    'preview-page': 'src/options/color-scheme/preview-iframe-page/page.ts',
   },
   splitting: false,
   sourcemap: !production,
@@ -65,6 +66,12 @@ export default defineConfig((base) => ({
           title: 'JQ Queries Manual',
           scriptLoading: 'module',
         },
+        {
+          entryPoints: ['src/options/color-scheme/preview-iframe-page/page.ts'],
+          filename: 'color-scheme-preview.html',
+          title: 'Color Scheme Preview',
+          scriptLoading: 'module',
+        }
       ],
     }),
     jsonMerge({

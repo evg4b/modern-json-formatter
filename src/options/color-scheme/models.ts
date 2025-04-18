@@ -23,3 +23,8 @@ export interface ColorScheme {
   '--toggle-hover-color': Color,
   '--toggle-size': Size
 }
+
+export interface Preset {
+  light?: ColorScheme,
+  dark?: ColorScheme,
+}

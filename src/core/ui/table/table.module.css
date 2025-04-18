@@ -1,11 +1,8 @@
 :global :root {
-  --v-margin: 1em;
-  --h-margin: 0;
   --table-border: 1px solid #636363;
 }
 
 .table {
-  margin: var(--v-margin) var(--h-margin);
   width: 100%;
   border: var(--table-border);
   border-collapse: collapse;

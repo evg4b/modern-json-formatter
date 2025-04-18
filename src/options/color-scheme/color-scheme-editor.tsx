@@ -1,30 +1,21 @@
-import { Button, Row, Table, TableColumn } from '@core/ui';
-import { useMemo, useState } from 'react';
+import { Button, Row } from '@core/ui';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { SectionHeader } from '../shared';
 import { presets } from './presets';
-
-const columns: TableColumn[] = [
-  { name: 'Variable', path: 'key' },
-  { name: 'Value', path: 'value' },
-];
+import { Preview } from './preview';
 
 const options = Object.entries(presets)
-  .map(([key, value]) => {
-    return {
-      key,
-      value,
-    };
-  });
+  .map(([key, value]) => ({ key, value }));
 
 export const ColorSchemeEditor = () => {
   const [selectedOption, setSelectedOption] = useState(options[0].key);
 
   const preset = useMemo(
-    () => Object.entries(presets[selectedOption]).map(([key, value]) => ({ key, value })),
+    () => presets[selectedOption],
     [selectedOption],
   );
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
   };
 
@@ -45,7 +36,7 @@ export const ColorSchemeEditor = () => {
           )) }
         </select>
       </Row>
-      <Table data={ preset } columns={ columns }/>;
+      <Preview preset={ preset }/>
     </>
   );
 };

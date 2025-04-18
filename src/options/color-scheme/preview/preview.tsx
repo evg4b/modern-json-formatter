@@ -1,5 +1,5 @@
 import { getURL } from '@core/browser';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useCallback, useEffect, useRef } from 'react';
 import { ColorScheme } from '../models';
 import { previewContainer } from './preview.module.css';
 
@@ -12,18 +12,18 @@ export interface PreviewProps {
 export const Preview: FC<PreviewProps> = ({ preset }) => {
   const ref = useRef<HTMLIFrameElement>(null);
 
-  useEffect(() => {
-    if (!ref.current?.contentWindow) {
-      return;
-    }
+  const updatePreset = useCallback(
+    (preset: ColorScheme) => ref.current?.contentWindow?.postMessage(preset),
+    [],
+  );
 
-    ref.current.contentWindow.postMessage(preset);
-  }, [preset, ref.current?.contentWindow]);
+  useEffect(() => updatePreset(preset), [preset, updatePreset]);
 
   return (
     <iframe ref={ ref }
             src={ previewPageUrl }
             className={ previewContainer }
+            onLoad={ () => updatePreset(preset) }
     />
   );
 };

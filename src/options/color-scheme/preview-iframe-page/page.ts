@@ -7,14 +7,12 @@ import { ColorScheme } from '../models';
 import { previewModel } from './preview-model';
 
 const applyRootCssVariablesTo = (element: HTMLElement | ShadowRoot, preset: ColorScheme) => {
-  const previewStyle = document.querySelector('#preview-style');
-  previewStyle?.remove();
-
-  const css = compilePreset({ light: preset });
-
-  const style = createElement({ element: 'style', id: 'preview-style', content: css });
-
-  element.appendChild(style);
+  element.querySelector('#preview-style')?.remove();
+  element.appendChild(createElement({
+    element: 'style',
+    id: 'preview-style',
+    content: compilePreset({ light: preset }),
+  }));
 };
 
 const shadowRoot = document.body.attachShadow({ mode: 'closed' });

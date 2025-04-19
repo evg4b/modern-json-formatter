@@ -7,9 +7,27 @@ export default `
   input {
     min-width: 200px;
     width: 30vw;
-    background: #3b3b3b;
-    border: 1px solid #858585;
-    border-radius: 2px;
+    background: var(--input-background);
+    color: var(--input-color);
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--input-border-radius);
+    padding: 0 5px;
+    outline: none;
+    transition-property: border-color,background, color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    
+    &:hover {
+        background: var(--input-hover-background);
+        color: var(--input-hover-color);
+        border-color: var(--input-hover-border-color);
+    }
+    
+    &:focus, &:focus-visible {
+        background: var(--input-focus-background);
+        color: var(--input-focus-color);
+        border-color: var(--input-focus-border-color);
+    }
   }
 
   .input-wrapper {
@@ -25,13 +43,14 @@ export default `
     .error-message {
       position: absolute;
       top: calc(100% + 5px);
-      color: #e46962;
+      color: var(--error-color);
+      background: var(--error-background);
       font-size: 10px;
       user-select: none;
-
-      background: var(--background-color);
-      padding: 2px;
-      box-shadow: 0 0 2px 1px var(--background-color);
+      padding: 2px 5px;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%;
 
       &.hidden {
         display: none;

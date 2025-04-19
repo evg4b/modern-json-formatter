@@ -11,6 +11,16 @@ import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
 
+const staticStyles = `:host {
+  background-color: var(--background, #282828);
+  color: var(--base-text-color, #282828);
+  display: block;
+  @media (prefers-color-scheme: light) {
+    background-color: var(--background, #f3f3f3);
+    color: var(--base-text-color, #1f1f1f);
+  }
+}`;
+
 export const runExtension = async () => {
   const preNode = await findNodeWithCode();
   if (!preNode) {
@@ -18,7 +28,7 @@ export const runExtension = async () => {
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  registerStyles(shadowRoot, `:host { background-color: #282828; color: #282828; display: block; }`);
+  registerStyles(shadowRoot, staticStyles);
   importStyles(shadowRoot, getURL('content-styles.css'));
 
   const content = preNode.textContent;
@@ -63,44 +73,46 @@ export const runExtension = async () => {
     }
   };
 
-  const toolbox = new ToolboxElement();
-  shadowRoot.appendChild(toolbox);
+  setTimeout(() => {
+    const toolbox = new ToolboxElement();
+    shadowRoot.appendChild(toolbox);
 
-  const jqQuery = async (query: string) => {
-    try {
-      const info = await jq(preNode.innerText, query);
-      queryContainer.innerHTML = '';
-      queryContainer.appendChild(prepareResponse(info));
-      await pushHistory(window.location.hostname, query);
-    } catch (error: unknown) {
-      if (isErrorNode(error) && error.scope === 'jq') {
-        toolbox.setErrorMessage(error.error);
-        return;
+    const jqQuery = async (query: string) => {
+      try {
+        const info = await jq(preNode.innerText, query);
+        queryContainer.innerHTML = '';
+        queryContainer.appendChild(prepareResponse(info));
+        await pushHistory(window.location.hostname, query);
+      } catch (error: unknown) {
+        if (isErrorNode(error) && error.scope === 'jq') {
+          toolbox.setErrorMessage(error.error);
+          return;
+        }
+
+        console.error(error);
       }
+    };
 
-      console.error(error);
-    }
-  };
+    toolbox.onQueryChanged(async query => {
+      await wrapper(jqQuery(query));
+    });
 
-  toolbox.onQueryChanged(async query => {
-    await wrapper(jqQuery(query));
-  });
-
-  toolbox.onTabChanged(tab => {
-    switch (tab) {
-      case 'query':
-        rootContainer.classList.remove('raw', 'formatted');
-        rootContainer.classList.add('query');
-        return;
-      case 'raw':
-        rootContainer.classList.remove('formatted', 'query');
-        rootContainer.classList.add('raw');
-        return;
-      case 'formatted':
-        rootContainer.classList.remove('raw', 'query');
-        rootContainer.classList.add('formatted');
-        return;
-    }
+    toolbox.onTabChanged(tab => {
+      switch (tab) {
+        case 'query':
+          rootContainer.classList.remove('raw', 'formatted');
+          rootContainer.classList.add('query');
+          return;
+        case 'raw':
+          rootContainer.classList.remove('formatted', 'query');
+          rootContainer.classList.add('raw');
+          return;
+        case 'formatted':
+          rootContainer.classList.remove('raw', 'query');
+          rootContainer.classList.add('formatted');
+          return;
+      }
+    });
   });
 
   const response = await wrapper(tokenize(preNode.innerText));

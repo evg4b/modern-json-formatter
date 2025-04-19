@@ -73,44 +73,46 @@ export const runExtension = async () => {
     }
   };
 
-  const toolbox = new ToolboxElement();
-  shadowRoot.appendChild(toolbox);
+  setTimeout(() => {
+    const toolbox = new ToolboxElement();
+    shadowRoot.appendChild(toolbox);
 
-  const jqQuery = async (query: string) => {
-    try {
-      const info = await jq(preNode.innerText, query);
-      queryContainer.innerHTML = '';
-      queryContainer.appendChild(prepareResponse(info));
-      await pushHistory(window.location.hostname, query);
-    } catch (error: unknown) {
-      if (isErrorNode(error) && error.scope === 'jq') {
-        toolbox.setErrorMessage(error.error);
-        return;
+    const jqQuery = async (query: string) => {
+      try {
+        const info = await jq(preNode.innerText, query);
+        queryContainer.innerHTML = '';
+        queryContainer.appendChild(prepareResponse(info));
+        await pushHistory(window.location.hostname, query);
+      } catch (error: unknown) {
+        if (isErrorNode(error) && error.scope === 'jq') {
+          toolbox.setErrorMessage(error.error);
+          return;
+        }
+
+        console.error(error);
       }
+    };
 
-      console.error(error);
-    }
-  };
+    toolbox.onQueryChanged(async query => {
+      await wrapper(jqQuery(query));
+    });
 
-  toolbox.onQueryChanged(async query => {
-    await wrapper(jqQuery(query));
-  });
-
-  toolbox.onTabChanged(tab => {
-    switch (tab) {
-      case 'query':
-        rootContainer.classList.remove('raw', 'formatted');
-        rootContainer.classList.add('query');
-        return;
-      case 'raw':
-        rootContainer.classList.remove('formatted', 'query');
-        rootContainer.classList.add('raw');
-        return;
-      case 'formatted':
-        rootContainer.classList.remove('raw', 'query');
-        rootContainer.classList.add('formatted');
-        return;
-    }
+    toolbox.onTabChanged(tab => {
+      switch (tab) {
+        case 'query':
+          rootContainer.classList.remove('raw', 'formatted');
+          rootContainer.classList.add('query');
+          return;
+        case 'raw':
+          rootContainer.classList.remove('formatted', 'query');
+          rootContainer.classList.add('raw');
+          return;
+        case 'formatted':
+          rootContainer.classList.remove('raw', 'query');
+          rootContainer.classList.add('formatted');
+          return;
+      }
+    });
   });
 
   const response = await wrapper(tokenize(preNode.innerText));

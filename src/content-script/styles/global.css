@@ -31,15 +31,15 @@
 
   --button-background: #262626;
   --button-color: #cccccc;
-  --button-border-color: #717171;;
+  --button-border-color: #717171;
 
   --button-hover-background: #3a3a3a;
   --button-hover-color: #cdcdcd;
   --button-hover-border-color: #3a3a3a;
 
-  --button-active-background: #1c466e;;
+  --button-active-background: #1c466e;
   --button-active-color: #a3c6dd;
-  --button-active-border-color: #1c466e;;
+  --button-active-border-color: #1c466e;
 
   /* input */
   --input-border-radius: 5px;

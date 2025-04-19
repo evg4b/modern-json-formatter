@@ -6,7 +6,7 @@ export default `
   position: fixed;
   top: 0;
   right: 0;
-  padding: 10px 20px 5px 5px;
+  padding: 10px 25px 5px 5px;
   background: var(--background);
   box-shadow: 0 0 3px 3px var(--background);
   gap: 10px;

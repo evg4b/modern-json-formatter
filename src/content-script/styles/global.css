@@ -1,15 +1,16 @@
 :global :host {
   --container-padding: 30px;
 
+  --indentation: 30px;
+  --font-size: 14px;
+  --guideline-style: dotted;
+  --toggle-size: 17px;
+
   --background: #282828;
   --base-text-color: #f8f8f2;
 
-  --indentation: 30px;
-  --font-size: 14px;
-
   --meta-info-color: #717171;
   --guideline-color: #3b3b3b;
-  --guideline-style: dotted;
 
   --string-literal-color: #5dd9ff;
   --boolean-literal-color: #9f84ff;
@@ -23,5 +24,25 @@
 
   --toggle-color: #575757;
   --toggle-hover-color: #a6a6a6;
-  --toggle-size: 17px;
+
+  @media (prefers-color-scheme: light) {
+    --background: #f3f3f3;
+    --base-text-color: #1f1f1f;
+
+    --meta-info-color: #898989;
+    --guideline-color: #81a4e6;
+
+    --string-literal-color: #9e3228;
+    --boolean-literal-color: #132c67;
+    --number-literal-color: #2553c0;
+    --null-literal-color: #a1225e;
+
+    --object-key-color: #9e3228;
+    --bracket-color: #1f1f1f;
+    --colon-color: #1f1f1f;
+    --comma-color: #1f1f1f;
+
+    --toggle-color: #454545;
+    --toggle-hover-color: #777777;
+  }
 }

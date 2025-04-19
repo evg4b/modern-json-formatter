@@ -11,6 +11,16 @@ import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
 
+const staticStyles = `:host {
+  background-color: var(--background, #282828);
+  color: var(--base-text-color, #282828);
+  display: block;
+  @media (prefers-color-scheme: light) {
+    background-color: var(--background, #f3f3f3);
+    color: var(--base-text-color, #1f1f1f);
+  }
+}`;
+
 export const runExtension = async () => {
   const preNode = await findNodeWithCode();
   if (!preNode) {
@@ -18,7 +28,7 @@ export const runExtension = async () => {
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  registerStyles(shadowRoot, `:host { background-color: #282828; color: #282828; display: block; }`);
+  registerStyles(shadowRoot, staticStyles);
   importStyles(shadowRoot, getURL('content-styles.css'));
 
   const content = preNode.textContent;

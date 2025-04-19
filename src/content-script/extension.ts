@@ -1,5 +1,5 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
-import { getURL } from '@core/browser';
+import { getURL, local } from '@core/browser';
 import { createElement } from '@core/dom';
 import { importStyles, registerStyles } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
@@ -21,15 +21,29 @@ const staticStyles = `:host {
   }
 }`;
 
+const colorSchemePromise = local.get(
+  ['color-scheme', 'stub-style'],
+);
+
 export const runExtension = async () => {
-  const preNode = await findNodeWithCode();
+  const [preNode, config] = await Promise.all([
+    findNodeWithCode(),
+    colorSchemePromise,
+  ]);
+
   if (!preNode) {
     return;
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
   registerStyles(shadowRoot, staticStyles);
+  registerStyles(shadowRoot, config['stub-style'] ?? `:host { background-color: #282828; color: #282828; display: block; }`);
   importStyles(shadowRoot, getURL('content-styles.css'));
+
+  if (config['color-scheme']) {
+    registerStyles(shadowRoot, config['color-scheme']);
+  }
+
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');

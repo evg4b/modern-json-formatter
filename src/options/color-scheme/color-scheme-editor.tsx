@@ -1,6 +1,8 @@
+import { local } from '@core/browser';
 import { Button, Row } from '@core/ui';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { SectionHeader } from '../shared';
+import { compilePreset } from './helpres';
 import { presets } from './presets';
 import { Preview } from './preview';
 
@@ -15,9 +17,14 @@ export const ColorSchemeEditor = () => {
     [selectedOption],
   );
 
-  const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleOptionChange = useCallback(async (event: ChangeEvent<HTMLSelectElement>) => {
+    const preset = presets[event.target.value];
     setSelectedOption(event.target.value);
-  };
+    await local.set({
+      'color-scheme': compilePreset({ light: preset }),
+      'stub-style': `:host { background-color: ${ preset['--background'] }; color: ${ preset['--base-text-color'] }; display: block; }`,
+    });
+  }, [setSelectedOption])
 
   return (
     <>

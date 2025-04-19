@@ -1,2 +1,4 @@
 const { getURL, sendMessage } = chrome.runtime;
-export { getURL, sendMessage };
+const { local } = chrome.storage;
+
+export { getURL, sendMessage, local };

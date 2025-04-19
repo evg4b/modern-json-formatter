@@ -4,6 +4,7 @@
   border-radius: 30px;
   padding: 3px 10px;
   background-color: transparent;
+  user-select: none;
 
   transition-property: color, border, background-color;
   transition-duration: 250ms;

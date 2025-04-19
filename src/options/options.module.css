@@ -23,6 +23,7 @@
   max-width: 700px;
   width: 100%;
   box-sizing: border-box;
+  gap: 30px;
 }
 
 .title {
@@ -34,19 +35,8 @@
   }
 }
 
-.header {
-  margin-bottom: 0;
-  width: 100%;
-
-  h2 {
-    margin: 0;
-  }
-}
-
 .separator {
   width: 100%;
-  margin-top: 15px;
-  margin-bottom: 35px;
   height: 1px;
   border: none;
   background: #636363;

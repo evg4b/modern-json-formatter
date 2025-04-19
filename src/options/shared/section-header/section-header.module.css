@@ -1,0 +1,9 @@
+.headerContainer {
+  margin-bottom: 0;
+  width: 100%;
+  user-select: none;
+
+  h2 {
+    margin: 0;
+  }
+}

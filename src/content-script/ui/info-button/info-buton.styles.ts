@@ -6,11 +6,11 @@ export default `
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #6c6c6c;
+    color: var(--icon-color);
     transition: all 150ms ease;
 
     &:hover {
-      color: #b0b0b0;
+      color: var(--icon-hover-color);
     }
   }
 }

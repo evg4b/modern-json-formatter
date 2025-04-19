@@ -14,7 +14,7 @@
     .inner {
       display: block;
       padding-left: var(--indentation, 30px);
-      border-left: 1px var(--guideline-style, dotted) var(--guideline-сolor, #3b3b3b);
+      border-left: 1px var(--guideline-style, dotted) var(--guideline-color, #3b3b3b);
     }
   }
 

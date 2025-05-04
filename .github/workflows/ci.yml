@@ -29,7 +29,7 @@ jobs:
 
       - name: Build worker wasm
         working-directory: ./worker-core
-        run: tinygo build -o worker-core.wasm -target wasm .
+        run: make
 
       - name: Test Go code
         working-directory: ./worker-core
@@ -48,7 +48,7 @@ jobs:
         run: yarn lint
 
       - name: Build
-        run: yarn build:production
+        run: make
 
       - name: Test
         run: yarn test:cover --color=true

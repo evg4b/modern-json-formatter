@@ -1,4 +1,4 @@
-default: clean build optimize
+default: clean exec-script build optimize
 
 exec-script:
 	@echo "Copying exec scripts..."

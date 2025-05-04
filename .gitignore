@@ -130,5 +130,7 @@ dist
 .idea
 .DS_Store
 *.zip
-worker-core/coverage.out
-worker-core/test-report.out
+
+worker-core/*.out
+worker-core/*.wasm
+worker-core/wasm_exec.js

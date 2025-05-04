@@ -40,3 +40,19 @@ release:
 		git commit -m "Bump new version $$NEW_VERSION" && \
 		git tag -a "v$$NEW_VERSION" -m "Release $$NEW_VERSION"
 	@git push --tags
+
+EXT_DIR := $(shell pwd)/dist
+TEMP_DIR := $(shell mktemp -d)
+
+screen-shot:
+	@echo "Taking screen shot..."
+	open -n -a "Google Chrome" --args \
+		--user-data-dir="$(TEMP_DIR)" \
+		--disable-extensions-except="$(EXT_DIR)" \
+		--load-extension="$(EXT_DIR)" \
+		--no-first-run \
+		--no-default-browser-check \
+		--new-window \
+		--disable-background-mode \
+		--window-size=1280,720 \
+		'https://evg4b.github.io/modern-json-formatter'

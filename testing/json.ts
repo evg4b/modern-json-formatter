@@ -1,6 +1,7 @@
 import {
   ArrayNode,
-  BooleanNode, ErrorNode,
+  BooleanNode,
+  ErrorNode,
   NullNode,
   NumberNode,
   ObjectNode,

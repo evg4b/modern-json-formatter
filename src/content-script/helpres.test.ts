@@ -1,5 +1,5 @@
 import { createElement } from '@core/dom';
-import { describe, test } from '@jest/globals';
+import { beforeEach, describe, expect, test } from '@jest/globals';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { ErrorNode } from '@worker-core';
 import { assetTabType, isErrorNode, isNotNil, query, throws } from './helpers';

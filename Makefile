@@ -25,6 +25,10 @@ clean:
 	@rm -rf ./dist
 	@rm -f ./extention.zip
 	@rm -f ./extention-msdn.zip
+	@rm -f ./worker-core/*.out
+	@rm -f ./worker-core/worker-core.wasm
+	@rm -f ./worker-core/worker-core.wasm.bak
+	@rm -f ./worker-core/wasm_exec.js
 	@cd worker-core && $(MAKE) clean
 
 release:

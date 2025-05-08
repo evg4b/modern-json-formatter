@@ -20,9 +20,7 @@ describe('main', () => {
     await import('./main');
   });
 
-  afterAll(() => {
-    consoleErrorSpy.mockRestore();
-  });
+  afterAll(() => consoleErrorSpy.mockRestore());
 
   it('should launch extension', () => {
     expect(runExtension).toHaveBeenCalled();

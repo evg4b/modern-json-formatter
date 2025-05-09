@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import text from './faq.html';
 import { sidebar } from './faq.module.css';
+import { MarkdownSection } from './markdown-section';
+import faq from './sections/en';
 import { Sidebar } from './sidebar';
 
 export const Faq = () => {
@@ -74,9 +76,12 @@ export const Faq = () => {
   return (
     <>
       <Sidebar className={ `${ sidebar } sidebar` }/>
-      <main
-        dangerouslySetInnerHTML={ { __html: text } }
-      />
+      <main>
+        <h1>JQ Queries Manual</h1>
+        <MarkdownSection section={ faq.intro }/>
+        <MarkdownSection section={ faq.basicFilters }/>
+        <div dangerouslySetInnerHTML={ { __html: text } }></div>
+      </main>
     </>
   );
 };

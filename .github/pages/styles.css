@@ -58,37 +58,3 @@ img {
   gap: 20px;
   padding: 0 0 50px 0;
 }
-
-.materials-for-testing {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--meta-info-color);
-}
-
-.materials-for-testing h4 {
-  font-weight: normal;
-}
-
-.materials-for-testing ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.materials-for-testing ul li a {
-  text-decoration: none;
-  color: var(--meta-info-color)
-  font-size: 12px;
-}
-
-.materials-for-testing ul li a:hover,
-.materials-for-testing ul li a:focus-visible {
-  text-decoration: underline;
-  color: #8c8c8c;
-}

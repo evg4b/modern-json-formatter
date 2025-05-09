@@ -8,49 +8,88 @@
   Format JSON in a modern way. With guaranteed order of keys, big numbers, jq queries, expandable/collapsable properties and more. 
 </p>
 <p align="center">
-    <a href="https://github.com/evg4b/modern-json-formatter/actions/workflows/ci.yml?query=branch%3Amain">
-        <img src="https://img.shields.io/github/actions/workflow/status/evg4b/modern-json-formatter/ci.yml?branch=main&logo=github" alt="GitHub Actions Workflow Status" />
-    </a>
-    <a href="https://github.com/evg4b/modern-json-formatter/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/evg4b/modern-json-formatter?logo=github" alt="License" />
-    </a>
-    <a href="https://github.com/evg4b/modern-json-formatter/releases/latest">
-        <img src="https://img.shields.io/github/v/release/evg4b/modern-json-formatter?logo=github" alt="GitHub Release Version">
-    </a>
-    <br>
-    <a href="https://sonarcloud.io/project/overview?id=evg4b_modern-json-formatter">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=alert_status" alt="Quality Gate Status">    
-    </a>
-    <a href="https://sonarcloud.io/project/activity?graph=coverage&id=evg4b_modern-json-formatter">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=coverage" alt="Coverage" />
-    </a>
-    <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=security_rating" alt="Security Rating" />
-    </a>
-    <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
-        <img src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=ncloc" alt="Lines of Code" />
-    </a>
-    <br>
-    <br>
-    <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img src="https://img.shields.io/chrome-web-store/v/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff" alt="Chrome Web Store Version">
-    </a>
-    <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img alt="Chrome Web Store Rating" src="https://img.shields.io/chrome-web-store/rating/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff">
-    </a>
-    <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
-        <img alt="Chrome Web Store Users" src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff">
-    </a>
-    <br>
-    <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
-        <img alt="Microsoft Store" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=version&prefix=v&label=microsoft%20store">    
-    </a>
-    <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
-        <img alt="Microsoft Store Rating" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=averageRating&label=rating&suffix=/5">
-    </a>
-    <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
-        <img alt="Microsoft Store Users" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=activeInstallCount&label=users">
-    </a>
+  <a href="https://github.com/evg4b/modern-json-formatter/actions/workflows/ci.yml?query=branch%3Amain">
+    <img
+      alt="GitHub Actions Workflow Status"
+      src="https://img.shields.io/github/actions/workflow/status/evg4b/modern-json-formatter/ci.yml?branch=main&logo=github"
+    />
+  </a>
+  <a href="https://github.com/evg4b/modern-json-formatter/blob/main/LICENSE">
+    <img
+      alt="License"
+      src="https://img.shields.io/github/license/evg4b/modern-json-formatter?logo=github"
+    />
+  </a>
+  <a href="https://github.com/evg4b/modern-json-formatter/releases/latest">
+    <img
+      src="https://img.shields.io/github/v/release/evg4b/modern-json-formatter?logo=github"
+      alt="GitHub Release Version"
+    />
+  </a>
+  <br>
+  <a href="https://sonarcloud.io/project/overview?id=evg4b_modern-json-formatter">
+    <img
+      alt="Quality Gate Status"
+      src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=alert_status"
+    />    
+  </a>
+  <a href="https://sonarcloud.io/project/activity?graph=coverage&id=evg4b_modern-json-formatter">
+    <img
+      alt="Coverage"
+      src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=coverage" 
+    />
+  </a>
+  <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
+    <img
+      alt="Security Rating"
+      src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=security_rating"
+    />
+  </a>
+  <a href="https://sonarcloud.io/summary/new_code?id=evg4b_modern-json-formatter">
+    <img
+      alt="Lines of Code" 
+      src="https://sonarcloud.io/api/project_badges/measure?project=evg4b_modern-json-formatter&metric=ncloc" 
+    />
+  </a>
+  <br>
+  <br>
+  <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
+    <img
+      alt="Chrome Web Store Version"
+      src="https://img.shields.io/chrome-web-store/v/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff&color=blue"
+    />
+  </a>
+  <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
+    <img
+      alt="Chrome Web Store Rating"
+      src="https://img.shields.io/chrome-web-store/rating/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff&color=blue"
+    />
+  </a>
+  <a href="https://chromewebstore.google.com/detail/dmofgolehdakghahlgibeaodbahpfkpf">
+    <img
+      alt="Chrome Web Store Users"
+      src="https://img.shields.io/chrome-web-store/users/dmofgolehdakghahlgibeaodbahpfkpf?logoColor=%23fff&color=blue"
+    />
+  </a>
+  <br>
+  <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
+    <img
+      alt="Microsoft Store" 
+      src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=version&prefix=v&label=microsoft%20store&color=blue"
+    />    
+  </a>
+  <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
+    <img
+      alt="Microsoft Store Rating"
+      src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=averageRating&label=rating&suffix=/5&color=blue"
+    />
+  </a>
+  <a href="https://microsoftedge.microsoft.com/addons/detail/modern-json-formatter/edjgdbhdfdodmabofpnkngphlbpjpihj">
+    <img
+      alt="Microsoft Store Users"
+      src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fedjgdbhdfdodmabofpnkngphlbpjpihj%3Fhl%3Dru-RU%26gl%3DCA&query=activeInstallCount&label=users"
+    />
+  </a>
 </p>
 
 # Key features:

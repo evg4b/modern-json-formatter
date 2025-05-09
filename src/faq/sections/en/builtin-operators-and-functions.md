@@ -2863,3 +2863,606 @@ each input.
     </table>
   </div>
 </div>
+
+### `walk(f)`
+
+The `walk(f)` function applies f recursively to every component of the input entity. When an array is encountered, f is
+first applied to its elements and then to the array itself; when an object is encountered, f is first applied to all the
+values and then to the object. In practice, f will usually test the type of its input, as illustrated in the following
+examples. The first example highlights the usefulness of processing the elements of an array of arrays before processing
+the array itself. The second example shows how all the keys of all the objects within the input can be considered for
+alteration.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example70" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">walk(if type == "array" then sort else . end)</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[[4, 1, 7], [8, 5, 2], [3, 6, 9]]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">[[1,4,7],[2,5,8],[3,6,9]]</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">
+          walk( if type == "object" then with_entries( .key |= sub( "^_+"; "") ) else . end )
+        </td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[ { "_a": { "__b": 2 } } ]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">[{"a":{"b":2}}]</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+[//]: # (### `$ENV`, `env`)
+
+[//]: # ()
+
+[//]: # (`$ENV` is an object representing the environment variables as set when the jq program started.)
+
+[//]: # ()
+
+[//]: # (`env` outputs an object representing jq's current environment.)
+
+[//]: # ()
+
+[//]: # (At the moment there is no builtin for setting environment variables.)
+
+[//]: # ()
+
+[//]: # (<div class="pb-3">)
+
+[//]: # (  <h4 class="examples">Examples:</h4>)
+
+[//]: # (  <div id="example71" class="collapse mx-3 small d-print-block">)
+
+[//]: # (    <table class="table table-borderless table-sm w-auto">)
+
+[//]: # (      <tbody>)
+
+[//]: # (      <tr>)
+
+[//]: # (        <th class="pe-3">Query</th>)
+
+[//]: # (        <td class="font-monospace">$ENV.PAGER</td>)
+
+[//]: # (      </tr>)
+
+[//]: # (      <tr>)
+
+[//]: # (        <th>Input</th>)
+
+[//]: # (        <td class="font-monospace">null</td>)
+
+[//]: # (      </tr>)
+
+[//]: # (      <tr>)
+
+[//]: # (        <th>Output</th>)
+
+[//]: # (        <td class="font-monospace">"less"</td>)
+
+[//]: # (      </tr>)
+
+[//]: # (      </tbody>)
+
+[//]: # (    </table>)
+
+[//]: # (    <table class="table table-borderless table-sm w-auto">)
+
+[//]: # (      <tbody>)
+
+[//]: # (      <tr>)
+
+[//]: # (        <th class="pe-3">Query</th>)
+
+[//]: # (        <td class="font-monospace">env.PAGER</td>)
+
+[//]: # (      </tr>)
+
+[//]: # (      <tr>)
+
+[//]: # (        <th>Input</th>)
+
+[//]: # (        <td class="font-monospace">null</td>)
+
+[//]: # (      </tr>)
+
+[//]: # (      <tr>)
+
+[//]: # (        <th>Output</th>)
+
+[//]: # (        <td class="font-monospace">"less"</td>)
+
+[//]: # (      </tr>)
+
+[//]: # (      </tbody>)
+
+[//]: # (    </table>)
+
+[//]: # (  </div>)
+
+[//]: # (</div>)
+
+### `transpose`
+
+Transpose a possibly jagged matrix (an array of arrays). Rows are padded with nulls so the result is always rectangular.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example72" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">transpose</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[[1], [2,3]]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">[[1,2],[null,3]]</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+### `bsearch(x)`
+
+`bsearch(x)` conducts a binary search for x in the input array. If the input is sorted and contains x, then `bsearch(x)`
+will return its index in the array; otherwise, if the array is sorted, it will return (-1 - ix) where ix is an insertion
+point such that the array would still be sorted after the insertion of x at ix. If the array is not sorted, `bsearch(x)`
+will return an integer that is probably of no interest.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example73" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">bsearch(0)</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[0,1]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">0</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">bsearch(0)</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[1,2,3]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">-1</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">bsearch(4) as $ix | if $ix &lt; 0 then .[-(1+$ix)] = 4 else .
+          end
+        </td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[1,2,3]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">[1,2,3,4]</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+### String interpolation: `\(exp)`
+
+Inside a string, you can put an expression inside parens after a backslash. Whatever the expression returns will be
+interpolated into the string.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example74" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">"The input was \(.), which is one less than \(.+1)"</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">42</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">"The input was 42, which is one less than 43"</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+### Convert to/from JSON
+
+The `tojson` and `fromjson` builtins dump values as JSON texts or parse JSON texts into values, respectively. The
+`tojson` builtin differs from `tostring` in that `tostring` returns strings unmodified, while `tojson` encodes strings
+as JSON strings.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example75" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">[.[]|tostring]</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[1, "foo", ["foo"]]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">["1","foo","[\"foo\"]"]</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">[.[]|tojson]</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[1, "foo", ["foo"]]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">["1","\"foo\"","[\"foo\"]"]</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">[.[]|tojson|fromjson]</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">[1, "foo", ["foo"]]</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">[1,"foo",["foo"]]</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+### Format strings and escaping
+
+The `@foo` syntax is used to format and escape strings, which is useful for building URLs, documents in a language like
+HTML or XML, and so forth. `@foo` can be used as a filter on its own, the possible escapings are:
+
+* `@text`:
+
+Calls `tostring`, see that function for details.
+
+* `@json`:
+
+Serializes the input as JSON.
+
+* `@html`:
+
+Applies HTML/XML escaping, by mapping the characters `<>&'"` to their entity equivalents `&lt;`, `&gt;`, `&amp;`,
+`&apos;`, `&quot;`.
+
+* `@uri`:
+
+Applies percent-encoding, by mapping all reserved URI characters to a `%XX` sequence.
+
+* `@csv`:
+
+The input must be an array, and it is rendered as CSV with double quotes for strings, and quotes escaped by repetition.
+
+* `@tsv`:
+
+The input must be an array, and it is rendered as TSV (tab-separated values). Each input array will be printed as a
+single line. Fields are separated by a single tab (ascii `0x09`). Input characters line-feed (ascii `0x0a`),
+carriage-return (ascii `0x0d`), tab (ascii `0x09`) and backslash (ascii `0x5c`) will be output as escape sequences `\n`,
+`\r`, `\t`, `\\` respectively.
+
+* `@sh`:
+
+The input is escaped suitable for use in a command-line for a POSIX shell. If the input is an array, the output will be
+a series of space-separated strings.
+
+* `@base64`:
+
+The input is converted to base64 as specified by RFC 4648.
+
+* `@base64d`:
+
+The inverse of `@base64`, input is decoded as specified by RFC 4648. Note\\: If the decoded string is not UTF-8, the
+results are undefined.
+
+This syntax can be combined with string interpolation in a useful way. You can follow a `@foo` token with a string
+literal. The contents of the string literal will _not_ be escaped. However, all interpolations made inside that string
+literal will be escaped. For instance,
+
+```
+@uri "https://www.google.com/search?q=\(.search)"
+```
+
+will produce the following output for the input `{"search":"what is jq?"}`:
+
+```
+"https://www.google.com/search?q=what%20is%20jq%3F"
+```
+
+Note that the slashes, question mark, etc. in the URL are not escaped, as they were part of the string literal.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example76" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">@html</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"This works if x &lt; y"</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">"This works if x &amp;lt; y"</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">@sh "echo \(.)"</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"O'Hara's Ale"</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">"echo 'O'\\''Hara'\\''s Ale'"</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">@base64</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"This is a message"</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">"VGhpcyBpcyBhIG1lc3NhZ2U="</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">@base64d</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"VGhpcyBpcyBhIG1lc3NhZ2U="</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">"This is a message"</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+### Dates
+
+jq provides some basic date handling functionality, with some high-level and low-level builtins. In all cases these
+builtins deal exclusively with time in UTC.
+
+The `fromdateiso8601` builtin parses datetimes in the ISO 8601 format to a number of seconds since the Unix epoch (
+1970-01-01T00:00:00Z). The `todateiso8601` builtin does the inverse.
+
+The `fromdate` builtin parses datetime strings. Currently `fromdate` only supports ISO 8601 datetime strings, but in the
+future it will attempt to parse datetime strings in more formats.
+
+The `todate` builtin is an alias for `todateiso8601`.
+
+The `now` builtin outputs the current time, in seconds since the Unix epoch.
+
+Low-level jq interfaces to the C-library time functions are also provided: `strptime`, `strftime`, `strflocaltime`,
+`mktime`, `gmtime`, and `localtime`. Refer to your host operating system's documentation for the format strings used by
+`strptime` and `strftime`. Note: these are not necessarily stable interfaces in jq, particularly as to their
+localization functionality.
+
+The `gmtime` builtin consumes a number of seconds since the Unix epoch and outputs a "broken down time" representation
+of Greenwich Mean Time as an array of numbers representing (in this order): the year, the month (zero-based), the day of
+the month (one-based), the hour of the day, the minute of the hour, the second of the minute, the day of the week, and
+the day of the year -- all one-based unless otherwise stated. The day of the week number may be wrong on some systems
+for dates before March 1st 1900, or after December 31 2099.
+
+The `localtime` builtin works like the `gmtime` builtin, but using the local timezone setting.
+
+The `mktime` builtin consumes "broken down time" representations of time output by `gmtime` and `strptime`.
+
+The `strptime(fmt)` builtin parses input strings matching the `fmt` argument. The output is in the "broken down time"
+representation consumed by `mktime` and output by `gmtime`.
+
+The `strftime(fmt)` builtin formats a time (GMT) with the given format. The `strflocaltime` does the same, but using the
+local timezone setting.
+
+The format strings for `strptime` and `strftime` are described in typical C library documentation. The format string for
+ISO 8601 datetime is `"%Y-%m-%dT%H:%M:%SZ"`.
+
+jq may not support some or all of this date functionality on some systems. In particular, the `%u` and `%j` specifiers
+for `strptime(fmt)` are not supported on macOS.
+
+<div class="pb-3">
+  <h4 class="examples">Examples:</h4>
+  <div id="example77" class="collapse mx-3 small d-print-block">
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">fromdate</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"2015-03-05T23:51:47Z"</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">1425599507</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">strptime("%Y-%m-%dT%H:%M:%SZ")</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"2015-03-05T23:51:47Z"</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">[2015,2,5,23,51,47,4,63]</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table table-borderless table-sm w-auto">
+      <tbody>
+      <tr>
+        <th class="pe-3">Query</th>
+        <td class="font-monospace">strptime("%Y-%m-%dT%H:%M:%SZ")|mktime</td>
+      </tr>
+      <tr>
+        <th>Input</th>
+        <td class="font-monospace">"2015-03-05T23:51:47Z"</td>
+      </tr>
+      <tr>
+        <th>Output</th>
+        <td class="font-monospace">1425599507</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+[//]: # (### SQL-Style Operators)
+
+[//]: # ()
+
+[//]: # (jq provides a few SQL-style operators.)
+
+[//]: # ()
+
+[//]: # (*   INDEX&#40;stream; index\_expression&#41;:)
+
+[//]: # ()
+
+[//]: # (This builtin produces an object whose keys are computed by the given index expression applied to each value from the given stream.)
+
+[//]: # ()
+
+[//]: # (*   JOIN&#40;$idx; stream; idx\_expr; join\_expr&#41;:)
+
+[//]: # ()
+
+[//]: # (This builtin joins the values from the given stream to the given index. The index's keys are computed by applying the given index expression to each value from the given stream. An array of the value in the stream and the corresponding value from the index is fed to the given join expression to produce each result.)
+
+[//]: # ()
+
+[//]: # (*   JOIN&#40;$idx; stream; idx\_expr&#41;:)
+
+[//]: # ()
+
+[//]: # (Same as `JOIN&#40;$idx; stream; idx_expr; .&#41;`.)
+
+[//]: # ()
+
+[//]: # (*   JOIN&#40;$idx; idx\_expr&#41;:)
+
+[//]: # ()
+
+[//]: # (This builtin joins the input `.` to the given index, applying the given index expression to `.` to compute the index key. The join operation is as described above.)
+
+[//]: # ()
+
+[//]: # (*   IN&#40;s&#41;:)
+
+[//]: # ()
+
+[//]: # (This builtin outputs `true` if `.` appears in the given stream, otherwise it outputs `false`.)
+
+[//]: # ()
+
+[//]: # (*   IN&#40;source; s&#41;:)
+
+[//]: # ()
+
+[//]: # (This builtin outputs `true` if any value in the source stream appears in the second stream, otherwise it outputs `false`.)
+
+### `builtins`
+
+Returns a list of all builtin functions in the format `name/arity`. Since functions with the same name but different
+arities are considered separate functions, `all/0`, `all/1`, and `all/2` would all be present in the list.

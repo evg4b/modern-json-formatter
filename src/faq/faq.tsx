@@ -80,6 +80,7 @@ export const Faq = () => {
         <h1>JQ Queries Manual</h1>
         <MarkdownSection section={ faq.intro }/>
         <MarkdownSection section={ faq.basicFilters }/>
+        <MarkdownSection section={ faq.typesAndValues }/>
         <div dangerouslySetInnerHTML={ { __html: text } }></div>
       </main>
     </>

@@ -83,6 +83,7 @@ export const Faq = () => {
         <MarkdownSection section={ faq.typesAndValues }/>
         <MarkdownSection section={ faq.builtinOperatorsAndFunctions }/>
         <MarkdownSection section={ faq.conditionalsAndComparisons }/>
+        <MarkdownSection section={ faq.regularExpressions }/>
         <div dangerouslySetInnerHTML={ { __html: text } }></div>
       </main>
     </>

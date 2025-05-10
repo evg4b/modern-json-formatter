@@ -3,6 +3,7 @@ import intro from './intro.md';
 import typesAndValues from './types-and-values.md';
 import builtinOperatorsAndFunctions from './builtin-operators-and-functions.md';
 import conditionalsAndComparisons from './conditionals-and-comparisons.md';
+import regularExpressions from './regular-expressions.md';
 
 export default {
   intro,
@@ -10,4 +11,5 @@ export default {
   typesAndValues,
   builtinOperatorsAndFunctions,
   conditionalsAndComparisons,
+  regularExpressions,
 };

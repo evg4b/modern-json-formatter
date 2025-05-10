@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { sidebar } from './faq.module.css';
 import { MarkdownSection } from './markdown-section';
-import faq from './sections/en';
+import sections from './sections';
 import { Sidebar } from './sidebar';
 
 export const Faq = () => {
@@ -71,21 +71,20 @@ export const Faq = () => {
     };
   })
 
-
   return (
     <>
       <Sidebar className={ `${ sidebar } sidebar` }/>
       <main>
         <h1>JQ Queries Manual</h1>
-        <MarkdownSection section={ faq.intro }/>
-        <MarkdownSection section={ faq.basicFilters }/>
-        <MarkdownSection section={ faq.typesAndValues }/>
-        <MarkdownSection section={ faq.builtinOperatorsAndFunctions }/>
-        <MarkdownSection section={ faq.conditionalsAndComparisons }/>
-        <MarkdownSection section={ faq.regularExpressions }/>
-        <MarkdownSection section={ faq.advancedFeatures }/>
-        <MarkdownSection section={ faq.math }/>
-        <MarkdownSection section={ faq.assignment }/>
+        <MarkdownSection section={ sections.en.intro }/>
+        <MarkdownSection section={ sections.en.basicFilters }/>
+        <MarkdownSection section={ sections.en.typesAndValues }/>
+        <MarkdownSection section={ sections.en.builtinOperatorsAndFunctions }/>
+        <MarkdownSection section={ sections.en.conditionalsAndComparisons }/>
+        <MarkdownSection section={ sections.en.regularExpressions }/>
+        <MarkdownSection section={ sections.en.advancedFeatures }/>
+        <MarkdownSection section={ sections.en.math }/>
+        <MarkdownSection section={ sections.en.assignment }/>
       </main>
     </>
   );

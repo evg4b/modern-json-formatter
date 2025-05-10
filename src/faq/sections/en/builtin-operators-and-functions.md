@@ -973,6 +973,7 @@ It's useful for filtering lists: `[1,2,3] | map(select(. >= 2))` will give you `
 </div>
 
 ### `arrays`, `objects`, `iterables`, `booleans`, `numbers`, `normals`, `finites`, `strings`, `nulls`, `values`,
+
 `scalars`
 
 These built-ins select only inputs that are arrays, objects, iterables (arrays or objects), booleans, numbers, normal
@@ -1742,13 +1743,13 @@ Currently most arithmetic operations operating on infinities, NaNs, and sub-norm
 
 The `sort` functions sorts its input, which must be an array. Values are sorted in the following order:
 
-* `null`
-* `false`
-* `true`
-* numbers
-* strings, in alphabetical order (by unicode codepoint value)
-* arrays, in lexical order
-* objects
+- `null`
+- `false`
+- `true`
+- numbers
+- strings, in alphabetical order (by unicode codepoint value)
+- arrays, in lexical order
+- objects
 
 The ordering for objects is a little complex: first they're compared by comparing their sets of keys (as arrays in
 sorted order), and if their keys are equal then the values are compared key by key.
@@ -2913,95 +2914,51 @@ alteration.
   </div>
 </div>
 
-[//]: # (### `$ENV`, `env`)
-
-[//]: # ()
-
-[//]: # (`$ENV` is an object representing the environment variables as set when the jq program started.)
-
-[//]: # ()
-
-[//]: # (`env` outputs an object representing jq's current environment.)
-
-[//]: # ()
-
-[//]: # (At the moment there is no builtin for setting environment variables.)
-
-[//]: # ()
-
-[//]: # (<div class="pb-3">)
-
-[//]: # (  <h4 class="examples">Examples:</h4>)
-
-[//]: # (  <div id="example71" class="collapse mx-3 small d-print-block">)
-
-[//]: # (    <table class="table table-borderless table-sm w-auto">)
-
-[//]: # (      <tbody>)
-
-[//]: # (      <tr>)
-
-[//]: # (        <th class="pe-3">Query</th>)
-
-[//]: # (        <td class="font-monospace">$ENV.PAGER</td>)
-
-[//]: # (      </tr>)
-
-[//]: # (      <tr>)
-
-[//]: # (        <th>Input</th>)
-
-[//]: # (        <td class="font-monospace">null</td>)
-
-[//]: # (      </tr>)
-
-[//]: # (      <tr>)
-
-[//]: # (        <th>Output</th>)
-
-[//]: # (        <td class="font-monospace">"less"</td>)
-
-[//]: # (      </tr>)
-
-[//]: # (      </tbody>)
-
-[//]: # (    </table>)
-
-[//]: # (    <table class="table table-borderless table-sm w-auto">)
-
-[//]: # (      <tbody>)
-
-[//]: # (      <tr>)
-
-[//]: # (        <th class="pe-3">Query</th>)
-
-[//]: # (        <td class="font-monospace">env.PAGER</td>)
-
-[//]: # (      </tr>)
-
-[//]: # (      <tr>)
-
-[//]: # (        <th>Input</th>)
-
-[//]: # (        <td class="font-monospace">null</td>)
-
-[//]: # (      </tr>)
-
-[//]: # (      <tr>)
-
-[//]: # (        <th>Output</th>)
-
-[//]: # (        <td class="font-monospace">"less"</td>)
-
-[//]: # (      </tr>)
-
-[//]: # (      </tbody>)
-
-[//]: # (    </table>)
-
-[//]: # (  </div>)
-
-[//]: # (</div>)
+[//]: # "### `$ENV`, `env`"
+[//]: #
+[//]: # "`$ENV` is an object representing the environment variables as set when the jq program started."
+[//]: #
+[//]: # "`env` outputs an object representing jq's current environment."
+[//]: #
+[//]: # "At the moment there is no builtin for setting environment variables."
+[//]: #
+[//]: # '<div class="pb-3">'
+[//]: # '  <h4 class="examples">Examples:</h4>'
+[//]: # '  <div id="example71" class="collapse mx-3 small d-print-block">'
+[//]: # '    <table class="table table-borderless table-sm w-auto">'
+[//]: # "      <tbody>"
+[//]: # "      <tr>"
+[//]: # '        <th class="pe-3">Query</th>'
+[//]: # '        <td class="font-monospace">$ENV.PAGER</td>'
+[//]: # "      </tr>"
+[//]: # "      <tr>"
+[//]: # "        <th>Input</th>"
+[//]: # '        <td class="font-monospace">null</td>'
+[//]: # "      </tr>"
+[//]: # "      <tr>"
+[//]: # "        <th>Output</th>"
+[//]: # '        <td class="font-monospace">"less"</td>'
+[//]: # "      </tr>"
+[//]: # "      </tbody>"
+[//]: # "    </table>"
+[//]: # '    <table class="table table-borderless table-sm w-auto">'
+[//]: # "      <tbody>"
+[//]: # "      <tr>"
+[//]: # '        <th class="pe-3">Query</th>'
+[//]: # '        <td class="font-monospace">env.PAGER</td>'
+[//]: # "      </tr>"
+[//]: # "      <tr>"
+[//]: # "        <th>Input</th>"
+[//]: # '        <td class="font-monospace">null</td>'
+[//]: # "      </tr>"
+[//]: # "      <tr>"
+[//]: # "        <th>Output</th>"
+[//]: # '        <td class="font-monospace">"less"</td>'
+[//]: # "      </tr>"
+[//]: # "      </tbody>"
+[//]: # "    </table>"
+[//]: # "  </div>"
+[//]: # "</div>"
 
 ### `transpose`
 
@@ -3184,44 +3141,44 @@ as JSON strings.
 The `@foo` syntax is used to format and escape strings, which is useful for building URLs, documents in a language like
 HTML or XML, and so forth. `@foo` can be used as a filter on its own, the possible escapings are:
 
-* `@text`:
+- `@text`:
 
 Calls `tostring`, see that function for details.
 
-* `@json`:
+- `@json`:
 
 Serializes the input as JSON.
 
-* `@html`:
+- `@html`:
 
 Applies HTML/XML escaping, by mapping the characters `<>&'"` to their entity equivalents `&lt;`, `&gt;`, `&amp;`,
 `&apos;`, `&quot;`.
 
-* `@uri`:
+- `@uri`:
 
 Applies percent-encoding, by mapping all reserved URI characters to a `%XX` sequence.
 
-* `@csv`:
+- `@csv`:
 
 The input must be an array, and it is rendered as CSV with double quotes for strings, and quotes escaped by repetition.
 
-* `@tsv`:
+- `@tsv`:
 
 The input must be an array, and it is rendered as TSV (tab-separated values). Each input array will be printed as a
 single line. Fields are separated by a single tab (ascii `0x09`). Input characters line-feed (ascii `0x0a`),
 carriage-return (ascii `0x0d`), tab (ascii `0x09`) and backslash (ascii `0x5c`) will be output as escape sequences `\n`,
 `\r`, `\t`, `\\` respectively.
 
-* `@sh`:
+- `@sh`:
 
 The input is escaped suitable for use in a command-line for a POSIX shell. If the input is an array, the output will be
 a series of space-separated strings.
 
-* `@base64`:
+- `@base64`:
 
 The input is converted to base64 as specified by RFC 4648.
 
-* `@base64d`:
+- `@base64d`:
 
 The inverse of `@base64`, input is decoded as specified by RFC 4648. Note\\: If the decoded string is not UTF-8, the
 results are undefined.
@@ -3408,59 +3365,33 @@ for `strptime(fmt)` are not supported on macOS.
   </div>
 </div>
 
-[//]: # (### SQL-Style Operators)
-
-[//]: # ()
-
-[//]: # (jq provides a few SQL-style operators.)
-
-[//]: # ()
-
-[//]: # (*   INDEX&#40;stream; index\_expression&#41;:)
-
-[//]: # ()
-
-[//]: # (This builtin produces an object whose keys are computed by the given index expression applied to each value from the given stream.)
-
-[//]: # ()
-
-[//]: # (*   JOIN&#40;$idx; stream; idx\_expr; join\_expr&#41;:)
-
-[//]: # ()
-
-[//]: # (This builtin joins the values from the given stream to the given index. The index's keys are computed by applying the given index expression to each value from the given stream. An array of the value in the stream and the corresponding value from the index is fed to the given join expression to produce each result.)
-
-[//]: # ()
-
-[//]: # (*   JOIN&#40;$idx; stream; idx\_expr&#41;:)
-
-[//]: # ()
-
-[//]: # (Same as `JOIN&#40;$idx; stream; idx_expr; .&#41;`.)
-
-[//]: # ()
-
-[//]: # (*   JOIN&#40;$idx; idx\_expr&#41;:)
-
-[//]: # ()
-
-[//]: # (This builtin joins the input `.` to the given index, applying the given index expression to `.` to compute the index key. The join operation is as described above.)
-
-[//]: # ()
-
-[//]: # (*   IN&#40;s&#41;:)
-
-[//]: # ()
-
-[//]: # (This builtin outputs `true` if `.` appears in the given stream, otherwise it outputs `false`.)
-
-[//]: # ()
-
-[//]: # (*   IN&#40;source; s&#41;:)
-
-[//]: # ()
-
-[//]: # (This builtin outputs `true` if any value in the source stream appears in the second stream, otherwise it outputs `false`.)
+[//]: # "### SQL-Style Operators"
+[//]: #
+[//]: # "jq provides a few SQL-style operators."
+[//]: #
+[//]: # "*   INDEX(stream; index_expression):"
+[//]: #
+[//]: # "This builtin produces an object whose keys are computed by the given index expression applied to each value from the given stream."
+[//]: #
+[//]: # "*   JOIN($idx; stream; idx_expr; join_expr):"
+[//]: #
+[//]: # "This builtin joins the values from the given stream to the given index. The index's keys are computed by applying the given index expression to each value from the given stream. An array of the value in the stream and the corresponding value from the index is fed to the given join expression to produce each result."
+[//]: #
+[//]: # "*   JOIN($idx; stream; idx_expr):"
+[//]: #
+[//]: # "Same as `JOIN($idx; stream; idx_expr; .)`."
+[//]: #
+[//]: # "*   JOIN($idx; idx_expr):"
+[//]: #
+[//]: # "This builtin joins the input `.` to the given index, applying the given index expression to `.` to compute the index key. The join operation is as described above."
+[//]: #
+[//]: # "*   IN(s):"
+[//]: #
+[//]: # "This builtin outputs `true` if `.` appears in the given stream, otherwise it outputs `false`."
+[//]: #
+[//]: # "*   IN(source; s):"
+[//]: #
+[//]: # "This builtin outputs `true` if any value in the source stream appears in the second stream, otherwise it outputs `false`."
 
 ### `builtins`
 

@@ -5,6 +5,7 @@ import builtinOperatorsAndFunctions from './builtin-operators-and-functions.md';
 import conditionalsAndComparisons from './conditionals-and-comparisons.md';
 import regularExpressions from './regular-expressions.md';
 import advancedFeatures from './advanced-features.md';
+import math from './math.md';
 
 export default {
   intro,
@@ -14,4 +15,5 @@ export default {
   conditionalsAndComparisons,
   regularExpressions,
   advancedFeatures,
+  math,
 };

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import text from './faq.html';
 import { sidebar } from './faq.module.css';
 import { MarkdownSection } from './markdown-section';
 import faq from './sections/en';
@@ -86,7 +85,7 @@ export const Faq = () => {
         <MarkdownSection section={ faq.regularExpressions }/>
         <MarkdownSection section={ faq.advancedFeatures }/>
         <MarkdownSection section={ faq.math }/>
-        <div dangerouslySetInnerHTML={ { __html: text } }></div>
+        <MarkdownSection section={ faq.assignment }/>
       </main>
     </>
   );

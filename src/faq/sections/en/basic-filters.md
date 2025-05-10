@@ -27,7 +27,7 @@ understanding that they are intended to be descriptive of the current version of
 interpreted as being prescriptive:
 
 1. Any arithmetic operation on a number that has not already been converted to an IEEE754 double precision
-representation will trigger a conversion to the IEEE754 representation.
+   representation will trigger a conversion to the IEEE754 representation.
 
 2. jq will attempt to maintain the original decimal precision of number literals, but in expressions such `
 1E1234567890`, precision will be lost if the exponent is too large.
@@ -35,7 +35,7 @@ representation will trigger a conversion to the IEEE754 representation.
 3. In jq programs, a leading minus sign will trigger the conversion of the number to an IEEE754 representation.
 
 4. Comparisons are carried out using the untruncated big decimal representation of numbers if available, as illustrated
-in one of the following examples.
+   in one of the following examples.
 
 <div class="pb-3">
   <h4 class="examples">Examples:</h4>

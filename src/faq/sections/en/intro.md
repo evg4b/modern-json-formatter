@@ -18,5 +18,4 @@ filters, like addition, generally feed the same input to both and combine the re
 an averaging filter as `add / length` - feeding the input array both to the `add` filter and the `length` filter and
 then performing the division.
 
-
 But that's getting ahead of ourselves. :) Let's start with something simpler:

@@ -17,23 +17,23 @@ STRING | FILTER([REGEX, FLAGS])
 
 where:
 
-* STRING, REGEX, and FLAGS are jq strings and subject to jq string interpolation;
-* REGEX, after string interpolation, should be a valid regular expression;
-* FILTER is one of `test`, `match`, or `capture`, as described below.
+- STRING, REGEX, and FLAGS are jq strings and subject to jq string interpolation;
+- REGEX, after string interpolation, should be a valid regular expression;
+- FILTER is one of `test`, `match`, or `capture`, as described below.
 
 Since REGEX must evaluate to a JSON string, some characters that are needed to form a regular expression must be
 escaped. For example, the regular expression `\s` signifying a whitespace character would be written as `"\\s"`.
 
 FLAGS is a string consisting of one of more of the supported flags:
 
-* `g` - Global search (find all matches, not just the first)
-* `i` - Case insensitive search
-* `m` - Multi line mode (`.` will match newlines)
-* `n` - Ignore empty matches
-* `p` - Both s and m modes are enabled
-* `s` - Single line mode (`^` -> `\A`, `$` -> `\Z`)
-* `l` - Find longest possible matches
-* `x` - Extended regex format (ignore whitespace and comments)
+- `g` - Global search (find all matches, not just the first)
+- `i` - Case insensitive search
+- `m` - Multi line mode (`.` will match newlines)
+- `n` - Ignore empty matches
+- `p` - Both s and m modes are enabled
+- `s` - Single line mode (`^` -> `\A`, `$` -> `\Z`)
+- `l` - Find longest possible matches
+- `x` - Extended regex format (ignore whitespace and comments)
 
 To match a whitespace with the `x` flag, use `\s`, e.g.
 
@@ -99,17 +99,17 @@ Like `match`, but does not return match objects, only `true` or `false` for whet
 
 **match** outputs an object for each match it finds. Matches have the following fields:
 
-* `offset` - offset in UTF-8 codepoints from the beginning of the input
-* `length` - length in UTF-8 codepoints of the match
-* `string` - the string that it matched
-* `captures` - an array of objects representing capturing groups.
+- `offset` - offset in UTF-8 codepoints from the beginning of the input
+- `length` - length in UTF-8 codepoints of the match
+- `string` - the string that it matched
+- `captures` - an array of objects representing capturing groups.
 
 Capturing group objects have the following fields:
 
-* `offset` - offset in UTF-8 codepoints from the beginning of the input
-* `length` - length in UTF-8 codepoints of this capturing group
-* `string` - the string that was captured
-* `name` - the name of the capturing group (or `null` if it was unnamed)
+- `offset` - offset in UTF-8 codepoints from the beginning of the input
+- `length` - length in UTF-8 codepoints of this capturing group
+- `string` - the string that was captured
+- `name` - the name of the capturing group (or `null` if it was unnamed)
 
 Capturing groups that did not match anything return an offset of -1
 

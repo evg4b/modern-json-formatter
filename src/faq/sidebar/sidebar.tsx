@@ -9,6 +9,7 @@ import { logo } from './sidebar.module.css';
 export interface NavigationItem {
   id: string;
   title: string;
+  titleHtml: string;
   children?: NavigationItem[];
   ref: HTMLElement;
 }
@@ -32,33 +33,50 @@ export const Sidebar: FC<SidebarProps> = memo(({ className, mainRef }) => {
 
         return {
           id: header.id,
-          title: header.innerHTML,
+          title: header.textContent ?? '',
+          titleHtml: header.innerHTML,
           ref: header,
           children: Array.from(section.querySelectorAll('h3'))
             .map<NavigationItem>(subHeader => ({
               id: subHeader.id,
-              title: subHeader.innerHTML,
+              title: subHeader.textContent ?? '',
+              titleHtml: subHeader.innerHTML,
               ref: subHeader,
             })),
         } satisfies NavigationItem;
       });
 
-    console.log(navigationItems);
-
     setNavigation(navigationItems);
   }, [mainRef]);
 
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   useEffect(() => {
     const handleScroll = () => {
-      console.log('scroll');
+      const visibleItems = navigation
+        .flatMap(item => [item, ...(item.children ?? [])])
+        .map(item => {
+          const rect = item.ref.getBoundingClientRect();
+          return {
+            id: item.id,
+            top: rect.top,
+            offset: Math.abs(rect.top),
+          };
+        })
+        .filter(item => item.top < window.innerHeight) // visible area
+        .sort((a, b) => a.offset - b.offset); // closest to top
+
+      if (visibleItems.length > 0) {
+        setActiveId(visibleItems[0].id);
+      }
     };
 
     handleScroll();
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll, { capture: true });
     };
   }, [navigation])
 
@@ -83,6 +101,7 @@ export const Sidebar: FC<SidebarProps> = memo(({ className, mainRef }) => {
             <SidebarLink item={ item }
                          mainRef={ mainRef }
                          className="item section-header"
+                         activeId={ activeId }
             />
             <div className="children section">
               { item.children?.map((child) => (
@@ -90,6 +109,7 @@ export const Sidebar: FC<SidebarProps> = memo(({ className, mainRef }) => {
                              item={ child }
                              mainRef={ mainRef }
                              className="item"
+                             activeId={ activeId }
                 />
               )) }
             </div>

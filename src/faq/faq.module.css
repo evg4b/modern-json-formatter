@@ -84,10 +84,6 @@
     text-decoration: none;
   }
 
-  a:not(.button-link):hover {
-    background: #6e6e6e;
-  }
-
   .section {
     display: flex;
     flex-direction: column;

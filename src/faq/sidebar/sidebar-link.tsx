@@ -1,34 +1,25 @@
+import { isInViewport } from '@core/helpers';
 import { clsx } from 'clsx';
-import { FC, memo, type MouseEvent, RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
-import { NavigationItem } from './sidebar';
-import { active, link } from './sidebar-link.module.css';
+import { FC, memo, type MouseEvent, useEffect, useRef } from 'react';
+import { NavigationItem } from './models';
+import { activeLink, childLink, link } from './sidebar-link.module.css';
+import { useSidebar } from './sidebar.context';
 
 interface SidebarLinkProps {
   item: NavigationItem;
-  className?: string;
-  mainRef: RefObject<HTMLElement | null>;
-  activeId: string | null;
+  child?: boolean;
 }
 
-function isInViewport(element: HTMLElement) {
-  const rect = element.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
-
-const SidebarLinkInner: FC<SidebarLinkProps> = ({ item, mainRef, className, activeId }) => {
+export const SidebarLink: FC<SidebarLinkProps> = memo(({ item, child = false }) => {
+  const { activeId, selectItem } = useSidebar();
   const ref = useRef<HTMLAnchorElement>(null);
 
-  const handleClick = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    item.ref.scrollIntoView({ behavior: 'smooth' });
-  }, [mainRef]);
+  const isActive = activeId === item.id;
 
-  const isActive = useMemo(() => activeId === item.id, [activeId, item.id]);
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    selectItem(item);
+  };
 
   useEffect(() => {
     if (isActive && ref.current && !isInViewport(ref.current)) {
@@ -44,11 +35,9 @@ const SidebarLinkInner: FC<SidebarLinkProps> = ({ item, mainRef, className, acti
     <a href="#"
        onClick={ handleClick }
        title={ item.title }
-       className={ clsx(link, className, { [active]: item.id === activeId }) }
+       className={ clsx(link, { [activeLink]: isActive, [childLink]: child }) }
        dangerouslySetInnerHTML={ { __html: item.titleHtml } }
        ref={ ref }
     />
   );
-};
-
-export const SidebarLink = memo(SidebarLinkInner);
+});

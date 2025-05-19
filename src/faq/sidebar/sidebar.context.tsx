@@ -11,7 +11,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { NavigationItem } from './models';
+import { type NavigationItem } from './models';
 
 export interface SidebarContextType {
   contentRef: RefObject<HTMLElement | null>;

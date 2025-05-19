@@ -1,13 +1,11 @@
-import clsx from 'clsx';
-import { Content } from './Content';
-import { sidebar } from './faq.module.css';
-import { Sidebar } from './sidebar';
-import { SidebarProvider } from './sidebar/sidebar.context';
+import { Content } from './content';
+import './faq.module.css';
+import { Sidebar, SidebarProvider } from './sidebar';
 
 export const Faq = () => {
   return (
     <SidebarProvider>
-      <Sidebar className={ clsx(sidebar, `sidebar`) }/>
+      <Sidebar/>
       <Content />
     </SidebarProvider>
   );

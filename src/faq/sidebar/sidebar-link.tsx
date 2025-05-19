@@ -1,7 +1,7 @@
 import { isInViewport } from '@core/helpers';
 import { clsx } from 'clsx';
 import { FC, memo, type MouseEvent, useEffect, useRef } from 'react';
-import { NavigationItem } from './models';
+import { type NavigationItem } from './models';
 import { activeLink, childLink, link } from './sidebar-link.module.css';
 import { useSidebar } from './sidebar.context';
 

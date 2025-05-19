@@ -1,4 +1,50 @@
 .logo {
-  max-width: 100px;
-  width: 60%;
+  width: 66px;
+  height: 66px;
+}
+
+.sidebarContainer {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  padding: var(--v-padding) var(--h-padding);
+  padding-left: 0;
+  position: fixed;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 0;
+  user-select: none;
+}
+
+.name {
+  text-align: center;
+  font-weight: 600;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }

@@ -155,7 +155,7 @@ input.
 rather than with special syntax, as in `.foo and .bar | not`.
 
 These three only produce the values `true` and `false`, and so are only useful for genuine Boolean operations, rather
-than the common Perl/Python/Ruby idiom of "value\_that\_may\_be\_null or default". If you want to use this form of "or",
+than the common Perl/Python/Ruby idiom of "value_that_may_be_null or default". If you want to use this form of "or",
 picking between two values rather than evaluating a condition, see the `//` operator below.
 
 <div class="pb-3">
@@ -451,7 +451,7 @@ label $out | reduce .[] as $item (null; if .==false then break $out else ... end
 
 The following jq program produces a syntax error:
 
-```break $out```
+`break $out`
 
 because no label `$out` is visible.
 

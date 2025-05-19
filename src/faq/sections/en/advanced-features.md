@@ -182,7 +182,7 @@ which will not be visible where the old one was.
 The destructuring alternative operator provides a concise mechanism for destructuring an input that can take one of
 several forms.
 
-Suppose we have an API that returns a list of resources and events associated with them, and we want to get the user\_id
+Suppose we have an API that returns a list of resources and events associated with them, and we want to get the user_id
 and timestamp of the first event for each resource. The API (having been clumsily converted from XML) will only wrap the
 events in an array if the resource has multiple events:
 

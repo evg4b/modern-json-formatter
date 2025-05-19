@@ -25,8 +25,8 @@ export const SidebarLink: FC<SidebarLinkProps> = memo(({ item, child = false }) 
     if (isActive && ref.current && !isInViewport(ref.current)) {
       ref.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'nearest',
+        block: 'center',
+        inline: 'center',
       })
     }
   }, [isActive]);

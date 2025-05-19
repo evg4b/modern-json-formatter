@@ -11,6 +11,7 @@
   transition-property: background-color, color;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
+  text-decoration: none;
 
   &:hover {
     --sidebar-link-background: #6e6e6e;

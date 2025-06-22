@@ -1,8 +1,8 @@
-import { getURL } from '@core/browser';
+import { resource } from '@core/browser';
 import { loadWasm } from './helpers';
 
 export const importWasm = async (go: Go, wasmFile: string) => {
-  const webAssemblyInstance = await loadWasm(getURL(wasmFile), go.importObject);
+  const webAssemblyInstance = await loadWasm(resource(wasmFile), go.importObject);
 
   void go
     .run(webAssemblyInstance.instance)

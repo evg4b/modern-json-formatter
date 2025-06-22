@@ -1,5 +1,5 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
-import { getURL } from '@core/browser';
+import { resource } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyleLink, registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
@@ -29,7 +29,7 @@ export const runExtension = async () => {
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
   registerStyle(shadowRoot, staticStyles);
-  registerStyleLink(shadowRoot, getURL('content-styles.css'));
+  registerStyleLink(shadowRoot, resource('content-styles.css'));
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');

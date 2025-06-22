@@ -1,5 +1,5 @@
 import { getHistory } from '@core/background';
-import { getURL } from '@core/browser';
+import { resource } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { debounce } from 'lodash';
 import { isNotNil } from '../../helpers';
@@ -44,7 +44,7 @@ export class QueryInputElement extends StyledComponentElement {
     ],
   });
 
-  private readonly infoIcons = new InfoButtonElement(getURL('faq.html'));
+  private readonly infoIcons = new InfoButtonElement(resource('faq.html'));
   private readonly history = new HistoryManager<HistoryItem>();
 
   private onSubmitCallback: ((s: string) => unknown) | null = null;

@@ -23,30 +23,30 @@ const bridge = async <M, R>(request: M) => {
 };
 
 export const format = async (json: string): Promise<ErrorNode | string> => {
-  return bridge<FormatParams, ErrorNode | string>({ action: 'format', json });
+  return bridge<FormatParams, ErrorNode | string>({ action: 'format', payload: json });
 };
 
 export const jq = async (json: string, query: string): Promise<TokenizerResponse> => {
-  return bridge<JqParams, TokenizerResponse>({ action: 'jq', json, query });
+  return bridge<JqParams, TokenizerResponse>({ action: 'jq', payload: { json, query } });
 };
 
 
 export const tokenize = async (json: string): Promise<TokenizerResponse> => {
-  return bridge<TokenizeParams, TokenizerResponse>({ action: 'tokenize', json });
+  return bridge<TokenizeParams, TokenizerResponse>({ action: 'tokenize', payload: json });
 };
 
 export const getHistory = async (domain: string, prefix: string): Promise<HistoryResponse> => {
-  return bridge<GetHistoryParams, HistoryResponse>({ action: 'get-history', domain, prefix });
+  return bridge<GetHistoryParams, HistoryResponse>({ action: 'get-history', payload: { domain, prefix } });
 };
 
 export const clearHistory = async (): Promise<void> => {
-  return bridge<ClearHistoryParams, void>({ action: 'clear-history' });
+  return bridge<ClearHistoryParams, void>({ action: 'clear-history', payload: undefined });
 };
 
 export const pushHistory = async (domain: string, query: string): Promise<void> => {
-  return bridge<PushHistoryParams, void>({ action: 'push-history', domain, query });
+  return bridge<PushHistoryParams, void>({ action: 'push-history', payload: { domain, query } });
 };
 
 export const getDomains = async (): Promise<DomainCountResponse> => {
-  return bridge<GetDomainsParams, DomainCountResponse>({ action: 'get-domains' });
+  return bridge<GetDomainsParams, DomainCountResponse>({ action: 'get-domains', payload: undefined });
 };

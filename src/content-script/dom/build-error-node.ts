@@ -1,4 +1,4 @@
-import { getURL } from '@core/browser';
+import { resource } from '@core/browser';
 import { createElement } from '@core/dom';
 
 export const buildErrorNode = (header: string, ...lines: string[]) => {
@@ -6,7 +6,7 @@ export const buildErrorNode = (header: string, ...lines: string[]) => {
   wrapper.className = 'error';
   const image = document.createElement('img');
 
-  image.src = getURL('invalid.svg');
+  image.src = resource('invalid.svg');
   image.alt = 'Error';
   const message = document.createElement('div');
   message.className = 'message';

@@ -7,7 +7,7 @@ more than once, you'll need to store it in a variable. To pass a value to anothe
 part of the program to define a variable (as a function parameter, object member, or whatever) in which to place the
 data.
 
-It is also possible to define functions in jq, although this is is a feature whose biggest use is defining jq's standard
+It is also possible to define functions in jq, although this is a feature whose biggest use is defining jq's standard
 library (many jq functions such as `map` and `select` are in fact written in jq).
 
 jq has reduction operators, which are very powerful but a bit tricky. Again, these are mostly used internally, to define

@@ -17,25 +17,25 @@ describe('getHistory', () => {
 
   describe('when history is empty', () => {
     test('should return empty array', async () => {
-      const history = await getHistory('unknown', '');
+      const history = await getHistory({ domain: 'unknown', prefix: '' });
       expect(history).toEqual([]);
     });
   });
 
   describe('when history has some records', () => {
     beforeEach(async () => {
-      await pushHistory('example.com', '.');
-      await pushHistory('example.com', '.[]');
-      await pushHistory('another.com', '.');
+      await pushHistory({ domain: 'example.com', query: '.' });
+      await pushHistory({ domain: 'example.com', query: '.[]' });
+      await pushHistory({ domain: 'another.com', query: '.' });
     });
 
     test('should return all records', async () => {
-      const history = await getHistory('example.com', '');
+      const history = await getHistory({ domain: 'example.com', prefix: '' });
       expect(history).toEqual(['.[]', '.']);
     });
 
     test('should return only matched records', async () => {
-      const history = await getHistory('example.com', '.[');
+      const history = await getHistory({ domain: 'example.com', prefix: '.[' });
       expect(history).toEqual(['.[]']);
     });
   });
@@ -43,12 +43,12 @@ describe('getHistory', () => {
   describe('when history has many records', () => {
     beforeEach(async () => {
       for (let i = 0; i < 50; i++) {
-        await pushHistory('example.com', `.[${ i }]`);
+        await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
       }
     });
 
     test('should return only 10 records', async () => {
-      const history = await getHistory('example.com', '');
+      const history = await getHistory({ domain: 'example.com', prefix: '' });
       expect(history).toHaveLength(10);
       expect(history).toEqual([
         '.[49]', '.[48]', '.[47]', '.[46]', '.[45]',
@@ -63,16 +63,16 @@ describe('pushHistory', () => {
   beforeEach(cleanup);
 
   test('should push history', async () => {
-    await pushHistory('example.com', 'query1');
-    const history = await getHistory('example.com', '');
+    await pushHistory({ domain: 'example.com', query: 'query1' });
+    const history = await getHistory({ domain: 'example.com', prefix: '' });
     expect(history).toEqual(['query1']);
   });
 
   test('should push history', async () => {
-    await pushHistory('example.com', '.');
-    await pushHistory('example.com', '.[]');
-    await pushHistory('example.com', '.');
-    const history = await getHistory('example.com', '');
+    await pushHistory({ domain: 'example.com', query: '.' });
+    await pushHistory({ domain: 'example.com', query: '.[]' });
+    await pushHistory({ domain: 'example.com', query: '.' });
+    const history = await getHistory({ domain: 'example.com', prefix: '' });
     expect(history).toEqual(['.', '.[]']);
   });
 });
@@ -82,13 +82,13 @@ describe('clearHistory', () => {
 
   beforeEach(async () => {
     for (let i = 0; i < 50; i++) {
-      await pushHistory('example.com', `.[${ i }]`);
+      await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
     }
   });
 
   test('should clear history', async () => {
     await clearHistory();
-    const history = await getHistory('example.com', '');
+    const history = await getHistory({ domain: 'example.com', prefix: '' });
     expect(history).toEqual([]);
   });
 });
@@ -99,17 +99,17 @@ describe('getDomains', () => {
 
   beforeEach(async () => {
     for (let i = 0; i < 3; i++) {
-      await pushHistory('example.com', `.[${ i }]`);
+      await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
     }
 
-    await pushHistory('sub.example.com', `.[0]`);
+    await pushHistory({ domain: 'sub.example.com', query: `.[0]` });
 
     for (let i = 0; i < 5; i++) {
-      await pushHistory('test.com', `.[${ i }]`);
+      await pushHistory({ domain: 'test.com', query: `.[${ i }]` });
     }
 
     for (let i = 0; i < 2; i++) {
-      await pushHistory('other.net', `.[${ i }]`);
+      await pushHistory({ domain: 'other.net', query: `.[${ i }]` });
     }
   });
 

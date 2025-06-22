@@ -24,7 +24,7 @@ describe('worker-core.wasm', () => {
 
   describe('jq', () => {
     test('should return a TokenizerResponse', async () => {
-      const data = await jq('{ "data": 123 }', '.data');
+      const data = await jq({ json: '{ "data": 123 }', query: '.data' });
 
       expect(data).toEqual(tNumber(`123`));
     });

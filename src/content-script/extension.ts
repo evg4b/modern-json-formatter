@@ -1,7 +1,7 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
-import { getURL } from '@core/browser';
+import { resource } from '@core/browser';
 import { createElement } from '@core/dom';
-import { importStyles, registerStyles } from '@core/ui/helpers';
+import { registerStyle, registerStyleLink } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
@@ -28,8 +28,8 @@ export const runExtension = async () => {
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  registerStyles(shadowRoot, staticStyles);
-  importStyles(shadowRoot, getURL('content-styles.css'));
+  registerStyle(shadowRoot, staticStyles);
+  registerStyleLink(shadowRoot, resource('content-styles.css'));
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');
@@ -84,9 +84,17 @@ export const runExtension = async () => {
         queryContainer.appendChild(prepareResponse(info));
         await pushHistory(window.location.hostname, query);
       } catch (error: unknown) {
-        if (isErrorNode(error) && error.scope === 'jq') {
-          toolbox.setErrorMessage(error.error);
-          return;
+        if (isErrorNode(error)) {
+          if (error.scope === 'jq') {
+            toolbox.setErrorMessage(error.error);
+            return;
+          }
+
+          rootContainer.appendChild(new FloatingMessageElement(
+            `Error ${ error.error } in ${ error.scope }`,
+            error.stack ? `Stack trace: ${ error.stack }` : '',
+            'error-message',
+          ));
         }
 
         console.error(error);

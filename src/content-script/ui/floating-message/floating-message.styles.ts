@@ -1,4 +1,5 @@
 export default `
+
 :host {
   display: flex;
   position: fixed;
@@ -16,7 +17,7 @@ export default `
   opacity: 1;
   transform: translateY(0);
   transition: all 250ms ease-in-out;
-
+  
   .header-container {
     display: flex;
     flex-direction: row;
@@ -57,7 +58,15 @@ export default `
     display: flex;
     flex-direction: column;
     color: #9b9b9b;
+    overflow: auto;
   }
+}
+
+:host(.error-message),
+:host(.error-message) .header-container, 
+:host(.error-message) .body {
+  background: var(--error-background) !important;
+  color: var(--error-color) !important;
 }
 
 :host.hidden,

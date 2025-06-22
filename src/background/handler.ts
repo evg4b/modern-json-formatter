@@ -1,58 +1,52 @@
 import { DomainCountResponse, HistoryResponse, Message, TokenizerResponse } from '@core/background';
 import { ErrorNode, format, jq, tokenize } from '@worker-core';
-import { is } from './helpers';
+import { get } from 'lodash';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
+
 export const handler = async (message: Message): Promise<HandlerResult | void> => {
   try {
-    if (is(message, 'tokenize')) {
-      return await tokenize(message.json);
-    }
+    switch (message.action) {
+      case 'tokenize':
+        return await tokenize(message.payload);
+      case 'format':
+        return await format(message.payload);
+      case 'jq':
+        return await jq(message.payload);
+      case 'get-history':
+        return await getHistory(message.payload);
+      case 'push-history':
+        return await pushHistory(message.payload);
+      case 'clear-history':
+        return await clearHistory();
+      case 'get-domains':
+        return await getDomains();
+      default: {
+        const type: string = get(message, 'action', 'N/A');
 
-    if (is(message, 'format')) {
-      return await format(message.json);
+        return {
+          type: 'error',
+          scope: 'worker',
+          error: `Unknown message type: ${ type }`,
+        };
+      }
     }
-
-    if (is(message, 'jq')) {
-      return await jq(message.json, message.query);
-    }
-
-    if (is(message, 'get-history')) {
-      return await getHistory(message.domain, message.prefix);
-    }
-
-    if (is(message, 'push-history')) {
-      return await pushHistory(message.domain, message.query);
-    }
-
-    if (is(message, 'clear-history')) {
-      return await clearHistory();
-    }
-
-    if (is(message, 'get-domains')) {
-      return await getDomains();
-    }
-
   } catch (err: unknown) {
-    return err instanceof Error
-      ? {
+    if (err instanceof Error) {
+      return {
         type: 'error',
         scope: 'worker',
         stack: err.stack,
         error: err.message,
-      }
-      : {
-        type: 'error',
-        scope: 'worker',
-        error: `Unknown error: ${ String(err) }`,
       };
-  }
+    }
 
-  return {
-    type: 'error',
-    scope: 'worker',
-    error: 'Unknown message type',
-  } as ErrorNode;
+    return {
+      type: 'error',
+      scope: 'worker',
+      error: `Unknown error: ${ String(err) }`,
+    };
+  }
 };
 

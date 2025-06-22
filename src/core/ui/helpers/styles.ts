@@ -1,6 +1,6 @@
 import { createElement } from '@core/dom';
 
-export const registerStyles = (shadowRoot: ShadowRoot, styles: string) => {
+export const registerStyle = (shadowRoot: ShadowRoot, styles: string) => {
   const styleNode = document.createElement('style');
   styleNode.textContent = styles;
   styleNode.setAttribute('type', 'text/css');
@@ -11,8 +11,8 @@ export const registerStyles = (shadowRoot: ShadowRoot, styles: string) => {
   return styleNode;
 };
 
-export const importStyles = (shadowRoot: ShadowRoot, url: string) => {
-  shadowRoot.appendChild(createElement({
+export const registerStyleLink = (shadowRoot: ShadowRoot, url: string) => {
+  const linkNode = createElement({
     element: 'link',
     attributes: {
       href: url,
@@ -20,5 +20,9 @@ export const importStyles = (shadowRoot: ShadowRoot, url: string) => {
       rel: 'stylesheet',
       role: 'presentation',
     },
-  }));
+  });
+
+  shadowRoot.appendChild(linkNode);
+
+  return linkNode;
 };

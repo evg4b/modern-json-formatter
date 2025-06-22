@@ -16,32 +16,32 @@ jest.mock('./history', () => ({
 describe('handler', () => {
   describe('worker-core', () => {
     test('should handle tokenize message', async () => {
-      const message: Message = { json: 'json', action: 'tokenize' };
+      const message: Message = { payload: 'json', action: 'tokenize' };
       wrapMock(tokenize).mockResolvedValue('tokenized');
 
       const response = await handler(message);
 
-      expect(tokenize).toHaveBeenCalledWith(message.json);
+      expect(tokenize).toHaveBeenCalledWith(message.payload);
       expect(response).toEqual('tokenized');
     });
 
     test('should handle format message', async () => {
-      const message: Message = { json: 'json', action: 'format' };
+      const message: Message = { payload: 'json', action: 'format' };
       wrapMock(format).mockResolvedValue('formatted');
 
       const response = await handler(message);
 
-      expect(format).toHaveBeenCalledWith(message.json);
+      expect(format).toHaveBeenCalledWith(message.payload);
       expect(response).toEqual('formatted');
     });
 
     test('should handle jq message', async () => {
-      const message: Message = { json: 'json', query: '.query', action: 'jq' };
+      const message: Message = { payload: { json: 'json', query: '.query' }, action: 'jq' };
       wrapMock(jq).mockResolvedValue('jq');
 
       const response = await handler(message);
 
-      expect(jq).toHaveBeenCalledWith(message.json, message.query);
+      expect(jq).toHaveBeenCalledWith(message.payload);
       expect(response).toEqual('jq');
     });
   });
@@ -50,18 +50,18 @@ describe('handler', () => {
     test('should handle get-history message', async () => {
       const expected = ['history'];
 
-      const message: Message = { domain: 'domain', prefix: 'prefix', action: 'get-history' };
+      const message: Message = { payload: { domain: 'domain', prefix: 'prefix' }, action: 'get-history' };
 
       wrapMock(getHistory).mockResolvedValue(expected);
 
       const response = await handler(message);
 
-      expect(getHistory).toHaveBeenCalledWith(message.domain, message.prefix);
+      expect(getHistory).toHaveBeenCalledWith(message.payload);
       expect(response).toEqual(expected);
     });
 
     test('should handle clear-history message', async () => {
-      const message: Message = { action: 'clear-history' };
+      const message: Message = { action: 'clear-history', payload: undefined };
 
       await handler(message);
 
@@ -69,17 +69,17 @@ describe('handler', () => {
     });
 
     test('should handle push-history message', async () => {
-      const message: Message = { domain: 'domain', query: 'query', action: 'push-history' };
+      const message: Message = { payload: { domain: 'domain', query: 'query' }, action: 'push-history' };
 
       await handler(message);
 
-      expect(pushHistory).toHaveBeenCalledWith(message.domain, message.query);
+      expect(pushHistory).toHaveBeenCalledWith(message.payload);
     });
 
     test('should handle get-domains message', async () => {
       const expected = [{ domain: 'domain', count: 1 }];
 
-      const message: Message = { action: 'get-domains' };
+      const message: Message = { action: 'get-domains', payload: undefined };
 
       wrapMock(getDomains).mockResolvedValue(expected);
 
@@ -90,15 +90,29 @@ describe('handler', () => {
     });
   });
 
-  test('should throw error', async () => {
-    const message = { json: 'json', action: 'unknown' } as unknown as Message;
+  describe('should throw error', () => {
+    test('for unknown message type', async () => {
+      const message = { json: 'json', action: 'unknown' } as unknown as Message;
 
-    const response = await handler(message);
+      const response = await handler(message);
 
-    expect(response).toEqual({
-      type: 'error',
-      scope: 'worker',
-      error: 'Unknown message type',
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'worker',
+        error: 'Unknown message type: unknown',
+      });
+    });
+
+    test('for undefined message action', async () => {
+      const message = { json: 'json' } as unknown as Message;
+
+      const response = await handler(message);
+
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'worker',
+        error: 'Unknown message type: N/A',
+      });
     });
   });
 });

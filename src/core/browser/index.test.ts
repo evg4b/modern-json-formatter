@@ -3,7 +3,7 @@ import { afterAll, beforeAll } from '@jest/globals';
 describe('Chrome Browser', () => {
   beforeAll(() => {
     const runtime = {
-      getURL: jest.fn(),
+      resource: jest.fn(),
       sendMessage: jest.fn(),
     };
     Reflect.defineProperty(global, 'chrome', {
@@ -15,10 +15,10 @@ describe('Chrome Browser', () => {
     Reflect.deleteProperty(global, 'chrome');
   });
 
-  it('should call getURL', async () => {
-    const { getURL } = await import('./index');
+  it('should call resource', async () => {
+    const { resource } = await import('./index');
 
-    expect(getURL).toBe(chrome.runtime.getURL);
+    expect(resource).toBe(chrome.runtime.getURL);
   });
 
   it('should call sendMessage', async () => {

@@ -3,7 +3,7 @@ import '@testing/background.mock';
 import { format, tokenize } from '@core/background';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
-import { registerStyles } from '@core/ui/helpers';
+import { registerStyle } from '@core/ui/helpers';
 import { tNull, tObject, tProperty, tString } from '@testing';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
@@ -60,7 +60,7 @@ describe('runExtension', () => {
 
     expect(buildContainers).not.toHaveBeenCalled();
     expect(spy).not.toHaveBeenCalled();
-    expect(registerStyles).not.toHaveBeenCalled();
+    expect(registerStyle).not.toHaveBeenCalled();
 
     spy.mockRestore();
   });
@@ -79,7 +79,7 @@ describe('runExtension', () => {
 
     expect(buildContainers).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
-    expect(registerStyles).toHaveBeenCalled();
+    expect(registerStyle).toHaveBeenCalled();
     expect(format).toHaveBeenCalled();
 
     expect(tokenize).not.toHaveBeenCalled();
@@ -107,7 +107,7 @@ describe('runExtension', () => {
 
     expect(buildContainers).toHaveBeenCalled();
     expect(spy).toHaveBeenCalled();
-    expect(registerStyles).toHaveBeenCalled();
+    expect(registerStyle).toHaveBeenCalled();
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();

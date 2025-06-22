@@ -1,39 +1,37 @@
 import { DomainCountResponse, HistoryResponse, Message, TokenizerResponse } from '@core/background';
 import { ErrorNode, format, jq, tokenize } from '@worker-core';
-import { is } from './helpers';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
+
+function handle(message: Message) {
+  switch (message.action) {
+    case 'tokenize':
+      return tokenize(message.json);
+    case 'format':
+      return format(message.json);
+    case 'jq':
+      return jq(message.json, message.query);
+    case 'get-history':
+      return getHistory(message.domain, message.prefix);
+    case 'push-history':
+      return pushHistory(message.domain, message.query);
+    case 'clear-history':
+      return clearHistory();
+    case 'get-domains':
+      return getDomains();
+    default:
+      return {
+        type: 'error',
+        scope: 'worker',
+        error: `Unknown message type: ${ (Reflect.get(message, 'action') as (string | undefined) ?? 'N/A') }`,
+      } as ErrorNode;
+  }
+}
+
 export const handler = async (message: Message): Promise<HandlerResult | void> => {
   try {
-    if (is(message, 'tokenize')) {
-      return await tokenize(message.json);
-    }
-
-    if (is(message, 'format')) {
-      return await format(message.json);
-    }
-
-    if (is(message, 'jq')) {
-      return await jq(message.json, message.query);
-    }
-
-    if (is(message, 'get-history')) {
-      return await getHistory(message.domain, message.prefix);
-    }
-
-    if (is(message, 'push-history')) {
-      return await pushHistory(message.domain, message.query);
-    }
-
-    if (is(message, 'clear-history')) {
-      return await clearHistory();
-    }
-
-    if (is(message, 'get-domains')) {
-      return await getDomains();
-    }
-
+    return await handle(message);
   } catch (err: unknown) {
     return err instanceof Error
       ? {
@@ -48,11 +46,5 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
         error: `Unknown error: ${ String(err) }`,
       };
   }
-
-  return {
-    type: 'error',
-    scope: 'worker',
-    error: 'Unknown message type',
-  } as ErrorNode;
 };
 

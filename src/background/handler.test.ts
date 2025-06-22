@@ -90,15 +90,29 @@ describe('handler', () => {
     });
   });
 
-  test('should throw error', async () => {
-    const message = { json: 'json', action: 'unknown' } as unknown as Message;
+  describe('should throw error', () => {
+    test('for unknown message type', async () => {
+      const message = { json: 'json', action: 'unknown' } as unknown as Message;
 
-    const response = await handler(message);
+      const response = await handler(message);
 
-    expect(response).toEqual({
-      type: 'error',
-      scope: 'worker',
-      error: 'Unknown message type',
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'worker',
+        error: 'Unknown message type: unknown',
+      });
+    });
+
+    test('for undefined message action', async () => {
+      const message = { json: 'json' } as unknown as Message;
+
+      const response = await handler(message);
+
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'worker',
+        error: 'Unknown message type: N/A',
+      });
     });
   });
 });

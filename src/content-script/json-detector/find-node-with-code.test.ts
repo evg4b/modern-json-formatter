@@ -36,7 +36,8 @@ describe('findNodeWithCode', () => {
   test('should resolve with node when body is present', async () => {
     const result = await findNodeWithCode();
     expect(result).toBe(mockNode);
-    expect(getNodeWithCode).toHaveBeenCalledWith(document.body.childNodes);
+    const unknownChildNodes: NodeListOf<ChildNode> = document.body.childNodes;
+    expect(getNodeWithCode as unknown).toHaveBeenCalledWith(unknownChildNodes);
     expect(addEventListenerMock).not.toHaveBeenCalled();
   });
 
@@ -46,7 +47,7 @@ describe('findNodeWithCode', () => {
     const result = await findNodeWithCode();
 
     expect(result).toBe(mockNode);
-    expect(getNodeWithCode).toHaveBeenCalledWith(document.body.childNodes);
+    expect(getNodeWithCode as unknown).toHaveBeenCalledWith(document.body.childNodes);
     expect(addEventListenerMock).toHaveBeenCalled();
   });
 });

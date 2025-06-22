@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { beforeAll, describe, jest, test } from '@jest/globals';
+import { beforeAll, describe, expect, jest, test } from '@jest/globals';
 import { tNumber, tObject, tProperty } from '@testing';
 import { readFileSync } from 'fs';
 import { format, initialize, jq, tokenize } from './index';

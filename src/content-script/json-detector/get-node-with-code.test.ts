@@ -1,4 +1,4 @@
-import { beforeEach, describe } from '@jest/globals';
+import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { edgeUserAgent } from '@testing/user-agents';
 import { getNodeWithCode } from './get-node-with-code';
 

@@ -1,6 +1,6 @@
 jest.useFakeTimers();
 
-import { beforeEach, describe, jest, test } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { FloatingMessageElement } from './floating-message';
 
 describe('FloatingMessageElement', () => {

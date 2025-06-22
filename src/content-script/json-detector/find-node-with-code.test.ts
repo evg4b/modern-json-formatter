@@ -1,7 +1,7 @@
 jest.mock('./get-node-with-code');
 
 import { createElement } from '@core/dom';
-import { expect } from '@jest/globals';
+import { beforeEach, describe, expect, test, afterEach, } from '@jest/globals';
 import { wrapMock } from '@testing/helpers';
 import { findNodeWithCode } from './find-node-with-code';
 import { getNodeWithCode } from './get-node-with-code';

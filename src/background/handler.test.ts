@@ -1,6 +1,6 @@
 import '@testing/worker-core.mock';
 import { type Message } from '@core/background';
-import { describe, expect, jest, test } from '@jest/globals';
+import { describe, expect, test, jest } from '@jest/globals';
 import { wrapMock } from '@testing/helpers';
 import { format, jq, tokenize } from '@worker-core';
 import { handler } from './handler';

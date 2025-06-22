@@ -1,5 +1,5 @@
 import { trim } from '@core/helpers';
-import { describe } from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 
 describe('trim', () => {
   const items = [
@@ -9,7 +9,7 @@ describe('trim', () => {
     { input: ' \t\r\nabc\t\r\n ', chars: ' \t\n\r', expected: 'abc' },
   ];
 
-  it.each(items)('should return %p', ({ input, chars, expected }) => {
+  test.each(items)('should return %p', ({ input, chars, expected }) => {
     expect(trim(input, chars)).toEqual(expected);
   });
 });

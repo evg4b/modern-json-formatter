@@ -22,11 +22,11 @@ describe('main', () => {
 
   afterAll(() => consoleErrorSpy.mockRestore());
 
-  it('should launch extension', () => {
+  test('should launch extension', () => {
     expect(runExtension).toHaveBeenCalled();
   });
 
-  it('should handle error', () => {
+  test('should handle error', () => {
     expect(consoleErrorSpy).toHaveBeenCalledWith('Error running extension:', error);
   });
 });

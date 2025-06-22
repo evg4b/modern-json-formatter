@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import '@testing/browser.mock';
 import '@testing/query-input.mock';
-import { beforeEach, describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
 import { type QueryInputElement } from '../query-input';
 import { ToolboxElement } from './toolbox';

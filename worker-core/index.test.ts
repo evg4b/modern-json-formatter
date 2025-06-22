@@ -1,5 +1,5 @@
 import '@testing/wasm';
-import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, test, afterEach } from '@jest/globals';
 import { wrapMock } from '@testing/helpers';
 import { format, jq, tokenize } from './index';
 import { importWasm } from './wasm';

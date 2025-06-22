@@ -13,7 +13,7 @@ describe('binding', () => {
     jest.clearAllMocks();
   });
 
-  it('format should resolve with formatted JSON', async () => {
+  test('format should resolve with formatted JSON', async () => {
     const mockResponse = 'formatted-json';
     mockSendMessage.mockResolvedValue(mockResponse);
 
@@ -22,7 +22,7 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'format', payload: 'json' });
   });
 
-  it('jq should resolve with TokenizerResponse', async () => {
+  test('jq should resolve with TokenizerResponse', async () => {
     const mockResponse: TokenizerResponse = { type: 'null' };
     mockSendMessage.mockResolvedValue(mockResponse);
 
@@ -31,7 +31,7 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'jq', payload: { json: 'json', query: 'query' } });
   });
 
-  it('tokenize should resolve with TokenizerResponse', async () => {
+  test('tokenize should resolve with TokenizerResponse', async () => {
     const mockResponse: TokenizerResponse = { type: 'null' };
     mockSendMessage.mockResolvedValue(mockResponse);
 
@@ -40,7 +40,7 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'tokenize', payload: 'json' });
   });
 
-  it('getHistory should resolve with HistoryResponse', async () => {
+  test('getHistory should resolve with HistoryResponse', async () => {
     const mockResponse: HistoryResponse = [];
     mockSendMessage.mockResolvedValue(mockResponse);
 
@@ -50,14 +50,14 @@ describe('binding', () => {
       .toHaveBeenCalledWith({ action: 'get-history', payload: { domain: 'domain', prefix: 'prefix' } });
   });
 
-  it('clearHistory should resolve with void', async () => {
+  test('clearHistory should resolve with void', async () => {
     mockSendMessage.mockResolvedValue(undefined);
 
     await clearHistory();
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'clear-history', payload: undefined });
   });
 
-  it('pushHistory should resolve with void', async () => {
+  test('pushHistory should resolve with void', async () => {
     mockSendMessage.mockResolvedValue(undefined);
 
     await pushHistory('domain', 'query');
@@ -65,7 +65,7 @@ describe('binding', () => {
       .toHaveBeenCalledWith({ action: 'push-history', payload: { domain: 'domain', query: 'query' } });
   });
 
-  it('getDomains should resolve with DomainCountResponse', async () => {
+  test('getDomains should resolve with DomainCountResponse', async () => {
     const mockResponse: DomainCountResponse = [{ domain: 'example.com', count: 5 }];
     mockSendMessage.mockResolvedValue(mockResponse);
 
@@ -74,7 +74,7 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'get-domains', payload: undefined });
   });
 
-  it('should reject with ErrorNode if response is an error', async () => {
+  test('should reject with ErrorNode if response is an error', async () => {
     const mockError: ErrorNode = { error: 'error', type: 'error', scope: 'jq' };
     mockSendMessage.mockResolvedValue(mockError);
 

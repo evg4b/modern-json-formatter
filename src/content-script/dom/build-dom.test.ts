@@ -233,7 +233,7 @@ describe('buildDom', () => {
     },
   };
 
-  it('should render valid JSON', () => {
+  test('should render valid JSON', () => {
     const result = buildDom(parsedJson);
 
     const invisibleElements = [
@@ -252,7 +252,7 @@ describe('buildDom', () => {
     expect(parsed).toEqual(expected);
   });
 
-  it('should throw error for invalid type', () => {
+  test('should throw error for invalid type', () => {
     const invalidJson = {
       ...parsedJson,
       type: 'invalid',

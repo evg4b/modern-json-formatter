@@ -1,5 +1,5 @@
 import { registerStyle, registerStyleLink } from '@core/ui/helpers/styles';
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, describe, expect, test } from '@jest/globals';
 
 describe('registerStyle', () => {
   let shadowRoot: ShadowRoot;
@@ -19,11 +19,11 @@ describe('registerStyle', () => {
     `);
   });
 
-  it('should return the style node', () => {
+  test('should return the style node', () => {
     expect(styleElement).toMatchSnapshot();
   });
 
-  it('should attach the style node to the shadow root', () => {
+  test('should attach the style node to the shadow root', () => {
     expect(shadowRoot.innerHTML).toMatchSnapshot();
   });
 });
@@ -38,11 +38,11 @@ describe('registerStyleLink', () => {
     linkElement = registerStyleLink(shadowRoot, `/css/content-styles.css`);
   });
 
-  it('should return the link node', () => {
+  test('should return the link node', () => {
     expect(linkElement).toMatchSnapshot();
   });
 
-  it('should render the lint to style', () => {
+  test('should render the lint to style', () => {
     expect(shadowRoot.innerHTML).toMatchSnapshot();
   });
 });

@@ -52,7 +52,7 @@ describe('runExtension', () => {
     jest.resetAllMocks();
   });
 
-  it('when code node doesn\'t exists', async () => {
+  test('when code node doesn\'t exists', async () => {
     wrapMock(findNodeWithCode).mockResolvedValue(null);
     const spy = jest.spyOn(document.body, 'attachShadow');
 
@@ -65,7 +65,7 @@ describe('runExtension', () => {
     spy.mockRestore();
   });
 
-  it('when content is too large', async () => {
+  test('when content is too large', async () => {
     const preNode = createElement({
       element: 'pre',
       content: 'X'.repeat(LIMIT + 10),
@@ -87,7 +87,7 @@ describe('runExtension', () => {
     spy.mockRestore();
   });
 
-  it('when content is base', async () => {
+  test('when content is base', async () => {
     const preNode = createElement({
       element: 'pre',
       content: '{ "key": "value" }',

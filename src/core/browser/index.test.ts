@@ -1,4 +1,4 @@
-import { afterAll, beforeAll } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, jest, test } from '@jest/globals';
 
 describe('Chrome Browser', () => {
   beforeAll(() => {
@@ -15,13 +15,13 @@ describe('Chrome Browser', () => {
     Reflect.deleteProperty(global, 'chrome');
   });
 
-  it('should call resource', async () => {
+  test('should call resource', async () => {
     const { resource } = await import('./index');
 
     expect(resource).toBe(chrome.runtime.getURL);
   });
 
-  it('should call sendMessage', async () => {
+  test('should call sendMessage', async () => {
     const { sendMessage } = await import('./index');
 
     expect(sendMessage).toBe(chrome.runtime.sendMessage);

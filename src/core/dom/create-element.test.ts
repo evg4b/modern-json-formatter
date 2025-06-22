@@ -1,5 +1,5 @@
 import { createElement, type Options } from '@core/dom/create-element';
-import { describe, expect } from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 
 describe('createElement', () => {
   const testCases: Options<'span' | 'div' | 'input' | 'a'>[] = [

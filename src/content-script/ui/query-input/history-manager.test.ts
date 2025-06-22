@@ -1,23 +1,23 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 import { HistoryManager } from './history-manager';
 
 describe('HistoryManager', () => {
   describe('undo', () => {
-    it('should undo the last change and return the previous state', () => {
+    test('should undo the last change and return the previous state', () => {
       const historyManager = new HistoryManager<number>();
       historyManager.save(1);
       historyManager.save(2);
       expect(historyManager.undo()).toBe(1);
     });
 
-    it('should return null if there are no previous states', () => {
+    test('should return null if there are no previous states', () => {
       const historyManager = new HistoryManager<number>();
       expect(historyManager.undo()).toBeNull();
     });
   });
 
   describe('redo', () => {
-    it('should redo the last undone change and return the restored state', () => {
+    test('should redo the last undone change and return the restored state', () => {
       const historyManager = new HistoryManager<number>();
       historyManager.save(1);
       historyManager.save(2);
@@ -25,7 +25,7 @@ describe('HistoryManager', () => {
       expect(historyManager.redo()).toBe(2);
     });
 
-    it('should return null if there are no future states', () => {
+    test('should return null if there are no future states', () => {
       const historyManager = new HistoryManager<number>();
       historyManager.save(1);
       historyManager.undo();
@@ -34,7 +34,7 @@ describe('HistoryManager', () => {
   });
 
   describe('save', () => {
-    it('should save a new item in the history and clear any undone changes', () => {
+    test('should save a new item in the history and clear any undone changes', () => {
       const historyManager = new HistoryManager<number>();
       historyManager.save(1);
       historyManager.save(2);

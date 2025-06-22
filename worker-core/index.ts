@@ -2,12 +2,13 @@ import { isString } from 'typed-assert';
 import { type ErrorNode, type TokenizerResponse } from './models';
 import { importWasm } from './wasm';
 
+let go = new Go();
+
 export * from './models';
 
 export const initialize = async (): Promise<void> => {
-  const go = new Go();
+  go = new Go();
   await importWasm(go, 'worker-core.wasm');
-  Reflect.set(globalThis, 'goRuntime', go);
   console.log('Wasm runtime initialized');
 };
 

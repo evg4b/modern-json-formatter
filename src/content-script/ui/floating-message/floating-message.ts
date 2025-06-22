@@ -5,9 +5,10 @@ import floatingMessageStyles from './floating-message.styles';
 export class FloatingMessageElement extends StyledComponentElement {
   private readonly close = createElement({ element: 'div', class: 'close' });
 
-  constructor(header: string, message: string) {
+  constructor(header: string, message: string, type: 'error-message' | 'info-message' = 'info-message') {
     super(floatingMessageStyles);
     this.classList.add('hidden');
+    this.classList.add(type);
 
     this.shadow.append(
       createElement({

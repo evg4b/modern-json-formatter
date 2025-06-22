@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[` Should render the style block 1`] = `
+exports[`registerStyle should attach the style node to the shadow root 1`] = `
 "<style type="text/css" rel="stylesheet" role="presentation">
       :host {
         display: flex;
@@ -10,4 +10,33 @@ exports[` Should render the style block 1`] = `
         justify-content: center;  
       }
     </style>"
+`;
+
+exports[`registerStyle should return the style node 1`] = `
+<style
+  rel="stylesheet"
+  role="presentation"
+  type="text/css"
+>
+  
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;  
+      }
+    
+</style>
+`;
+
+exports[`registerStyleLink should render the lint to style 1`] = `"<link href="/css/content-styles.css" type="text/css" rel="stylesheet" role="presentation">"`;
+
+exports[`registerStyleLink should return the link node 1`] = `
+<link
+  href="/css/content-styles.css"
+  rel="stylesheet"
+  role="presentation"
+  type="text/css"
+/>
 `;

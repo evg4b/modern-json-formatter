@@ -1,4 +1,4 @@
-import { registerStyles } from '@core/ui/helpers';
+import { registerStyle } from '@core/ui/helpers';
 
 export abstract class StyledComponentElement extends HTMLElement {
   protected readonly shadow = this.attachShadow({ mode: 'closed' });
@@ -6,6 +6,6 @@ export abstract class StyledComponentElement extends HTMLElement {
 
   protected constructor(styles: string) {
     super();
-    this._styles = registerStyles(this.shadow, styles);
+    this._styles = registerStyle(this.shadow, styles);
   }
 }

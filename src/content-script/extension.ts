@@ -1,7 +1,7 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
 import { getURL } from '@core/browser';
 import { createElement } from '@core/dom';
-import { importStyles, registerStyles } from '@core/ui/helpers';
+import { registerStyleLink, registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
@@ -28,8 +28,8 @@ export const runExtension = async () => {
   }
 
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  registerStyles(shadowRoot, staticStyles);
-  importStyles(shadowRoot, getURL('content-styles.css'));
+  registerStyle(shadowRoot, staticStyles);
+  registerStyleLink(shadowRoot, getURL('content-styles.css'));
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');

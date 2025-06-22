@@ -118,7 +118,7 @@ describe('QueryInputElement', () => {
 
       input.focus();
 
-      expect(innerInput.focus).toBeCalled();
+      expect(innerInput.focus).toHaveBeenCalled();
     });
 
     test('should blur', () => {
@@ -126,7 +126,7 @@ describe('QueryInputElement', () => {
 
       input.blur();
 
-      expect(innerInput.blur).toBeCalled();
+      expect(innerInput.blur).toHaveBeenCalled();
     });
   });
 
@@ -137,7 +137,7 @@ describe('QueryInputElement', () => {
       input.onSubmit(onSubmitCallback);
       keyPress('Enter');
 
-      expect(onSubmitCallback).toBeCalled();
+      expect(onSubmitCallback).toHaveBeenCalled();
     });
 
     test('should not call onSubmitCallback on other key', () => {
@@ -146,7 +146,7 @@ describe('QueryInputElement', () => {
       input.onSubmit(onSubmitCallback);
       keyPress('a');
 
-      expect(onSubmitCallback).not.toBeCalled();
+      expect(onSubmitCallback).not.toHaveBeenCalled();
     });
 
     test('should clear error message on typing', () => {
@@ -298,7 +298,7 @@ describe('QueryInputElement', () => {
     });
 
     test('should load history', () => {
-      expect(getHistory).toBeCalledWith(window.location.hostname, '');
+      expect(getHistory).toHaveBeenCalledWith(window.location.hostname, '');
     });
 
     test('should load history on focus', () => {

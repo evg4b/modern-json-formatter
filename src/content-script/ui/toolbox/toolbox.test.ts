@@ -42,7 +42,7 @@ describe('Toolbox', () => {
         toolbox.onTabChanged(handler);
         button?.click();
 
-        expect(handler).toBeCalledWith(name);
+        expect(handler).toHaveBeenCalledWith(name);
       });
     });
   });
@@ -59,7 +59,7 @@ describe('Toolbox', () => {
     });
 
     test('should be hided by default', () => {
-      expect(input?.hide).toBeCalled();
+      expect(input?.hide).toHaveBeenCalled();
     });
 
     describe('after query button click', () => {
@@ -68,16 +68,16 @@ describe('Toolbox', () => {
       });
 
       test('should be visible', () => {
-        expect(input?.show).toBeCalledTimes(1);
+        expect(input?.show).toHaveBeenCalledTimes(1);
       });
 
       test('should be focused', () => {
-        expect(input?.focus).toBeCalledTimes(1);
+        expect(input?.focus).toHaveBeenCalledTimes(1);
       });
 
       test('should be hidden after raw button click', () => {
         shadowRoot.querySelector<HTMLButtonElement>('button[ref="raw"]')?.click();
-        expect(input?.hide).toBeCalledTimes(2);
+        expect(input?.hide).toHaveBeenCalledTimes(2);
       });
     });
 
@@ -86,7 +86,7 @@ describe('Toolbox', () => {
 
       toolbox.setErrorMessage(errorMessage);
 
-      expect(input?.setErrorMessage).toBeCalledWith(errorMessage);
+      expect(input?.setErrorMessage).toHaveBeenCalledWith(errorMessage);
     });
 
     test(`should set submit handler on the input`, () => {
@@ -96,7 +96,7 @@ describe('Toolbox', () => {
 
       toolbox.onQueryChanged(handler);
 
-      expect(input?.onSubmit).toBeCalledWith(handler);
+      expect(input?.onSubmit).toHaveBeenCalledWith(handler);
     });
   });
 });

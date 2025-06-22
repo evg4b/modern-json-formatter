@@ -16,7 +16,7 @@ const initIfNotDefined = async (key: string): Promise<void> => {
   if (!Reflect.get(globalThis, key)) {
     await initialize();
   }
-}
+};
 
 export const jq = async ({ json, query }: { json: string; query: string }) => {
   await initIfNotDefined('___jq');

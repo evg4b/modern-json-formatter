@@ -38,13 +38,13 @@ export const SidebarProvider: FC<PropsWithChildren> = ({ children }) => {
 
         return {
           id: header.id,
-          title: header.textContent ?? '',
+          title: header.textContent,
           titleHtml: header.innerHTML,
           ref: header,
           children: Array.from(section.querySelectorAll('h3'))
             .map<NavigationItem>(subHeader => ({
               id: subHeader.id,
-              title: subHeader.textContent ?? '',
+              title: subHeader.textContent,
               titleHtml: subHeader.innerHTML,
               ref: subHeader,
             })),

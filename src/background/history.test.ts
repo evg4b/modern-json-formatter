@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, test } from '@jest/globals';
+import 'fake-indexeddb/auto';
+import { beforeEach, describe, expect, test } from '@rstest/core';
 import { throws } from '../content-script/helpers';
 import { wait } from './helpers';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';

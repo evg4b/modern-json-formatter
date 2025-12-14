@@ -7,6 +7,7 @@ export default defineConfig({
   include: [
     'src/**/button/**/*.test.ts',
     'worker-core/**/*.test.ts',
+    'src/background/**/*.test.ts',
   ],
   coverage: {
     enabled: true,

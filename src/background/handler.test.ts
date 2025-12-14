@@ -1,16 +1,17 @@
 import '@testing/worker-core.mock';
 import { type Message } from '@core/background';
-import { describe, expect, test, jest } from '@jest/globals';
+import { describe, expect, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { format, jq, tokenize } from '@worker-core';
 import { handler } from './handler';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
+import { rstest } from "@rstest/core";
 
-jest.mock('./history', () => ({
-  getHistory: jest.fn(),
-  clearHistory: jest.fn(),
-  pushHistory: jest.fn(),
-  getDomains: jest.fn(),
+rstest.mock('./history', () => ({
+  getHistory: rstest.fn(),
+  clearHistory: rstest.fn(),
+  pushHistory: rstest.fn(),
+  getDomains: rstest.fn(),
 }));
 
 describe('handler', () => {

@@ -7,6 +7,9 @@ import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
+import './ui/toolbox';
+import './ui/sticky-panel/sticky-panel.ts';
+import { TabChangedEvent } from "./ui/toolbox/toolbox.ts";
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
@@ -74,8 +77,31 @@ export const runExtension = async () => {
   };
 
   setTimeout(() => {
-    const toolbox = new ToolboxElement();
-    shadowRoot.appendChild(toolbox);
+    const toolboxOld = new ToolboxElement();
+    const toolbox = document.createElement('mjf-toolbox');
+    const panel = document.createElement('mjf-sticky-panel');
+    panel.appendChild(toolboxOld);
+    panel.appendChild(toolbox);
+
+
+    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
+      switch (event.detail) {
+        case 'query':
+          rootContainer.classList.remove('raw', 'formatted');
+          rootContainer.classList.add('query');
+          return;
+        case 'raw':
+          rootContainer.classList.remove('formatted', 'query');
+          rootContainer.classList.add('raw');
+          return;
+        case 'formatted':
+          rootContainer.classList.remove('raw', 'query');
+          rootContainer.classList.add('formatted');
+          return;
+      }
+    })
+
+    shadowRoot.appendChild(panel);
 
     const jqQuery = async (query: string) => {
       try {
@@ -86,7 +112,7 @@ export const runExtension = async () => {
       } catch (error: unknown) {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {
-            toolbox.setErrorMessage(error.error);
+            toolboxOld.setErrorMessage(error.error);
             return;
           }
 
@@ -101,11 +127,11 @@ export const runExtension = async () => {
       }
     };
 
-    toolbox.onQueryChanged(async query => {
+    toolboxOld.onQueryChanged(async query => {
       await wrapper(jqQuery(query));
     });
 
-    toolbox.onTabChanged(tab => {
+    toolboxOld.onTabChanged(tab => {
       switch (tab) {
         case 'query':
           rootContainer.classList.remove('raw', 'formatted');

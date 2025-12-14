@@ -3,7 +3,7 @@ import { assetTabType } from '../../helpers';
 import { QueryInputElement } from '../query-input';
 import toolboxStyles from './toolbox.styles';
 
-@CustomElement('extension-toolbox')
+@CustomElement('extension-toolbox-old')
 export class ToolboxElement extends StyledComponentElement {
   private readonly input = new QueryInputElement();
   private readonly rawButton = this.createButton('Raw', 'raw');

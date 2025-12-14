@@ -1,5 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import '../query-input'
+import '../button'
+import { isInstanceOf } from 'typed-assert';
+import { ButtonElement } from "../button";
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {
@@ -23,11 +28,23 @@ export class ToolboxElement extends LitElement {
       :host {
           display: flex;
           flex-direction: row;
+          justify-content: space-between;
+          margin-bottom: 10px;
+          gap: 10px;
+      }
+
+      .button-container {
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
       }
   `;
 
   @property({ type: String, reflect: true })
   public tab: TabType = 'formatted';
+
+  @property({ type: String })
+  public error: string | null = null;
 
   private readonly tabs: { tab: TabType, label: string }[] = [
     { tab: 'query', label: 'Query' },
@@ -37,22 +54,27 @@ export class ToolboxElement extends LitElement {
 
   public override render() {
     const input = this.tab === 'query'
-      ? html`<input/>`
+      ? html`<mjf-query-input .error=${ this.error } />`
       : ''
 
     return html`
         ${ input }
-        ${ this.tabs.map(({ tab, label }) => html`
-            <button @click=${ this.clickHandler } data-type=${ tab }>
+        <div class="button-container">
+          ${ this.tabs.map(({ tab, label }) => html`
+            <mjf-button class=${ classMap({ active: this.tab === tab }) }
+                        @click=${ this.clickHandler }
+                        .active=${ this.tab === tab }
+                        data-type=${ tab }>
                 ${ label }
-            </button>
-        `) }
+            </mjf-button>
+          `) }
+        </div>
     `;
   }
 
-  private clickHandler(args: MouseEvent) {
-    const target = args.target as HTMLElement;
-    this.tab = target.dataset.type as TabType;
+  private clickHandler(event: MouseEvent) {
+    isInstanceOf(event.target, ButtonElement)
+    this.tab = event.target.dataset.type as TabType;
     this.dispatchEvent(new TabChangedEvent(this.tab));
   }
 }

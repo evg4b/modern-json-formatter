@@ -98,6 +98,11 @@ export const runExtension = async () => {
           rootContainer.classList.add('formatted');
           return;
       }
+    });
+
+    toolbox.addEventListener('jq-query', async event => {
+      console.log(event.detail);
+      await wrapper(jqQuery(event.detail));
     })
 
     shadowRoot.appendChild(panel);
@@ -111,6 +116,7 @@ export const runExtension = async () => {
       } catch (error: unknown) {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {
+            toolbox.error = error.error;
             toolboxOld.setErrorMessage(error.error);
             return;
           }

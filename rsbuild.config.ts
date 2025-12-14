@@ -10,6 +10,7 @@ export default defineConfig({
       js: '',
     },
     filenameHash: false,
+    sourceMap: true,
     copy: [
       { from: './worker-core/worker-core.wasm', to: '' },
     ],

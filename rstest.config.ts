@@ -9,7 +9,7 @@ export default defineConfig({
     'src/**/*.test.ts',
   ],
   coverage: {
-    enabled: false,
+    enabled: true,
     exclude: ['testing/**/*'],
     reportOnFailure: true,
   },

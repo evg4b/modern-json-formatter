@@ -1,4 +1,4 @@
-import { HistoryResponse } from '@core/background';
+import { type HistoryResponse } from '@core/background';
 import { sortBy, take, uniq } from 'lodash';
 import { wait } from './helpers';
 

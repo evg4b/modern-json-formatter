@@ -10,7 +10,7 @@ declare global {
 
 @customElement('mjf-button')
 export class ButtonElement extends LitElement {
-  static styles = css`
+  public static override styles = css`
       :host {
           display: inline-block;
       }
@@ -51,15 +51,18 @@ export class ButtonElement extends LitElement {
       }
   `;
 
-  @property({ type: Boolean }) disabled = false;
-  @property({ type: Boolean }) active = false;
+  @property({ type: Boolean })
+  public disabled = false;
 
-  render() {
+  @property({ type: Boolean })
+  public active = false;
+
+  public override render() {
     return html`
-        <button ?disabled=${ this.disabled }
-                class=${classMap({ active: this.active })}>
-            <slot></slot>
-        </button>
+      <button ?disabled=${ this.disabled }
+              class=${classMap({ active: this.active })}>
+        <slot></slot>
+      </button>
     `;
   }
 }

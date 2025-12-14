@@ -1,4 +1,96 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
+
+exports[`elements > bracket > close 1`] = `
+<span
+  class="bracket bracket-close"
+>
+  }
+</span>
+`;
+
+exports[`elements > bracket > open 1`] = `
+<span
+  class="bracket bracket-open"
+>
+  {
+</span>
+`;
+
+exports[`elements > colon 1`] = `
+<span
+  class="colon"
+>
+  :
+</span>
+`;
+
+exports[`elements > comma 1`] = `
+<span
+  class="comma"
+>
+  ,
+</span>
+`;
+
+exports[`elements > ellipsis 1`] = `
+<span
+  class="ellipsis"
+/>
+`;
+
+exports[`elements > itemsCount > for multiple elements 1`] = `
+<span
+  class="items-count"
+>
+  // 5 items
+</span>
+`;
+
+exports[`elements > itemsCount > for single element 1`] = `
+<span
+  class="items-count"
+>
+  // 1 item
+</span>
+`;
+
+exports[`elements > propertiesCount > for multiple elements 1`] = `
+<span
+  class="properties-count"
+>
+  // 5 properties
+</span>
+`;
+
+exports[`elements > propertiesCount > for single element 1`] = `
+<span
+  class="properties-count"
+>
+  // 1 property
+</span>
+`;
+
+exports[`elements > square-bracket > close 1`] = `
+<span
+  class="bracket square-bracket-close"
+>
+  ]
+</span>
+`;
+
+exports[`elements > square-bracket > open 1`] = `
+<span
+  class="bracket square-bracket-open"
+>
+  [
+</span>
+`;
+
+exports[`elements > toggle 1`] = `
+<span
+  class="toggle"
+/>
+`;
 
 exports[`elements bracket close 1`] = `
 <span

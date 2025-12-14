@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+export type StickyPanelPosition = 'rightTop' | 'rightBottom' | 'leftTop' | 'leftBottom';
+
 @customElement('mjf-sticky-panel')
 export class StickyPanelElement extends LitElement {
   public static override styles = css`
@@ -46,7 +48,7 @@ export class StickyPanelElement extends LitElement {
   `;
 
   @property({ type: String, reflect: true })
-  public position: 'rightTop' | 'rightBottom' | 'leftTop' | 'leftBottom' = 'rightTop';
+  public position: StickyPanelPosition = 'rightTop';
 
   public override render() {
     return html`<slot/>`;

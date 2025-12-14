@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
-    "lib": ["DOM", "ES2020"],
-    "target": "ES2020",
+    "lib": ["DOM", "ES2021"],
+    "target": "ES2021",
     "noEmit": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    // Lit requirements
     "experimentalDecorators": true,
+    // Lit requirements
     "useDefineForClassFields": false,
 
     /* modules */
@@ -18,8 +24,11 @@
 
     /* type checking */
     "strict": true,
+    "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
     "paths": {
       "@core/*": ["src/core/*"],
       "@testing/*": ["testing/*"],

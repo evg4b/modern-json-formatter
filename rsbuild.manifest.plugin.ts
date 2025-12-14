@@ -34,7 +34,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
       const backgroundScript = getFileByExtension(chunks['background'] ?? [], '.js');
 
       const file = await readFile(manifestPath, 'utf-8');
-      const srcManifest: any = JSON.parse(file);
+      const srcManifest = JSON.parse(file);
 
       await writeFile(resolve(stats?.outputPath ?? '', 'manifest.json'), JSON.stringify({
         ...srcManifest,

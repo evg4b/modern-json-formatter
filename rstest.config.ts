@@ -8,9 +8,10 @@ export default defineConfig({
     'src/**/button/**/*.test.ts',
     'worker-core/**/*.test.ts',
     'src/background/**/*.test.ts',
+    'src/core/**/*.test.ts',
   ],
   coverage: {
-    enabled: true,
+    enabled: false,
     exclude: ['testing/**/*'],
     reportOnFailure: true,
   },

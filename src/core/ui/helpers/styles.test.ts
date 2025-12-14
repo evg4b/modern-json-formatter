@@ -1,5 +1,5 @@
 import { registerStyle, registerStyleLink } from '@core/ui/helpers/styles';
-import { beforeAll, describe, expect, test } from '@jest/globals';
+import { beforeAll, describe, expect, test } from '@rstest/core';
 
 describe('registerStyle', () => {
   let shadowRoot: ShadowRoot;

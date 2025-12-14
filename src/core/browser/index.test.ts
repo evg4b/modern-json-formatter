@@ -1,10 +1,10 @@
-import { afterAll, beforeAll, describe, expect, jest, test } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, rstest, test } from '@rstest/core';
 
 describe('Chrome Browser', () => {
   beforeAll(() => {
     const runtime = {
-      resource: jest.fn(),
-      sendMessage: jest.fn(),
+      resource: rstest.fn(),
+      sendMessage: rstest.fn(),
     };
     Reflect.defineProperty(global, 'chrome', {
       get: () => ({ runtime }),

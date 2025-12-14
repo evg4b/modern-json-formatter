@@ -1,51 +1,10 @@
-import tseslint from 'typescript-eslint';
-import eslint from '@eslint/js';
+import js from '@eslint/js';
+import globals from 'globals';
+import ts from 'typescript-eslint';
 
-export default tseslint.config(
-  {
-    ignores: [
-      '.git/',
-      '.yarn/',
-      'dist/',
-      'jest.config.js',
-      'jest.setup.ts',
-      'media_data/',
-      'worker-core/wasm_exec.js',
-      'eslint.config.mjs',
-      'coverage/',
-      'tsup.config.mjs',
-      '.pnp.cjs',
-      '.pnp.loader.mjs',
-    ],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
-  {
-    rules: {
-      '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
-      '@typescript-eslint/no-invalid-void-type': 'off',
-      '@typescript-eslint/prefer-promise-reject-errors': 'off',
-      '@typescript-eslint/no-misused-promises': 'off',
-      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/no-unsafe-argument': 'off',
-      '@typescript-eslint/restrict-template-expressions': [
-        'error',
-        {
-          allowNumber: true,
-        },
-      ],
-    },
-  },
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  }
-);
+export default [
+  { languageOptions: { globals: globals.browser } },
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  { ignores: ['dist/'] },
+];

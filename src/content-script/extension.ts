@@ -6,8 +6,9 @@ import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageOldElement, ToolboxElement } from './ui';
+import { buildContainers, ToolboxElement } from './ui';
 import './ui/toolbox';
+import './ui/floating-message';
 import './ui/sticky-panel/sticky-panel.ts';
 import { TabChangedEvent } from "./ui/toolbox/toolbox.ts";
 
@@ -55,10 +56,16 @@ export const runExtension = async () => {
       content: formatted,
     }));
 
-    rootContainer.appendChild(new FloatingMessageOldElement(
-      'File is too large',
-      'File is too large to be processed (More than 3MB). It has been formatted instead.',
-    ));
+    const creeated = createElement({
+      element: 'mjf-floating-message',
+      attributes: {
+        type: 'info-message',
+        header: 'File is too large',
+      },
+      content: 'File is too large to be processed (More than 3MB). It has been formatted instead.'
+    });
+
+    rootContainer.appendChild(creeated);
 
     rootContainer.classList.remove('loading');
 
@@ -121,11 +128,16 @@ export const runExtension = async () => {
             return;
           }
 
-          rootContainer.appendChild(new FloatingMessageOldElement(
-            `Error ${ error.error } in ${ error.scope }`,
-            error.stack ? `Stack trace: ${ error.stack }` : '',
-            'error-message',
-          ));
+          const errorMessage = createElement({
+            element: 'mjf-floating-message',
+            attributes: {
+              type: 'error-message',
+              header: `Error ${ error.error } in ${ error.scope }`,
+            },
+            content: error.stack ? `Stack trace: ${ error.stack }` : '',
+          })
+
+          rootContainer.appendChild(errorMessage);
         }
 
         console.error(error);
@@ -159,6 +171,8 @@ export const runExtension = async () => {
     prepareResponse(response),
   );
   rootContainer.classList.remove('loading');
+
+  return undefined;
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Rstest Snapshot v1
 
-exports[`registerStyle should attach the style node to the shadow root 1`] = `
+exports[`registerStyle > should attach the style node to the shadow root 1`] = `
 "<style type="text/css" rel="stylesheet" role="presentation">
       :host {
         display: flex;
@@ -12,7 +12,7 @@ exports[`registerStyle should attach the style node to the shadow root 1`] = `
     </style>"
 `;
 
-exports[`registerStyle should return the style node 1`] = `
+exports[`registerStyle > should return the style node 1`] = `
 <style
   rel="stylesheet"
   role="presentation"
@@ -30,9 +30,9 @@ exports[`registerStyle should return the style node 1`] = `
 </style>
 `;
 
-exports[`registerStyleLink should render the lint to style 1`] = `"<link href="/css/content-styles.css" type="text/css" rel="stylesheet" role="presentation">"`;
+exports[`registerStyleLink > should render the lint to style 1`] = `"<link href="/css/content-styles.css" type="text/css" rel="stylesheet" role="presentation">"`;
 
-exports[`registerStyleLink should return the link node 1`] = `
+exports[`registerStyleLink > should return the link node 1`] = `
 <link
   href="/css/content-styles.css"
   rel="stylesheet"

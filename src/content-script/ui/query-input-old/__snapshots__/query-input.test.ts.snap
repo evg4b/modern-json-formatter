@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
 
-exports[`QueryInputElement query history should load history on focus 1`] = `
+exports[`QueryInputElement > query history > should load history on focus 1`] = `
 <datalist
   id="history-list"
 >

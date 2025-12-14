@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
 
-exports[`info-button should render button link 1`] = `
+exports[`info-button > should render button link 1`] = `
 "<style type="text/css" rel="stylesheet" role="presentation">
 :host {
   display: inline-flex;
@@ -17,5 +17,5 @@ exports[`info-button should render button link 1`] = `
     }
   }
 }
-</style><a target="_blank" href="https://test.com"><svg>info-button-icon</svg></a>"
+</style><a target="_blank" href="https://test.com"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjBweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSIyMHB4IiBmaWxsPSJjdXJyZW50Q29sb3IiPgogICAgPHBhdGggZD0iTTQ0NC0yODhoNzJ2LTI0MGgtNzJ2MjQwWm0zNS43OS0zMTJxMTUuMjEgMCAyNS43MS0xMC4yOXQxMC41LTI1LjVxMC0xNS4yMS0xMC4yOS0yNS43MXQtMjUuNS0xMC41cS0xNS4yMSAwLTI1LjcxIDEwLjI5dC0xMC41IDI1LjVxMCAxNS4yMSAxMC4yOSAyNS43MXQyNS41IDEwLjVabS40OSA1MDRRNDAxLTk2IDMzMS0xMjZ0LTEyMi41LTgyLjVRMTU2LTI2MSAxMjYtMzMwLjk2dC0zMC0xNDkuNVE5Ni01NjAgMTI2LTYyOS41cTMwLTY5LjUgODIuNS0xMjJUMzMwLjk2LTgzNHE2OS45Ni0zMCAxNDkuNS0zMHQxNDkuMDQgMzBxNjkuNSAzMCAxMjIgODIuNVQ4MzQtNjI5LjI4cTMwIDY5LjczIDMwIDE0OVE4NjQtNDAxIDgzNC0zMzF0LTgyLjUgMTIyLjVRNjk5LTE1NiA2MjkuMjgtMTI2cS02OS43MyAzMC0xNDkgMzBabS0uMjgtNzJxMTMwIDAgMjIxLTkxdDkxLTIyMXEwLTEzMC05MS0yMjF0LTIyMS05MXEtMTMwIDAtMjIxIDkxdC05MSAyMjFxMCAxMzAgOTEgMjIxdDIyMSA5MVptMC0zMTJaIi8+Cjwvc3ZnPgo="></a>"
 `;

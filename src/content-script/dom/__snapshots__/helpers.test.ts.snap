@@ -15,19 +15,3 @@ exports[`dom helpers > buildInfoNode > should return properties count element fo
   // 2 properties
 </span>
 `;
-
-exports[`dom helpers buildInfoNode should return properties count element for array node 1`] = `
-<span
-  class="items-count"
->
-  // 2 items
-</span>
-`;
-
-exports[`dom helpers buildInfoNode should return properties count element for object node 1`] = `
-<span
-  class="properties-count"
->
-  // 2 properties
-</span>
-`;

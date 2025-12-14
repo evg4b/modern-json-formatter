@@ -1,30 +1,44 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
 
-exports[`createElement {"attributes": [Object], "content": "test content", "element": "a"} 1`] = `
-<a
-  href="http://test"
->
-  test content
-</a>
+exports[`createElement > %p 1`] = `<span />`;
+
+exports[`createElement > %p 2`] = `
+<span
+  class="test"
+/>
 `;
 
-exports[`createElement {"attributes": [Object], "content": "test content", "element": "div"} 1`] = `
-<div
-  aria-data="test"
+exports[`createElement > %p 3`] = `
+<span
+  class="test"
 >
   test content
-</div>
+</span>
 `;
 
-exports[`createElement {"attributes": [Object], "content": "test content", "element": "input"} 1`] = `
-<input
-  test="data"
+exports[`createElement > %p 4`] = `
+<span
+  class="test1 test2 test3"
 >
   test content
-</input>
+</span>
 `;
 
-exports[`createElement {"attributes": [Object], "content": "test content", "element": "span"} 1`] = `
+exports[`createElement > %p 5`] = `
+<span>
+  <span>
+    test1
+  </span>
+  <span>
+    test2
+  </span>
+  <span>
+    test3
+  </span>
+</span>
+`;
+
+exports[`createElement > %p 6`] = `
 <span
   ref="test"
 >
@@ -32,21 +46,39 @@ exports[`createElement {"attributes": [Object], "content": "test content", "elem
 </span>
 `;
 
-exports[`createElement {"children": [Array], "element": "a"} 1`] = `
-<a>
+exports[`createElement > %p 7`] = `
+<span>
   <span>
-    test1
+    test
   </span>
-  <span>
-    test2
-  </span>
-  <span>
-    test3
-  </span>
-</a>
+</span>
 `;
 
-exports[`createElement {"children": [Array], "element": "div"} 1`] = `
+exports[`createElement > %p 8`] = `<div />`;
+
+exports[`createElement > %p 9`] = `
+<div
+  class="test"
+/>
+`;
+
+exports[`createElement > %p 10`] = `
+<div
+  class="test"
+>
+  test content
+</div>
+`;
+
+exports[`createElement > %p 11`] = `
+<div
+  class="test1 test2 test3"
+>
+  test content
+</div>
+`;
+
+exports[`createElement > %p 12`] = `
 <div>
   <div>
     test1
@@ -60,8 +92,48 @@ exports[`createElement {"children": [Array], "element": "div"} 1`] = `
 </div>
 `;
 
-exports[`createElement {"children": [Array], "element": "span"} 1`] = `
-<span>
+exports[`createElement > %p 13`] = `
+<div
+  aria-data="test"
+>
+  test content
+</div>
+`;
+
+exports[`createElement > %p 14`] = `
+<div>
+  <span>
+    test
+  </span>
+</div>
+`;
+
+exports[`createElement > %p 15`] = `<a />`;
+
+exports[`createElement > %p 16`] = `
+<a
+  class="test"
+/>
+`;
+
+exports[`createElement > %p 17`] = `
+<a
+  class="test"
+>
+  test content
+</a>
+`;
+
+exports[`createElement > %p 18`] = `
+<a
+  class="test1 test2 test3"
+>
+  test content
+</a>
+`;
+
+exports[`createElement > %p 19`] = `
+<a>
   <span>
     test1
   </span>
@@ -71,88 +143,18 @@ exports[`createElement {"children": [Array], "element": "span"} 1`] = `
   <span>
     test3
   </span>
-</span>
+</a>
 `;
 
-exports[`createElement {"class": "test", "content": "test content", "element": "a"} 1`] = `
+exports[`createElement > %p 20`] = `
 <a
-  class="test"
+  href="http://test"
 >
   test content
 </a>
 `;
 
-exports[`createElement {"class": "test", "content": "test content", "element": "div"} 1`] = `
-<div
-  class="test"
->
-  test content
-</div>
-`;
-
-exports[`createElement {"class": "test", "content": "test content", "element": "span"} 1`] = `
-<span
-  class="test"
->
-  test content
-</span>
-`;
-
-exports[`createElement {"class": "test", "element": "a"} 1`] = `
-<a
-  class="test"
-/>
-`;
-
-exports[`createElement {"class": "test", "element": "div"} 1`] = `
-<div
-  class="test"
-/>
-`;
-
-exports[`createElement {"class": "test", "element": "input"} 1`] = `
-<input
-  class="test"
-/>
-`;
-
-exports[`createElement {"class": "test", "element": "span"} 1`] = `
-<span
-  class="test"
-/>
-`;
-
-exports[`createElement {"class": [Array], "content": "test content", "element": "a"} 1`] = `
-<a
-  class="test1 test2 test3"
->
-  test content
-</a>
-`;
-
-exports[`createElement {"class": [Array], "content": "test content", "element": "div"} 1`] = `
-<div
-  class="test1 test2 test3"
->
-  test content
-</div>
-`;
-
-exports[`createElement {"class": [Array], "content": "test content", "element": "span"} 1`] = `
-<span
-  class="test1 test2 test3"
->
-  test content
-</span>
-`;
-
-exports[`createElement {"class": [Array], "element": "input"} 1`] = `
-<input
-  class="test1 test2 test3"
-/>
-`;
-
-exports[`createElement {"element": "a", "html": "<span>test</span>"} 1`] = `
+exports[`createElement > %p 21`] = `
 <a>
   <span>
     test
@@ -160,26 +162,24 @@ exports[`createElement {"element": "a", "html": "<span>test</span>"} 1`] = `
 </a>
 `;
 
-exports[`createElement {"element": "a"} 1`] = `<a />`;
+exports[`createElement > %p 22`] = `<input />`;
 
-exports[`createElement {"element": "div", "html": "<span>test</span>"} 1`] = `
-<div>
-  <span>
-    test
-  </span>
-</div>
+exports[`createElement > %p 23`] = `
+<input
+  class="test"
+/>
 `;
 
-exports[`createElement {"element": "div"} 1`] = `<div />`;
-
-exports[`createElement {"element": "input"} 1`] = `<input />`;
-
-exports[`createElement {"element": "span", "html": "<span>test</span>"} 1`] = `
-<span>
-  <span>
-    test
-  </span>
-</span>
+exports[`createElement > %p 24`] = `
+<input
+  class="test1 test2 test3"
+/>
 `;
 
-exports[`createElement {"element": "span"} 1`] = `<span />`;
+exports[`createElement > %p 25`] = `
+<input
+  test="data"
+>
+  test content
+</input>
+`;

@@ -23,7 +23,7 @@ interface HistoryItem {
   end: number | null;
 }
 
-@CustomElement('query-input')
+@CustomElement('query-input-old')
 export class QueryInputElement extends StyledComponentElement {
   private readonly inputElement = this.createInput();
   private readonly errorMessageElement = createElement({

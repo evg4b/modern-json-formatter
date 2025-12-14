@@ -1,6 +1,6 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { assetTabType } from '../../helpers';
-import { QueryInputElement } from '../query-input';
+import { QueryInputElement } from '../query-input-old';
 import toolboxStyles from './toolbox.styles';
 
 @CustomElement('extension-toolbox-old')

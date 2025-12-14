@@ -1,6 +1,6 @@
 import { CustomElement } from '@core/dom';
 
-@CustomElement('query-input')
+@CustomElement('query-input-old')
 export class QueryInputElementMock extends HTMLElement {
   public setErrorMessage = jest.fn().mockName('QueryInputElementMock.setErrorMessage');
   public onSubmit = jest.fn().mockName('QueryInputElementMock.onSubmit');
@@ -10,6 +10,6 @@ export class QueryInputElementMock extends HTMLElement {
   public show = jest.fn().mockName('QueryInputElementMock.show');
 }
 
-jest.mock('../src/content-script/ui/query-input', () => ({
+jest.mock('../src/content-script/ui/query-input-old', () => ({
   QueryInputElement: QueryInputElementMock,
 }));

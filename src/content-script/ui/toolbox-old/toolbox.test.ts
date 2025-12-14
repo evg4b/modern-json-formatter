@@ -3,7 +3,7 @@ import '@testing/browser.mock';
 import '@testing/query-input.mock';
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { getShadowRoot } from '@testing/styled-component';
-import { type QueryInputElement } from '../query-input';
+import { type QueryInputElement } from '../query-input-old';
 import { ToolboxElement } from './toolbox';
 
 describe('Toolbox', () => {
@@ -51,7 +51,7 @@ describe('Toolbox', () => {
     let input: QueryInputElement | null;
 
     beforeEach(() => {
-      input = shadowRoot.querySelector<QueryInputElement>('query-input');
+      input = shadowRoot.querySelector<QueryInputElement>('query-input-old');
     });
 
     test('should exists', () => {

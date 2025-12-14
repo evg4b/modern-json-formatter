@@ -83,7 +83,6 @@ export const runExtension = async () => {
     panel.appendChild(toolboxOld);
     panel.appendChild(toolbox);
 
-
     toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
       switch (event.detail) {
         case 'query':

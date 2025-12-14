@@ -1,13 +1,13 @@
 rstest.useFakeTimers();
 
 import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
-import { FloatingMessageElement } from './floating-message';
+import { FloatingMessageOldElement } from './floating-message';
 
 describe('FloatingMessageElement', () => {
-  let floatingMessage: FloatingMessageElement;
+  let floatingMessage: FloatingMessageOldElement;
 
   beforeEach(() => {
-    floatingMessage = new FloatingMessageElement('Test Header', 'Test Message');
+    floatingMessage = new FloatingMessageOldElement('Test Header', 'Test Message');
     document.body.appendChild(floatingMessage);
   });
 

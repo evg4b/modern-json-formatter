@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/unbound-method */
+ 
 import '@testing/browser.mock';
 import '@testing/background.mock';
 

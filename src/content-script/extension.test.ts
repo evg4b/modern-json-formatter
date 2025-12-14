@@ -9,7 +9,7 @@ import { tNull, tObject, tProperty, tString } from '@testing';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
+import { buildContainers, FloatingMessageOldElement, ToolboxElement } from './ui';
 
 rstest.mock('./json-detector', () => ({
   findNodeWithCode: rstest.fn().mockName('findNodeWithCode')
@@ -55,7 +55,7 @@ describe.skip('runExtension', () => {
       }),
     );
 
-    wrapMock(FloatingMessageElement).mockReturnValue(
+    wrapMock(FloatingMessageOldElement).mockReturnValue(
       createElement({ element: 'div' }),
     );
   });

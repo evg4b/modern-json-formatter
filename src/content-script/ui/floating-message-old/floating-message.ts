@@ -1,8 +1,8 @@
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import floatingMessageStyles from './floating-message.styles';
 
-@CustomElement('floating-message')
-export class FloatingMessageElement extends StyledComponentElement {
+@CustomElement('floating-message-old')
+export class FloatingMessageOldElement extends StyledComponentElement {
   private readonly close = createElement({ element: 'div', class: 'close' });
 
   constructor(header: string, message: string, type: 'error-message' | 'info-message' = 'info-message') {

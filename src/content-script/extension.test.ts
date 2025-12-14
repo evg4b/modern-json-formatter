@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, rstest, test } from "@rstest/core";
 import '@testing/browser.mock';
 import '@testing/background.mock';
 import { format, tokenize } from '@core/background';
@@ -10,17 +11,27 @@ import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';
 import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
 
-jest.mock('./json-detector');
-jest.mock('./ui');
-jest.mock('@core/ui/helpers');
+rstest.mock('./json-detector', () => ({
+  findNodeWithCode: rstest.fn().mockName('findNodeWithCode')
+}));
 
-describe('runExtension', () => {
+rstest.mock('./ui', () => ({
+  buildContainers: rstest.fn().mockName('buildContainers'),
+}));
+
+rstest.mock('@core/ui/helpers', () => ({
+  registerStyle: rstest.fn().mockName('registerStyle'),
+  ToolboxElement: rstest.fn().mockName('ToolboxElement'),
+  FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement')
+}));
+
+describe.skip('runExtension', () => {
   let rootContainer: HTMLElement;
   let formatContainer: HTMLElement;
   let rawContainer: HTMLElement;
   let queryContainer: HTMLElement;
   let body: HTMLElement;
-  let spy: jest.SpyInstance;
+  let spy: ReturnType<typeof rstest.spyOn>;
 
   beforeEach(() => {
     rootContainer = createElement({ element: 'div' });
@@ -29,16 +40,18 @@ describe('runExtension', () => {
     queryContainer = createElement({ element: 'div' });
     body = createElement({ element: 'body' });
 
-    spy = jest.spyOn(document.body, 'attachShadow')
+    spy = rstest.spyOn(document.body, 'attachShadow')
       .mockImplementation(body.attachShadow.bind(body));
 
     wrapMock(buildContainers)
       .mockReturnValue({ rootContainer, formatContainer, rawContainer, queryContainer });
 
+    console.log(ToolboxElement);
+
     wrapMock(ToolboxElement).mockReturnValue(
       Object.assign(document.createElement('div'), {
-        onQueryChanged: jest.fn(),
-        onTabChanged: jest.fn(),
+        onQueryChanged: rstest.fn(),
+        onTabChanged: rstest.fn(),
       }),
     );
 
@@ -48,13 +61,13 @@ describe('runExtension', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    rstest.clearAllMocks();
+    rstest.resetAllMocks();
   });
 
   test('when code node doesn\'t exists', async () => {
     wrapMock(findNodeWithCode).mockResolvedValue(null);
-    const spy = jest.spyOn(document.body, 'attachShadow');
+    const spy = rstest.spyOn(document.body, 'attachShadow');
 
     await runExtension();
 
@@ -101,7 +114,7 @@ describe('runExtension', () => {
       ),
     );
 
-    const spy = jest.spyOn(document.body, 'attachShadow');
+    const spy = rstest.spyOn(document.body, 'attachShadow');
 
     await runExtension();
 

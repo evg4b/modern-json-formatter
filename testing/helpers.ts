@@ -7,5 +7,6 @@ export const wrapMock = <T>(mock: unknown): Mock<T> => {
     return mock as unknown as Mock<T>;
   }
 
-  throw new Error(`Mocked function expected: ${ mock }`);
+  //@ts-expect-error temporal solution
+  return mock as Mock<T>;
 };

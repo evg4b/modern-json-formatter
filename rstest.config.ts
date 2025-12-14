@@ -5,10 +5,8 @@ export default defineConfig({
   globals: true,
   logHeapUsage: true,
   include: [
-    'src/**/button/**/*.test.ts',
     'worker-core/**/*.test.ts',
-    'src/background/**/*.test.ts',
-    'src/core/**/*.test.ts',
+    'src/**/*.test.ts',
   ],
   coverage: {
     enabled: false,

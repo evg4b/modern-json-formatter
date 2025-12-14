@@ -2,10 +2,10 @@
 import '@testing/browser.mock';
 import '@testing/background.mock';
 
-jest.useFakeTimers();
+rstest.useFakeTimers();
 
 import { getHistory } from '@core/background';
-import { beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { getShadowRoot } from '@testing/styled-component';
 import { throws } from '../../helpers';
@@ -18,8 +18,8 @@ describe('QueryInputElement', () => {
   let shadowRoot: ShadowRoot;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.clearAllTimers();
+    rstest.clearAllMocks();
+    rstest.clearAllTimers();
   });
 
   const keyPress = (key: string, options?: KeyboardEventInit) => {
@@ -114,7 +114,7 @@ describe('QueryInputElement', () => {
 
   describe('focus/blur', () => {
     test('should focus', () => {
-      Reflect.set(innerInput, 'focus', jest.fn());
+      Reflect.set(innerInput, 'focus', rstest.fn());
 
       input.focus();
 
@@ -122,7 +122,7 @@ describe('QueryInputElement', () => {
     });
 
     test('should blur', () => {
-      Reflect.set(innerInput, 'blur', jest.fn());
+      Reflect.set(innerInput, 'blur', rstest.fn());
 
       input.blur();
 
@@ -132,7 +132,7 @@ describe('QueryInputElement', () => {
 
   describe('typing', () => {
     test('should call onSubmitCallback on Enter', () => {
-      const onSubmitCallback = jest.fn<(s: string) => (void | Promise<void>)>();
+      const onSubmitCallback = rstest.fn<(s: string) => (void | Promise<void>)>();
 
       input.onSubmit(onSubmitCallback);
       keyPress('Enter');
@@ -141,7 +141,7 @@ describe('QueryInputElement', () => {
     });
 
     test('should not call onSubmitCallback on other key', () => {
-      const onSubmitCallback = jest.fn<(s: string) => (void | Promise<void>)>();
+      const onSubmitCallback = rstest.fn<(s: string) => (void | Promise<void>)>();
 
       input.onSubmit(onSubmitCallback);
       keyPress('a');
@@ -290,7 +290,7 @@ describe('QueryInputElement', () => {
     beforeEach(() => {
       wrapMock(getHistory).mockResolvedValue(['.[]', '.[0]']);
       historyDatalist = shadowRoot.querySelector('datalist');
-      jest.runAllTimers();
+      rstest.runAllTimers();
     });
 
     test('should have datalist', () => {

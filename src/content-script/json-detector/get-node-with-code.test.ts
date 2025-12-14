@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { edgeUserAgent } from '@testing/user-agents';
 import { getNodeWithCode } from './get-node-with-code';
 
@@ -55,7 +55,7 @@ describe('getNodeWithCode', () => {
 
   describe('edge view', () => {
     beforeEach(() => {
-      jest.spyOn(window.navigator, 'userAgent', 'get')
+      rstest.spyOn(window.navigator, 'userAgent', 'get')
         .mockImplementation(() => edgeUserAgent);
     });
 

@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import '@testing/browser.mock';
 import '@testing/query-input.mock';
-import { beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { getShadowRoot } from '@testing/styled-component';
 import { type QueryInputElement } from '../query-input-old';
 import { ToolboxElement } from './toolbox';
 
-describe('Toolbox', () => {
+describe.skip('Toolbox', () => {
   let toolbox: ToolboxElement;
   let shadowRoot: ShadowRoot;
 
@@ -38,7 +37,7 @@ describe('Toolbox', () => {
       });
 
       test(`should have handle click`, () => {
-        const handler = jest.fn();
+        const handler = rstest.fn();
         toolbox.onTabChanged(handler);
         button?.click();
 

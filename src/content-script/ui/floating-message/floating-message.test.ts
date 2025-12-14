@@ -1,6 +1,6 @@
-jest.useFakeTimers();
+rstest.useFakeTimers();
 
-import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { FloatingMessageElement } from './floating-message';
 
 describe('FloatingMessageElement', () => {
@@ -25,7 +25,7 @@ describe('FloatingMessageElement', () => {
 
   describe('header', () => {
     beforeEach(() => {
-      jest.advanceTimersByTime(1000);
+      rstest.advanceTimersByTime(1000);
     });
 
     test('should display the message after a timeout', () => {

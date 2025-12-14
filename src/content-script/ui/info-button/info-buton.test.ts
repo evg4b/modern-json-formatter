@@ -1,5 +1,4 @@
-import '@testing/svg.mock';
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from '@rstest/core';
 import { getShadowRoot } from '@testing/styled-component';
 import { InfoButtonElement } from './info-buton';
 

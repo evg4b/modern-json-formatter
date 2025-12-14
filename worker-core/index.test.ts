@@ -1,5 +1,6 @@
+import './wasm_exec';
 import '@testing/wasm';
-import { beforeEach, describe, expect, test, afterEach } from '@jest/globals';
+import { beforeEach, describe, expect, test, afterEach, rstest } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { format, jq, tokenize } from './index';
 import { importWasm } from './wasm';
@@ -20,7 +21,7 @@ describe('worker-core', () => {
       Reflect.deleteProperty(globalThis, key);
     });
 
-    return () => Reflect.set(globalThis, key, jest.fn()
+    return () => Reflect.set(globalThis, key, rstest.fn()
       .mockName(key)
       .mockResolvedValue({}));
   };

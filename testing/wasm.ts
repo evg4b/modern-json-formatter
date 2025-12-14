@@ -1,3 +1,5 @@
-jest.mock('../worker-core/wasm', () => ({
-  importWasm: jest.fn(() => Promise.resolve()),
+import { rstest } from "@rstest/core";
+
+rstest.mock('../worker-core/wasm', () => ({
+  importWasm: rstest.fn(() => Promise.resolve()),
 }));

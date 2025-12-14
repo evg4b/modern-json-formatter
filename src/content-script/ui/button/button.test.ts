@@ -3,7 +3,7 @@ import { ButtonElement } from "./button";
 import "./button";
 import { defaultLitAsserts, renderLitElement } from "@testing/lit";
 
-describe('should sayHi correctly', () => {
+describe('ButtonElement', () => {
   let button: ButtonElement
 
   renderLitElement('mjf-button', (element) => {

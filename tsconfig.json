@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "lib": ["DOM", "ES2021"],
     "target": "ES2021",
     "noEmit": true,
@@ -12,7 +13,6 @@
     "experimentalDecorators": true,
     // Lit requirements
     "useDefineForClassFields": false,
-
     /* modules */
     "module": "ESNext",
     "moduleDetection": "force",

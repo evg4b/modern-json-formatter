@@ -1,9 +1,11 @@
-jest.mock('@core/background', () => ({
-  format: jest.fn(),
-  jq: jest.fn(),
-  tokenize: jest.fn(),
-  getHistory: jest.fn(),
-  clearHistory: jest.fn(),
-  pushHistory: jest.fn(),
-  getDomains: jest.fn(),
+import { rstest } from "@rstest/core";
+
+rstest.mock('@core/background', () => ({
+  format: rstest.fn(),
+  jq: rstest.fn(),
+  tokenize: rstest.fn(),
+  getHistory: rstest.fn(),
+  clearHistory: rstest.fn(),
+  pushHistory: rstest.fn(),
+  getDomains: rstest.fn(),
 }));

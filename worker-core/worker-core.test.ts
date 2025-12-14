@@ -1,10 +1,12 @@
+import './wasm_exec';
 import '@testing/browser.mock';
-import { beforeAll, describe, expect, jest, test } from '@jest/globals';
+import { beforeAll, describe, expect, test } from '@rstest/core';
 import { tNumber, tObject, tProperty } from '@testing';
 import { readFileSync } from 'fs';
 import { format, initialize, jq, tokenize } from './index';
+import { rstest } from "@rstest/core";
 
-jest.mock('./helpers.ts', () => ({
+rstest.mock('./helpers.ts', () => ({
   loadWasm: (file: string, imports: WebAssembly.Imports) => {
     expect(file).toBe('worker-core.wasm');
     return WebAssembly.instantiate(readFileSync('worker-core/worker-core.wasm'), imports);

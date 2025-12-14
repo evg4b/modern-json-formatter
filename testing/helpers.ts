@@ -1,11 +1,11 @@
-import { jest } from '@jest/globals';
-import type { FunctionLike } from 'jest-mock';
+import { rstest, type Mock } from "@rstest/core";
 
-export const wrapMock = <T extends FunctionLike>(mock: unknown): jest.Mock<T> => {
-  if (jest.isMockFunction(mock)) {
-    return mock as jest.Mock<T>;
+// @ts-expect-error temporal solution
+export const wrapMock = <T>(mock: unknown): Mock<T> => {
+  if (rstest.isMockFunction(mock)) {
+    // @ts-expect-error - temporal solution
+    return mock as unknown as Mock<T>;
   }
 
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   throw new Error(`Mocked function expected: ${ mock }`);
 };

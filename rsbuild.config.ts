@@ -16,6 +16,9 @@ export default defineConfig({
     ],
   },
   source: {
+    define: {
+      require: null,
+    },
     entry: {
       'content-styles': {
         import: './src/content-script/styles.css',

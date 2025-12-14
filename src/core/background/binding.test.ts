@@ -3,7 +3,7 @@ import { sendMessage } from '@core/browser';
 import { wrapMock } from '@testing/helpers';
 import type { ErrorNode, TokenizerResponse } from '@worker-core';
 import { clearHistory, format, getDomains, getHistory, jq, pushHistory, tokenize } from './binding';
-import { DomainCountResponse, HistoryResponse } from './models';
+import { type DomainCountResponse, type HistoryResponse } from './models';
 import { beforeEach, describe, expect, rstest, test } from "@rstest/core";
 
 describe('binding', () => {

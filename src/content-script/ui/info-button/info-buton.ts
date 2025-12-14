@@ -6,7 +6,14 @@ import icon from './info-button-icon.svg';
 export class InfoButtonElement extends StyledComponentElement {
   private readonly link = createElement({
     element: 'a',
-    html: icon,
+    children: [
+      createElement({
+        element: 'img',
+        attributes: {
+          src: icon
+        }
+      })
+    ],
     attributes: {
       target: '_blank',
     },

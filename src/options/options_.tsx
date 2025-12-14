@@ -10,7 +10,7 @@ const columns: TableColumn[] = [
   { name: 'Count', path: 'count' },
 ];
 
-export const Options = () => {
+export const Options_ = () => {
   const [state, setState] = useState<DomainCountResponse>([]);
 
   const update = useCallback(

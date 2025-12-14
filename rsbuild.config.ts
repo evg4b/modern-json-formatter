@@ -4,6 +4,16 @@ import { pluginNodePolyfill } from "@rsbuild/plugin-node-polyfill";
 
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
+  output: {
+    distPath: {
+      css: '',
+      js: '',
+    },
+    filenameHash: false,
+    copy: [
+      { from: './worker-core/worker-core.wasm', to: '' },
+    ],
+  },
   source: {
     entry: {
       'content-styles': {

@@ -1,7 +1,5 @@
-// import '@webcomponents/custom-elements';
-// import { runExtension } from './extension';
-//
-// runExtension()
-//   .catch((error: unknown) => console.error('Error running extension:', error));
+import '@webcomponents/custom-elements';
+import { runExtension } from './extension';
 
-alert('content script');
+runExtension()
+  .catch((error: unknown) => console.error('Error running extension:', error));

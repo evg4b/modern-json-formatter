@@ -1,4 +1,4 @@
-:global :host > .root-container.formatted {
+:host > .root-container.formatted {
   & > .formatted-json-container {
     display: block;
   }
@@ -9,7 +9,7 @@
   }
 }
 
-:global :host > .root-container.raw {
+:host > .root-container.raw {
   & > .raw-json-container {
     display: block;
   }
@@ -20,7 +20,7 @@
   }
 }
 
-:global :host > .root-container.query {
+:host > .root-container.query {
   & > .query-json-container {
     display: block;
   }

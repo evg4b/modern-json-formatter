@@ -3,7 +3,6 @@ import { resource } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { debounce } from 'lodash';
 import { isNotNil } from '../../helpers';
-import { InfoButtonElement } from '../info-button';
 import { HistoryManager } from './history-manager';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import queryInputStyles from './query-input.styles';
@@ -44,7 +43,10 @@ export class QueryInputElement extends StyledComponentElement {
     ],
   });
 
-  private readonly infoIcons = new InfoButtonElement(resource('faq.html'));
+  private readonly infoIcons = createElement({
+    element:'mjf-info-button',
+    attributes: { url: resource('faq.html') }
+  });
   private readonly history = new HistoryManager<HistoryItem>();
 
   private onSubmitCallback: ((s: string) => unknown) | null = null;
@@ -71,11 +73,11 @@ export class QueryInputElement extends StyledComponentElement {
     this.onSubmitCallback = callback;
   }
 
-  public focus(): void {
+  public override focus(): void {
     this.inputElement.focus();
   }
 
-  public blur(): void {
+  public override blur(): void {
     this.inputElement.blur();
   }
 

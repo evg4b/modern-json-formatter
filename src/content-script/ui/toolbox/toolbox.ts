@@ -1,9 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import '../query-input'
-import '../button'
 import { isInstanceOf } from 'typed-assert';
+import '../query-input'
+import '../info-button';
+import '../button'
 import { ButtonElement } from "../button";
 
 export class TabChangedEvent extends CustomEvent<TabType> {
@@ -25,19 +26,19 @@ declare global {
 @customElement('mjf-toolbox')
 export class ToolboxElement extends LitElement {
   public static override styles = css`
-      :host {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          margin-bottom: 10px;
-          gap: 10px;
-      }
+    :host {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
 
-      .button-container {
-          display: flex;
-          flex-direction: row;
-          gap: 5px;
-      }
+    .button-container {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
   `;
 
   @property({ type: String, reflect: true })
@@ -54,7 +55,7 @@ export class ToolboxElement extends LitElement {
 
   public override render() {
     const input = this.tab === 'query'
-      ? html`<mjf-query-input .error=${ this.error } />`
+      ? html`<mjf-query-input .error=${ this.error }></mjf-query-input>`
       : '';
 
     return html`

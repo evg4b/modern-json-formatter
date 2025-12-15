@@ -16,9 +16,7 @@ export default defineConfig({
     ],
   },
   source: {
-    define: {
-      require: null,
-    },
+    define: { require: null },
     entry: {
       'content-styles': {
         import: './src/content-script/styles.css',
@@ -44,7 +42,7 @@ export default defineConfig({
   plugins: [
     pluginNodePolyfill(),
     manifestGeneratorPlugin({
-      manifestPath: './src/manifest.json'
+      manifestPath: './src/manifest.json',
     })
   ],
   html: {

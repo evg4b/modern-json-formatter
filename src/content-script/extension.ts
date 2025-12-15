@@ -6,10 +6,10 @@ import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, ToolboxElement } from './ui';
+import { buildContainers } from './ui';
 import './ui/toolbox';
 import './ui/floating-message';
-import './ui/sticky-panel/sticky-panel.ts';
+import './ui/sticky-panel';
 import { TabChangedEvent } from "./ui/toolbox/toolbox.ts";
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
@@ -84,10 +84,8 @@ export const runExtension = async () => {
   };
 
   setTimeout(() => {
-    const toolboxOld = new ToolboxElement();
     const toolbox = document.createElement('mjf-toolbox');
     const panel = document.createElement('mjf-sticky-panel');
-    panel.appendChild(toolboxOld);
     panel.appendChild(toolbox);
 
     toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
@@ -124,7 +122,6 @@ export const runExtension = async () => {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {
             toolbox.error = error.error;
-            toolboxOld.setErrorMessage(error.error);
             return;
           }
 
@@ -143,27 +140,6 @@ export const runExtension = async () => {
         console.error(error);
       }
     };
-
-    toolboxOld.onQueryChanged(async query => {
-      await wrapper(jqQuery(query));
-    });
-
-    toolboxOld.onTabChanged(tab => {
-      switch (tab) {
-        case 'query':
-          rootContainer.classList.remove('raw', 'formatted');
-          rootContainer.classList.add('query');
-          return;
-        case 'raw':
-          rootContainer.classList.remove('formatted', 'query');
-          rootContainer.classList.add('raw');
-          return;
-        case 'formatted':
-          rootContainer.classList.remove('raw', 'query');
-          rootContainer.classList.add('formatted');
-          return;
-      }
-    });
   });
 
   const response = await wrapper(tokenize(preNode.innerText));

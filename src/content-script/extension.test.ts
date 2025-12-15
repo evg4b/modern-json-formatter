@@ -9,7 +9,7 @@ import { tNull, tObject, tProperty, tString } from '@testing';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageOldElement, ToolboxElement } from './ui';
+import { buildContainers } from './ui';
 
 rstest.mock('./json-detector', () => ({
   findNodeWithCode: rstest.fn().mockName('findNodeWithCode')
@@ -21,7 +21,6 @@ rstest.mock('./ui', () => ({
 
 rstest.mock('@core/ui/helpers', () => ({
   registerStyle: rstest.fn().mockName('registerStyle'),
-  ToolboxElement: rstest.fn().mockName('ToolboxElement'),
   FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement')
 }));
 
@@ -45,19 +44,6 @@ describe.skip('runExtension', () => {
 
     wrapMock(buildContainers)
       .mockReturnValue({ rootContainer, formatContainer, rawContainer, queryContainer });
-
-    console.log(ToolboxElement);
-
-    wrapMock(ToolboxElement).mockReturnValue(
-      Object.assign(document.createElement('div'), {
-        onQueryChanged: rstest.fn(),
-        onTabChanged: rstest.fn(),
-      }),
-    );
-
-    wrapMock(FloatingMessageOldElement).mockReturnValue(
-      createElement({ element: 'div' }),
-    );
   });
 
   afterEach(() => {

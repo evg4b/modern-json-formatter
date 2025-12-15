@@ -1,8 +1,8 @@
 import { html, css, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-@customElement('mjf-options-page')
-export class OptionsPageElement extends LitElement {
+@customElement('mjf-faq-page')
+export class FaqPageElement extends LitElement {
   public static override styles = css`
     .content {
       display: flex;
@@ -30,7 +30,7 @@ export class OptionsPageElement extends LitElement {
       <div class="content">
         <h1>Rsbuild with Lit</h1>
         <p>Start building amazing things with Rsbuild.</p>
-        <pre>mjf-options-page</pre>
+        <pre>mjf-faq-page</pre>
       </div>
     `;
   }
@@ -38,6 +38,6 @@ export class OptionsPageElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'mjf-options-page': OptionsPageElement;
+    'mjf-faq-page': FaqPageElement;
   }
 }

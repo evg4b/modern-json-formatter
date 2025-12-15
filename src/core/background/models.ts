@@ -1,6 +1,6 @@
 import type { format, jq, tokenize } from '@worker-core';
 import type { getDomains, getHistory, pushHistory } from '../../background/history';
-import { clearHistory, DomainCount } from '../../background/history';
+import { clearHistory, type DomainCount } from '../../background/history';
 
 export { type TokenizerResponse } from '@worker-core';
 

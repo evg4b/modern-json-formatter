@@ -2,15 +2,15 @@ import { sendMessage } from '@core/browser';
 import type { ErrorNode, TokenizerResponse } from '@worker-core';
 import { isErrorNode } from '../../content-script/helpers';
 import {
-  ClearHistoryParams,
-  DomainCountResponse,
-  FormatParams,
-  GetDomainsParams,
-  GetHistoryParams,
-  HistoryResponse,
-  JqParams,
-  PushHistoryParams,
-  TokenizeParams,
+  type ClearHistoryParams,
+  type DomainCountResponse,
+  type FormatParams,
+  type GetDomainsParams,
+  type GetHistoryParams,
+  type HistoryResponse,
+  type JqParams,
+  type PushHistoryParams,
+  type TokenizeParams,
 } from './models';
 
 const bridge = async <M, R>(request: M) => {

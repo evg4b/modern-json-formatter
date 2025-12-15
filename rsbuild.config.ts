@@ -34,6 +34,10 @@ export default defineConfig({
         import: './src/options/options.ts',
         html: true,
       },
+      'faq': {
+        import: './src/faq/faq.ts',
+        html: true,
+      },
     },
     decorators: {
       version: 'legacy',

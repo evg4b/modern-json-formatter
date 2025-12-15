@@ -26,6 +26,7 @@
     "lint": "eslint .",
     "preview": "rsbuild preview",
     "test": "rstest",
+    "test:cover": "rstest",
     "_build": "tsup",
     "_lint": "eslint .",
     "_dev": "tsup --watch"

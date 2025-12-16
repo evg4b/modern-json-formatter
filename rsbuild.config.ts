@@ -1,6 +1,7 @@
 import { defineConfig } from '@rsbuild/core';
 import { manifestGeneratorPlugin } from "./rsbuild.manifest.plugin";
 import { pluginNodePolyfill } from "@rsbuild/plugin-node-polyfill";
+import { mdPlugin } from "./rsbuild.md.plugin";
 
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
@@ -13,6 +14,7 @@ export default defineConfig({
     sourceMap: true,
     copy: [
       { from: './worker-core/worker-core.wasm', to: '' },
+      { from: './public/**/*', to: '' },
     ],
   },
   source: {
@@ -44,10 +46,11 @@ export default defineConfig({
     },
   },
   plugins: [
+    mdPlugin({ test: true }),
     pluginNodePolyfill(),
     manifestGeneratorPlugin({
       manifestPath: './src/manifest.json',
-    })
+    }),
   ],
   html: {
     template: (a) => `./src/${ a.entryName }/${ a.entryName }.html`,

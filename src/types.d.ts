@@ -8,14 +8,10 @@ declare module '*.html' {
   export default content;
 }
 
-interface MarkdownFile {
-  html: string;
-  raw: string;
-  filename: string;
-}
+declare type MarkdownFile = ReturnType<typeof import('lit').html>
 
 declare module '*.md' {
-  declare const file: MarkdownFile;
+  const file: MarkdownFile;
   export default file;
 }
 

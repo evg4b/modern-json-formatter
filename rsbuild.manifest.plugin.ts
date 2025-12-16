@@ -13,6 +13,7 @@ const getFileByExtension = (files: string[], extension: string): string => {
 
 export type ManifestGeneratorParams = {
   manifestPath?: string;
+  pages?: string[];
 }
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
@@ -25,8 +26,8 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
       }
 
       let { manifestPath } = options ?? {};
-      const demo = api.getNormalizedConfig();
-      manifestPath = resolve(demo.root, manifestPath ?? 'manifest.json');
+      const config = api.getNormalizedConfig();
+      manifestPath = resolve(config.root, manifestPath ?? 'manifest.json');
 
       const chunks = stats.assetsByChunkName ?? {};
       const contentStyles = getFileByExtension(chunks['content-styles'] ?? [], '.css');
@@ -51,7 +52,12 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
         },
         web_accessible_resources: [
           {
-            resources: [ contentStyles ],
+            resources: [
+              contentStyles,
+              'faq.html',
+              'faq.css',
+              'faq.js',
+            ],
             matches: [ "<all_urls>" ]
           },
           {

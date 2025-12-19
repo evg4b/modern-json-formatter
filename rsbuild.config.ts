@@ -1,8 +1,8 @@
 import { defineConfig } from '@rsbuild/core';
-import { manifestGeneratorPlugin } from "./rsbuild.manifest.plugin";
-import { pluginNodePolyfill } from "@rsbuild/plugin-node-polyfill";
-import { mdPlugin } from "./rsbuild.md.plugin";
-import { pluginTypeCheck } from "@rsbuild/plugin-type-check";
+import { manifestGeneratorPlugin } from './rsbuild.manifest.plugin';
+import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
+import { mdPlugin } from './rsbuild.md.plugin';
+import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
@@ -56,13 +56,13 @@ export default defineConfig({
     }),
   ],
   html: {
-    template: (a) => `./src/${ a.entryName }/${ a.entryName }.html`,
+    template: a => `./src/${a.entryName}/${a.entryName}.html`,
   },
   tools: {
     rspack: {
       optimization: {
-        splitChunks: false
-      }
-    }
+        splitChunks: false,
+      },
+    },
   },
 });

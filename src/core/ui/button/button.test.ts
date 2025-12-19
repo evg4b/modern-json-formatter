@@ -6,7 +6,7 @@ import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
 describe('ButtonElement', () => {
   let button: ButtonElement;
 
-  renderLitElement('mjf-button', (element) => {
+  renderLitElement('mjf-button', element => {
     button = element;
   });
 

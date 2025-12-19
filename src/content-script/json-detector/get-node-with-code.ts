@@ -10,13 +10,13 @@ export const getNodeWithCode = (list: NodeListOf<ChildNode>): HTMLPreElement | H
 
   if (!pre && navigator.userAgent.includes('Edg')) {
     const div = Array.from(list)
-        .find(node => {
-          if (!(node instanceof HTMLDivElement)) {
-            return false;
-          }
-          const attributes = node.getAttributeNames();
-          return attributes.length === 1 && attributes[0] === 'hidden';
-        })
+      .find(node => {
+        if (!(node instanceof HTMLDivElement)) {
+          return false;
+        }
+        const attributes = node.getAttributeNames();
+        return attributes.length === 1 && attributes[0] === 'hidden';
+      })
       ?? null;
 
     return testNode(div as HTMLDivElement | null);

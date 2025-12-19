@@ -16,6 +16,6 @@ export default defineConfig({
   source: {
     decorators: {
       version: 'legacy',
-    }
-  }
+    },
+  },
 });

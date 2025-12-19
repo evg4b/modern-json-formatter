@@ -107,7 +107,7 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   private setupEventHandlers(input: HTMLInputElement) {
-    input.addEventListener('keydown', (event) => {
+    input.addEventListener('keydown', event => {
       this.setErrorMessage(null);
       if (isSubmitEvent(event)) {
         this.onSubmitEvent();
@@ -136,7 +136,7 @@ export class QueryInputElement extends StyledComponentElement {
   private readonly loadHistory = debounce(async (prefix: string) => {
     const history = await getHistory(window.location.hostname, prefix);
     this.historyList.querySelectorAll('option').forEach(option => option.remove());
-    history.forEach((query) => {
+    history.forEach(query => {
       const option = createElement({
         element: 'option',
         attributes: { value: query },

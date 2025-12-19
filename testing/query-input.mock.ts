@@ -1,5 +1,5 @@
 import { CustomElement } from '@core/dom';
-import { rstest } from "@rstest/core";
+import { rstest } from '@rstest/core';
 
 @CustomElement('query-input-old')
 export class QueryInputElementMock extends HTMLElement {

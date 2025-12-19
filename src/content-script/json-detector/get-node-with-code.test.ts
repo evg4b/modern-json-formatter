@@ -5,7 +5,7 @@ import { getNodeWithCode } from './get-node-with-code';
 describe('getNodeWithCode', () => {
   const addMarkup = (markup: string) => {
     document.body.innerHTML = markup;
-    document.body.childNodes.forEach((node) => {
+    document.body.childNodes.forEach(node => {
       if (node instanceof HTMLElement) {
         node.innerText = node.innerHTML;
       }

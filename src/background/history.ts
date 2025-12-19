@@ -30,7 +30,7 @@ const openDB = (): Promise<IDBDatabase> => {
   return wait(request as IDBRequest<IDBDatabase>);
 };
 
-export const getHistory = async ({ domain, prefix }: { domain: string, prefix: string }): Promise<HistoryResponse> => {
+export const getHistory = async ({ domain, prefix }: { domain: string; prefix: string }): Promise<HistoryResponse> => {
   const db = await openDB();
   try {
     const results = await wait(
@@ -45,12 +45,13 @@ export const getHistory = async ({ domain, prefix }: { domain: string, prefix: s
       .map(({ query }) => query);
 
     return take(rows, 10);
-  } finally {
+  }
+  finally {
     db.close();
   }
 };
 
-export const pushHistory = async ({ domain, query }: { domain: string, query: string }): Promise<void> => {
+export const pushHistory = async ({ domain, query }: { domain: string; query: string }): Promise<void> => {
   const db = await openDB();
   try {
     const store = db.transaction(STORE_NAME, 'readwrite')
@@ -66,7 +67,8 @@ export const pushHistory = async ({ domain, query }: { domain: string, query: st
     }
 
     await wait(store.add({ domain, query }));
-  } finally {
+  }
+  finally {
     db.close();
   }
 };
@@ -79,12 +81,13 @@ export const clearHistory = async (): Promise<void> => {
         .objectStore(STORE_NAME)
         .clear(),
     );
-  } finally {
+  }
+  finally {
     db.close();
   }
 };
 
-export interface DomainCount { domain: string, count: number }
+export interface DomainCount { domain: string; count: number }
 export const getDomains = async (): Promise<DomainCount[]> => {
   const db = await openDB();
   try {
@@ -94,14 +97,15 @@ export const getDomains = async (): Promise<DomainCount[]> => {
 
     const results = await wait(index.getAll() as IDBRequest<QueryRecord[]>);
 
-    const rsp: DomainCount[]  = []
+    const rsp: DomainCount[] = [];
     for (const domain of uniq(results.map(({ domain }) => domain))) {
       const count = await wait(index.count(domain));
       rsp.push({ domain, count });
     }
 
     return sortBy(rsp, p => -p.count);
-  } finally {
+  }
+  finally {
     db.close();
   }
 };

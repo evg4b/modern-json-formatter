@@ -39,7 +39,7 @@ describe('assetTabType', () => {
     undefined,
   ];
 
-  test.each(validCases)('should not throw an error for valid tab type %s', (tabType) => {
+  test.each(validCases)('should not throw an error for valid tab type %s', tabType => {
     expect(() => assetTabType(tabType)).not.toThrow();
   });
 

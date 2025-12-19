@@ -24,6 +24,7 @@ export default [
         },
         multilineDetection: 'brackets',
       }],
+      '@stylistic/arrow-parens': ['error', 'as-needed'],
     },
   },
   {

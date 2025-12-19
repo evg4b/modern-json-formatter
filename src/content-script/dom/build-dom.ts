@@ -44,7 +44,8 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
     const { target } = event;
     if (isToggleElement(target) && target.parentNode instanceof HTMLElement) {
       target.parentNode.classList.toggle('collapsed');
-    } else if ((event.metaKey || event.ctrlKey) && isLinkElement(target)) {
+    }
+    else if ((event.metaKey || event.ctrlKey) && isLinkElement(target)) {
       const url = target.getAttribute('href');
       if (url) {
         window.open(url, '_blank', 'noopener,noreferrer');

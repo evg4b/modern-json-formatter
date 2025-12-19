@@ -7,7 +7,7 @@ import { FloatingMessageElement } from './floating-message.ts';
 describe('FloatingMessageElement', () => {
   let floatingMessage: FloatingMessageElement;
 
-  renderLitElement('mjf-floating-message', (element) => {
+  renderLitElement('mjf-floating-message', element => {
     floatingMessage = element;
   });
 

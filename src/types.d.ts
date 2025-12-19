@@ -8,7 +8,7 @@ declare module '*.html' {
   export default content;
 }
 
-declare type MarkdownFile = ReturnType<typeof import('lit').html>
+declare type MarkdownFile = ReturnType<typeof import('lit').html>;
 
 declare module '*.md' {
   const file: MarkdownFile;

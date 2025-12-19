@@ -106,7 +106,7 @@ export const runExtension = async () => {
       }
     });
 
-    toolbox.addEventListener('jq-query', async (event) => {
+    toolbox.addEventListener('jq-query', async event => {
       await wrapper(jqQuery(event.detail));
     });
 

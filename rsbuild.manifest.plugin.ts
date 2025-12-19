@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 const getFileByExtension = (files: string[], extension: string): string => {
   const filteredFiles = files.filter(file => file.endsWith(extension));
   if (filteredFiles.length !== 1) {
-    throw new Error(`Expected one file with extension ${ extension }, found ${ filteredFiles.length }`);
+    throw new Error(`Expected one file with extension ${extension}, found ${filteredFiles.length}`);
   }
 
   return filteredFiles[0];
@@ -14,13 +14,13 @@ const getFileByExtension = (files: string[], extension: string): string => {
 export type ManifestGeneratorParams = {
   manifestPath?: string;
   pages?: string[];
-}
+};
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
   setup(api) {
-    api.onAfterBuild(async (params) => {
-      const stats = params.stats?.toJson("detailed");
+    api.onAfterBuild(async params => {
+      const stats = params.stats?.toJson('detailed');
       if (!stats) {
         throw new Error('No stats found');
       }
@@ -41,14 +41,14 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
         ...srcManifest,
         content_scripts: [
           {
-            matches: [ "<all_urls>" ],
-            js: [ contentScript ],
-            run_at: "document_start"
-          }
+            matches: ['<all_urls>'],
+            js: [contentScript],
+            run_at: 'document_start',
+          },
         ],
         background: {
           service_worker: backgroundScript,
-          type: "module"
+          type: 'module',
         },
         web_accessible_resources: [
           {
@@ -61,12 +61,12 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
               'options.css',
               'options.js',
             ],
-            matches: [ "<all_urls>" ]
+            matches: ['<all_urls>'],
           },
           {
-            resources: [ "*.map" ],
-            matches: [ "<all_urls>" ]
-          }
+            resources: ['*.map'],
+            matches: ['<all_urls>'],
+          },
         ],
       }));
     });

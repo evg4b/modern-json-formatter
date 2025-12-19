@@ -1,4 +1,4 @@
-import { rstest } from "@rstest/core";
+import { rstest } from '@rstest/core';
 
 rstest.mock('@core/browser', () => ({
   resource: rstest.fn((s: string) => s),

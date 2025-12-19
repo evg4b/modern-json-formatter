@@ -8,8 +8,8 @@ import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { buildContainers } from './ui';
 import './ui/toolbox';
-import './ui/floating-message';
-import './ui/sticky-panel';
+import '@core/ui/floating-message';
+import '@core/ui/sticky-panel';
 import { TabChangedEvent } from "./ui/toolbox/toolbox.ts";
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB

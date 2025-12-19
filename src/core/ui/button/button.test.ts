@@ -1,7 +1,7 @@
 import { expect, test, describe } from '@rstest/core';
-import { ButtonElement } from "./button";
-import "./button";
-import { defaultLitAsserts, renderLitElement } from "@testing/lit";
+import { ButtonElement } from "./button.ts";
+import "./button.ts";
+import { defaultLitAsserts, renderLitElement } from "@testing/lit.ts";
 
 describe('ButtonElement', () => {
   let button: ButtonElement

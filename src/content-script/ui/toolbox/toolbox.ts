@@ -4,8 +4,8 @@ import { classMap } from 'lit/directives/class-map.js';
 import { isInstanceOf } from 'typed-assert';
 import '../query-input'
 import '../info-button';
-import '../button'
-import { ButtonElement } from "../button";
+import '@core/ui/button'
+import { ButtonElement } from "@core/ui/button";
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {

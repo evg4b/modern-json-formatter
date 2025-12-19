@@ -19,7 +19,7 @@ export default defineConfig({
       'worker-core/**/*.ts',
     ],
     reportOnFailure: true,
-    reporters: ['text', 'lcov', 'html'],
+    reporters: ['text-summary', 'lcov', 'html'],
   },
   source: {
     decorators: {

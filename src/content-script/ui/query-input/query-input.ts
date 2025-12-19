@@ -7,6 +7,7 @@ import { isNotNil, throws } from '../../helpers.ts';
 import { HistoryManager } from '../query-input-old/history-manager.ts';
 import { resource } from '@core/browser';
 import { AutocompleteController } from './autocomplete.controller.ts';
+import { map } from 'lit/directives/map.js';
 
 interface HistoryItem {
   query: string;
@@ -111,8 +112,8 @@ export class QueryInputElement extends LitElement {
                ${ref(this.inputRef)}
         />
         <datalist id="history-list">
-          ${this.autocomplete.options.map(query => html`
-              <option value="${query}">${query}</option>
+          ${map(this.autocomplete.options, query => html`
+              <option value=${query}>${query}</option>
           `)}
         </datalist>
         ${this.renderError()}

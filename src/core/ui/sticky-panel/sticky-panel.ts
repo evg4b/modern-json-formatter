@@ -51,7 +51,7 @@ export class StickyPanelElement extends LitElement {
   public position: StickyPanelPosition = 'rightTop';
 
   public override render() {
-    return html`<slot/>`;
+    return html`<slot></slot>`;
   }
 }
 

@@ -32,7 +32,7 @@ export const ButtonMixin = <T extends Constructor<LitElement>>(superClass: T) =>
 
     public renderLink(icon: string, info: INFO): TemplateResult<1> {
       return html`
-        <a href="${info.URL}" target="_blank" title=${info.TITLE}>
+        <a href=${info.URL} target="_blank" title=${info.TITLE}>
             ${unsafeSVG(icon)}
         </a>
       `;

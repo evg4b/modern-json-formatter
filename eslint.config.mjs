@@ -2,12 +2,17 @@ import js from '@eslint/js';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
+import { configs as lit } from 'eslint-plugin-lit';
+import { configs } from 'eslint-plugin-wc';
 
 export default [
   { languageOptions: { globals: globals.browser } },
   js.configs.recommended,
-  ...ts.configs.recommended,
   stylistic.configs['all'],
+  lit['flat/all'],
+  configs['flat/recommended'],
+  configs['flat/best-practice'],
+  ...ts.configs.recommended,
   {
     rules: {
       '@stylistic/comma-dangle': ['error', 'always-multiline'],

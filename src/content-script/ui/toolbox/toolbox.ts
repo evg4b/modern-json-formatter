@@ -6,6 +6,7 @@ import '../query-input';
 import '../info-button';
 import '@core/ui/button';
 import { ButtonElement } from '@core/ui/button';
+import { map } from 'lit/directives/map.js';
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {
@@ -61,7 +62,7 @@ export class ToolboxElement extends LitElement {
     return html`
         ${input}
         <div class="button-container">
-          ${this.tabs.map(({ tab, label }) => html`
+          ${map(this.tabs, ({ tab, label }) => html`
             <mjf-button class=${classMap({ active: this.tab === tab })}
                         @click=${this.clickHandler}
                         .active=${this.tab === tab}

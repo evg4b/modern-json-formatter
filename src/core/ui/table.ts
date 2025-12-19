@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { get } from 'es-toolkit/compat';
+import { map } from 'lit/directives/map.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -65,7 +66,7 @@ export class TableElement extends LitElement {
       <table>
         <thead>
         <tr>
-          ${this.columns.map(col => html`
+          ${map(this.columns, col => html`
             <th>${col.title}</th>
           `)}
         </tr>
@@ -89,9 +90,9 @@ export class TableElement extends LitElement {
     }
 
     return html`
-      ${data.map(row => html`
+      ${map(data, row => html`
         <tr>
-          ${this.columns.map(col => html`
+          ${map(this.columns, col => html`
             <td>
               ${get(row, col.path, 'N/A')}
             </td>

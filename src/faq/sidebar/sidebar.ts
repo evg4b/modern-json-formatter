@@ -4,6 +4,7 @@ import type { NavigationItem } from './models.ts';
 import '@core/ui/buttons';
 import '@core/ui/logo.ts';
 import './side-bar-link';
+import { map } from 'lit/directives/map.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -64,6 +65,7 @@ export class SidebarElement extends LitElement {
   public items: NavigationItem[] = [];
 
   @property({ type: String })
+  // eslint-disable-next-line lit/attribute-names
   public activeItem: string | null = null;
 
   public override render() {
@@ -80,7 +82,7 @@ export class SidebarElement extends LitElement {
         </div>
       </div>
       <div class="menu">
-        ${this.items.map(item => html`
+        ${map(this.items, item => html`
           <mjf-sidebar-link .item=${item} .active=${this.activeItem === item.id}>
             ${item.title}
           </mjf-sidebar-link>

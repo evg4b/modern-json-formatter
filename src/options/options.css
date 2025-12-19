@@ -1,30 +1,16 @@
-/*@import '../core/styles/variables.css';*/
-
 body {
     background: var(--background);
     color: var(--base-text-color);
     min-height: 100vh;
     padding: 0;
     margin: 0;
-
     font-size: 15px;
-    /*background: #282828;*/
-    /*color: #eee;*/
     scrollbar-width: thin;
     scrollbar-color: #757575 #3c3c3c;
-    font-family: sans-serif;
-
-
     font-family: 'Roboto', sans-serif;
     line-height: 1.5;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 15px;
     background: #282828;
-    color: #eee;
-    scrollbar-width: thin;
-    scrollbar-color: #757575 #3c3c3c;
 }

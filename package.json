@@ -46,6 +46,8 @@
     "@webcomponents/custom-elements": "^1.6.0",
     "es-toolkit": "^1.43.0",
     "eslint": "^9.39.2",
+    "eslint-plugin-lit": "^2.1.1",
+    "eslint-plugin-wc": "^3.0.2",
     "fake-indexeddb": "^6.2.5",
     "globals": "^16.5.0",
     "happy-dom": "^20.0.11",

@@ -31,6 +31,7 @@ export const runExtension = async () => {
     return;
   }
 
+  // eslint-disable-next-line wc/no-closed-shadow-root
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
   registerStyle(shadowRoot, staticStyles);
   registerStyleLink(shadowRoot, resource('content-styles.css'));

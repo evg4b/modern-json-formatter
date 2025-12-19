@@ -25,6 +25,6 @@ export class ErrorMessageElement extends LitElement {
   `;
 
   public override render() {
-    return html`<slot />`;
+    return html`<slot></slot>`;
   }
 }

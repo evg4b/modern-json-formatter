@@ -3,7 +3,7 @@
 exports[`mjf-chrome-web-store-button > should have correct markup 1`] = `
 "<!---->
         <a target="_blank" href="https://chromewebstore.google.com/detail/modern-json-formatter/dmofgolehdakghahlgibeaodbahpfkpf" title="Chrome Web Store">
-            <!--?lit$764142597$--><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32px" height="32px">
+            <!--?lit$661550667$--><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32px" height="32px">
     <path fill="#c0c9cc" d="M42.39,11.07V37c0,1.66-1.34,3-3,3H8.38c-1.66,0-3-1.34-3-3V11.07H42.39z"></path>
     <linearGradient id="s1KY5cWnBSx6qWb48gxgFa" x1="23.885" x2="23.885" y1="2.953" y2="29.195" gradientUnits="userSpaceOnUse">
         <stop offset="0" stop-color="#bac1c6"></stop>

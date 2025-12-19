@@ -8,7 +8,9 @@ declare global {
   }
 }
 
-const imagesMap = {
+type LogoSize = '512' | '256' | '128' | '48' | '32';
+
+const imagesMap: Record<LogoSize, string> = {
   512: resource('./icon512.png'),
   256: resource('./icon256.png'),
   128: resource('./icon128.png'),

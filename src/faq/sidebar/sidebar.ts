@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import type { NavigationItem } from "./models.ts";
 import "./buttons";
 import "./logo";
+import './side-bar-link';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -16,7 +17,7 @@ export class SidebarElement extends LitElement {
     :host {
       display: flex;
       flex-direction: column;
-      padding: 20px;
+      padding: 20px 20px 20px 0;
       box-sizing: border-box;
     }
       
@@ -24,7 +25,7 @@ export class SidebarElement extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        padding: 15px 0;
+        padding: 15px 0 15px 20px;
         user-select: none;
     }
       
@@ -59,8 +60,12 @@ export class SidebarElement extends LitElement {
     }
   `;
 
-  @property()
+  @property({ type: Array })
   public items: NavigationItem[] = [];
+
+  @property({ type: String })
+  public activeItem: string | null = null;
+
   public override render() {
     return html`
       <div class="header-container">
@@ -76,12 +81,18 @@ export class SidebarElement extends LitElement {
       </div>
       <div class="menu">
         ${this.items.map(item => html`
-          <div>${item.title}</div>
-          <div class="section">
-            ${item.children?.map(child => html`
-                <div>${child.title}</div>
-            `)}    
-          </div>
+          <mjf-sidebar-link .item=${item} .active=${this.activeItem === item.id}>
+            ${item.title}
+          </mjf-sidebar-link>
+          ${item.children && html`
+            <div class="section">
+              ${item.children?.map(child => html`
+                <mjf-sidebar-link .item=${child} .active=${this.activeItem === child.id}>
+                  ${child.title}
+                </mjf-sidebar-link>
+              `)}
+            </div>
+          `}
         `)}    
       </div>
     `;

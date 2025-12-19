@@ -6,8 +6,9 @@ import './content';
 
 import "../core/styles/variables.css";
 import "./faq.css";
-import { sidebarControllerContext } from "./sidebar/sidebar-contex.ts";
+import { sidebarControllerContext } from "./sidebar/sidebar.controller.ts";
 import { SidebarController } from "./sidebar/sidebar.controller.ts";
+import { ref } from "lit/directives/ref.js";
 
 @customElement('mjf-faq-page')
 export class FaqPageElement extends LitElement {
@@ -19,11 +20,11 @@ export class FaqPageElement extends LitElement {
     }
 
     mjf-sidebar {
-      flex: 1 2 auto;
+      flex: 1 5 auto;
     }
 
     mjf-content {
-      flex: 4 4 auto;
+      flex: 4 7 auto;
     }
       
     mjf-sidebar,
@@ -39,10 +40,11 @@ export class FaqPageElement extends LitElement {
   private readonly sidebarController = new SidebarController(this);
 
   public override render() {
-    console.log(this.sidebarController.items);
     return html`
-      <mjf-sidebar .items=${this.sidebarController.items}></mjf-sidebar>
-      <mjf-content></mjf-content>
+      <mjf-sidebar .items=${this.sidebarController.items}
+                   .activeItem=${this.sidebarController.activeItem}>
+      </mjf-sidebar>
+      <mjf-content ${ref(this.sidebarController.contentRef)}></mjf-content>
     `;
   }
 }

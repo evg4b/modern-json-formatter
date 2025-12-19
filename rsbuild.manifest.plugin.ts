@@ -57,6 +57,9 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
               'faq.html',
               'faq.css',
               'faq.js',
+              'options.html',
+              'options.css',
+              'options.js',
             ],
             matches: [ "<all_urls>" ]
           },

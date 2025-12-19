@@ -1,9 +1,9 @@
 import { css, html, LitElement, type TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { consume } from "@lit/context";
-import { sidebarControllerContext } from "../sidebar/sidebar-contex.ts";
+import { sidebarControllerContext } from "../sidebar/sidebar.controller";
 import { createRef, ref } from "lit/directives/ref.js";
-import { SidebarController } from "../sidebar/sidebar.controller.ts";
+import { SidebarController } from "../sidebar/sidebar.controller";
 
 declare global {
   interface HTMLElementTagNameMap {

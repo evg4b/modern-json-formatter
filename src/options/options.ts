@@ -1,36 +1,46 @@
 import { html, css, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import '../faq/sidebar/logo';
+import './options.css';
 
 @customElement('mjf-options-page')
 export class OptionsPageElement extends LitElement {
   public static override styles = css`
-    .content {
-      display: flex;
-      min-height: 100vh;
-      line-height: 1.1;
-      text-align: center;
-      flex-direction: column;
-      justify-content: center;
-    }
+      .container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin: 0 auto;
+          padding: 20px;
+          max-width: 700px;
+          width: 100%;
+          box-sizing: border-box;
+      }
+      
+      .header {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 15px;
+          user-select: none;
 
-    .content h1 {
-      font-size: 3.6rem;
-      font-weight: 700;
-    }
-
-    .content p {
-      font-size: 1.2rem;
-      font-weight: 400;
-      opacity: 0.5;
-    }
+          h2 {
+              text-align: center;
+          }
+      }
   `;
 
   public override render() {
     return html`
-      <div class="content">
-        <h1>Rsbuild with Lit</h1>
-        <p>Start building amazing things with Rsbuild.</p>
-        <pre>mjf-options-page</pre>
+      <div class="container">
+        <div class="header">
+            <mjf-logo alt="sadsad" title="sadsadklsdkj" size="48"></mjf-logo>
+            <h2>Modern JSON Formatter Options</h2>
+        </div>
+        <div>
+            
+        </div>
       </div>
     `;
   }

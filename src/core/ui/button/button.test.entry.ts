@@ -1,1 +1,1 @@
-import './button.ts';
+import './button';

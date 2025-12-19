@@ -1,1 +1,1 @@
-export { ButtonElement } from './button.ts';
+export { ButtonElement } from './button';

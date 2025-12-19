@@ -2,6 +2,7 @@ import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@tes
 import { type TokenNode } from '@worker-core';
 import assert from 'node:assert';
 import { buildDom } from './build-dom';
+import { describe, expect, test } from '@rstest/core';
 
 describe('buildDom', () => {
   const parsedJson: TokenNode = {
@@ -237,10 +238,10 @@ describe('buildDom', () => {
     const result = buildDom(parsedJson);
 
     const invisibleElements = [
-      ...result.querySelectorAll('.toggle'),
-      ...result.querySelectorAll('.ellipsis'),
-      ...result.querySelectorAll('.properties-count'),
-      ...result.querySelectorAll('.items-count'),
+      ...Array.from(result.querySelectorAll('.toggle')),
+      ...Array.from(result.querySelectorAll('.ellipsis')),
+      ...Array.from(result.querySelectorAll('.properties-count')),
+      ...Array.from(result.querySelectorAll('.items-count')),
     ];
 
     invisibleElements.forEach(element => element.remove());

@@ -10,7 +10,7 @@ import { buildContainers } from './ui';
 import './ui/toolbox';
 import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
-import { TabChangedEvent } from './ui/toolbox/toolbox.ts';
+import { TabChangedEvent } from './ui/toolbox/toolbox';
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;

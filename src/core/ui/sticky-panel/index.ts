@@ -1,1 +1,1 @@
-export { StickyPanelElement } from './sticky-panel.ts';
+export { StickyPanelElement } from './sticky-panel';

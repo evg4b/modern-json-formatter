@@ -1,4 +1,3 @@
-import '@webcomponents/custom-elements';
 import { wrapMock } from '@testing/helpers';
 import { noop } from 'es-toolkit';
 import { runExtension } from './extension';

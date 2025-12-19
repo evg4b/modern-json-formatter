@@ -1,6 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { NavigationItem } from './models.ts';
+import type { NavigationItem } from './models';
 import { classMap } from 'lit/directives/class-map.js';
 import { isInViewport } from '@core/helpers';
 

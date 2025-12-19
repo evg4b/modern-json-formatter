@@ -1,7 +1,7 @@
 import { LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import icon from './chrome-web-store-button-icon.svg?raw';
-import { ButtonMixin } from './button.mixin.ts';
+import { ButtonMixin } from './button.mixin';
 import { BUTTONS } from '@core/constants';
 
 declare global {

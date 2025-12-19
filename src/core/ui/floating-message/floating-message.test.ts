@@ -1,8 +1,8 @@
 rstest.useFakeTimers({ toFake: ['setTimeout'] });
 
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
-import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
-import { FloatingMessageElement } from './floating-message.ts';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
+import { FloatingMessageElement } from './floating-message';
 
 describe('FloatingMessageElement', () => {
   let floatingMessage: FloatingMessageElement;

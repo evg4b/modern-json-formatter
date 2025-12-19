@@ -1,1 +1,1 @@
-export { FloatingMessageElement } from './floating-message.ts';
+export { FloatingMessageElement } from './floating-message';

@@ -9,7 +9,7 @@ import { wrapMock } from '@testing/helpers';
 import { getShadowRoot } from '@testing/styled-component';
 import { throws } from '../../helpers';
 import { brackets, QueryInputElement } from './query-input';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from '../query-input/query-input.helpers';
 
 describe('QueryInputElement', () => {
   let input: QueryInputElement;

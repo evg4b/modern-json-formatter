@@ -3,8 +3,8 @@ import { resource } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
 import { debounce } from 'es-toolkit';
 import { isNotNil } from '../../helpers';
-import { HistoryManager } from './history-manager';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
+import { HistoryManager } from '../query-input/history-manager';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from '../query-input/query-input.helpers';
 import queryInputStyles from './query-input.styles';
 
 export const brackets: Record<string, string> = {

@@ -6,8 +6,8 @@ import './content';
 
 import '../core/styles/variables.css';
 import './faq.css';
-import { sidebarControllerContext } from './sidebar/sidebar.controller.ts';
-import { SidebarController } from './sidebar/sidebar.controller.ts';
+import { sidebarControllerContext } from './sidebar/sidebar.controller';
+import { SidebarController } from './sidebar/sidebar.controller';
 import { ref } from 'lit/directives/ref.js';
 
 @customElement('mjf-faq-page')

@@ -1,12 +1,12 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref, createRef } from 'lit/directives/ref.js';
-import './error-message.ts';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from '../query-input-old/query-input.helpers.ts';
-import { isNotNil, throws } from '../../helpers.ts';
-import { HistoryManager } from '../query-input-old/history-manager.ts';
+import './error-message';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
+import { isNotNil, throws } from '../../helpers';
+import { HistoryManager } from './history-manager';
 import { resource } from '@core/browser';
-import { AutocompleteController } from './autocomplete.controller.ts';
+import { AutocompleteController } from './autocomplete.controller';
 import { map } from 'lit/directives/map.js';
 
 interface HistoryItem {

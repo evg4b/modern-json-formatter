@@ -1,12 +1,12 @@
 import { html, css, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import '@core/ui/logo.ts';
+import '@core/ui/logo';
 import '@core/ui/buttons';
 import '@core/ui';
 import './options.css';
 import { getDomains, clearHistory } from '@core/background';
-import '@core/ui/table.ts';
-import type { TableColumn } from '@core/ui/table.ts';
+import '@core/ui/table';
+import type { TableColumn } from '@core/ui/table';
 import { until } from 'lit/directives/until.js';
 
 const columns: TableColumn[] = [

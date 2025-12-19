@@ -1,8 +1,8 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { NavigationItem } from './models.ts';
+import type { NavigationItem } from './models';
 import '@core/ui/buttons';
-import '@core/ui/logo.ts';
+import '@core/ui/logo';
 import './side-bar-link';
 import { map } from 'lit/directives/map.js';
 

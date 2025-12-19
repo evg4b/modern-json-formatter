@@ -9,10 +9,17 @@ export default defineConfig({
     'src/**/*.test.ts',
   ],
   coverage: {
-    enabled: true,
-    exclude: ['testing/**/*'],
+    enabled: false,
+    exclude: [
+      'testing/**/*',
+      'worker-core/wasm_exec.js',
+    ],
+    include: [
+      'src/**/*.ts',
+      'worker-core/**/*.ts',
+    ],
     reportOnFailure: true,
-    reporters: ['text', 'lcov'],
+    reporters: ['text', 'lcov', 'html'],
   },
   source: {
     decorators: {

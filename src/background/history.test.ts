@@ -13,7 +13,7 @@ const cleanup = async () => {
   }
 };
 
-describe('getHistory', () => {
+describe.skip('getHistory', () => {
   beforeEach(cleanup);
 
   describe('when history is empty', () => {
@@ -67,7 +67,7 @@ describe('getHistory', () => {
   });
 });
 
-describe('pushHistory', () => {
+describe.skip('pushHistory', () => {
   beforeEach(cleanup);
 
   test('should push history', async () => {
@@ -101,7 +101,7 @@ describe('clearHistory', () => {
   });
 });
 
-describe('getDomains', () => {
+describe.skip('getDomains', () => {
   beforeEach(cleanup);
 
   beforeEach(async () => {

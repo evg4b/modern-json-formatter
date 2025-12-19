@@ -1,7 +1,8 @@
 import { css, type CSSResult, html, LitElement, type TemplateResult } from 'lit';
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 
-type Constructor<T = {}> = new (...args: any[]) => T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Constructor<T = object> = new (...args: any[]) => T;
 
 export interface INFO {
   URL: string;

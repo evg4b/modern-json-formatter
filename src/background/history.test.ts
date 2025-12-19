@@ -44,7 +44,7 @@ describe('getHistory', () => {
   describe('when history has many records', () => {
     beforeEach(async () => {
       for (let i = 0; i < 50; i++) {
-        await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
+        await pushHistory({ domain: 'example.com', query: `.[${i}]` });
       }
     });
 
@@ -58,7 +58,6 @@ describe('getHistory', () => {
     });
   });
 });
-
 
 describe('pushHistory', () => {
   beforeEach(cleanup);
@@ -83,7 +82,7 @@ describe('clearHistory', () => {
 
   beforeEach(async () => {
     for (let i = 0; i < 50; i++) {
-      await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
+      await pushHistory({ domain: 'example.com', query: `.[${i}]` });
     }
   });
 
@@ -94,23 +93,22 @@ describe('clearHistory', () => {
   });
 });
 
-
 describe('getDomains', () => {
   beforeEach(cleanup);
 
   beforeEach(async () => {
     for (let i = 0; i < 3; i++) {
-      await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
+      await pushHistory({ domain: 'example.com', query: `.[${i}]` });
     }
 
-    await pushHistory({ domain: 'sub.example.com', query: `.[0]` });
+    await pushHistory({ domain: 'sub.example.com', query: '.[0]' });
 
     for (let i = 0; i < 5; i++) {
-      await pushHistory({ domain: 'test.com', query: `.[${ i }]` });
+      await pushHistory({ domain: 'test.com', query: `.[${i}]` });
     }
 
     for (let i = 0; i < 2; i++) {
-      await pushHistory({ domain: 'other.net', query: `.[${ i }]` });
+      await pushHistory({ domain: 'other.net', query: `.[${i}]` });
     }
   });
 

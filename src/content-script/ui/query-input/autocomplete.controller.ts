@@ -1,11 +1,10 @@
-import type { ReactiveController } from "lit";
-import type { ReactiveControllerHost } from "@lit/reactive-element/reactive-controller.js";
-import { debounce } from "es-toolkit";
-import { getHistory } from "@core/background";
-
+import type { ReactiveController } from 'lit';
+import type { ReactiveControllerHost } from '@lit/reactive-element/reactive-controller.js';
+import { debounce } from 'es-toolkit';
+import { getHistory } from '@core/background';
 
 export class AutocompleteController implements ReactiveController {
-  public options: string[] = []
+  public options: string[] = [];
 
   constructor(
     private readonly host: ReactiveControllerHost,

@@ -1,9 +1,9 @@
-import { css, html, LitElement, type TemplateResult } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { consume } from "@lit/context";
-import { sidebarControllerContext } from "../sidebar/sidebar.controller";
-import { createRef, ref } from "lit/directives/ref.js";
-import { SidebarController } from "../sidebar/sidebar.controller";
+import { css, html, LitElement, type TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { consume } from '@lit/context';
+import { sidebarControllerContext } from '../sidebar/sidebar.controller';
+import { createRef, ref } from 'lit/directives/ref.js';
+import { SidebarController } from '../sidebar/sidebar.controller';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -94,14 +94,14 @@ export class SectionElement extends LitElement {
   @consume({ context: sidebarControllerContext })
   public sidebarController!: SidebarController;
 
-  public override updated()  {
-    this.sidebarController.registerSection(this.ref.value!)
+  public override updated() {
+    this.sidebarController.registerSection(this.ref.value!);
   }
 
   public override render() {
     return html`
       <section ${ref(this.ref)}>
-        ${ this.content }
+        ${this.content}
       </section>
     `;
   }

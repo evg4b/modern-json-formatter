@@ -10,7 +10,7 @@ import { buildContainers } from './ui';
 import './ui/toolbox';
 import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
-import { TabChangedEvent } from "./ui/toolbox/toolbox.ts";
+import { TabChangedEvent } from './ui/toolbox/toolbox.ts';
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
@@ -62,7 +62,7 @@ export const runExtension = async () => {
         type: 'info-message',
         header: 'File is too large',
       },
-      content: 'File is too large to be processed (More than 3MB). It has been formatted instead.'
+      content: 'File is too large to be processed (More than 3MB). It has been formatted instead.',
     });
 
     rootContainer.appendChild(creeated);
@@ -78,7 +78,8 @@ export const runExtension = async () => {
     rootContainer.classList.add('loading');
     try {
       return await promise;
-    } finally {
+    }
+    finally {
       rootContainer.classList.remove('loading');
     }
   };
@@ -105,9 +106,9 @@ export const runExtension = async () => {
       }
     });
 
-    toolbox.addEventListener('jq-query', async event => {
+    toolbox.addEventListener('jq-query', async (event) => {
       await wrapper(jqQuery(event.detail));
-    })
+    });
 
     shadowRoot.appendChild(panel);
 
@@ -117,7 +118,8 @@ export const runExtension = async () => {
         queryContainer.innerHTML = '';
         queryContainer.appendChild(prepareResponse(info));
         await pushHistory(window.location.hostname, query);
-      } catch (error: unknown) {
+      }
+      catch (error: unknown) {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {
             toolbox.error = error.error;
@@ -128,10 +130,10 @@ export const runExtension = async () => {
             element: 'mjf-floating-message',
             attributes: {
               type: 'error-message',
-              header: `Error ${ error.error } in ${ error.scope }`,
+              header: `Error ${error.error} in ${error.scope}`,
             },
-            content: error.stack ? `Stack trace: ${ error.stack }` : '',
-          })
+            content: error.stack ? `Stack trace: ${error.stack}` : '',
+          });
 
           rootContainer.appendChild(errorMessage);
         }
@@ -155,4 +157,3 @@ const prepareResponse = (response: TokenizerResponse): HTMLElement => {
     ? buildErrorNode('Invalid JSON file.', response.error)
     : buildDom(response);
 };
-

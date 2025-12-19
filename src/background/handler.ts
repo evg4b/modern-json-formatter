@@ -27,11 +27,12 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
         return {
           type: 'error',
           scope: 'worker',
-          error: `Unknown message type: ${ type }`,
+          error: `Unknown message type: ${type}`,
         };
       }
     }
-  } catch (err: unknown) {
+  }
+  catch (err: unknown) {
     if (err instanceof Error) {
       return {
         type: 'error',
@@ -44,8 +45,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
     return {
       type: 'error',
       scope: 'worker',
-      error: `Unknown error: ${ String(err) }`,
+      error: `Unknown error: ${String(err)}`,
     };
   }
 };
-

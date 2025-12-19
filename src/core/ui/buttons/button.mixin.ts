@@ -1,5 +1,5 @@
 import { css, type CSSResult, html, LitElement, type TemplateResult } from 'lit';
-import { unsafeSVG } from "lit/directives/unsafe-svg.js";
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Constructor<T = object> = new (...args: any[]) => T;
@@ -29,7 +29,7 @@ export const ButtonMixin = <T extends Constructor<LitElement>>(superClass: T) =>
             transform: scale(1.2);
         }
       }
-    `
+    `;
 
     public renderLink(icon: string, info: INFO): TemplateResult<1> {
       return html`
@@ -41,4 +41,4 @@ export const ButtonMixin = <T extends Constructor<LitElement>>(superClass: T) =>
   }
 
   return ButtonClass as unknown as Constructor<ButtonMixinInterface> & T;
-}
+};

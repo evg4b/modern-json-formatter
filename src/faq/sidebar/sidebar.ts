@@ -1,8 +1,8 @@
-import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import type { NavigationItem } from "./models.ts";
-import "@core/ui/buttons";
-import "@core/ui/logo.ts";
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import type { NavigationItem } from './models.ts';
+import '@core/ui/buttons';
+import '@core/ui/logo.ts';
 import './side-bar-link';
 
 declare global {

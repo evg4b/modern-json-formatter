@@ -1,8 +1,8 @@
-import { LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
+import { LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import icon from './github-button-icon.svg?raw';
-import { ButtonMixin } from "./button.mixin.ts";
-import { BUTTONS } from "@core/constants";
+import { ButtonMixin } from './button.mixin.ts';
+import { BUTTONS } from '@core/constants';
 
 declare global {
   interface HTMLElementTagNameMap {

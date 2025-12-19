@@ -1,4 +1,4 @@
-import type { ReactiveController, ReactiveControllerHost } from "lit";
+import type { ReactiveController, ReactiveControllerHost } from 'lit';
 
 interface FloatingMessageControllerHost extends ReactiveControllerHost {
   remove(): void;

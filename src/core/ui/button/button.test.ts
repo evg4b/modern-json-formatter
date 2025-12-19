@@ -1,16 +1,16 @@
 import { expect, test, describe } from '@rstest/core';
-import { ButtonElement } from "./button.ts";
-import "./button.ts";
-import { defaultLitAsserts, renderLitElement } from "@testing/lit.ts";
+import { ButtonElement } from './button.ts';
+import './button.ts';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
 
 describe('ButtonElement', () => {
-  let button: ButtonElement
+  let button: ButtonElement;
 
   renderLitElement('mjf-button', (element) => {
-    button = element
+    button = element;
   });
 
-  defaultLitAsserts(ButtonElement, () => button)
+  defaultLitAsserts(ButtonElement, () => button);
 
   test('should have a button', () => {
     const buttonElement = button.shadowRoot?.querySelector('button');

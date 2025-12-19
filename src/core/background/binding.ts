@@ -30,7 +30,6 @@ export const jq = async (json: string, query: string): Promise<TokenizerResponse
   return bridge<JqParams, TokenizerResponse>({ action: 'jq', payload: { json, query } });
 };
 
-
 export const tokenize = async (json: string): Promise<TokenizerResponse> => {
   return bridge<TokenizeParams, TokenizerResponse>({ action: 'tokenize', payload: json });
 };

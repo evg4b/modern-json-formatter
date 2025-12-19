@@ -4,10 +4,10 @@ import '@core/ui/logo.ts';
 import '@core/ui/buttons';
 import '@core/ui';
 import './options.css';
-import { getDomains, clearHistory } from "@core/background";
+import { getDomains, clearHistory } from '@core/background';
 import '@core/ui/table.ts';
-import type { TableColumn } from "@core/ui/table.ts";
-import {until} from 'lit/directives/until.js';
+import type { TableColumn } from '@core/ui/table.ts';
+import { until } from 'lit/directives/until.js';
 
 const columns: TableColumn[] = [
   { title: 'Domain', path: 'domain' },

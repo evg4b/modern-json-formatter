@@ -1,6 +1,6 @@
-import { html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { resource } from "@core/browser";
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { resource } from '@core/browser';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -9,11 +9,11 @@ declare global {
 }
 
 const imagesMap = {
-  '512': resource('./icon512.png'),
-  '256': resource('./icon256.png'),
-  '128': resource('./icon128.png'),
-  '48': resource('./icon48.png'),
-  '32': resource('./icon32.png'),
+  512: resource('./icon512.png'),
+  256: resource('./icon256.png'),
+  128: resource('./icon128.png'),
+  48: resource('./icon48.png'),
+  32: resource('./icon32.png'),
 };
 
 @customElement('mjf-logo')

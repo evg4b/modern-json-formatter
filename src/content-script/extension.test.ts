@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, rstest, test } from "@rstest/core";
+import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import '@testing/browser.mock';
 import '@testing/background.mock';
 import { format, tokenize } from '@core/background';
@@ -12,7 +12,7 @@ import { findNodeWithCode } from './json-detector';
 import { buildContainers } from './ui';
 
 rstest.mock('./json-detector', () => ({
-  findNodeWithCode: rstest.fn().mockName('findNodeWithCode')
+  findNodeWithCode: rstest.fn().mockName('findNodeWithCode'),
 }));
 
 rstest.mock('./ui', () => ({
@@ -21,7 +21,7 @@ rstest.mock('./ui', () => ({
 
 rstest.mock('@core/ui/helpers', () => ({
   registerStyle: rstest.fn().mockName('registerStyle'),
-  FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement')
+  FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement'),
 }));
 
 describe.skip('runExtension', () => {

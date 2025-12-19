@@ -1,9 +1,9 @@
-import type { ReactiveController } from "lit";
-import type { ReactiveControllerHost } from "@lit/reactive-element/reactive-controller.js";
-import type { NavigationItem } from "./models";
-import { assert } from "typed-assert";
-import { head } from "es-toolkit";
-import { createContext } from "@lit/context";
+import type { ReactiveController } from 'lit';
+import type { ReactiveControllerHost } from '@lit/reactive-element/reactive-controller.js';
+import type { NavigationItem } from './models';
+import { assert } from 'typed-assert';
+import { head } from 'es-toolkit';
+import { createContext } from '@lit/context';
 
 export const sidebarControllerContext = createContext<SidebarController>(Symbol('sidebar-controller'));
 
@@ -23,7 +23,7 @@ export class SidebarController implements ReactiveController {
   public contentRef = (a: Element | undefined) => {
     a?.addEventListener('scroll', this.scrollEndHandler.bind(this));
     setTimeout(() => this.scrollEndHandler(), 10);
-  }
+  };
 
   public get items() {
     return Array.from(this.itemsMap.values());
@@ -35,7 +35,7 @@ export class SidebarController implements ReactiveController {
       return;
     }
 
-    assert(header.id.length > 0, 'Header id should be present')
+    assert(header.id.length > 0, 'Header id should be present');
 
     this.itemsMap.set(header.id, {
       id: header.id,
@@ -56,8 +56,8 @@ export class SidebarController implements ReactiveController {
 
   private scrollEndHandler() {
     const visibleItems = this.items
-      .flatMap(item => [ item, ...(item.children ?? []) ])
-      .map(item => {
+      .flatMap(item => [item, ...(item.children ?? [])])
+      .map((item) => {
         const rect = item.ref.getBoundingClientRect();
         return { id: item.id, top: rect.top, offset: Math.abs(rect.top), ref: item.ref };
       })

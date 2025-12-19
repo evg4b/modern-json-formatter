@@ -1,6 +1,6 @@
-import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
-import lang from "../sections";
+import { css, html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import lang from '../sections';
 
 import './section';
 
@@ -32,6 +32,6 @@ export class ContentElement extends LitElement {
       <mjf-section .content=${lang.en.advancedFeatures}></mjf-section>
       <mjf-section .content=${lang.en.math}></mjf-section>
       <mjf-section .content=${lang.en.assignment}></mjf-section>
-    `
+    `;
   }
 }

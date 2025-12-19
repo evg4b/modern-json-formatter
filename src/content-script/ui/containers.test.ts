@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from "@rstest/core";
+import { beforeEach, describe, expect, test } from '@rstest/core';
 import { buildContainers } from './containers';
 
 describe('buildContainers', () => {

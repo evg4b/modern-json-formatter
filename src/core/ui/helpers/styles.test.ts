@@ -35,7 +35,7 @@ describe('registerStyleLink', () => {
   beforeAll(() => {
     const host = document.createElement('div');
     shadowRoot = host.attachShadow({ mode: 'open' });
-    linkElement = registerStyleLink(shadowRoot, `/css/content-styles.css`);
+    linkElement = registerStyleLink(shadowRoot, '/css/content-styles.css');
   });
 
   test('should return the link node', () => {

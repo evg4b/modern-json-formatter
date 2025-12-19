@@ -1,7 +1,7 @@
 import icon from './info-button-icon.svg?raw';
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement } from 'lit';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property } from 'lit/decorators.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -34,12 +34,12 @@ export class InfoButtonElement extends LitElement {
   `;
 
   @property({ type: String })
-  public url = ''
+  public url = '';
 
   public override render() {
     return html`
-      <a class="info-button" target="_blank" href=${ this.url }>
-        ${ unsafeSVG(icon) }
+      <a class="info-button" target="_blank" href=${this.url}>
+        ${unsafeSVG(icon)}
       </a>
     `;
   }

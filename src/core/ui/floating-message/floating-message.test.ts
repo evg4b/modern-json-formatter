@@ -1,15 +1,15 @@
-rstest.useFakeTimers({ toFake: [ 'setTimeout' ] });
+rstest.useFakeTimers({ toFake: ['setTimeout'] });
 
-import { beforeEach, describe, expect, rstest, test } from "@rstest/core";
-import { defaultLitAsserts, renderLitElement } from "@testing/lit.ts";
-import { FloatingMessageElement } from "./floating-message.ts";
+import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
+import { FloatingMessageElement } from './floating-message.ts';
 
-describe("FloatingMessageElement", () => {
+describe('FloatingMessageElement', () => {
   let floatingMessage: FloatingMessageElement;
 
-  renderLitElement('mjf-floating-message', element => {
+  renderLitElement('mjf-floating-message', (element) => {
     floatingMessage = element;
-  })
+  });
 
   defaultLitAsserts(FloatingMessageElement, () => floatingMessage);
 
@@ -22,7 +22,7 @@ describe("FloatingMessageElement", () => {
 
     test('should exists', () => {
       expect(wrapper).not.toBeNull();
-    })
+    });
 
     test('should be hidden', () => {
       expect(wrapper?.classList).not.toContain('visible');
@@ -32,7 +32,7 @@ describe("FloatingMessageElement", () => {
       const typeAttribute = floatingMessage.attributes.getNamedItem('type');
 
       expect(typeAttribute?.value).toEqual('info-message');
-    })
+    });
 
     describe('after 100ms', () => {
       beforeEach(async () => {
@@ -75,9 +75,9 @@ describe("FloatingMessageElement", () => {
 
       rstest.advanceTimersByTime(250);
 
-      await floatingMessage.updateComplete
+      await floatingMessage.updateComplete;
 
       expect(wrapper?.classList).not.toContain('visible');
-    })
-  })
-})
+    });
+  });
+});

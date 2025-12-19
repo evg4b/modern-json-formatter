@@ -25,7 +25,7 @@ describe('isNotNil', () => {
     { value: {}, expected: true },
   ];
 
-  test.each(cases)(`should return $value for $expected`, ({ value, expected }) => {
+  test.each(cases)('should return $value for $expected', ({ value, expected }) => {
     expect(isNotNil(value)).toBe(expected);
   });
 });
@@ -44,7 +44,7 @@ describe('assetTabType', () => {
   });
 
   test('should throw an error for invalid tab type %s', () => {
-    expect(() => assetTabType('invalid')).toThrow(`Invalid tab type 'invalid'`);
+    expect(() => assetTabType('invalid')).toThrow('Invalid tab type \'invalid\'');
   });
 });
 
@@ -128,5 +128,5 @@ describe('query', () => {
 
   test('should throw error if element not found', () => {
     expect(() => query(container, '.non-existent-element')).toThrow('Element .non-existent-element not found');
-  })
+  });
 });

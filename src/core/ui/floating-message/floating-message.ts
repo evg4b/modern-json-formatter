@@ -1,7 +1,7 @@
-import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { classMap } from "lit/directives/class-map.js";
-import { FloatingMessageController } from "./floating-message.controller.ts";
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { FloatingMessageController } from './floating-message.controller.ts';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -84,7 +84,7 @@ export class FloatingMessageElement extends LitElement {
   private readonly controller = new FloatingMessageController(this);
 
   @property({ type: String, reflect: true })
-  public type: FloatingMessageType = 'info-message'
+  public type: FloatingMessageType = 'info-message';
 
   @property({ type: String })
   public header: string | null = null;
@@ -92,11 +92,11 @@ export class FloatingMessageElement extends LitElement {
   public override render() {
     const classes = classMap({
       visible: this.controller.visible,
-      wrapper: true
+      wrapper: true,
     });
 
     return html`
-      <div class=${ classes }>
+      <div class=${classes}>
         <div class="header-container">
             <div class="header">${this.header}</div>
             <div class="close" @click=${this.close}></div>

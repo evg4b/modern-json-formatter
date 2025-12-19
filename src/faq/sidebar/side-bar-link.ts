@@ -1,8 +1,8 @@
-import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import type { NavigationItem } from "./models.ts";
-import { classMap } from "lit/directives/class-map.js";
-import { isInViewport } from "@core/helpers";
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import type { NavigationItem } from './models.ts';
+import { classMap } from 'lit/directives/class-map.js';
+import { isInViewport } from '@core/helpers';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -48,7 +48,7 @@ export class SideBarLinkElement extends LitElement {
         padding-left: 50px;
       }
     }
-  `
+  `;
 
   @property({ type: Object })
   public item!: NavigationItem;
@@ -60,7 +60,7 @@ export class SideBarLinkElement extends LitElement {
     if (args.has('active')) {
       const newActive = !!args.get('active');
       if (newActive !== this.active && !isInViewport(this)) {
-        this.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+        this.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
     }
   }
@@ -74,7 +74,7 @@ export class SideBarLinkElement extends LitElement {
   }
 
   private onClick(e: PointerEvent) {
-    e.preventDefault()
+    e.preventDefault();
     e.stopPropagation();
 
     this.item.ref.scrollIntoView({

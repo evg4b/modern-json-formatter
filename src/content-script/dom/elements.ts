@@ -17,13 +17,13 @@ export const squareBracket = {
 export const propertiesCount = (count: number) =>
   createElement({
     element: 'span',
-    content: `// ${ count } propert${ count === 1 ? 'y' : 'ies' }`,
+    content: `// ${count} propert${count === 1 ? 'y' : 'ies'}`,
     class: 'properties-count',
   });
 
 export const itemsCount = (count: number) =>
   createElement({
     element: 'span',
-    content: `// ${ count } item${ count === 1 ? '' : 's' }`,
+    content: `// ${count} item${count === 1 ? '' : 's'}`,
     class: 'items-count',
   });

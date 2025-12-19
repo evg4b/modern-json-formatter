@@ -2,11 +2,11 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref, createRef } from 'lit/directives/ref.js';
 import './error-message.ts';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from "../query-input-old/query-input.helpers.ts";
-import { isNotNil, throws } from "../../helpers.ts";
-import { HistoryManager } from "../query-input-old/history-manager.ts";
-import { resource } from "@core/browser";
-import { AutocompleteController } from "./autocomplete.controller.ts";
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from '../query-input-old/query-input.helpers.ts';
+import { isNotNil, throws } from '../../helpers.ts';
+import { HistoryManager } from '../query-input-old/history-manager.ts';
+import { resource } from '@core/browser';
+import { AutocompleteController } from './autocomplete.controller.ts';
 
 interface HistoryItem {
   query: string;
@@ -89,7 +89,7 @@ export class QueryInputElement extends LitElement {
   public error: string | null = null;
 
   private readonly historyManager = new HistoryManager<HistoryItem>();
-  private readonly autocomplete = new AutocompleteController(this, window.location.hostname)
+  private readonly autocomplete = new AutocompleteController(this, window.location.hostname);
 
   private readonly inputRef = createRef<HTMLInputElement>();
 
@@ -101,21 +101,21 @@ export class QueryInputElement extends LitElement {
 
   public override render() {
     return html`
-      <mjf-info-button .url=${ this.url }></mjf-info-button>
+      <mjf-info-button .url=${this.url}></mjf-info-button>
       <div class="input-wrapper">
         <input type="text"
                placeholder="Input jq query..."
                list="history-list"
-               @keydown=${ this.onKeydown }
-               @input=${ this.onInput }
-               ${ ref(this.inputRef) }
+               @keydown=${this.onKeydown}
+               @input=${this.onInput}
+               ${ref(this.inputRef)}
         />
         <datalist id="history-list">
           ${this.autocomplete.options.map(query => html`
-              <option value="${ query }">${ query }</option>
+              <option value="${query}">${query}</option>
           `)}
         </datalist>
-        ${ this.renderError() }
+        ${this.renderError()}
       </div>
     `;
   }
@@ -126,12 +126,12 @@ export class QueryInputElement extends LitElement {
 
   private renderError() {
     if (!this.error) {
-      return ''
+      return '';
     }
 
     return html`
       <mjf-error-message>
-        ${ this.error }
+        ${this.error}
       </mjf-error-message>
     `;
   }
@@ -140,11 +140,14 @@ export class QueryInputElement extends LitElement {
     this.error = null;
     if (isSubmitEvent(event)) {
       this.dispatchEvent(new JqQueryEvent(this.inputElement.value));
-    } else if (isWrapEvent(event, brackets)) {
+    }
+    else if (isWrapEvent(event, brackets)) {
       this.onWrapEvent(event);
-    } else if (isUndoEvent(event)) {
+    }
+    else if (isUndoEvent(event)) {
       this.onUndoEvent(event);
-    } else if (isRedoEvent(event)) {
+    }
+    else if (isRedoEvent(event)) {
       this.onRedoEvent(event);
     }
   }
@@ -160,7 +163,7 @@ export class QueryInputElement extends LitElement {
     if (isNotNil(start) && isNotNil(end) && start !== end) {
       event.preventDefault();
       const selectedText = this.inputElement.value.substring(start, end);
-      this.inputElement.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
+      this.inputElement.setRangeText(`${event.key}${selectedText}${brackets[event.key]}`);
       this.inputElement.setSelectionRange(start + 1, end + 1);
       this.saveState();
     }

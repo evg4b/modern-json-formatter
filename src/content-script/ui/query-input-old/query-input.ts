@@ -29,10 +29,12 @@ export class QueryInputElement extends StyledComponentElement {
     element: 'span',
     class: ['error-message', 'hidden'],
   });
+
   private readonly historyList = createElement({
     element: 'datalist',
     id: 'history-list',
   });
+
   private readonly wrapperElement = createElement({
     element: 'div',
     class: 'input-wrapper',
@@ -44,9 +46,10 @@ export class QueryInputElement extends StyledComponentElement {
   });
 
   private readonly infoIcons = createElement({
-    element:'mjf-info-button',
-    attributes: { url: resource('faq.html') }
+    element: 'mjf-info-button',
+    attributes: { url: resource('faq.html') },
   });
+
   private readonly history = new HistoryManager<HistoryItem>();
 
   private onSubmitCallback: ((s: string) => unknown) | null = null;
@@ -63,7 +66,8 @@ export class QueryInputElement extends StyledComponentElement {
     if (errorMessage) {
       this.errorMessageElement.textContent = errorMessage;
       this.errorMessageElement.classList.remove('hidden');
-    } else {
+    }
+    else {
       this.errorMessageElement.textContent = '';
       this.errorMessageElement.classList.add('hidden');
     }
@@ -103,15 +107,18 @@ export class QueryInputElement extends StyledComponentElement {
   }
 
   private setupEventHandlers(input: HTMLInputElement) {
-    input.addEventListener('keydown', event => {
+    input.addEventListener('keydown', (event) => {
       this.setErrorMessage(null);
       if (isSubmitEvent(event)) {
         this.onSubmitEvent();
-      } else if (isWrapEvent(event, brackets)) {
+      }
+      else if (isWrapEvent(event, brackets)) {
         this.onWrapEvent(event);
-      } else if (isUndoEvent(event)) {
+      }
+      else if (isUndoEvent(event)) {
         this.onUndoEvent(event);
-      } else if (isRedoEvent(event)) {
+      }
+      else if (isRedoEvent(event)) {
         this.onRedoEvent(event);
       }
     });
@@ -129,7 +136,7 @@ export class QueryInputElement extends StyledComponentElement {
   private readonly loadHistory = debounce(async (prefix: string) => {
     const history = await getHistory(window.location.hostname, prefix);
     this.historyList.querySelectorAll('option').forEach(option => option.remove());
-    history.forEach(query => {
+    history.forEach((query) => {
       const option = createElement({
         element: 'option',
         attributes: { value: query },
@@ -145,7 +152,7 @@ export class QueryInputElement extends StyledComponentElement {
     if (isNotNil(start) && isNotNil(end) && start !== end) {
       event.preventDefault();
       const selectedText = this.inputElement.value.substring(start, end);
-      this.inputElement.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
+      this.inputElement.setRangeText(`${event.key}${selectedText}${brackets[event.key]}`);
       this.inputElement.setSelectionRange(start + 1, end + 1);
       this.saveState();
     }

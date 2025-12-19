@@ -4,11 +4,11 @@ import { customElement } from 'lit/decorators.js';
 import './sidebar';
 import './content';
 
-import "../core/styles/variables.css";
-import "./faq.css";
-import { sidebarControllerContext } from "./sidebar/sidebar.controller.ts";
-import { SidebarController } from "./sidebar/sidebar.controller.ts";
-import { ref } from "lit/directives/ref.js";
+import '../core/styles/variables.css';
+import './faq.css';
+import { sidebarControllerContext } from './sidebar/sidebar.controller.ts';
+import { SidebarController } from './sidebar/sidebar.controller.ts';
+import { ref } from 'lit/directives/ref.js';
 
 @customElement('mjf-faq-page')
 export class FaqPageElement extends LitElement {
@@ -34,7 +34,6 @@ export class FaqPageElement extends LitElement {
       overflow-y: auto;
     }
   `;
-
 
   @provide({ context: sidebarControllerContext })
   private readonly sidebarController = new SidebarController(this);

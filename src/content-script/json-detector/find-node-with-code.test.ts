@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, afterEach, rstest } from '@rstest/core';
 
 rstest.mock('./get-node-with-code', () => ({
-  getNodeWithCode: rstest.fn().mockName('getNodeWithCode')
+  getNodeWithCode: rstest.fn().mockName('getNodeWithCode'),
 }));
 
 import { createElement } from '@core/dom';
@@ -25,7 +25,7 @@ describe.skip('findNodeWithCode', () => {
           cb(new Event('DOMContentLoaded'));
         }
 
-        throw new Error(`Unexpected event: ${ event }`);
+        throw new Error(`Unexpected event: ${event}`);
       });
 
     wrapMock(getNodeWithCode).mockReturnValue(mockNode);

@@ -1,4 +1,3 @@
- 
 import '@testing/browser.mock';
 import '@testing/background.mock';
 
@@ -193,7 +192,7 @@ describe('QueryInputElement', () => {
           expect(selectedText).toEqual(expectedSelection);
         });
 
-        test(`should wrap selected text with ${ key }`, () => {
+        test(`should wrap selected text with ${key}`, () => {
           expect(innerInput.value).toEqual(expected);
         });
       });
@@ -209,7 +208,7 @@ describe('QueryInputElement', () => {
           innerInput.dispatchEvent(new KeyboardEvent('keydown', { key }));
         });
 
-        test(`should not change text`, () => {
+        test('should not change text', () => {
           expect(innerInput.value).toEqual(query);
         });
       });

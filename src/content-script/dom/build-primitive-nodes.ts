@@ -41,7 +41,7 @@ export const buildStringNode = ({ value, variant }: StringNode) => {
       content: JSON.stringify(value),
       class: ['string', 'email'],
       attributes: {
-        href: `mailto:${ value }`,
+        href: `mailto:${value}`,
       },
     });
   }

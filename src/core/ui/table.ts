@@ -1,6 +1,6 @@
-import { css, html, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { get } from "es-toolkit/compat";
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { get } from 'es-toolkit/compat';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -66,7 +66,7 @@ export class TableElement extends LitElement {
         <thead>
         <tr>
           ${this.columns.map(col => html`
-            <th>${ col.title }</th>
+            <th>${col.title}</th>
           `)}
         </tr>
         </thead>

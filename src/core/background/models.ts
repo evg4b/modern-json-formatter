@@ -45,13 +45,11 @@ export interface GetDomainsParams {
   payload: Payload<typeof getDomains>;
 }
 
-export type Message =
-  TokenizeParams
-  | JqParams
-  | FormatParams
-  | GetHistoryParams
-  | PushHistoryParams
-  | ClearHistoryParams
-  | GetDomainsParams;
-
-
+export type Message
+  = TokenizeParams
+    | JqParams
+    | FormatParams
+    | GetHistoryParams
+    | PushHistoryParams
+    | ClearHistoryParams
+    | GetDomainsParams;

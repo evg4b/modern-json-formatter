@@ -5,8 +5,7 @@ export const findNodeWithCode = (): Promise<HTMLPreElement | HTMLDivElement | nu
     const body = document.body as HTMLBodyElement | null;
     if (body) {
       resolve(getNodeWithCode(body.childNodes));
-    }
-    else {
+    } else {
       document.addEventListener('DOMContentLoaded', () => {
         resolve(getNodeWithCode(document.body.childNodes));
       });

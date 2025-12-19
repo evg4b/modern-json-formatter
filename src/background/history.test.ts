@@ -52,8 +52,16 @@ describe('getHistory', () => {
       const history = await getHistory({ domain: 'example.com', prefix: '' });
       expect(history).toHaveLength(10);
       expect(history).toEqual([
-        '.[49]', '.[48]', '.[47]', '.[46]', '.[45]',
-        '.[44]', '.[43]', '.[42]', '.[41]', '.[40]',
+        '.[49]',
+        '.[48]',
+        '.[47]',
+        '.[46]',
+        '.[45]',
+        '.[44]',
+        '.[43]',
+        '.[42]',
+        '.[41]',
+        '.[40]',
       ]);
     });
   });

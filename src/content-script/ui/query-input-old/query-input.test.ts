@@ -22,7 +22,7 @@ describe('QueryInputElement', () => {
   });
 
   const keyPress = (key: string, options?: KeyboardEventInit) => {
-    const fakeEvent = new KeyboardEvent('keydown', { key, ...(options ?? {}) });
+    const fakeEvent = new KeyboardEvent('keydown', { key, ...options ?? {} });
     innerInput.dispatchEvent(fakeEvent);
     if (
       !isRedoEvent(fakeEvent)
@@ -131,7 +131,7 @@ describe('QueryInputElement', () => {
 
   describe('typing', () => {
     test('should call onSubmitCallback on Enter', () => {
-      const onSubmitCallback = rstest.fn<(s: string) => (void | Promise<void>)>();
+      const onSubmitCallback = rstest.fn<(s: string) => void | Promise<void>>();
 
       input.onSubmit(onSubmitCallback);
       keyPress('Enter');
@@ -140,7 +140,7 @@ describe('QueryInputElement', () => {
     });
 
     test('should not call onSubmitCallback on other key', () => {
-      const onSubmitCallback = rstest.fn<(s: string) => (void | Promise<void>)>();
+      const onSubmitCallback = rstest.fn<(s: string) => void | Promise<void>>();
 
       input.onSubmit(onSubmitCallback);
       keyPress('a');

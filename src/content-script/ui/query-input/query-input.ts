@@ -140,14 +140,11 @@ export class QueryInputElement extends LitElement {
     this.error = null;
     if (isSubmitEvent(event)) {
       this.dispatchEvent(new JqQueryEvent(this.inputElement.value));
-    }
-    else if (isWrapEvent(event, brackets)) {
+    } else if (isWrapEvent(event, brackets)) {
       this.onWrapEvent(event);
-    }
-    else if (isUndoEvent(event)) {
+    } else if (isUndoEvent(event)) {
       this.onUndoEvent(event);
-    }
-    else if (isRedoEvent(event)) {
+    } else if (isRedoEvent(event)) {
       this.onRedoEvent(event);
     }
   }

@@ -31,8 +31,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
         };
       }
     }
-  }
-  catch (err: unknown) {
+  } catch (err: unknown) {
     if (err instanceof Error) {
       return {
         type: 'error',

@@ -45,8 +45,7 @@ export const getHistory = async ({ domain, prefix }: { domain: string; prefix: s
       .map(({ query }) => query);
 
     return take(rows, 10);
-  }
-  finally {
+  } finally {
     db.close();
   }
 };
@@ -67,8 +66,7 @@ export const pushHistory = async ({ domain, query }: { domain: string; query: st
     }
 
     await wait(store.add({ domain, query }));
-  }
-  finally {
+  } finally {
     db.close();
   }
 };
@@ -81,8 +79,7 @@ export const clearHistory = async (): Promise<void> => {
         .objectStore(STORE_NAME)
         .clear(),
     );
-  }
-  finally {
+  } finally {
     db.close();
   }
 };
@@ -104,8 +101,7 @@ export const getDomains = async (): Promise<DomainCount[]> => {
     }
 
     return sortBy(rsp, p => -p.count);
-  }
-  finally {
+  } finally {
     db.close();
   }
 };

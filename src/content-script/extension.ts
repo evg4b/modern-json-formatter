@@ -78,8 +78,7 @@ export const runExtension = async () => {
     rootContainer.classList.add('loading');
     try {
       return await promise;
-    }
-    finally {
+    } finally {
       rootContainer.classList.remove('loading');
     }
   };
@@ -118,8 +117,7 @@ export const runExtension = async () => {
         queryContainer.innerHTML = '';
         queryContainer.appendChild(prepareResponse(info));
         await pushHistory(window.location.hostname, query);
-      }
-      catch (error: unknown) {
+      } catch (error: unknown) {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {
             toolbox.error = error.error;

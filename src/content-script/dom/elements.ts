@@ -14,16 +14,14 @@ export const squareBracket = {
   close: () => createElement({ element: 'span', content: ']', class: ['bracket', 'square-bracket-close'] }),
 };
 
-export const propertiesCount = (count: number) =>
-  createElement({
-    element: 'span',
-    content: `// ${count} propert${count === 1 ? 'y' : 'ies'}`,
-    class: 'properties-count',
-  });
+export const propertiesCount = (count: number) => createElement({
+  element: 'span',
+  content: `// ${count} propert${count === 1 ? 'y' : 'ies'}`,
+  class: 'properties-count',
+});
 
-export const itemsCount = (count: number) =>
-  createElement({
-    element: 'span',
-    content: `// ${count} item${count === 1 ? '' : 's'}`,
-    class: 'items-count',
-  });
+export const itemsCount = (count: number) => createElement({
+  element: 'span',
+  content: `// ${count} item${count === 1 ? '' : 's'}`,
+  class: 'items-count',
+});

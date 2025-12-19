@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "rootDir": ".",
-    "lib": ["DOM", "ES2021"],
+    "lib": [
+      "DOM",
+      "ES2021"
+    ],
     "target": "ES2021",
     "noEmit": true,
     "skipLibCheck": false,
@@ -9,11 +12,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "inlineSources": true,
-    // Lit requirements
     "experimentalDecorators": true,
-    // Lit requirements
     "useDefineForClassFields": false,
-    /* modules */
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "bundler",
@@ -21,7 +21,8 @@
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "noUncheckedSideEffectImports": true,
-
+    "isolatedModules": true,
+    "alwaysStrict": true,
     /* type checking */
     "strict": true,
     "strictNullChecks": true,
@@ -30,11 +31,21 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "paths": {
-      "@core/*": ["src/core/*"],
-      "@testing/*": ["testing/*"],
-      "@testing": ["testing"],
-      "@worker-core": ["worker-core"]
+      "@core/*": [
+        "src/core/*"
+      ],
+      "@testing/*": [
+        "testing/*"
+      ],
+      "@testing": [
+        "testing"
+      ],
+      "@worker-core": [
+        "worker-core"
+      ]
     }
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

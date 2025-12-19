@@ -1,5 +1,5 @@
 import { createElement } from '@core/dom';
-import { TokenNode, TupleNode } from '@worker-core';
+import { type TokenNode, type TupleNode } from '@worker-core';
 import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
@@ -44,8 +44,7 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
     const { target } = event;
     if (isToggleElement(target) && target.parentNode instanceof HTMLElement) {
       target.parentNode.classList.toggle('collapsed');
-    }
-    else if ((event.metaKey || event.ctrlKey) && isLinkElement(target)) {
+    } else if ((event.metaKey || event.ctrlKey) && isLinkElement(target)) {
       const url = target.getAttribute('href');
       if (url) {
         window.open(url, '_blank', 'noopener,noreferrer');

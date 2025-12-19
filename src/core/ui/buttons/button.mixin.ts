@@ -11,7 +11,6 @@ export interface INFO {
 
 export declare class ButtonMixinInterface {
   public static readonly styles: CSSResult;
-
   public renderLink(icon: string, info: INFO): void;
 }
 

@@ -12,6 +12,7 @@ export default defineConfig({
     enabled: true,
     exclude: ['testing/**/*'],
     reportOnFailure: true,
+    reporters: ['text', 'lcov'],
   },
   source: {
     decorators: {

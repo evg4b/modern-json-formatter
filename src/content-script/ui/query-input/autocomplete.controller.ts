@@ -1,6 +1,6 @@
 import type { ReactiveController } from "lit";
 import type { ReactiveControllerHost } from "@lit/reactive-element/reactive-controller.js";
-import { debounce } from "lodash";
+import { debounce } from "es-toolkit";
 import { getHistory } from "@core/background";
 
 

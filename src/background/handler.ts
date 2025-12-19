@@ -1,6 +1,5 @@
 import { DomainCountResponse, HistoryResponse, Message, TokenizerResponse } from '@core/background';
 import { ErrorNode, format, jq, tokenize } from '@worker-core';
-import { get } from 'lodash';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
@@ -23,7 +22,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
       case 'get-domains':
         return await getDomains();
       default: {
-        const type: string = get(message, 'action', 'N/A');
+        const type: string = message['action'] ?? 'N/A';
 
         return {
           type: 'error',

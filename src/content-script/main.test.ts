@@ -1,6 +1,6 @@
 import '@webcomponents/custom-elements';
 import { wrapMock } from '@testing/helpers';
-import { noop } from 'lodash';
+import { noop } from 'es-toolkit';
 import { runExtension } from './extension';
 import { rstest, describe, test, expect, afterAll, beforeAll } from "@rstest/core";
 

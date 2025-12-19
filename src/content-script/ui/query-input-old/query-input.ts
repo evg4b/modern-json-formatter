@@ -1,7 +1,7 @@
 import { getHistory } from '@core/background';
 import { resource } from '@core/browser';
 import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { debounce } from 'lodash';
+import { debounce } from 'es-toolkit';
 import { isNotNil } from '../../helpers';
 import { HistoryManager } from './history-manager';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';

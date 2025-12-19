@@ -2,7 +2,7 @@ import type { ReactiveController } from "lit";
 import type { ReactiveControllerHost } from "@lit/reactive-element/reactive-controller.js";
 import type { NavigationItem } from "./models";
 import { assert } from "typed-assert";
-import { first } from "lodash";
+import { head } from "es-toolkit";
 import { createContext } from "@lit/context";
 
 export const sidebarControllerContext = createContext<SidebarController>(Symbol('sidebar-controller'));
@@ -64,7 +64,7 @@ export class SidebarController implements ReactiveController {
       .filter(item => item.top < window.innerHeight)
       .sort((a, b) => a.offset - b.offset);
 
-    const activeItem = first(visibleItems);
+    const activeItem = head(visibleItems);
     if (activeItem) {
       this.activeItem = activeItem.id;
       this.host.requestUpdate();

@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { get } from "lodash";
+import { get } from "es-toolkit/compat";
 
 declare global {
   interface HTMLElementTagNameMap {

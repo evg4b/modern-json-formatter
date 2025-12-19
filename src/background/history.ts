@@ -1,5 +1,5 @@
 import { type HistoryResponse } from '@core/background';
-import { sortBy, take, uniq } from 'lodash';
+import { sortBy, take, uniq } from 'es-toolkit';
 import { wait } from './helpers';
 
 interface QueryRecord {

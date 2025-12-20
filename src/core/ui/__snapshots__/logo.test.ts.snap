@@ -1,7 +1,11 @@
 // Rstest Snapshot v1
 
 exports[`mjf-logo > should have correct markup 1`] = `
-"<!---->
-      <img src="./icon32.png" alt="" title="">
-    "
+HTMLCollection [
+  <img
+    alt=""
+    src="./icon32.png"
+    title=""
+  />,
+]
 `;

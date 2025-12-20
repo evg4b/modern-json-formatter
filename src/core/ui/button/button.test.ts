@@ -1,3 +1,4 @@
+import '@testing/browser.mock';
 import { expect, test, describe } from '@rstest/core';
 import { ButtonElement } from './button';
 import './button';

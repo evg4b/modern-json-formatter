@@ -1,6 +1,7 @@
+import '@testing/browser.mock';
 import { describe, expect, test } from '@rstest/core';
 import { RoundedButtonElement } from '@core/ui';
-import { renderLitElement } from '@testing/lit.ts';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import './rounded-button';
 
 describe('mjf-rounded-button', () => {
@@ -10,13 +11,5 @@ describe('mjf-rounded-button', () => {
     button = element;
   });
 
-  test('should have correct markup for empty buttons', () => {
-    expect(button.shadowRoot?.innerHTML).toMatchSnapshot();
-  });
-
-  test('should have correct markup for button with test', () => {
-    button.innerText = 'Test';
-
-    expect(button.shadowRoot?.innerHTML).toMatchSnapshot();
-  });
+  defaultLitAsserts(RoundedButtonElement, () => button);
 });

@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-type LogoSize = '512' | '256' | '128' | '48' | '32';
+export type LogoSize = '512' | '256' | '128' | '48' | '32';
 
 const imagesMap: Record<LogoSize, string> = {
   512: resource('./icon512.png'),

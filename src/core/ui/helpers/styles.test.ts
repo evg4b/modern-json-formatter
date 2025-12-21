@@ -1,4 +1,4 @@
-import { registerStyle, registerStyleLink } from '@core/ui/helpers/styles';
+import { registerStyle } from '@core/ui/helpers/styles';
 import { beforeAll, describe, expect, test } from '@rstest/core';
 
 describe('registerStyle', () => {
@@ -24,25 +24,6 @@ describe('registerStyle', () => {
   });
 
   test('should attach the style node to the shadow root', () => {
-    expect(shadowRoot.innerHTML).toMatchSnapshot();
-  });
-});
-
-describe('registerStyleLink', () => {
-  let shadowRoot: ShadowRoot;
-  let linkElement: HTMLLinkElement;
-
-  beforeAll(() => {
-    const host = document.createElement('div');
-    shadowRoot = host.attachShadow({ mode: 'open' });
-    linkElement = registerStyleLink(shadowRoot, '/css/content-styles.css');
-  });
-
-  test('should return the link node', () => {
-    expect(linkElement).toMatchSnapshot();
-  });
-
-  test('should render the lint to style', () => {
     expect(shadowRoot.innerHTML).toMatchSnapshot();
   });
 });

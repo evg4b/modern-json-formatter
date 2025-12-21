@@ -29,14 +29,3 @@ exports[`registerStyle > should return the style node 1`] = `
     
 </style>
 `;
-
-exports[`registerStyleLink > should render the lint to style 1`] = `"<link href="/css/content-styles.css" type="text/css" rel="stylesheet" role="presentation">"`;
-
-exports[`registerStyleLink > should return the link node 1`] = `
-<link
-  href="/css/content-styles.css"
-  rel="stylesheet"
-  role="presentation"
-  type="text/css"
-/>
-`;

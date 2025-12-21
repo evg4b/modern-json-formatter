@@ -17,7 +17,7 @@ describe('mjf-logo', () => {
     expect(logo.shadowRoot?.children).toMatchSnapshot();
   });
 
-  test.for<LogoSize>(['512', '256', '128', '48', '32'])('should have correct size', async size => {
+  test.each<LogoSize>(['512', '256', '128', '48', '32'])('should have correct size', async size => {
     logo.size = size;
     await logo.updateComplete;
 

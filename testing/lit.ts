@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, expect, test } from '@rstest/core';
+import { LitElement } from 'lit';
 
 type TagName = keyof HTMLElementTagNameMap;
 type Element<T extends TagName> = HTMLElementTagNameMap[T];
@@ -10,6 +11,10 @@ export const renderLitElement = <T extends TagName>(tag: T, callback: (element: 
     element = document.createElement(tag);
     document.body.appendChild(element);
 
+    if (element instanceof LitElement) {
+      await element.updateComplete;
+    }
+
     await callback(element);
   });
 
@@ -19,7 +24,8 @@ export const renderLitElement = <T extends TagName>(tag: T, callback: (element: 
 };
 
 export const defaultLitAsserts = <T extends TagName>(type: unknown, getter: () => Element<T>) => {
-  test(`should be instance of ${type?.constructor?.name}`, () => {
+  // @ts-expect-error incorrect type definition
+  test(`should be instance of ${type?.name}`, () => {
     expect(getter()).toBeInstanceOf(type);
   });
 
@@ -27,3 +33,4 @@ export const defaultLitAsserts = <T extends TagName>(type: unknown, getter: () =
     expect(getter().shadowRoot).not.toBeNull();
   });
 };
+

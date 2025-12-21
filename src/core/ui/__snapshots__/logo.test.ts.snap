@@ -4,7 +4,7 @@ exports[`mjf-logo > should have correct markup 1`] = `
 HTMLCollection [
   <img
     alt=""
-    src="./icon32.png"
+    src="icon32.png"
     title=""
   />,
 ]

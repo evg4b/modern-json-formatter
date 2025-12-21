@@ -11,11 +11,11 @@ declare global {
 export type LogoSize = '512' | '256' | '128' | '48' | '32';
 
 const imagesMap: Record<LogoSize, string> = {
-  512: resource('./icon512.png'),
-  256: resource('./icon256.png'),
-  128: resource('./icon128.png'),
-  48: resource('./icon48.png'),
-  32: resource('./icon32.png'),
+  512: resource('icon512.png'),
+  256: resource('icon256.png'),
+  128: resource('icon128.png'),
+  48: resource('icon48.png'),
+  32: resource('icon32.png'),
 };
 
 @customElement('mjf-logo')

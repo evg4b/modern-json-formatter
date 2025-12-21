@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { describe, expect, test } from '@rstest/core';
+import { describe } from '@rstest/core';
 import { RoundedButtonElement } from '@core/ui';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import './rounded-button';

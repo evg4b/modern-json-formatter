@@ -1,3 +1,5 @@
+@import "../core/styles/variables";
+
 body {
     background: var(--background);
     color: var(--base-text-color);
@@ -11,4 +13,6 @@ body {
     scrollbar-width: thin;
     scrollbar-color: #757575 #3c3c3c;
     font-family: sans-serif;
+
+    @include variables()
 }

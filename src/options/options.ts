@@ -3,7 +3,7 @@ import { customElement, state } from 'lit/decorators.js';
 import '@core/ui/logo';
 import '@core/ui/buttons';
 import '@core/ui';
-import './options.css';
+import './options.scss';
 import { getDomains, clearHistory } from '@core/background';
 import '@core/ui/table';
 import type { TableColumn } from '@core/ui/table';

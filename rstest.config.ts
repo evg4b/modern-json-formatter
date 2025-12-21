@@ -1,4 +1,5 @@
 import { defineConfig } from '@rstest/core';
+import { pluginSass } from '@rsbuild/plugin-sass';
 
 export default defineConfig({
   testEnvironment: 'happy-dom',
@@ -21,6 +22,9 @@ export default defineConfig({
     reportOnFailure: true,
     reporters: ['text-summary', 'lcov', 'html'],
   },
+  plugins: [
+    pluginSass(),
+  ],
   source: {
     decorators: {
       version: 'legacy',

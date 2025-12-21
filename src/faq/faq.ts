@@ -1,11 +1,11 @@
-import { html, css, LitElement } from 'lit';
+import { html, css, LitElement, unsafeCSS } from 'lit';
 import { provide } from '@lit/context';
 import { customElement } from 'lit/decorators.js';
 import './sidebar';
 import './content';
 
-import '../core/styles/variables.css';
-import './faq.css';
+import '@core/styles/variables.scss';
+import './faq.scss';
 import { sidebarControllerContext } from './sidebar/sidebar.controller';
 import { SidebarController } from './sidebar/sidebar.controller';
 import { ref } from 'lit/directives/ref.js';

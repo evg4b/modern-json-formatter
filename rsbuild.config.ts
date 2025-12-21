@@ -3,14 +3,12 @@ import { manifestGeneratorPlugin } from './rsbuild.manifest.plugin';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { mdPlugin } from './rsbuild.md.plugin';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
+import { pluginSass } from '@rsbuild/plugin-sass';
 
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
   output: {
-    distPath: {
-      css: '',
-      js: '',
-    },
+    distPath: { css: '', js: '' },
     filenameHash: false,
     sourceMap: true,
     copy: [
@@ -23,7 +21,7 @@ export default defineConfig({
     define: { require: null },
     entry: {
       'content-styles': {
-        import: './src/content-script/styles.css',
+        import: './src/content-script/styles.scss',
         html: false,
       },
       'content-script': {
@@ -49,6 +47,7 @@ export default defineConfig({
   },
   plugins: [
     mdPlugin(),
+    pluginSass(),
     pluginTypeCheck({ enable: false }),
     pluginNodePolyfill(),
     manifestGeneratorPlugin({

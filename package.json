@@ -20,22 +20,17 @@
   "scripts": {
     "build": "rsbuild build",
     "build:production": "NODE_ENV=production rsbuild build",
-    "check": "biome check --write",
     "dev": "rsbuild dev --open",
-    "format": "biome format --write",
     "lint": "eslint .",
-    "preview": "rsbuild preview",
     "test": "rstest",
-    "test:cover": "rstest",
-    "_build": "tsup",
-    "_lint": "eslint .",
-    "_dev": "tsup --watch"
+    "test:cover": "rstest --coverage"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@lit/context": "^1.1.6",
     "@rsbuild/core": "^1.6.15",
     "@rsbuild/plugin-node-polyfill": "^1.4.2",
+    "@rsbuild/plugin-sass": "^1.4.0",
     "@rsbuild/plugin-type-check": "^1.3.2",
     "@rstest/core": "^0.7.5",
     "@rstest/coverage-istanbul": "^0.1.3",

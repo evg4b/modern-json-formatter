@@ -55,8 +55,7 @@ export class ToolboxElement extends LitElement {
 
   public override render() {
     const input = this.tab === 'query'
-      ? html`
-              <mjf-query-input .error=${this.error}></mjf-query-input>`
+      ? html`<mjf-query-input .error=${this.error}></mjf-query-input>`
       : '';
 
     return html`

@@ -19,6 +19,7 @@ describe('mjf-toolbox', () => {
   } as const;
 
   const buttonNames = Object.keys(mapping) as (keyof typeof mapping)[];
+  const buttonValues = Object.values(mapping) as TabType[];
 
   describe('buttons', () => {
     let buttons: ButtonElement[];
@@ -79,6 +80,30 @@ describe('mjf-toolbox', () => {
         expect(event.detail).toBe(mapping[buttonName]);
         expect(event.type).toBe('tab-changed');
       });
+    });
+  });
+
+  describe.each(without(buttonValues, 'query'))('should reflect tab="%s" property', tabValue => {
+    beforeEach(async () => {
+      toolbox.tab = tabValue;
+      await toolbox.updateComplete;
+    });
+
+    test('should not render input', () => {
+      expect(toolbox.shadowRoot?.querySelector('mjf-query-input'))
+        .toBeNull();
+    });
+  });
+
+  describe('should reflect tab="query" property', () => {
+    beforeEach(async () => {
+      toolbox.tab = 'query';
+      await toolbox.updateComplete;
+    });
+
+    test('should render input', () => {
+      expect(toolbox.shadowRoot?.querySelector('mjf-query-input'))
+        .toBeDefined();
     });
   });
 });

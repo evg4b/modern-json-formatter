@@ -16,7 +16,7 @@ export interface TableColumn {
 
 @customElement('mjf-table-element')
 export class TableElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       --v-margin: 1em;
       --h-margin: 0;

@@ -3,9 +3,9 @@
     "rootDir": ".",
     "lib": [
       "DOM",
-      "ES2021"
+      "ES2023"
     ],
-    "target": "ES2021",
+    "target": "ES2023",
     "noEmit": true,
     "skipLibCheck": false,
     "declaration": true,

@@ -16,7 +16,7 @@ declare global {
 
 @customElement('mjf-sidebar')
 export class SidebarElement extends LitElement {
-  public static override styles = [
+  public static override readonly styles = [
     inlineCodeCss,
     css`
       :host {

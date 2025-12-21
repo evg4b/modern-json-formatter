@@ -5,7 +5,7 @@ export type StickyPanelPosition = 'rightTop' | 'rightBottom' | 'leftTop' | 'left
 
 @customElement('mjf-sticky-panel')
 export class StickyPanelElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: flex;
       flex-direction: column;
@@ -20,7 +20,7 @@ export class StickyPanelElement extends LitElement {
       align-items: end;
     }
 
-    :host([position="leftTop"])
+    :host([position="leftTop"]),
     :host([position="leftBottom"]) {
       left: 0;
       align-items: start;

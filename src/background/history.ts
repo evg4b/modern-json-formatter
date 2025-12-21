@@ -41,7 +41,7 @@ export const getHistory = async ({ domain, prefix }: { domain: string; prefix: s
     );
 
     const rows = results
-      .sort((a, b) => b.id - a.id)
+      .toSorted((a, b) => b.id - a.id)
       .filter(({ query }) => query.startsWith(prefix))
       .map(({ query }) => query);
 
@@ -105,7 +105,7 @@ export const getDomains = async (): Promise<DomainCount[]> => {
       rsp.push({ domain, count });
     }
 
-    return rsp.sort((a, b) => b.count - a.count);
+    return rsp.toSorted((a, b) => b.count - a.count);
   } finally {
     db.close();
   }

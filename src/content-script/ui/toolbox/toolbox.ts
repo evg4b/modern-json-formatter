@@ -4,7 +4,6 @@ import { classMap } from 'lit/directives/class-map.js';
 import { isInstanceOf } from 'typed-assert';
 import '../query-input';
 import '../info-button';
-import '@core/ui/button';
 import { ButtonElement } from '@core/ui/button';
 import { map } from 'lit/directives/map.js';
 
@@ -26,7 +25,7 @@ declare global {
 
 @customElement('mjf-toolbox')
 export class ToolboxElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: flex;
       flex-direction: row;

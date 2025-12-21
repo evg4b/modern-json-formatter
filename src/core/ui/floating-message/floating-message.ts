@@ -14,7 +14,7 @@ export type FloatingMessageType = 'error-message' | 'info-message';
 
 @customElement('mjf-floating-message')
 export class FloatingMessageElement extends LitElement {
-  public static override styles = [
+  public static override readonly styles = [
     boxingFixCss,
     css`
       .wrapper {

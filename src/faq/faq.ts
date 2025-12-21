@@ -11,7 +11,7 @@ import { ref } from 'lit/directives/ref.js';
 
 @customElement('mjf-faq-page')
 export class FaqPageElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: flex;
       flex-direction: row;

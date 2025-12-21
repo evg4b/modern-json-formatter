@@ -8,7 +8,7 @@ import { createContext } from '@lit/context';
 export const sidebarControllerContext = createContext<SidebarController>(Symbol('sidebar-controller'));
 
 export class SidebarController implements ReactiveController {
-  private itemsMap = new Map<string, NavigationItem>();
+  private readonly itemsMap = new Map<string, NavigationItem>();
 
   public activeItem: string | null = null;
 
@@ -62,7 +62,7 @@ export class SidebarController implements ReactiveController {
         return { id: item.id, top: rect.top, offset: Math.abs(rect.top), ref: item.ref };
       })
       .filter(item => item.top < window.innerHeight)
-      .sort((a, b) => a.offset - b.offset);
+      .toSorted((a, b) => a.offset - b.offset);
 
     const activeItem = head(visibleItems);
     if (activeItem) {

@@ -12,7 +12,7 @@ declare global {
 
 @customElement('mjf-content')
 export class ContentElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: flex;
       flex-direction: column;

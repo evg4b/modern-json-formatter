@@ -42,7 +42,7 @@ declare global {
 
 @customElement('mjf-query-input')
 export class QueryInputElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: flex;
       flex-direction: row;

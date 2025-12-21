@@ -11,7 +11,7 @@ declare global {
 
 @customElement('mjf-button')
 export class ButtonElement extends LitElement {
-  public static override styles = [
+  public static override readonly styles = [
     boxingFixCss,
     css`
       :host {

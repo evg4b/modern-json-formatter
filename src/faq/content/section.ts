@@ -13,7 +13,7 @@ declare global {
 
 @customElement('mjf-section')
 export class SectionElement extends LitElement {
-  public static override styles = [
+  public static override readonly styles = [
     inlineCodeCss,
     css`
       :host {

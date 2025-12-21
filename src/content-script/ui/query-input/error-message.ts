@@ -9,7 +9,7 @@ declare global {
 
 @customElement('mjf-error-message')
 export class ErrorMessageElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       position: absolute;
       top: calc(100% + 5px);

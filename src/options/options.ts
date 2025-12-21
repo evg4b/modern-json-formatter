@@ -14,7 +14,7 @@ const columns: TableColumn[] = [
 
 @customElement('mjf-options-page')
 export class OptionsPageElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     .container {
       display: flex;
       flex-direction: column;

@@ -11,7 +11,7 @@ declare global {
 
 @customElement('mjf-info-button')
 export class InfoButtonElement extends LitElement {
-  public static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: inline-flex;
       flex-direction: column;

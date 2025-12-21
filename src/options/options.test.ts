@@ -1,8 +1,8 @@
 import '@testing/browser.mock';
-import '@testing/background.mock.ts';
+import '@testing/background.mock';
 import { beforeEach, describe, type Mock } from '@rstest/core';
-import { OptionsPageElement } from './options.ts';
-import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
+import { OptionsPageElement } from './options';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { type DomainCountResponse, getDomains } from '@core/background';
 import '@core/ui';
 

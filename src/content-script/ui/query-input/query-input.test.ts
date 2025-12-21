@@ -1,7 +1,7 @@
 import '@testing/browser.mock';
 import { describe } from '@rstest/core';
-import { QueryInputElement } from './query-input.ts';
-import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
+import { QueryInputElement } from './query-input';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 
 describe('mjf-query-input', () => {
   let queryInputElement: QueryInputElement;

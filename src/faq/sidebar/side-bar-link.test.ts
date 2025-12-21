@@ -1,6 +1,6 @@
 import { describe } from '@rstest/core';
-import { SideBarLinkElement } from './side-bar-link.ts';
-import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
+import { SideBarLinkElement } from './side-bar-link';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 
 describe('mjf-sidebar-link', () => {
   let sidebarLink: SideBarLinkElement;

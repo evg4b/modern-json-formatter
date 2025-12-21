@@ -1,5 +1,5 @@
 import { type HistoryResponse } from '@core/background';
-import { sortBy, take, uniq } from 'es-toolkit';
+import { take, uniq } from 'es-toolkit';
 import { wait } from './helpers';
 
 interface QueryRecord {
@@ -40,7 +40,8 @@ export const getHistory = async ({ domain, prefix }: { domain: string; prefix: s
         .getAll(domain) as IDBRequest<QueryRecord[]>,
     );
 
-    const rows = sortBy(results, p => -p.id)
+    const rows = results
+      .sort((a, b) => b.id - a.id)
       .filter(({ query }) => query.startsWith(prefix))
       .map(({ query }) => query);
 
@@ -104,7 +105,7 @@ export const getDomains = async (): Promise<DomainCount[]> => {
       rsp.push({ domain, count });
     }
 
-    return sortBy(rsp, p => -p.count);
+    return rsp.sort((a, b) => b.count - a.count);
   } finally {
     db.close();
   }

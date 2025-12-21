@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { describe, expect, test } from '@rstest/core';
+import { describe } from '@rstest/core';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
 import { ChromeWebStoreButtonElement } from '@core/ui';
 import './chrome-web-store-button';
@@ -12,8 +12,4 @@ describe('mjf-chrome-web-store-button', () => {
   });
 
   defaultLitAsserts(ChromeWebStoreButtonElement, () => button);
-
-  test.skip('should have correct markup', () => {
-    expect(button.shadowRoot?.children).toMatchSnapshot();
-  });
 });

@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { describe, expect, test } from '@rstest/core';
+import { describe } from '@rstest/core';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit.ts';
 import { GithubButtonElement } from '@core/ui';
 import './github-button';
@@ -12,8 +12,4 @@ describe('mjf-github-button', () => {
   });
 
   defaultLitAsserts(GithubButtonElement, () => button);
-
-  test.skip('should have correct markup', () => {
-    expect(button.shadowRoot?.children).toMatchSnapshot();
-  });
 });

@@ -24,5 +24,5 @@ export class AutocompleteController implements ReactiveController {
   private loadHistory = debounce(async (prefix: string) => {
     this.options = await getHistory(this.hostname, prefix);
     this.host.requestUpdate();
-  });
+  }, 250);
 }

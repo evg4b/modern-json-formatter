@@ -8,7 +8,7 @@ rstest.mock('./get-node-with-code', () => ({
   getNodeWithCode: rstest.fn().mockName('getNodeWithCode'),
 }));
 
-describe.skip('findNodeWithCode', () => {
+describe('findNodeWithCode', () => {
   let bodyMock: ReturnType<typeof rstest.spyOn>;
   let addEventListenerMock: ReturnType<typeof rstest.spyOn>;
   let mockNode: HTMLPreElement;

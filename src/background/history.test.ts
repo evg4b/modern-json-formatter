@@ -9,11 +9,11 @@ const cleanup = async () => {
   for (const item of items) {
     const request = indexedDB.deleteDatabase(item.name ?? '');
     request.onblocked = () => throws('Database is blocked');
-    await wait(indexedDB.deleteDatabase(item.name ?? ''));
+    await wait(request);
   }
 };
 
-describe.skip('getHistory', () => {
+describe('getHistory', () => {
   beforeEach(cleanup);
 
   describe('when history is empty', () => {
@@ -67,7 +67,7 @@ describe.skip('getHistory', () => {
   });
 });
 
-describe.skip('pushHistory', () => {
+describe('pushHistory', () => {
   beforeEach(cleanup);
 
   test('should push history', async () => {
@@ -101,7 +101,7 @@ describe('clearHistory', () => {
   });
 });
 
-describe.skip('getDomains', () => {
+describe('getDomains', () => {
   beforeEach(cleanup);
 
   beforeEach(async () => {

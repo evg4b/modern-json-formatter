@@ -24,13 +24,13 @@ rstest.mock('@core/ui/helpers', () => ({
   FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement'),
 }));
 
-describe.skip('runExtension', () => {
+describe('runExtension', () => {
   let rootContainer: HTMLElement;
   let formatContainer: HTMLElement;
   let rawContainer: HTMLElement;
   let queryContainer: HTMLElement;
   let body: HTMLElement;
-  let spy: ReturnType<typeof rstest.spyOn>;
+  let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
 
   beforeEach(() => {
     rootContainer = createElement({ element: 'div' });
@@ -39,7 +39,7 @@ describe.skip('runExtension', () => {
     queryContainer = createElement({ element: 'div' });
     body = createElement({ element: 'body' });
 
-    spy = rstest.spyOn(document.body, 'attachShadow')
+    attachShadowSpy = rstest.spyOn(document.body, 'attachShadow')
       .mockImplementation(body.attachShadow.bind(body));
 
     wrapMock(buildContainers)
@@ -53,15 +53,12 @@ describe.skip('runExtension', () => {
 
   test('when code node doesn\'t exists', async () => {
     wrapMock(findNodeWithCode).mockResolvedValue(null);
-    const spy = rstest.spyOn(document.body, 'attachShadow');
 
     await runExtension();
 
     expect(buildContainers).not.toHaveBeenCalled();
-    expect(spy).not.toHaveBeenCalled();
+    expect(attachShadowSpy).not.toHaveBeenCalled();
     expect(registerStyle).not.toHaveBeenCalled();
-
-    spy.mockRestore();
   });
 
   test('when content is too large', async () => {
@@ -77,13 +74,11 @@ describe.skip('runExtension', () => {
     await runExtension();
 
     expect(buildContainers).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalled();
+    expect(attachShadowSpy).toHaveBeenCalled();
     expect(registerStyle).toHaveBeenCalled();
     expect(format).toHaveBeenCalled();
 
     expect(tokenize).not.toHaveBeenCalled();
-
-    spy.mockRestore();
   });
 
   test('when content is base', async () => {
@@ -100,17 +95,13 @@ describe.skip('runExtension', () => {
       ),
     );
 
-    const spy = rstest.spyOn(document.body, 'attachShadow');
-
     await runExtension();
 
     expect(buildContainers).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalled();
+    expect(attachShadowSpy).toHaveBeenCalled();
     expect(registerStyle).toHaveBeenCalled();
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();
-
-    spy.mockRestore();
   });
 });

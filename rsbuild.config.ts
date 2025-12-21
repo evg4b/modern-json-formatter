@@ -20,10 +20,6 @@ export default defineConfig({
   source: {
     define: { require: null },
     entry: {
-      'content-styles': {
-        import: './src/content-script/styles.scss',
-        html: false,
-      },
       'content-script': {
         import: './src/content-script/main.ts',
         html: false,

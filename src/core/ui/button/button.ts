@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { boxingFixCss } from '@core/ui/styles';
@@ -63,10 +63,10 @@ export class ButtonElement extends LitElement {
 
   public override render() {
     return html`
-        <button ?disabled=${this.disabled}
-                class=${classMap({ active: this.active })}>
-            <slot></slot>
-        </button>
+      <button ?disabled=${this.disabled}
+              class=${classMap({ active: this.active })}>
+        <slot></slot>
+      </button>
     `;
   }
 }

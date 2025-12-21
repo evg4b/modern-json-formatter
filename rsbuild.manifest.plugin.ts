@@ -30,7 +30,6 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
       manifestPath = resolve(config.root, manifestPath ?? 'manifest.json');
 
       const chunks = stats.assetsByChunkName ?? {};
-      const contentStyles = getFileByExtension(chunks['content-styles'] ?? [], '.css');
       const contentScript = getFileByExtension(chunks['content-script'] ?? [], '.js');
       const backgroundScript = getFileByExtension(chunks['background'] ?? [], '.js');
 
@@ -53,7 +52,6 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
         web_accessible_resources: [
           {
             resources: [
-              contentStyles,
               'faq.html',
               'faq.scss',
               'faq.js',

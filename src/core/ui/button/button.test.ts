@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { expect, test, describe } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import { ButtonElement } from './button';
 import './button';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';

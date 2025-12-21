@@ -1,13 +1,12 @@
-import { beforeEach, describe, expect, test, afterEach, rstest } from '@rstest/core';
-
-rstest.mock('./get-node-with-code', () => ({
-  getNodeWithCode: rstest.fn().mockName('getNodeWithCode'),
-}));
-
+import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { createElement } from '@core/dom';
 import { wrapMock } from '@testing/helpers';
 import { findNodeWithCode } from './find-node-with-code';
 import { getNodeWithCode } from './get-node-with-code';
+
+rstest.mock('./get-node-with-code', () => ({
+  getNodeWithCode: rstest.fn().mockName('getNodeWithCode'),
+}));
 
 describe.skip('findNodeWithCode', () => {
   let bodyMock: ReturnType<typeof rstest.spyOn>;

@@ -1,4 +1,4 @@
-import { css, html, LitElement, unsafeCSS } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { NavigationItem } from './models';
 import '@core/ui/buttons';
@@ -75,33 +75,37 @@ export class SidebarElement extends LitElement {
 
   public override render() {
     return html`
-        <div class="header-container">
-            <div class="header">
-                <mjf-logo alt="sadsad" title="sadsadklsdkj" size="128"></mjf-logo>
-                <div class="name">Modern JSON Formatter</div>
-            </div>
-            <div class="links">
-                <mjf-github-button></mjf-github-button>
-                <mjf-ko-fi-button></mjf-ko-fi-button>
-                <mjf-chrome-web-store-button></mjf-chrome-web-store-button>
-            </div>
+      <div class="header-container">
+        <div class="header">
+          <mjf-logo alt="sadsad" title="sadsadklsdkj" size="128"></mjf-logo>
+          <div class="name">Modern JSON Formatter</div>
         </div>
-        <div class="menu">
-            ${ map(this.items, item => html`
-                <mjf-sidebar-link .item=${ item } .active=${ this.activeItem === item.id }>
-                    ${ unsafeHTML(item.titleHtml) }
+        <div class="links">
+          <mjf-github-button></mjf-github-button>
+          <mjf-ko-fi-button></mjf-ko-fi-button>
+          <mjf-chrome-web-store-button></mjf-chrome-web-store-button>
+        </div>
+      </div>
+      <div class="menu">
+        ${map(this.items, item => html`
+          <mjf-sidebar-link .item=${item}
+                            .active=${this.activeItem === item.id}
+                            .title=${item.title}>
+            <span>${unsafeHTML(item.titleHtml)}</span>
+          </mjf-sidebar-link>
+          ${item.children && html`
+            <div class="section">
+              ${item.children?.map(child => html`
+                <mjf-sidebar-link .item=${child}
+                                  .active=${this.activeItem === child.id}
+                                  .title=${item.title}>
+                  <span>${unsafeHTML(child.titleHtml)}</span>
                 </mjf-sidebar-link>
-                ${ item.children && html`
-                    <div class="section">
-                        ${ item.children?.map(child => html`
-                            <mjf-sidebar-link .item=${ child } .active=${ this.activeItem === child.id }>
-                                ${ unsafeHTML(child.titleHtml) }
-                            </mjf-sidebar-link>
-                        `) }
-                    </div>
-                ` }
-            `) }
-        </div>
+              `)}
+            </div>
+          `}
+        `)}
+      </div>
     `;
   }
 }

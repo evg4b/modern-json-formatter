@@ -100,13 +100,13 @@ export class FloatingMessageElement extends LitElement {
     });
 
     return html`
-        <div class=${classes}>
-            <div class="header-container">
-                <div class="header">${this.header}</div>
-                <div class="close" @click=${this.close}></div>
-            </div>
-            <slot></slot>
+      <div class=${classes}>
+        <div class="header-container">
+          <div class="header">${this.header}</div>
+          <div class="close" @click=${this.close}></div>
         </div>
+        <slot></slot>
+      </div>
     `;
   }
 

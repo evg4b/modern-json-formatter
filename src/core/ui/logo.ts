@@ -29,7 +29,7 @@ export class LogoElement extends LitElement {
   public override render() {
     return html`
       <img src=${imagesMap[this.size]}
-           alt=${this.alt} 
+           alt=${this.alt}
            title=${this.title}
       />
     `;

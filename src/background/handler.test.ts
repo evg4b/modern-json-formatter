@@ -1,11 +1,10 @@
 import '@testing/worker-core.mock';
 import { type Message } from '@core/background';
-import { describe, expect, test } from '@rstest/core';
+import { describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { format, jq, tokenize } from '@worker-core';
 import { handler } from './handler';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
-import { rstest } from '@rstest/core';
 
 rstest.mock('./history', () => ({
   getHistory: rstest.fn(),

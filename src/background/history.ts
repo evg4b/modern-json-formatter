@@ -84,7 +84,11 @@ export const clearHistory = async (): Promise<void> => {
   }
 };
 
-export interface DomainCount { domain: string; count: number }
+export interface DomainCount {
+  domain: string;
+  count: number;
+}
+
 export const getDomains = async (): Promise<DomainCount[]> => {
   const db = await openDB();
   try {

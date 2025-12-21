@@ -1,9 +1,8 @@
 import { css, html, LitElement, type TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { consume } from '@lit/context';
-import { sidebarControllerContext } from '../sidebar/sidebar.controller';
+import { SidebarController, sidebarControllerContext } from '../sidebar/sidebar.controller';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { SidebarController } from '../sidebar/sidebar.controller';
 import { inlineCodeCss } from '@core/ui/styles';
 
 declare global {
@@ -89,7 +88,7 @@ export class SectionElement extends LitElement {
           width: 65px;
         }
       }
-    `
+    `,
   ];
 
   ref = createRef<HTMLSelectElement>();
@@ -106,9 +105,9 @@ export class SectionElement extends LitElement {
 
   public override render() {
     return html`
-        <section ${ ref(this.ref) }>
-            ${ this.content }
-        </section>
+      <section ${ref(this.ref)}>
+        ${this.content}
+      </section>
     `;
   }
 }

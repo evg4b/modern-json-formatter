@@ -1,7 +1,7 @@
 import { wrapMock } from '@testing/helpers';
 import { noop } from 'es-toolkit';
 import { runExtension } from './extension';
-import { rstest, describe, test, expect, afterAll, beforeAll } from '@rstest/core';
+import { afterAll, beforeAll, describe, expect, rstest, test } from '@rstest/core';
 
 rstest.mock('./extension', () => ({
   runExtension: rstest.fn(),

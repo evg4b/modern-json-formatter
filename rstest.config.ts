@@ -22,9 +22,7 @@ export default defineConfig({
     reportOnFailure: true,
     reporters: ['text-summary', 'lcov', 'html'],
   },
-  plugins: [
-    pluginSass(),
-  ],
+  plugins: [pluginSass()],
   source: {
     decorators: {
       version: 'legacy',

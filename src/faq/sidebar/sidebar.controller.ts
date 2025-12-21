@@ -17,7 +17,7 @@ export class SidebarController implements ReactiveController {
   }
 
   public hostConnected() {
-    console.log('connected', this.host);
+    // interface implementation
   }
 
   public contentRef = (a: Element | undefined) => {

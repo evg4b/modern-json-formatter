@@ -1,7 +1,6 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
-import { resource } from '@core/browser';
 import { createElement } from '@core/dom';
-import { registerStyle, registerStyleLink } from '@core/ui/helpers';
+import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
@@ -12,18 +11,11 @@ import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
 import { TabChangedEvent } from './ui/toolbox/toolbox';
 
+import contentStyles from './content-script.scss?inline';
+import rootStyles from './root-styles.scss?inline';
+
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
-
-const staticStyles = `:host {
-  background-color: var(--background, #282828);
-  color: var(--base-text-color, #282828);
-  display: block;
-  @media (prefers-color-scheme: light) {
-    background-color: var(--background, #f3f3f3);
-    color: var(--base-text-color, #1f1f1f);
-  }
-}`;
 
 export const runExtension = async () => {
   const preNode = await findNodeWithCode();
@@ -31,10 +23,11 @@ export const runExtension = async () => {
     return;
   }
 
+  registerStyle(document.head, rootStyles);
+
   // eslint-disable-next-line wc/no-closed-shadow-root
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  registerStyle(shadowRoot, staticStyles);
-  registerStyleLink(shadowRoot, resource('content-styles.css'));
+  registerStyle(shadowRoot, contentStyles);
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');

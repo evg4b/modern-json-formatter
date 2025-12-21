@@ -2915,49 +2915,93 @@ alteration.
 </div>
 
 [//]: # "### `$ENV`, `env`"
+
 [//]: #
+
 [//]: # "`$ENV` is an object representing the environment variables as set when the jq program started."
+
 [//]: #
+
 [//]: # "`env` outputs an object representing jq's current environment."
+
 [//]: #
+
 [//]: # "At the moment there is no builtin for setting environment variables."
+
 [//]: #
+
 [//]: # '<div class="pb-3">'
+
 [//]: # '  <h4 class="examples">Examples:</h4>'
+
 [//]: # '  <div id="example71" class="collapse mx-3 small d-print-block">'
+
 [//]: # '    <table class="table table-borderless table-sm w-auto">'
+
 [//]: # "      <tbody>"
+
 [//]: # "      <tr>"
+
 [//]: # '        <th class="pe-3">Query</th>'
+
 [//]: # '        <td class="font-monospace">$ENV.PAGER</td>'
+
 [//]: # "      </tr>"
+
 [//]: # "      <tr>"
+
 [//]: # "        <th>Input</th>"
+
 [//]: # '        <td class="font-monospace">null</td>'
+
 [//]: # "      </tr>"
+
 [//]: # "      <tr>"
+
 [//]: # "        <th>Output</th>"
+
 [//]: # '        <td class="font-monospace">"less"</td>'
+
 [//]: # "      </tr>"
+
 [//]: # "      </tbody>"
+
 [//]: # "    </table>"
+
 [//]: # '    <table class="table table-borderless table-sm w-auto">'
+
 [//]: # "      <tbody>"
+
 [//]: # "      <tr>"
+
 [//]: # '        <th class="pe-3">Query</th>'
+
 [//]: # '        <td class="font-monospace">env.PAGER</td>'
+
 [//]: # "      </tr>"
+
 [//]: # "      <tr>"
+
 [//]: # "        <th>Input</th>"
+
 [//]: # '        <td class="font-monospace">null</td>'
+
 [//]: # "      </tr>"
+
 [//]: # "      <tr>"
+
 [//]: # "        <th>Output</th>"
+
 [//]: # '        <td class="font-monospace">"less"</td>'
+
 [//]: # "      </tr>"
+
 [//]: # "      </tbody>"
+
 [//]: # "    </table>"
+
 [//]: # "  </div>"
+
 [//]: # "</div>"
 
 ### `transpose`
@@ -3366,31 +3410,57 @@ for `strptime(fmt)` are not supported on macOS.
 </div>
 
 [//]: # "### SQL-Style Operators"
+
 [//]: #
+
 [//]: # "jq provides a few SQL-style operators."
+
 [//]: #
+
 [//]: # "*   INDEX(stream; index_expression):"
+
 [//]: #
+
 [//]: # "This builtin produces an object whose keys are computed by the given index expression applied to each value from the given stream."
+
 [//]: #
+
 [//]: # "*   JOIN($idx; stream; idx_expr; join_expr):"
+
 [//]: #
+
 [//]: # "This builtin joins the values from the given stream to the given index. The index's keys are computed by applying the given index expression to each value from the given stream. An array of the value in the stream and the corresponding value from the index is fed to the given join expression to produce each result."
+
 [//]: #
+
 [//]: # "*   JOIN($idx; stream; idx_expr):"
+
 [//]: #
+
 [//]: # "Same as `JOIN($idx; stream; idx_expr; .)`."
+
 [//]: #
+
 [//]: # "*   JOIN($idx; idx_expr):"
+
 [//]: #
+
 [//]: # "This builtin joins the input `.` to the given index, applying the given index expression to `.` to compute the index key. The join operation is as described above."
+
 [//]: #
+
 [//]: # "*   IN(s):"
+
 [//]: #
+
 [//]: # "This builtin outputs `true` if `.` appears in the given stream, otherwise it outputs `false`."
+
 [//]: #
+
 [//]: # "*   IN(source; s):"
+
 [//]: #
+
 [//]: # "This builtin outputs `true` if any value in the source stream appears in the second stream, otherwise it outputs `false`."
 
 ### `builtins`

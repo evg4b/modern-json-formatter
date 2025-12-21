@@ -3,7 +3,6 @@ import { customElement, property } from 'lit/decorators.js';
 import type { NavigationItem } from './models';
 import { classMap } from 'lit/directives/class-map.js';
 import { isInViewport } from '@core/helpers';
-import { inlineCodeCss } from '@core/ui/styles';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -46,7 +45,7 @@ export class SideBarLinkElement extends LitElement {
 
     :host-context(.section) {
       a {
-        padding-left: 50px;
+        padding-left: 40px;
       }
     }
   `;
@@ -68,9 +67,10 @@ export class SideBarLinkElement extends LitElement {
 
   public override render() {
     return html`
-        <a href="#" @click=${ this.onClick } class=${ classMap({ active: this.active }) }>
-            <slot></slot>
-        </a>
+      <a href="#" @click=${this.onClick}
+         class=${classMap({ active: this.active })}>
+        <slot></slot>
+      </a>
     `;
   }
 

@@ -21,37 +21,37 @@ export class TableElement extends LitElement {
       --v-margin: 1em;
       --h-margin: 0;
       --table-border: 1px solid #636363;
-        
+
       display: flex;
       flex-direction: column;
 
       table {
-          margin: var(--v-margin) var(--h-margin);
-          width: 100%;
-          border: var(--table-border);
-          border-collapse: collapse;
+        margin: var(--v-margin) var(--h-margin);
+        width: 100%;
+        border: var(--table-border);
+        border-collapse: collapse;
       }
 
-        th,
-        td {
-            font-weight: normal;
-            text-align: left;
-            padding: 0.3em 0.3em;
-            border: var(--table-border);
-            border-collapse: collapse;
-        }
+      th,
+      td {
+        font-weight: normal;
+        text-align: left;
+        padding: 0.3em 0.3em;
+        border: var(--table-border);
+        border-collapse: collapse;
+      }
 
-        th {
-            background-color: #3c3c3c;
-            user-select: none;
-        }
+      th {
+        background-color: #3c3c3c;
+        user-select: none;
+      }
 
-        .empty {
-            text-align: center;
-            user-select: none;
-            color: #757575;
-        }
-        
+      .empty {
+        text-align: center;
+        user-select: none;
+        color: #757575;
+      }
+
     }
   `;
 
@@ -72,7 +72,7 @@ export class TableElement extends LitElement {
         </tr>
         </thead>
         <tbody>
-          ${this.renderRows(this.data)}
+        ${this.renderRows(this.data)}
         </tbody>
       </table>
     `;

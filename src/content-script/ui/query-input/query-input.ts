@@ -1,6 +1,6 @@
-import { LitElement, html, css } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { ref, createRef } from 'lit/directives/ref.js';
+import { createRef, ref } from 'lit/directives/ref.js';
 import './error-message';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import { isNotNil, throws } from '../../helpers';
@@ -113,7 +113,7 @@ export class QueryInputElement extends LitElement {
         />
         <datalist id="history-list">
           ${map(this.autocomplete.options, query => html`
-              <option value=${query}>${query}</option>
+            <option value=${query}>${query}</option>
           `)}
         </datalist>
         ${this.renderError()}

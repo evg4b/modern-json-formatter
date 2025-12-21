@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { isInstanceOf } from 'typed-assert';
@@ -36,9 +36,9 @@ export class ToolboxElement extends LitElement {
     }
 
     .button-container {
-        display: flex;
-        flex-direction: row;
-        gap: 5px;
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
     }
   `;
 
@@ -56,7 +56,8 @@ export class ToolboxElement extends LitElement {
 
   public override render() {
     const input = this.tab === 'query'
-      ? html`<mjf-query-input .error=${this.error}></mjf-query-input>`
+      ? html`
+              <mjf-query-input .error=${this.error}></mjf-query-input>`
       : '';
 
     return html`

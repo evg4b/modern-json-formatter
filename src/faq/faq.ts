@@ -1,4 +1,4 @@
-import { html, css, LitElement, unsafeCSS } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { provide } from '@lit/context';
 import { customElement } from 'lit/decorators.js';
 import './sidebar';
@@ -6,8 +6,7 @@ import './content';
 
 import '@core/styles/variables.scss';
 import './faq.scss';
-import { sidebarControllerContext } from './sidebar/sidebar.controller';
-import { SidebarController } from './sidebar/sidebar.controller';
+import { SidebarController, sidebarControllerContext } from './sidebar/sidebar.controller';
 import { ref } from 'lit/directives/ref.js';
 
 @customElement('mjf-faq-page')
@@ -26,7 +25,7 @@ export class FaqPageElement extends LitElement {
     mjf-content {
       flex: 4 7 auto;
     }
-      
+
     mjf-sidebar,
     mjf-content {
       min-height: 100vh;

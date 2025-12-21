@@ -1,0 +1,8 @@
+@import "../core/styles/variables";
+@import "../core/styles/scroll-bars";
+
+html {
+  @include variables();
+  @include scroll-bars();
+  overflow-y: scroll !important;
+}

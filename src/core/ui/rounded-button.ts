@@ -40,9 +40,9 @@ export class RoundedButtonElement extends LitElement {
 
   public override render() {
     return html`
-        <button>
-            <slot></slot>
-        </button>
+      <button>
+        <slot></slot>
+      </button>
     `;
   }
 }

@@ -1,7 +1,8 @@
-import './table';
+import '@testing/browser.mock';
 import { TableElement } from './table';
 import { describe, expect, test } from '@rstest/core';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
+import './table';
 
 describe('TableElement', () => {
   let tableElement: TableElement;

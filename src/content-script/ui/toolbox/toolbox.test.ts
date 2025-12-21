@@ -1,8 +1,9 @@
 import '@testing/browser.mock';
-import { beforeEach, describe, expect, test } from '@rstest/core';
-import { ToolboxElement } from './toolbox';
+import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
+import { TabChangedEvent, ToolboxElement } from './toolbox';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { ButtonElement } from '@core/ui/button';
+import { without } from 'es-toolkit';
 
 describe('mjf-toolbox', () => {
   let toolbox: ToolboxElement;
@@ -10,6 +11,14 @@ describe('mjf-toolbox', () => {
   renderLitElement('mjf-toolbox', element => toolbox = element);
 
   defaultLitAsserts(ToolboxElement, () => toolbox);
+
+  const mapping = {
+    Raw: 'raw',
+    Formatted: 'formatted',
+    Query: 'query',
+  } as const;
+
+  const buttonNames = Object.keys(mapping) as (keyof typeof mapping)[];
 
   describe('buttons', () => {
     let buttons: ButtonElement[];
@@ -22,7 +31,7 @@ describe('mjf-toolbox', () => {
       expect(buttons).toHaveLength(3);
     });
 
-    test.each(['Raw', 'Formatted', 'Query'])('should have a %s button', buttonName => {
+    test.each(buttonNames)('should have a %s button', buttonName => {
       expect(buttons.find(b => b.innerText.trim() === buttonName)).toBeDefined();
     });
 
@@ -35,6 +44,40 @@ describe('mjf-toolbox', () => {
       test.each(['Raw', 'Query'])('%s should be inactive', () => {
         const button = buttons.find(b => b.innerText.trim() === 'Raw');
         expect(button?.active).toBe(false);
+      });
+    });
+
+    describe.each(buttonNames)('after clicking %s button', buttonName => {
+      let handler: Mock<(event: TabChangedEvent) => void>;
+
+      beforeEach(async () => {
+        handler = rstest.fn();
+
+        toolbox.addEventListener('tab-changed', handler);
+
+        buttons.find(b => b.innerText.trim() === buttonName)
+          ?.click();
+        await toolbox.updateComplete;
+      });
+
+      test.each(without(buttonNames, buttonName))('%s button should be inactive', buttonName => {
+        expect(buttons.find(b => b.innerText.trim() === buttonName)?.active)
+          .toBe(false);
+      });
+
+      test(`${buttonName} button should be active`, () => {
+        expect(buttons.find(b => b.innerText.trim() === buttonName)?.active)
+          .toBe(true);
+      });
+
+      test('should emit tab-changed event', () => {
+        expect(handler).toHaveBeenCalledTimes(1);
+
+        const event = handler.mock.calls[0][0];
+
+        expect(event).toBeInstanceOf(TabChangedEvent);
+        expect(event.detail).toBe(mapping[buttonName]);
+        expect(event.type).toBe('tab-changed');
       });
     });
   });

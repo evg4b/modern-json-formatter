@@ -1,7 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
-import './error-message';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import { isNotNil, throws } from '../../helpers';
 import { HistoryManager } from './history-manager';
@@ -9,6 +8,8 @@ import { resource } from '@core/browser';
 import { AutocompleteController } from './autocomplete.controller';
 import { map } from 'lit/directives/map.js';
 import { boxingFixCss } from '@core/ui/styles';
+
+import './error-message';
 
 interface HistoryItem {
   query: string;
@@ -127,6 +128,7 @@ export class QueryInputElement extends LitElement {
 
   public override firstUpdated() {
     this.inputElement.focus();
+    this.saveState();
   }
 
   private renderError() {

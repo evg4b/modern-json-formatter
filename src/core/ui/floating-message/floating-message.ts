@@ -34,6 +34,7 @@ export class FloatingMessageElement extends LitElement {
         opacity: 0;
         transform: translateY(50%);
         transition: all 250ms ease-in-out;
+        overflow-x: hidden;
       }
 
       .header-container {

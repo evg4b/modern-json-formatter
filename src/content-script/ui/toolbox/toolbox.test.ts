@@ -12,11 +12,7 @@ describe('mjf-toolbox', () => {
 
   defaultLitAsserts(ToolboxElement, () => toolbox);
 
-  const mapping = {
-    Raw: 'raw',
-    Formatted: 'formatted',
-    Query: 'query',
-  } as const;
+  const mapping = { Raw: 'raw', Formatted: 'formatted', Query: 'query' } as const;
 
   const buttonNames = Object.keys(mapping) as (keyof typeof mapping)[];
   const buttonValues = Object.values(mapping) as TabType[];

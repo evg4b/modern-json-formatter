@@ -1,4 +1,4 @@
-import { ErrorNode } from '@worker-core';
+import { type ErrorNode } from '@worker-core';
 
 export const throws = (value?: string): never => {
   throw new Error(value ?? 'Unexpected value');

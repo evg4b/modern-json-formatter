@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { consume } from '@lit/context';
 import { SidebarController, sidebarControllerContext } from '../sidebar/sidebar.controller';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { inlineCodeCss } from '@core/ui/styles';
+import { boxingFixCss, inlineCodeCss } from '@core/ui/styles';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -14,6 +14,7 @@ declare global {
 @customElement('mjf-section')
 export class SectionElement extends LitElement {
   public static override readonly styles = [
+    boxingFixCss,
     inlineCodeCss,
     css`
       :host {

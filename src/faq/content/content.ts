@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import lang from '../sections';
 
 import './section';
+import { boxingFixCss } from '@core/ui/styles';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -12,14 +13,17 @@ declare global {
 
 @customElement('mjf-content')
 export class ContentElement extends LitElement {
-  public static override readonly styles = css`
-    :host {
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-      padding: 20px;
-    }
-  `;
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding: 20px;
+      }
+    `,
+  ];
 
   public override render() {
     return html`

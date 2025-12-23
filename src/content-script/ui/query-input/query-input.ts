@@ -8,6 +8,7 @@ import { HistoryManager } from './history-manager';
 import { resource } from '@core/browser';
 import { AutocompleteController } from './autocomplete.controller';
 import { map } from 'lit/directives/map.js';
+import { boxingFixCss } from '@core/ui/styles';
 
 interface HistoryItem {
   query: string;
@@ -42,49 +43,52 @@ declare global {
 
 @customElement('mjf-query-input')
 export class QueryInputElement extends LitElement {
-  public static override readonly styles = css`
-    :host {
-      display: flex;
-      flex-direction: row;
-      gap: 5px;
-    }
-
-    .input-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      position: relative;
-    }
-
-    input {
-      min-width: 200px;
-      min-height: 24px;
-      width: 30vw;
-      background: var(--input-background);
-      color: var(--input-color);
-      border: 1px solid var(--input-border-color);
-      border-radius: var(--input-border-radius);
-      padding: 0 5px;
-      outline: none;
-      transition-property: border-color, background, color;
-      transition-duration: 0.2s;
-      transition-timing-function: ease-in-out;
-      flex: 1 1 auto;
-      box-sizing: border-box;
-
-      &:hover {
-        background: var(--input-hover-background);
-        color: var(--input-hover-color);
-        border-color: var(--input-hover-border-color);
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
       }
 
-      &:focus, &:focus-visible {
-        background: var(--input-focus-background);
-        color: var(--input-focus-color);
-        border-color: var(--input-focus-border-color);
+      .input-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        position: relative;
       }
-    }
-  `;
+
+      input {
+        min-width: 200px;
+        min-height: 24px;
+        width: 30vw;
+        background: var(--input-background);
+        color: var(--input-color);
+        border: 1px solid var(--input-border-color);
+        border-radius: var(--input-border-radius);
+        padding: 0 5px;
+        outline: none;
+        transition-property: border-color, background, color;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+        flex: 1 1 auto;
+        box-sizing: border-box;
+
+        &:hover {
+          background: var(--input-hover-background);
+          color: var(--input-hover-color);
+          border-color: var(--input-hover-border-color);
+        }
+
+        &:focus, &:focus-visible {
+          background: var(--input-focus-background);
+          color: var(--input-focus-color);
+          border-color: var(--input-focus-border-color);
+        }
+      }
+    `,
+  ];
 
   @property({ type: String })
   public error: string | null = null;

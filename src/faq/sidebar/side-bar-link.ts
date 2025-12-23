@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { NavigationItem } from './models';
 import { classMap } from 'lit/directives/class-map.js';
 import { isInViewport } from '@core/helpers';
+import { boxingFixCss } from '@core/ui/styles';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -12,43 +13,46 @@ declare global {
 
 @customElement('mjf-sidebar-link')
 export class SideBarLinkElement extends LitElement {
-  public static override readonly styles = css`
-    :host {
-      --sidebar-link-background: #282828;
-      --sidebar-link-color: #eee;
-      display: flex;
-      flex-direction: column;
-
-      a {
-        border-radius: 0 30px 30px 0;
-        padding: 5px 10px 5px 20px;
-        color: var(--sidebar-link-color, #eee);
-        overflow: hidden;
-        position: relative;
-        background: var(--sidebar-link-background, #282828);
-        transition-property: background-color, color;
-        transition-duration: 150ms;
-        transition-timing-function: ease-in-out;
-        text-decoration: none;
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        --sidebar-link-background: #282828;
+        --sidebar-link-color: #eee;
         display: flex;
+        flex-direction: column;
 
-        &:hover {
-          --sidebar-link-background: #6e6e6e;
-        }
+        a {
+          border-radius: 0 30px 30px 0;
+          padding: 5px 10px 5px 20px;
+          color: var(--sidebar-link-color, #eee);
+          overflow: hidden;
+          position: relative;
+          background: var(--sidebar-link-background, #282828);
+          transition-property: background-color, color;
+          transition-duration: 150ms;
+          transition-timing-function: ease-in-out;
+          text-decoration: none;
+          display: flex;
 
-        &.active {
-          --sidebar-link-background: #7cacf8;
-          --sidebar-link-color: #282828;
+          &:hover {
+            --sidebar-link-background: #6e6e6e;
+          }
+
+          &.active {
+            --sidebar-link-background: #7cacf8;
+            --sidebar-link-color: #282828;
+          }
         }
       }
-    }
 
-    :host-context(.section) {
-      a {
-        padding-left: 40px;
+      :host-context(.section) {
+        a {
+          padding-left: 40px;
+        }
       }
-    }
-  `;
+    `,
+  ];
 
   @property({ type: Object })
   public item!: NavigationItem;

@@ -110,7 +110,8 @@ export const runExtension = async () => {
         const info = await jq(preNode.innerText, query);
         queryContainer.innerHTML = '';
         queryContainer.appendChild(prepareResponse(info));
-        await pushHistory(window.location.hostname, query);
+        // use globalThis for portability (Sonar: prefer globalThis over window)
+        await pushHistory(globalThis.location.hostname, query);
       } catch (error: unknown) {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {

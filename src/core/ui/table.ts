@@ -2,6 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { get } from 'es-toolkit/compat';
 import { map } from 'lit/directives/map.js';
+import { boxingFixCss } from '@core/ui/styles';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -16,44 +17,47 @@ export interface TableColumn {
 
 @customElement('mjf-table-element')
 export class TableElement extends LitElement {
-  public static override readonly styles = css`
-    :host {
-      --v-margin: 1em;
-      --h-margin: 0;
-      --table-border: 1px solid #636363;
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        --v-margin: 1em;
+        --h-margin: 0;
+        --table-border: 1px solid #636363;
 
-      display: flex;
-      flex-direction: column;
+        display: flex;
+        flex-direction: column;
 
-      table {
-        margin: var(--v-margin) var(--h-margin);
-        width: 100%;
-        border: var(--table-border);
-        border-collapse: collapse;
+        table {
+          margin: var(--v-margin) var(--h-margin);
+          width: 100%;
+          border: var(--table-border);
+          border-collapse: collapse;
+        }
+
+        th,
+        td {
+          font-weight: normal;
+          text-align: left;
+          padding: 0.3em 0.3em;
+          border: var(--table-border);
+          border-collapse: collapse;
+        }
+
+        th {
+          background-color: #3c3c3c;
+          user-select: none;
+        }
+
+        .empty {
+          text-align: center;
+          user-select: none;
+          color: #757575;
+        }
+
       }
-
-      th,
-      td {
-        font-weight: normal;
-        text-align: left;
-        padding: 0.3em 0.3em;
-        border: var(--table-border);
-        border-collapse: collapse;
-      }
-
-      th {
-        background-color: #3c3c3c;
-        user-select: none;
-      }
-
-      .empty {
-        text-align: center;
-        user-select: none;
-        color: #757575;
-      }
-
-    }
-  `;
+    `,
+  ];
 
   @property({ type: Array })
   public columns: TableColumn[] = [];

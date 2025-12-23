@@ -10,7 +10,7 @@ export const sidebarControllerContext = createContext<SidebarController>(Symbol(
 export class SidebarController implements ReactiveController {
   private readonly itemsMap = new Map<string, NavigationItem>();
 
-  public activeItem: string | null = null;
+  public active: string | null = null;
 
   constructor(private readonly host: ReactiveControllerHost) {
     host.addController(this);
@@ -21,8 +21,8 @@ export class SidebarController implements ReactiveController {
   }
 
   public contentRef = (a: Element | undefined) => {
-    a?.addEventListener('scroll', this.scrollEndHandler.bind(this));
-    setTimeout(() => this.scrollEndHandler(), 10);
+    a?.addEventListener('scroll', this.scrollEndHandler);
+    setTimeout(this.scrollEndHandler, 10);
   };
 
   public get items() {
@@ -54,20 +54,23 @@ export class SidebarController implements ReactiveController {
     this.host.requestUpdate();
   }
 
-  private scrollEndHandler() {
+  private scrollEndHandler = () => {
     const visibleItems = this.items
       .flatMap(item => [item, ...item.children ?? []])
-      .map(item => {
+      .flatMap(item => {
         const rect = item.ref.getBoundingClientRect();
-        return { id: item.id, top: rect.top, offset: Math.abs(rect.top), ref: item.ref };
+        if (rect.top < globalThis.innerHeight) {
+          return { id: item.id, offset: Math.abs(rect.top), ref: item.ref };
+        }
+
+        return [];
       })
-      .filter(item => item.top < window.innerHeight)
       .toSorted((a, b) => a.offset - b.offset);
 
     const activeItem = head(visibleItems);
     if (activeItem) {
-      this.activeItem = activeItem.id;
+      this.active = activeItem.id;
       this.host.requestUpdate();
     }
-  }
+  };
 }

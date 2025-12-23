@@ -6,7 +6,7 @@ import '@core/ui/logo';
 import './side-bar-link';
 import { map } from 'lit/directives/map.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { inlineCodeCss } from '@core/ui/styles';
+import { boxingFixCss, inlineCodeCss } from '@core/ui/styles';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -18,6 +18,7 @@ declare global {
 export class SidebarElement extends LitElement {
   public static override readonly styles = [
     inlineCodeCss,
+    boxingFixCss,
     css`
       :host {
         display: flex;
@@ -70,8 +71,7 @@ export class SidebarElement extends LitElement {
   public items: NavigationItem[] = [];
 
   @property({ type: String })
-  // eslint-disable-next-line lit/attribute-names
-  public activeItem: string | null = null;
+  public active: string | null = null;
 
   public override render() {
     return html`
@@ -89,7 +89,7 @@ export class SidebarElement extends LitElement {
       <div class="menu">
         ${map(this.items, item => html`
           <mjf-sidebar-link .item=${item}
-                            .active=${this.activeItem === item.id}
+                            .active=${this.active === item.id}
                             .title=${item.title}>
             <span>${unsafeHTML(item.titleHtml)}</span>
           </mjf-sidebar-link>
@@ -97,7 +97,7 @@ export class SidebarElement extends LitElement {
             <div class="section">
               ${item.children?.map(child => html`
                 <mjf-sidebar-link .item=${child}
-                                  .active=${this.activeItem === child.id}
+                                  .active=${this.active === child.id}
                                   .title=${item.title}>
                   <span>${unsafeHTML(child.titleHtml)}</span>
                 </mjf-sidebar-link>

@@ -6,6 +6,7 @@ import '../query-input';
 import '../info-button';
 import { ButtonElement } from '@core/ui/button';
 import { map } from 'lit/directives/map.js';
+import { boxingFixCss } from '@core/ui/styles';
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {
@@ -25,21 +26,24 @@ declare global {
 
 @customElement('mjf-toolbox')
 export class ToolboxElement extends LitElement {
-  public static override readonly styles = css`
-    :host {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      gap: 10px;
-    }
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        gap: 10px;
+      }
 
-    .button-container {
-      display: flex;
-      flex-direction: row;
-      gap: 5px;
-    }
-  `;
+      .button-container {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+      }
+    `,
+  ];
 
   @property({ type: String, reflect: true })
   public tab: TabType = 'formatted';
@@ -59,17 +63,17 @@ export class ToolboxElement extends LitElement {
       : '';
 
     return html`
-        ${input}
-        <div class="button-container">
-          ${map(this.tabs, ({ tab, label }) => html`
-            <mjf-button class=${classMap({ active: this.tab === tab })}
-                        @click=${this.clickHandler}
-                        .active=${this.tab === tab}
-                        data-type=${tab}>
-                ${label}
-            </mjf-button>
-          `)}
-        </div>
+      ${input}
+      <div class="button-container">
+        ${map(this.tabs, ({ tab, label }) => html`
+          <mjf-button class=${classMap({ active: this.tab === tab })}
+                      @click=${this.clickHandler}
+                      .active=${this.tab === tab}
+                      data-type=${tab}>
+            ${label}
+          </mjf-button>
+        `)}
+      </div>
     `;
   }
 

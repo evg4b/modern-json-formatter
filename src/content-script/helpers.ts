@@ -17,10 +17,6 @@ export function assetTabType(s?: string | null): asserts s is TabType {
   }
 }
 
-export const isNotNil = <T>(value: T | null | undefined): value is T => {
-  return value !== null && value !== undefined;
-};
-
 export const isErrorNode = (node: unknown): node is ErrorNode => {
   return !!node && typeof node === 'object' && 'type' in node && node.type === 'error';
 };

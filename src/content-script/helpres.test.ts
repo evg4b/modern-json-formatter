@@ -2,7 +2,7 @@ import { createElement } from '@core/dom';
 import { beforeEach, describe, expect, test } from '@rstest/core';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { type ErrorNode } from '@worker-core';
-import { assetTabType, isErrorNode, isNotNil, query, throws } from './helpers';
+import { assetTabType, isErrorNode, query, throws } from './helpers';
 
 describe('helpers', () => {
   test('should work', () => {
@@ -11,22 +11,6 @@ describe('helpers', () => {
 
   test('should work with a value', () => {
     expect(() => throws('Custom message')).toThrow('Custom message');
-  });
-});
-
-describe('isNotNil', () => {
-  const cases = [
-    { value: null, expected: false },
-    { value: undefined, expected: false },
-    { value: 0, expected: true },
-    { value: '', expected: true },
-    { value: 'string', expected: true },
-    { value: [], expected: true },
-    { value: {}, expected: true },
-  ];
-
-  test.each(cases)('should return $value for $expected', ({ value, expected }) => {
-    expect(isNotNil(value)).toBe(expected);
   });
 });
 

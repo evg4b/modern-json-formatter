@@ -6,7 +6,7 @@ import '../query-input';
 import '../info-button';
 import { ButtonElement } from '@core/ui/button';
 import { map } from 'lit/directives/map.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {

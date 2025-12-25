@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { get } from 'es-toolkit/compat';
 import { map } from 'lit/directives/map.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 declare global {
   interface HTMLElementTagNameMap {

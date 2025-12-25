@@ -1,6 +1,6 @@
 import { css, type CSSResult, html, LitElement, type TemplateResult } from 'lit';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Constructor<T = object> = new (...args: any[]) => T;

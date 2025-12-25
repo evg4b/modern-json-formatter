@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import lang from '../sections';
 
 import './section';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 declare global {
   interface HTMLElementTagNameMap {

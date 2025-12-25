@@ -6,7 +6,7 @@ import '@core/ui/logo';
 import './side-bar-link';
 import { map } from 'lit/directives/map.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { boxingFixCss, inlineCodeCss } from '@core/ui/styles';
+import { boxingFixCss, inlineCodeCss } from '@core/styles/lit';
 
 declare global {
   interface HTMLElementTagNameMap {

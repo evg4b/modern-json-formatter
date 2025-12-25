@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { FloatingMessageController } from './floating-message.controller';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 declare global {
   interface HTMLElementTagNameMap {

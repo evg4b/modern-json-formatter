@@ -8,7 +8,7 @@ import '@core/styles/variables.scss';
 import './faq.scss';
 import { SidebarController, sidebarControllerContext } from './sidebar/sidebar.controller';
 import { ref } from 'lit/directives/ref.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 @customElement('mjf-faq-page')
 export class FaqPageElement extends LitElement {

@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { consume } from '@lit/context';
 import { SidebarController, sidebarControllerContext } from '../sidebar/sidebar.controller';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { boxingFixCss, inlineCodeCss } from '@core/ui/styles';
+import { boxingFixCss, inlineCodeCss } from '@core/styles/lit';
 
 declare global {
   interface HTMLElementTagNameMap {

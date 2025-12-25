@@ -3,7 +3,7 @@ import { customElement, state } from 'lit/decorators.js';
 import { clearHistory, getDomains } from '@core/background';
 import type { TableColumn } from '@core/ui/table';
 import { until } from 'lit/directives/until.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 import '@core/ui';
 
 import './options.scss';

@@ -2,7 +2,7 @@ import icon from './info-button-icon.svg?raw';
 import { css, html, LitElement } from 'lit';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { customElement, property } from 'lit/decorators.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 
 declare global {
   interface HTMLElementTagNameMap {

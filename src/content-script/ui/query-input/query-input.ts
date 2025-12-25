@@ -7,7 +7,7 @@ import { HistoryManager } from './history-manager';
 import { resource } from '@core/browser';
 import { AutocompleteController } from './autocomplete.controller';
 import { map } from 'lit/directives/map.js';
-import { boxingFixCss } from '@core/ui/styles';
+import { boxingFixCss } from '@core/styles/lit';
 import { isNotNil } from 'es-toolkit';
 
 interface HistoryItem {

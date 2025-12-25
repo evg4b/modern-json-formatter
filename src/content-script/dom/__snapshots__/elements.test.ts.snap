@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
 
-exports[`elements bracket close 1`] = `
+exports[`elements > bracket > close 1`] = `
 <span
   class="bracket bracket-close"
 >
@@ -8,7 +8,7 @@ exports[`elements bracket close 1`] = `
 </span>
 `;
 
-exports[`elements bracket open 1`] = `
+exports[`elements > bracket > open 1`] = `
 <span
   class="bracket bracket-open"
 >
@@ -16,7 +16,7 @@ exports[`elements bracket open 1`] = `
 </span>
 `;
 
-exports[`elements colon 1`] = `
+exports[`elements > colon 1`] = `
 <span
   class="colon"
 >
@@ -24,7 +24,7 @@ exports[`elements colon 1`] = `
 </span>
 `;
 
-exports[`elements comma 1`] = `
+exports[`elements > comma 1`] = `
 <span
   class="comma"
 >
@@ -32,13 +32,13 @@ exports[`elements comma 1`] = `
 </span>
 `;
 
-exports[`elements ellipsis 1`] = `
+exports[`elements > ellipsis 1`] = `
 <span
   class="ellipsis"
 />
 `;
 
-exports[`elements itemsCount for multiple elements 1`] = `
+exports[`elements > itemsCount > for multiple elements 1`] = `
 <span
   class="items-count"
 >
@@ -46,7 +46,7 @@ exports[`elements itemsCount for multiple elements 1`] = `
 </span>
 `;
 
-exports[`elements itemsCount for single element 1`] = `
+exports[`elements > itemsCount > for single element 1`] = `
 <span
   class="items-count"
 >
@@ -54,7 +54,7 @@ exports[`elements itemsCount for single element 1`] = `
 </span>
 `;
 
-exports[`elements propertiesCount for multiple elements 1`] = `
+exports[`elements > propertiesCount > for multiple elements 1`] = `
 <span
   class="properties-count"
 >
@@ -62,7 +62,7 @@ exports[`elements propertiesCount for multiple elements 1`] = `
 </span>
 `;
 
-exports[`elements propertiesCount for single element 1`] = `
+exports[`elements > propertiesCount > for single element 1`] = `
 <span
   class="properties-count"
 >
@@ -70,7 +70,7 @@ exports[`elements propertiesCount for single element 1`] = `
 </span>
 `;
 
-exports[`elements square-bracket close 1`] = `
+exports[`elements > square-bracket > close 1`] = `
 <span
   class="bracket square-bracket-close"
 >
@@ -78,7 +78,7 @@ exports[`elements square-bracket close 1`] = `
 </span>
 `;
 
-exports[`elements square-bracket open 1`] = `
+exports[`elements > square-bracket > open 1`] = `
 <span
   class="bracket square-bracket-open"
 >
@@ -86,7 +86,7 @@ exports[`elements square-bracket open 1`] = `
 </span>
 `;
 
-exports[`elements toggle 1`] = `
+exports[`elements > toggle 1`] = `
 <span
   class="toggle"
 />

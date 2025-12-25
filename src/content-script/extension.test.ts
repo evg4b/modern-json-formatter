@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import '@testing/browser.mock';
 import '@testing/background.mock';
 import { format, tokenize } from '@core/background';
@@ -8,11 +9,20 @@ import { tNull, tObject, tProperty, tString } from '@testing';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
+import { buildContainers } from './ui';
 
-jest.mock('./json-detector');
-jest.mock('./ui');
-jest.mock('@core/ui/helpers');
+rstest.mock('./json-detector', () => ({
+  findNodeWithCode: rstest.fn().mockName('findNodeWithCode'),
+}));
+
+rstest.mock('./ui', () => ({
+  buildContainers: rstest.fn().mockName('buildContainers'),
+}));
+
+rstest.mock('@core/ui/helpers', () => ({
+  registerStyle: rstest.fn().mockName('registerStyle'),
+  FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement'),
+}));
 
 describe('runExtension', () => {
   let rootContainer: HTMLElement;
@@ -20,7 +30,7 @@ describe('runExtension', () => {
   let rawContainer: HTMLElement;
   let queryContainer: HTMLElement;
   let body: HTMLElement;
-  let spy: jest.SpyInstance;
+  let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
 
   beforeEach(() => {
     rootContainer = createElement({ element: 'div' });
@@ -29,40 +39,26 @@ describe('runExtension', () => {
     queryContainer = createElement({ element: 'div' });
     body = createElement({ element: 'body' });
 
-    spy = jest.spyOn(document.body, 'attachShadow')
+    attachShadowSpy = rstest.spyOn(document.body, 'attachShadow')
       .mockImplementation(body.attachShadow.bind(body));
 
     wrapMock(buildContainers)
       .mockReturnValue({ rootContainer, formatContainer, rawContainer, queryContainer });
-
-    wrapMock(ToolboxElement).mockReturnValue(
-      Object.assign(document.createElement('div'), {
-        onQueryChanged: jest.fn(),
-        onTabChanged: jest.fn(),
-      }),
-    );
-
-    wrapMock(FloatingMessageElement).mockReturnValue(
-      createElement({ element: 'div' }),
-    );
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-    jest.resetAllMocks();
+    rstest.clearAllMocks();
+    rstest.resetAllMocks();
   });
 
   test('when code node doesn\'t exists', async () => {
     wrapMock(findNodeWithCode).mockResolvedValue(null);
-    const spy = jest.spyOn(document.body, 'attachShadow');
 
     await runExtension();
 
     expect(buildContainers).not.toHaveBeenCalled();
-    expect(spy).not.toHaveBeenCalled();
+    expect(attachShadowSpy).not.toHaveBeenCalled();
     expect(registerStyle).not.toHaveBeenCalled();
-
-    spy.mockRestore();
   });
 
   test('when content is too large', async () => {
@@ -78,13 +74,11 @@ describe('runExtension', () => {
     await runExtension();
 
     expect(buildContainers).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalled();
+    expect(attachShadowSpy).toHaveBeenCalled();
     expect(registerStyle).toHaveBeenCalled();
     expect(format).toHaveBeenCalled();
 
     expect(tokenize).not.toHaveBeenCalled();
-
-    spy.mockRestore();
   });
 
   test('when content is base', async () => {
@@ -101,17 +95,13 @@ describe('runExtension', () => {
       ),
     );
 
-    const spy = jest.spyOn(document.body, 'attachShadow');
-
     await runExtension();
 
     expect(buildContainers).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalled();
+    expect(attachShadowSpy).toHaveBeenCalled();
     expect(registerStyle).toHaveBeenCalled();
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();
-
-    spy.mockRestore();
   });
 });

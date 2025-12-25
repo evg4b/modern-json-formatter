@@ -1,8 +1,7 @@
 import { type ArrayNode, type ObjectNode, type TokenNode } from '@worker-core';
 import { itemsCount, propertiesCount } from './elements';
 
-export const isValueExpandable = (value: TokenNode): value is ObjectNode | ArrayNode =>
-  (value.type === 'object' && !!value.properties.length) || (value.type === 'array' && !!value.items.length);
+export const isValueExpandable = (value: TokenNode): value is ObjectNode | ArrayNode => value.type === 'object' && !!value.properties.length || value.type === 'array' && !!value.items.length;
 
 export const isToggleElement = (element: EventTarget | null): element is HTMLElement => {
   return element instanceof HTMLElement && element.classList.contains('toggle');

@@ -1,34 +1,51 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "allowJs": true,
-    "module": "esnext",
-    "types": ["node", "chrome", "golang-wasm-exec"],
-    "baseUrl": ".",
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "jsxFactory": "React.createElement",
-    "jsxFragmentFactory": "React.Fragment",
+    "rootDir": ".",
+    "lib": [
+      "DOM",
+      "ES2023"
+    ],
+    "target": "ES2023",
+    "noEmit": true,
+    "skipLibCheck": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noUncheckedSideEffectImports": true,
+    "isolatedModules": true,
+    "alwaysStrict": true,
+    /* type checking */
     "strict": true,
-    "skipLibCheck": true,
-    "sourceRoot": ".",
     "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
     "paths": {
-      "@core/*": ["src/core/*"],
-      "@testing/*": ["testing/*"],
-      "@testing": ["testing"],
-      "@worker-core": ["worker-core"]
-    },
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
-  },
-  "references": [
-    {
-      "path": "./tsconfig.ext.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
+      "@core/*": [
+        "src/core/*"
+      ],
+      "@testing/*": [
+        "testing/*"
+      ],
+      "@testing": [
+        "testing"
+      ],
+      "@worker-core": [
+        "worker-core"
+      ]
     }
+  },
+  "include": [
+    "src"
   ]
 }

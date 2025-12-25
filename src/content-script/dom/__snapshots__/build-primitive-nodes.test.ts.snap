@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
 
-exports[`buildStringNode should create a URL string node 1`] = `
+exports[`buildStringNode > should create a URL string node 1`] = `
 <span
   class="string url"
   href="https://example.com"
@@ -9,7 +9,7 @@ exports[`buildStringNode should create a URL string node 1`] = `
 </span>
 `;
 
-exports[`buildStringNode should create a default string node 1`] = `
+exports[`buildStringNode > should create a default string node 1`] = `
 <span
   class="string"
 >
@@ -17,7 +17,7 @@ exports[`buildStringNode should create a default string node 1`] = `
 </span>
 `;
 
-exports[`buildStringNode should create an email string node 1`] = `
+exports[`buildStringNode > should create an email string node 1`] = `
 <span
   class="string email"
   href="mailto:test@example.com"

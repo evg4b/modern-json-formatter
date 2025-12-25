@@ -2,15 +2,15 @@ import { sendMessage } from '@core/browser';
 import type { ErrorNode, TokenizerResponse } from '@worker-core';
 import { isErrorNode } from '../../content-script/helpers';
 import {
-  ClearHistoryParams,
-  DomainCountResponse,
-  FormatParams,
-  GetDomainsParams,
-  GetHistoryParams,
-  HistoryResponse,
-  JqParams,
-  PushHistoryParams,
-  TokenizeParams,
+  type ClearHistoryParams,
+  type DomainCountResponse,
+  type FormatParams,
+  type GetDomainsParams,
+  type GetHistoryParams,
+  type HistoryResponse,
+  type JqParams,
+  type PushHistoryParams,
+  type TokenizeParams,
 } from './models';
 
 const bridge = async <M, R>(request: M) => {
@@ -29,7 +29,6 @@ export const format = async (json: string): Promise<ErrorNode | string> => {
 export const jq = async (json: string, query: string): Promise<TokenizerResponse> => {
   return bridge<JqParams, TokenizerResponse>({ action: 'jq', payload: { json, query } });
 };
-
 
 export const tokenize = async (json: string): Promise<TokenizerResponse> => {
   return bridge<TokenizeParams, TokenizerResponse>({ action: 'tokenize', payload: json });

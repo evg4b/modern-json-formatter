@@ -1,4 +1,4 @@
-import { FaqSection } from '../models';
+import { type FaqSection } from '../models';
 import advancedFeatures from './advanced-features.md';
 import assignment from './assignment.md';
 import basicFilters from './basic-filters.md';

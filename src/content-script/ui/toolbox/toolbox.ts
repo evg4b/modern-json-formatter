@@ -1,73 +1,85 @@
-import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { assetTabType } from '../../helpers';
-import { QueryInputElement } from '../query-input';
-import toolboxStyles from './toolbox.styles';
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { isInstanceOf } from 'typed-assert';
+import '../query-input';
+import '../info-button';
+import { ButtonElement } from '@core/ui/button';
+import { map } from 'lit/directives/map.js';
+import { boxingFixCss } from '@core/ui/styles';
 
-@CustomElement('extension-toolbox')
-export class ToolboxElement extends StyledComponentElement {
-  private readonly input = new QueryInputElement();
-  private readonly rawButton = this.createButton('Raw', 'raw');
-  private readonly formattedButton = this.createButton('Formatted', 'formatted', true);
-  private readonly queryButton = this.createButton('Query', 'query');
+export class TabChangedEvent extends CustomEvent<TabType> {
+  constructor(tab: TabType) {
+    super('tab-changed', { detail: tab });
+  }
+}
 
-  private readonly buttonList: [TabType, HTMLButtonElement][] = [
-    ['raw', this.rawButton],
-    ['formatted', this.formattedButton],
-    ['query', this.queryButton],
+declare global {
+  interface HTMLElementEventMap {
+    'tab-changed': TabChangedEvent;
+  }
+
+  interface HTMLElementTagNameMap {
+    'mjf-toolbox': ToolboxElement;
+  }
+}
+
+@customElement('mjf-toolbox')
+export class ToolboxElement extends LitElement {
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        gap: 10px;
+      }
+
+      .button-container {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+      }
+    `,
   ];
 
-  private tabChangedCallback: ((s: TabType) => void) | null = null;
+  @property({ type: String, reflect: true })
+  public tab: TabType = 'formatted';
 
-  constructor() {
-    super(toolboxStyles);
-    const container = createElement({
-      element: 'div',
-      class: 'button-container',
-      children: [this.queryButton, this.formattedButton, this.rawButton],
-    });
-    this.shadow.append(this.input, container);
-    this.shadow.addEventListener('click', e => {
-      if (e.target instanceof HTMLButtonElement) {
-        e.preventDefault();
-        const ref = e.target.getAttribute('ref');
-        assetTabType(ref);
-        this.activateButton(ref);
-      }
-    });
-    this.input.hide();
+  @property({ type: String })
+  public error: string | null = null;
+
+  private readonly tabs: { tab: TabType; label: string }[] = [
+    { tab: 'query', label: 'Query' },
+    { tab: 'formatted', label: 'Formatted' },
+    { tab: 'raw', label: 'Raw' },
+  ];
+
+  public override render() {
+    const input = this.tab === 'query'
+      ? html`<mjf-query-input .error=${this.error}></mjf-query-input>`
+      : '';
+
+    return html`
+      ${input}
+      <div class="button-container">
+        ${map(this.tabs, ({ tab, label }) => html`
+          <mjf-button class=${classMap({ active: this.tab === tab })}
+                      @click=${this.clickHandler}
+                      .active=${this.tab === tab}
+                      data-type=${tab}>
+            ${label}
+          </mjf-button>
+        `)}
+      </div>
+    `;
   }
 
-  public onQueryChanged(callback: (s: string) => void | Promise<void>): void {
-    this.input.onSubmit(callback);
-  }
-
-  public onTabChanged(callback: (s: TabType) => void): void {
-    this.tabChangedCallback = callback;
-  }
-
-  public setErrorMessage(error: string): void {
-    this.input.setErrorMessage(error);
-  }
-
-  private activateButton(tab: TabType): void {
-    this.buttonList.forEach(([key, value]) =>
-      key === tab ? value.classList.add('active') : value.classList.remove('active'),
-    );
-    this.tabChangedCallback?.(tab);
-    if (tab === 'query') {
-      this.input.show();
-      this.input.focus();
-    } else {
-      this.input.hide();
-    }
-  }
-
-  private createButton(content: string, ref: TabType, active = false): HTMLButtonElement {
-    return createElement({
-      element: 'button',
-      content,
-      class: active ? 'active' : undefined,
-      attributes: { type: 'button', ref },
-    });
+  private clickHandler(event: MouseEvent) {
+    isInstanceOf(event.target, ButtonElement);
+    this.tab = event.target.dataset.type as TabType;
+    this.dispatchEvent(new TabChangedEvent(this.tab));
   }
 }

@@ -1,0 +1,1 @@
+export { StickyPanelElement } from './sticky-panel';

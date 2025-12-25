@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, test } from '@jest/globals';
+import 'fake-indexeddb/auto';
+import { beforeEach, describe, expect, test } from '@rstest/core';
 import { throws } from '../content-script/helpers';
 import { wait } from './helpers';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
@@ -8,7 +9,7 @@ const cleanup = async () => {
   for (const item of items) {
     const request = indexedDB.deleteDatabase(item.name ?? '');
     request.onblocked = () => throws('Database is blocked');
-    await wait(indexedDB.deleteDatabase(item.name ?? ''));
+    await wait(request);
   }
 };
 
@@ -43,7 +44,7 @@ describe('getHistory', () => {
   describe('when history has many records', () => {
     beforeEach(async () => {
       for (let i = 0; i < 50; i++) {
-        await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
+        await pushHistory({ domain: 'example.com', query: `.[${i}]` });
       }
     });
 
@@ -51,13 +52,20 @@ describe('getHistory', () => {
       const history = await getHistory({ domain: 'example.com', prefix: '' });
       expect(history).toHaveLength(10);
       expect(history).toEqual([
-        '.[49]', '.[48]', '.[47]', '.[46]', '.[45]',
-        '.[44]', '.[43]', '.[42]', '.[41]', '.[40]',
+        '.[49]',
+        '.[48]',
+        '.[47]',
+        '.[46]',
+        '.[45]',
+        '.[44]',
+        '.[43]',
+        '.[42]',
+        '.[41]',
+        '.[40]',
       ]);
     });
   });
 });
-
 
 describe('pushHistory', () => {
   beforeEach(cleanup);
@@ -82,7 +90,7 @@ describe('clearHistory', () => {
 
   beforeEach(async () => {
     for (let i = 0; i < 50; i++) {
-      await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
+      await pushHistory({ domain: 'example.com', query: `.[${i}]` });
     }
   });
 
@@ -93,23 +101,22 @@ describe('clearHistory', () => {
   });
 });
 
-
 describe('getDomains', () => {
   beforeEach(cleanup);
 
   beforeEach(async () => {
     for (let i = 0; i < 3; i++) {
-      await pushHistory({ domain: 'example.com', query: `.[${ i }]` });
+      await pushHistory({ domain: 'example.com', query: `.[${i}]` });
     }
 
-    await pushHistory({ domain: 'sub.example.com', query: `.[0]` });
+    await pushHistory({ domain: 'sub.example.com', query: '.[0]' });
 
     for (let i = 0; i < 5; i++) {
-      await pushHistory({ domain: 'test.com', query: `.[${ i }]` });
+      await pushHistory({ domain: 'test.com', query: `.[${i}]` });
     }
 
     for (let i = 0; i < 2; i++) {
-      await pushHistory({ domain: 'other.net', query: `.[${ i }]` });
+      await pushHistory({ domain: 'other.net', query: `.[${i}]` });
     }
   });
 

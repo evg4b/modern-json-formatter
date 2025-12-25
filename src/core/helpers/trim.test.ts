@@ -1,5 +1,5 @@
 import { trim } from '@core/helpers';
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from '@rstest/core';
 
 describe('trim', () => {
   const items = [

@@ -1,20 +1,22 @@
-jest.mock('./get-node-with-code');
-
+import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { createElement } from '@core/dom';
-import { beforeEach, describe, expect, test, afterEach, } from '@jest/globals';
 import { wrapMock } from '@testing/helpers';
 import { findNodeWithCode } from './find-node-with-code';
 import { getNodeWithCode } from './get-node-with-code';
 
+rstest.mock('./get-node-with-code', () => ({
+  getNodeWithCode: rstest.fn().mockName('getNodeWithCode'),
+}));
+
 describe('findNodeWithCode', () => {
-  let bodyMock: jest.SpyInstance;
-  let addEventListenerMock: jest.SpyInstance;
+  let bodyMock: ReturnType<typeof rstest.spyOn>;
+  let addEventListenerMock: ReturnType<typeof rstest.spyOn>;
   let mockNode: HTMLPreElement;
 
   beforeEach(() => {
     mockNode = createElement({ element: 'pre' });
-    bodyMock = jest.spyOn(document, 'body', 'get');
-    addEventListenerMock = jest.spyOn(document, 'addEventListener')
+    bodyMock = rstest.spyOn(document, 'body', 'get');
+    addEventListenerMock = rstest.spyOn(document, 'addEventListener')
       .mockImplementation((event, cb) => {
         bodyMock.mockRestore();
 
@@ -22,15 +24,15 @@ describe('findNodeWithCode', () => {
           cb(new Event('DOMContentLoaded'));
         }
 
-        throw new Error(`Unexpected event: ${ event }`);
+        throw new Error(`Unexpected event: ${event}`);
       });
 
     wrapMock(getNodeWithCode).mockReturnValue(mockNode);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllMocks();
+    rstest.resetAllMocks();
+    rstest.clearAllMocks();
   });
 
   test('should resolve with node when body is present', async () => {

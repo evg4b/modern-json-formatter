@@ -1,5 +1,5 @@
-import { HistoryResponse } from '@core/background';
-import { sortBy, take, uniq } from 'lodash';
+import { type HistoryResponse } from '@core/background';
+import { take, uniq } from 'es-toolkit';
 import { wait } from './helpers';
 
 interface QueryRecord {
@@ -30,7 +30,7 @@ const openDB = (): Promise<IDBDatabase> => {
   return wait(request as IDBRequest<IDBDatabase>);
 };
 
-export const getHistory = async ({ domain, prefix }: { domain: string, prefix: string }): Promise<HistoryResponse> => {
+export const getHistory = async ({ domain, prefix }: { domain: string; prefix: string }): Promise<HistoryResponse> => {
   const db = await openDB();
   try {
     const results = await wait(
@@ -40,7 +40,8 @@ export const getHistory = async ({ domain, prefix }: { domain: string, prefix: s
         .getAll(domain) as IDBRequest<QueryRecord[]>,
     );
 
-    const rows = sortBy(results, p => -p.id)
+    const rows = results
+      .toSorted((a, b) => b.id - a.id)
       .filter(({ query }) => query.startsWith(prefix))
       .map(({ query }) => query);
 
@@ -50,7 +51,7 @@ export const getHistory = async ({ domain, prefix }: { domain: string, prefix: s
   }
 };
 
-export const pushHistory = async ({ domain, query }: { domain: string, query: string }): Promise<void> => {
+export const pushHistory = async ({ domain, query }: { domain: string; query: string }): Promise<void> => {
   const db = await openDB();
   try {
     const store = db.transaction(STORE_NAME, 'readwrite')
@@ -84,7 +85,11 @@ export const clearHistory = async (): Promise<void> => {
   }
 };
 
-export interface DomainCount { domain: string, count: number }
+export interface DomainCount {
+  domain: string;
+  count: number;
+}
+
 export const getDomains = async (): Promise<DomainCount[]> => {
   const db = await openDB();
   try {
@@ -94,13 +99,13 @@ export const getDomains = async (): Promise<DomainCount[]> => {
 
     const results = await wait(index.getAll() as IDBRequest<QueryRecord[]>);
 
-    const rsp: DomainCount[]  = []
+    const rsp: DomainCount[] = [];
     for (const domain of uniq(results.map(({ domain }) => domain))) {
       const count = await wait(index.count(domain));
       rsp.push({ domain, count });
     }
 
-    return sortBy(rsp, p => -p.count);
+    return rsp.toSorted((a, b) => b.count - a.count);
   } finally {
     db.close();
   }

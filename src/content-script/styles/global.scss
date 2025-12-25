@@ -1,0 +1,7 @@
+@import "../../core/styles/variables";
+@import "../../core/styles/scroll-bars";
+
+:host {
+  @include variables();
+  @include scroll-bars();
+}

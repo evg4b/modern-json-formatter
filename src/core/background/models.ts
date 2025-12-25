@@ -1,6 +1,5 @@
 import type { format, jq, tokenize } from '@worker-core';
-import type { getDomains, getHistory, pushHistory } from '../../background/history';
-import { clearHistory, DomainCount } from '../../background/history';
+import { clearHistory, type DomainCount, type getDomains, type getHistory, type pushHistory } from '../../background/history';
 
 export { type TokenizerResponse } from '@worker-core';
 
@@ -45,13 +44,11 @@ export interface GetDomainsParams {
   payload: Payload<typeof getDomains>;
 }
 
-export type Message =
-  TokenizeParams
-  | JqParams
-  | FormatParams
-  | GetHistoryParams
-  | PushHistoryParams
-  | ClearHistoryParams
-  | GetDomainsParams;
-
-
+export type Message
+  = TokenizeParams
+    | JqParams
+    | FormatParams
+    | GetHistoryParams
+    | PushHistoryParams
+    | ClearHistoryParams
+    | GetDomainsParams;

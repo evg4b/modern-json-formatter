@@ -1,12 +1,20 @@
-import { getHistory } from '@core/background';
-import { resource } from '@core/browser';
-import { createElement, CustomElement, StyledComponentElement } from '@core/dom';
-import { debounce } from 'lodash';
-import { isNotNil } from '../../helpers';
-import { InfoButtonElement } from '../info-button';
-import { HistoryManager } from './history-manager';
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
-import queryInputStyles from './query-input.styles';
+import { throws } from '../../helpers';
+import { HistoryManager } from './history-manager';
+import { resource } from '@core/browser';
+import { AutocompleteController } from './autocomplete.controller';
+import { map } from 'lit/directives/map.js';
+import { boxingFixCss } from '@core/ui/styles';
+import { isNotNil } from 'es-toolkit';
+
+interface HistoryItem {
+  query: string;
+  start: number | null;
+  end: number | null;
+}
 
 export const brackets: Record<string, string> = {
   '[': ']',
@@ -17,125 +25,153 @@ export const brackets: Record<string, string> = {
   '`': '`',
 };
 
-interface HistoryItem {
-  query: string;
-  start: number | null;
-  end: number | null;
+export class JqQueryEvent extends CustomEvent<string> {
+  constructor(query: string) {
+    super('jq-query', { detail: query, bubbles: true, composed: true });
+  }
 }
 
-@CustomElement('query-input')
-export class QueryInputElement extends StyledComponentElement {
-  private readonly inputElement = this.createInput();
-  private readonly errorMessageElement = createElement({
-    element: 'span',
-    class: ['error-message', 'hidden'],
-  });
-  private readonly historyList = createElement({
-    element: 'datalist',
-    id: 'history-list',
-  });
-  private readonly wrapperElement = createElement({
-    element: 'div',
-    class: 'input-wrapper',
-    children: [
-      this.inputElement,
-      this.errorMessageElement,
-      this.historyList,
-    ],
-  });
-
-  private readonly infoIcons = new InfoButtonElement(resource('faq.html'));
-  private readonly history = new HistoryManager<HistoryItem>();
-
-  private onSubmitCallback: ((s: string) => unknown) | null = null;
-
-  constructor() {
-    super(queryInputStyles);
-    this.shadow.append(this.infoIcons, this.wrapperElement);
-    this.setupEventHandlers(this.inputElement);
-    this.saveState();
-    void this.loadHistory('');
+declare global {
+  interface HTMLElementEventMap {
+    'jq-query': JqQueryEvent;
   }
 
-  public setErrorMessage(errorMessage: string | null): void {
-    if (errorMessage) {
-      this.errorMessageElement.textContent = errorMessage;
-      this.errorMessageElement.classList.remove('hidden');
-    } else {
-      this.errorMessageElement.textContent = '';
-      this.errorMessageElement.classList.add('hidden');
+  interface HTMLElementTagNameMap {
+    'mjf-query-input': QueryInputElement;
+  }
+}
+
+@customElement('mjf-query-input')
+export class QueryInputElement extends LitElement {
+  public static override readonly styles = [
+    boxingFixCss,
+    css`
+      :host {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+      }
+
+      .input-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        position: relative;
+      }
+
+      input {
+        min-width: 200px;
+        min-height: 24px;
+        width: 30vw;
+        background: var(--input-background);
+        color: var(--input-color);
+        border: 1px solid var(--input-border-color);
+        border-radius: var(--input-border-radius);
+        padding: 0 5px;
+        outline: none;
+        transition-property: border-color, background, color;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in-out;
+        flex: 1 1 auto;
+        box-sizing: border-box;
+
+        &:hover {
+          background: var(--input-hover-background);
+          color: var(--input-hover-color);
+          border-color: var(--input-hover-border-color);
+        }
+
+        &:focus, &:focus-visible {
+          background: var(--input-focus-background);
+          color: var(--input-focus-color);
+          border-color: var(--input-focus-border-color);
+        }
+      }
+      
+      .error-message {
+        position: absolute;
+        top: calc(100% + 5px);
+        color: var(--error-color);
+        background: var(--error-background);
+        font-size: 10px;
+        user-select: none;
+        padding: 2px 5px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        width: 100%;
+      }
+    `,
+  ];
+
+  @property({ type: String })
+  public error: string | null = null;
+
+  private readonly historyManager = new HistoryManager<HistoryItem>();
+  private readonly autocomplete = new AutocompleteController(this, window.location.hostname);
+
+  private readonly inputRef = createRef<HTMLInputElement>();
+
+  private get inputElement() {
+    return this.inputRef.value ?? throws('input element is not defined');
+  }
+
+  private readonly url = resource('faq.html');
+
+  public override render() {
+    return html`
+      <mjf-info-button .url=${this.url}></mjf-info-button>
+      <div class="input-wrapper">
+        <input type="text"
+               placeholder="Input jq query..."
+               list="history-list"
+               @keydown=${this.onKeydown}
+               @input=${this.onInput}
+               ${ref(this.inputRef)}
+        />
+        <datalist id="history-list">
+          ${map(this.autocomplete.options, query => html`
+            <option value=${query}>${query}</option>
+          `)}
+        </datalist>
+        ${this.renderError()}
+      </div>
+    `;
+  }
+
+  public override firstUpdated() {
+    this.inputElement.focus();
+    this.saveState();
+  }
+
+  private renderError() {
+    if (!this.error) {
+      return '';
+    }
+
+    return html`
+      <div class="error-message">
+        ${this.error}
+      </div>
+    `;
+  }
+
+  private onKeydown(event: KeyboardEvent) {
+    this.error = null;
+    if (isSubmitEvent(event)) {
+      this.dispatchEvent(new JqQueryEvent(this.inputElement.value));
+    } else if (isWrapEvent(event, brackets)) {
+      this.onWrapEvent(event);
+    } else if (isUndoEvent(event)) {
+      this.onUndoEvent(event);
+    } else if (isRedoEvent(event)) {
+      this.onRedoEvent(event);
     }
   }
 
-  public onSubmit(callback: (s: string) => void | Promise<void>): void {
-    this.onSubmitCallback = callback;
+  private onInput() {
+    this.saveState();
+    void this.autocomplete.updateHistory(this.inputElement.value);
   }
-
-  public focus(): void {
-    this.inputElement.focus();
-  }
-
-  public blur(): void {
-    this.inputElement.blur();
-  }
-
-  public hide(): void {
-    this.style.display = 'none';
-  }
-
-  public show(): void {
-    this.style.display = 'flex';
-  }
-
-  private createInput(): HTMLInputElement {
-    const input = createElement({
-      element: 'input',
-      attributes: {
-        list: 'history-list',
-      },
-    });
-    input.type = 'text';
-    input.placeholder = 'Input jq query...';
-
-    return input;
-  }
-
-  private setupEventHandlers(input: HTMLInputElement) {
-    input.addEventListener('keydown', event => {
-      this.setErrorMessage(null);
-      if (isSubmitEvent(event)) {
-        this.onSubmitEvent();
-      } else if (isWrapEvent(event, brackets)) {
-        this.onWrapEvent(event);
-      } else if (isUndoEvent(event)) {
-        this.onUndoEvent(event);
-      } else if (isRedoEvent(event)) {
-        this.onRedoEvent(event);
-      }
-    });
-
-    input.addEventListener('input', () => {
-      this.saveState();
-      void this.loadHistory(this.inputElement.value);
-    });
-  }
-
-  private onSubmitEvent() {
-    this.onSubmitCallback?.(this.inputElement.value);
-  }
-
-  private readonly loadHistory = debounce(async (prefix: string) => {
-    const history = await getHistory(window.location.hostname, prefix);
-    this.historyList.querySelectorAll('option').forEach(option => option.remove());
-    history.forEach(query => {
-      const option = createElement({
-        element: 'option',
-        attributes: { value: query },
-        content: query,
-      });
-      this.historyList.appendChild(option);
-    });
-  }, 150);
 
   private onWrapEvent(event: KeyboardEvent) {
     const start = this.inputElement.selectionStart ?? 0;
@@ -143,7 +179,7 @@ export class QueryInputElement extends StyledComponentElement {
     if (isNotNil(start) && isNotNil(end) && start !== end) {
       event.preventDefault();
       const selectedText = this.inputElement.value.substring(start, end);
-      this.inputElement.setRangeText(`${ event.key }${ selectedText }${ brackets[event.key] }`);
+      this.inputElement.setRangeText(`${event.key}${selectedText}${brackets[event.key]}`);
       this.inputElement.setSelectionRange(start + 1, end + 1);
       this.saveState();
     }
@@ -151,18 +187,18 @@ export class QueryInputElement extends StyledComponentElement {
 
   private onUndoEvent(event: KeyboardEvent) {
     event.preventDefault();
-    const previousState = this.history.undo();
+    const previousState = this.historyManager.undo();
     this.restoreState(previousState);
   }
 
   private onRedoEvent(event: KeyboardEvent) {
     event.preventDefault();
-    const nextState = this.history.redo();
+    const nextState = this.historyManager.redo();
     this.restoreState(nextState);
   }
 
   private saveState() {
-    this.history.save({
+    this.historyManager.save({
       query: this.inputElement.value,
       start: this.inputElement.selectionStart,
       end: this.inputElement.selectionEnd,

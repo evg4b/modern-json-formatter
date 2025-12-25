@@ -1,4 +1,7 @@
-jest.mock('@core/browser', () => ({
-  resource: jest.fn((s: string) => s),
-  sendMessage: jest.fn(() => Promise.resolve()),
+import { rstest } from '@rstest/core';
+import { identity } from 'es-toolkit';
+
+rstest.mock('@core/browser', () => ({
+  resource: rstest.fn(identity),
+  sendMessage: rstest.fn(() => Promise.resolve()),
 }));

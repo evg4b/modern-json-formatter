@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Rstest Snapshot v1
 
-exports[`error-node should render error node 1`] = `
+exports[`error-node > should render error node 1`] = `
 <div
   class="error"
 >

@@ -6,7 +6,7 @@ export const importWasm = async (go: Go, wasmFile: string) => {
 
   void go
     .run(webAssemblyInstance.instance)
-    .then(() => console.log(`Wasm module ${ wasmFile } loaded successfully`))
+    .then(() => console.log(`Wasm module ${wasmFile} loaded successfully`))
     .catch((error: unknown) => console.error(error))
     .finally(() => console.log('Wasm module loaded'));
 };

@@ -1,1 +1,1 @@
-export * from './query-input';
+export { QueryInputElement } from './query-input';

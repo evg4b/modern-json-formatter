@@ -5,6 +5,6 @@ export const loadWasm = (url: string, imports: Imports): Promise<WebAssemblyInst
   return 'instantiateStreaming' in WebAssembly
     ? WebAssembly.instantiateStreaming(fetch(url), imports)
     : fetch(url)
-        .then(resp => resp.arrayBuffer())
-        .then(bytes => WebAssembly.instantiate(bytes, imports));
+      .then(resp => resp.arrayBuffer())
+      .then(bytes => WebAssembly.instantiate(bytes, imports));
 };

@@ -1,102 +1,105 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import '@testing/browser.mock';
-import '@testing/query-input.mock';
-import { beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { getShadowRoot } from '@testing/styled-component';
-import { type QueryInputElement } from '../query-input';
-import { ToolboxElement } from './toolbox';
+import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
+import { TabChangedEvent, ToolboxElement } from './toolbox';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
+import { ButtonElement } from '@core/ui/button';
+import { without } from 'es-toolkit';
 
-describe('Toolbox', () => {
+describe('mjf-toolbox', () => {
   let toolbox: ToolboxElement;
-  let shadowRoot: ShadowRoot;
 
-  beforeEach(() => {
-    toolbox = new ToolboxElement();
-    shadowRoot = getShadowRoot(toolbox);
-  });
+  renderLitElement('mjf-toolbox', element => toolbox = element);
 
-  describe('button', () => {
-    const cases = [
-      { name: 'raw', selector: `button[ref="raw"]` },
-      { name: 'formatted', selector: `button[ref="formatted"]` },
-      { name: 'query', selector: `button[ref="query"]` },
-    ];
+  defaultLitAsserts(ToolboxElement, () => toolbox);
 
-    describe.each(cases)(`$name`, ({ name, selector }) => {
-      let button: HTMLButtonElement | null;
+  const mapping = { Raw: 'raw', Formatted: 'formatted', Query: 'query' } as const;
 
-      beforeEach(() => {
-        button = shadowRoot.querySelector<HTMLButtonElement>(selector);
-      });
+  const buttonNames = Object.keys(mapping) as (keyof typeof mapping)[];
+  const buttonValues = Object.values(mapping) as TabType[];
 
-      test('should exists', () => {
-        expect(button).toBeTruthy();
-      });
-
-      test(`should match to snapshot`, () => {
-        expect(button).toMatchSnapshot();
-      });
-
-      test(`should have handle click`, () => {
-        const handler = jest.fn();
-        toolbox.onTabChanged(handler);
-        button?.click();
-
-        expect(handler).toHaveBeenCalledWith(name);
-      });
-    });
-  });
-
-  describe('input', () => {
-    let input: QueryInputElement | null;
+  describe('buttons', () => {
+    let buttons: ButtonElement[];
 
     beforeEach(() => {
-      input = shadowRoot.querySelector<QueryInputElement>('query-input');
+      buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('mjf-button') ?? []);
     });
 
-    test('should exists', () => {
-      expect(input).toBeTruthy();
+    test('should have 3 buttons', () => {
+      expect(buttons).toHaveLength(3);
     });
 
-    test('should be hided by default', () => {
-      expect(input?.hide).toHaveBeenCalled();
+    test.each(buttonNames)('should have a %s button', buttonName => {
+      expect(buttons.find(b => b.innerText.trim() === buttonName)).toBeDefined();
     });
 
-    describe('after query button click', () => {
-      beforeEach(() => {
-        shadowRoot.querySelector<HTMLButtonElement>('button[ref="query"]')?.click();
+    describe('by default', () => {
+      test('Formatted should be active', () => {
+        const button = buttons.find(b => b.innerText.trim() === 'Formatted');
+        expect(button?.active).toBe(true);
       });
 
-      test('should be visible', () => {
-        expect(input?.show).toHaveBeenCalledTimes(1);
-      });
-
-      test('should be focused', () => {
-        expect(input?.focus).toHaveBeenCalledTimes(1);
-      });
-
-      test('should be hidden after raw button click', () => {
-        shadowRoot.querySelector<HTMLButtonElement>('button[ref="raw"]')?.click();
-        expect(input?.hide).toHaveBeenCalledTimes(2);
+      test.each(['Raw', 'Query'])('%s should be inactive', () => {
+        const button = buttons.find(b => b.innerText.trim() === 'Raw');
+        expect(button?.active).toBe(false);
       });
     });
 
-    test(`should set error to the input`, () => {
-      const errorMessage = 'Test error message';
+    describe.each(buttonNames)('after clicking %s button', buttonName => {
+      let handler: Mock<(event: TabChangedEvent) => void>;
 
-      toolbox.setErrorMessage(errorMessage);
+      beforeEach(async () => {
+        handler = rstest.fn();
 
-      expect(input?.setErrorMessage).toHaveBeenCalledWith(errorMessage);
+        toolbox.addEventListener('tab-changed', handler);
+
+        buttons.find(b => b.innerText.trim() === buttonName)
+          ?.click();
+        await toolbox.updateComplete;
+      });
+
+      test.each(without(buttonNames, buttonName))('%s button should be inactive', buttonName => {
+        expect(buttons.find(b => b.innerText.trim() === buttonName)?.active)
+          .toBe(false);
+      });
+
+      test(`${buttonName} button should be active`, () => {
+        expect(buttons.find(b => b.innerText.trim() === buttonName)?.active)
+          .toBe(true);
+      });
+
+      test('should emit tab-changed event', () => {
+        expect(handler).toHaveBeenCalledTimes(1);
+
+        const event = handler.mock.calls[0][0];
+
+        expect(event).toBeInstanceOf(TabChangedEvent);
+        expect(event.detail).toBe(mapping[buttonName]);
+        expect(event.type).toBe('tab-changed');
+      });
+    });
+  });
+
+  describe.each(without(buttonValues, 'query'))('should reflect tab="%s" property', tabValue => {
+    beforeEach(async () => {
+      toolbox.tab = tabValue;
+      await toolbox.updateComplete;
     });
 
-    test(`should set submit handler on the input`, () => {
-      const handler = () => {
-        // stub for test
-      };
+    test('should not render input', () => {
+      expect(toolbox.shadowRoot?.querySelector('mjf-query-input'))
+        .toBeNull();
+    });
+  });
 
-      toolbox.onQueryChanged(handler);
+  describe('should reflect tab="query" property', () => {
+    beforeEach(async () => {
+      toolbox.tab = 'query';
+      await toolbox.updateComplete;
+    });
 
-      expect(input?.onSubmit).toHaveBeenCalledWith(handler);
+    test('should render input', () => {
+      expect(toolbox.shadowRoot?.querySelector('mjf-query-input'))
+        .toBeDefined();
     });
   });
 });

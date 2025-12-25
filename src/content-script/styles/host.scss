@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Monaco', Arial, sans-serif;
+  padding: var(--container-padding, 30px);
+  background: var(--background);
+  color: var(--base-text-color);
+  font-size: var(--font-size, 14px);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+
+  pre {
+    margin: 0;
+    padding: 0;
+    text-wrap: pretty;
+    word-wrap: break-word;
+    font-family: 'Monaco', Arial, sans-serif;
+    font-size: var(--font-size, 14px);
+  }
+}
+

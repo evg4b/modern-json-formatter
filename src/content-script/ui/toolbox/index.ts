@@ -1,1 +1,1 @@
-export * from './toolbox';
+export { ToolboxElement } from './toolbox';

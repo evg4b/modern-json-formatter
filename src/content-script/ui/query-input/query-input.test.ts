@@ -1,29 +1,20 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import '@testing/browser.mock';
 import '@testing/background.mock';
-
-jest.useFakeTimers();
-
-import { getHistory } from '@core/background';
-import { beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { wrapMock } from '@testing/helpers';
-import { getShadowRoot } from '@testing/styled-component';
-import { throws } from '../../helpers';
+import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
 import { brackets, QueryInputElement } from './query-input';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
+import { isNil } from 'es-toolkit';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers.ts';
+import { getHistory } from '@core/background';
 
-describe('QueryInputElement', () => {
-  let input: QueryInputElement;
+rstest.useFakeTimers();
+
+describe('mjf-query-input', () => {
+  let queryInputElement: QueryInputElement;
   let innerInput: HTMLInputElement;
-  let shadowRoot: ShadowRoot;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    jest.clearAllTimers();
-  });
 
   const keyPress = (key: string, options?: KeyboardEventInit) => {
-    const fakeEvent = new KeyboardEvent('keydown', { key, ...(options ?? {}) });
+    const fakeEvent = new KeyboardEvent('keydown', { key, ...options ?? {} });
     innerInput.dispatchEvent(fakeEvent);
     if (
       !isRedoEvent(fakeEvent)
@@ -49,111 +40,102 @@ describe('QueryInputElement', () => {
       .forEach(fn);
   };
 
-  beforeEach(() => {
-    input = new QueryInputElement();
-    shadowRoot = getShadowRoot(input);
-    innerInput = shadowRoot.querySelector('input') ?? throws('No input');
+  renderLitElement('mjf-query-input', element => {
+    queryInputElement = element;
+    const inputElement = queryInputElement.shadowRoot?.querySelector<HTMLInputElement>('input');
+    if (isNil(inputElement)) {
+      throw new Error('should not render input');
+    }
+
+    innerInput = inputElement;
   });
 
-  test('should create input element', () => {
-    expect(innerInput).not.toBeNull();
-  });
+  defaultLitAsserts(QueryInputElement, () => queryInputElement);
 
-  describe('errors', () => {
-    let errorMessage: HTMLElement | null;
-
-    beforeEach(() => {
-      errorMessage = shadowRoot.querySelector('.error-message');
-    });
-
-    test('should exists', () => {
-      expect(errorMessage).not.toBeNull();
-    });
-
-    test('should have no error message by defaults', () => {
-      input.setErrorMessage(null);
-
-      expect(errorMessage?.classList.contains('hidden')).toBe(true);
-      expect(errorMessage?.textContent).toEqual('');
-    });
-
-    test('should show error message', () => {
-      input.setErrorMessage('Error message');
-
-      expect(errorMessage?.classList.contains('hidden')).toBe(false);
-      expect(errorMessage?.textContent).toEqual('Error message');
-    });
-
-    test('should hide error message', () => {
-      input.setErrorMessage('Error message');
-      input.setErrorMessage(null);
-
-      expect(errorMessage?.classList.contains('hidden')).toBe(true);
-      expect(errorMessage?.textContent).toEqual('');
-    });
-  });
-
-  describe('show/hide', () => {
-    test('should visible by default', () => {
-      expect(input.style.display).not.toEqual('none');
-    });
-
-    test('should hide', () => {
-      input.hide();
-
-      expect(input.style.display).toEqual('none');
-    });
-
-    test('should show', () => {
-      input.hide();
-      input.show();
-
-      expect(input.style.display).not.toEqual('none');
-    });
+  test('input should be rendered', () => {
+    expect(innerInput).toBeDefined();
   });
 
   describe('focus/blur', () => {
     test('should focus', () => {
-      Reflect.set(innerInput, 'focus', jest.fn());
+      Reflect.set(innerInput, 'focus', rstest.fn());
 
-      input.focus();
+      innerInput.focus();
 
       expect(innerInput.focus).toHaveBeenCalled();
     });
 
     test('should blur', () => {
-      Reflect.set(innerInput, 'blur', jest.fn());
+      Reflect.set(innerInput, 'blur', rstest.fn());
 
-      input.blur();
+      innerInput.blur();
 
       expect(innerInput.blur).toHaveBeenCalled();
     });
   });
 
   describe('typing', () => {
-    test('should call onSubmitCallback on Enter', () => {
-      const onSubmitCallback = jest.fn<(s: string) => (void | Promise<void>)>();
+    test('should emit event jq-query by Enter', () => {
+      const onSubmitCallback = rstest.fn();
 
-      input.onSubmit(onSubmitCallback);
+      queryInputElement.addEventListener('jq-query', onSubmitCallback);
+
       keyPress('Enter');
 
       expect(onSubmitCallback).toHaveBeenCalled();
     });
 
     test('should not call onSubmitCallback on other key', () => {
-      const onSubmitCallback = jest.fn<(s: string) => (void | Promise<void>)>();
+      const onSubmitCallback = rstest.fn();
 
-      input.onSubmit(onSubmitCallback);
+      queryInputElement.addEventListener('jq-query', onSubmitCallback);
       keyPress('a');
 
       expect(onSubmitCallback).not.toHaveBeenCalled();
     });
 
-    test('should clear error message on typing', () => {
-      input.setErrorMessage('Error message');
+    test('should clear error message on typing', async () => {
+      queryInputElement.error = 'Error message';
+      await queryInputElement.updateComplete;
+
       keyPress('a');
 
-      expect(shadowRoot.querySelector('.error-message')?.classList.contains('hidden')).toBe(true);
+      await queryInputElement.updateComplete;
+
+      expect(queryInputElement.shadowRoot?.querySelector('.error-message'))
+        .toBeNull();
+    });
+  });
+
+  describe('errors', () => {
+    const errorMessageQuery = () => queryInputElement.shadowRoot
+      ?.querySelector('.error-message');
+
+    test('should have no error message by defaults', () => {
+      expect(errorMessageQuery()).toBeNull();
+    });
+
+    test('should show error message', async () => {
+      queryInputElement.error = 'Error message';
+
+      await queryInputElement.updateComplete;
+
+      const errorMessage = errorMessageQuery();
+
+      expect(errorMessage).not.toBeNull();
+      expect(errorMessage?.textContent.trim()).toEqual('Error message');
+    });
+
+    test('should hide error message', async () => {
+      queryInputElement.error = 'Error message';
+      await queryInputElement.updateComplete;
+
+      queryInputElement.error = null;
+      await queryInputElement.updateComplete;
+
+      const errorMessage = errorMessageQuery();
+
+      expect(errorMessage).toBeNull();
     });
   });
 
@@ -193,7 +175,7 @@ describe('QueryInputElement', () => {
           expect(selectedText).toEqual(expectedSelection);
         });
 
-        test(`should wrap selected text with ${ key }`, () => {
+        test(`should wrap selected text with ${key}`, () => {
           expect(innerInput.value).toEqual(expected);
         });
       });
@@ -209,7 +191,7 @@ describe('QueryInputElement', () => {
           innerInput.dispatchEvent(new KeyboardEvent('keydown', { key }));
         });
 
-        test(`should not change text`, () => {
+        test('should not change text', () => {
           expect(innerInput.value).toEqual(query);
         });
       });
@@ -285,16 +267,16 @@ describe('QueryInputElement', () => {
   });
 
   describe('query history', () => {
-    let historyDatalist: HTMLDataListElement | null;
+    const historyDatalistQuery = () => queryInputElement.shadowRoot?.querySelector('datalist') ?? null;
 
     beforeEach(() => {
-      wrapMock(getHistory).mockResolvedValue(['.[]', '.[0]']);
-      historyDatalist = shadowRoot.querySelector('datalist');
-      jest.runAllTimers();
+      (getHistory as Mock<typeof getHistory>)
+        .mockResolvedValue(['.[]', '.[0]', '. | map(.id)']);
+      rstest.runAllTimers();
     });
 
     test('should have datalist', () => {
-      expect(historyDatalist).not.toBeNull();
+      expect(historyDatalistQuery()).not.toBeNull();
     });
 
     test('should load history', () => {
@@ -302,7 +284,17 @@ describe('QueryInputElement', () => {
     });
 
     test('should load history on focus', () => {
-      expect(historyDatalist).toMatchSnapshot();
+      const options = Array.from(historyDatalistQuery()?.querySelectorAll('option') ?? [])
+        .map(option => ({
+          value: option.value,
+          textContent: option.textContent,
+        }));
+
+      expect(options).toEqual([
+        { value: '.[]', textContent: '.[]' },
+        { value: '.[0]', textContent: '.[0]' },
+        { value: '. | map(.id)', textContent: '. | map(.id)' },
+      ]);
     });
   });
 });

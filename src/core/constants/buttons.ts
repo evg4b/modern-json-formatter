@@ -10,5 +10,5 @@ export const BUTTONS = {
   KO_FI: {
     URL: 'https://ko-fi.com/evg4b',
     TITLE: 'Support project on KO-FI',
-  }
-}
+  },
+};

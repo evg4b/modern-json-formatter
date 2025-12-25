@@ -1,25 +1,21 @@
 import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
-import { resource } from '@core/browser';
 import { createElement } from '@core/dom';
-import { registerStyle, registerStyleLink } from '@core/ui/helpers';
+import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
 import { isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers, FloatingMessageElement, ToolboxElement } from './ui';
+import { buildContainers } from './ui';
+import './ui/toolbox';
+import '@core/ui/floating-message';
+import '@core/ui/sticky-panel';
+import { TabChangedEvent } from './ui/toolbox/toolbox';
+
+import contentStyles from './content-script.scss?inline';
+import rootStyles from './root-styles.scss?inline';
 
 export const ONE_MEGABYTE_LENGTH = 927182; // This is approximately 1MB
 export const LIMIT = ONE_MEGABYTE_LENGTH * 3;
-
-const staticStyles = `:host {
-  background-color: var(--background, #282828);
-  color: var(--base-text-color, #282828);
-  display: block;
-  @media (prefers-color-scheme: light) {
-    background-color: var(--background, #f3f3f3);
-    color: var(--base-text-color, #1f1f1f);
-  }
-}`;
 
 export const runExtension = async () => {
   const preNode = await findNodeWithCode();
@@ -27,9 +23,11 @@ export const runExtension = async () => {
     return;
   }
 
+  registerStyle(document.head, rootStyles);
+
+  // eslint-disable-next-line wc/no-closed-shadow-root
   const shadowRoot = document.body.attachShadow({ mode: 'closed' });
-  registerStyle(shadowRoot, staticStyles);
-  registerStyleLink(shadowRoot, resource('content-styles.css'));
+  registerStyle(shadowRoot, contentStyles);
 
   const content = preNode.textContent;
   isNotNull(content, 'No data found');
@@ -52,10 +50,16 @@ export const runExtension = async () => {
       content: formatted,
     }));
 
-    rootContainer.appendChild(new FloatingMessageElement(
-      'File is too large',
-      'File is too large to be processed (More than 3MB). It has been formatted instead.',
-    ));
+    const creeated = createElement({
+      element: 'mjf-floating-message',
+      attributes: {
+        type: 'info-message',
+        header: 'File is too large',
+      },
+      content: 'File is too large to be processed (More than 3MB). It has been formatted instead.',
+    });
+
+    rootContainer.appendChild(creeated);
 
     rootContainer.classList.remove('loading');
 
@@ -74,39 +78,12 @@ export const runExtension = async () => {
   };
 
   setTimeout(() => {
-    const toolbox = new ToolboxElement();
-    shadowRoot.appendChild(toolbox);
+    const toolbox = document.createElement('mjf-toolbox');
+    const panel = document.createElement('mjf-sticky-panel');
+    panel.appendChild(toolbox);
 
-    const jqQuery = async (query: string) => {
-      try {
-        const info = await jq(preNode.innerText, query);
-        queryContainer.innerHTML = '';
-        queryContainer.appendChild(prepareResponse(info));
-        await pushHistory(window.location.hostname, query);
-      } catch (error: unknown) {
-        if (isErrorNode(error)) {
-          if (error.scope === 'jq') {
-            toolbox.setErrorMessage(error.error);
-            return;
-          }
-
-          rootContainer.appendChild(new FloatingMessageElement(
-            `Error ${ error.error } in ${ error.scope }`,
-            error.stack ? `Stack trace: ${ error.stack }` : '',
-            'error-message',
-          ));
-        }
-
-        console.error(error);
-      }
-    };
-
-    toolbox.onQueryChanged(async query => {
-      await wrapper(jqQuery(query));
-    });
-
-    toolbox.onTabChanged(tab => {
-      switch (tab) {
+    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
+      switch (event.detail) {
         case 'query':
           rootContainer.classList.remove('raw', 'formatted');
           rootContainer.classList.add('query');
@@ -121,6 +98,42 @@ export const runExtension = async () => {
           return;
       }
     });
+
+    toolbox.addEventListener('jq-query', async event => {
+      await wrapper(jqQuery(event.detail));
+    });
+
+    shadowRoot.appendChild(panel);
+
+    const jqQuery = async (query: string) => {
+      try {
+        const info = await jq(preNode.innerText, query);
+        queryContainer.innerHTML = '';
+        queryContainer.appendChild(prepareResponse(info));
+        // use globalThis for portability (Sonar: prefer globalThis over window)
+        await pushHistory(globalThis.location.hostname, query);
+      } catch (error: unknown) {
+        if (isErrorNode(error)) {
+          if (error.scope === 'jq') {
+            toolbox.error = error.error;
+            return;
+          }
+
+          const errorMessage = createElement({
+            element: 'mjf-floating-message',
+            attributes: {
+              type: 'error-message',
+              header: `Error ${error.error} in ${error.scope}`,
+            },
+            content: error.stack ? `Stack trace: ${error.stack}` : '',
+          });
+
+          rootContainer.appendChild(errorMessage);
+        }
+
+        console.error(error);
+      }
+    };
   });
 
   const response = await wrapper(tokenize(preNode.innerText));
@@ -128,6 +141,8 @@ export const runExtension = async () => {
     prepareResponse(response),
   );
   rootContainer.classList.remove('loading');
+
+  return undefined;
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
@@ -135,4 +150,3 @@ const prepareResponse = (response: TokenizerResponse): HTMLElement => {
     ? buildErrorNode('Invalid JSON file.', response.error)
     : buildDom(response);
 };
-

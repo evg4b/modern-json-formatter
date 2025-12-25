@@ -1,18 +1,18 @@
-import '@webcomponents/custom-elements';
 import { wrapMock } from '@testing/helpers';
-import { noop } from 'lodash';
+import { noop } from 'es-toolkit';
 import { runExtension } from './extension';
+import { afterAll, beforeAll, describe, expect, rstest, test } from '@rstest/core';
 
-jest.mock('./extension', () => ({
-  runExtension: jest.fn(),
+rstest.mock('./extension', () => ({
+  runExtension: rstest.fn(),
 }));
 
 describe('main', () => {
   const error = new Error('Test error');
-  let consoleErrorSpy: jest.SpyInstance;
+  let consoleErrorSpy: ReturnType<typeof rstest.spyOn>;
 
   beforeAll(async () => {
-    consoleErrorSpy = jest.spyOn(console, 'error')
+    consoleErrorSpy = rstest.spyOn(console, 'error')
       .mockImplementation(noop);
 
     wrapMock(runExtension).mockRejectedValueOnce(error);

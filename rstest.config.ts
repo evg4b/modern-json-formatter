@@ -7,6 +7,13 @@ export default defineConfig({
   testEnvironment: 'happy-dom',
   globals: true,
   logHeapUsage: true,
+  resolve: {
+    conditionNames: [
+      'browser',
+      'import',
+      'production',
+    ],
+  },
   include: [
     'worker-core/**/*.test.ts',
     'src/**/*.test.ts',

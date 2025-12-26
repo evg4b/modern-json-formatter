@@ -1,6 +1,6 @@
 import './wasm_exec';
 import '@testing/wasm';
-import { beforeEach, describe, expect, test, afterEach, rstest } from '@rstest/core';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { format, jq, tokenize } from './index';
 import { importWasm } from './wasm';
@@ -12,8 +12,17 @@ describe('worker-core', () => {
     { name: 'non-void and not string value', value: ['xxx'] as unknown as string },
   ];
 
+  beforeAll(() => {
+    rstest.spyOn(console, 'log')
+      .mockReturnValue();
+  });
+
   beforeEach(() => {
     wrapMock(importWasm).mockClear();
+  });
+
+  afterAll(() => {
+    rstest.resetAllMocks();
   });
 
   const globalFactory = (key: string) => {

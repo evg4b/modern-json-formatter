@@ -1,6 +1,6 @@
 import './wasm_exec';
 import '@testing/browser.mock';
-import { beforeAll, describe, expect, test } from '@rstest/core';
+import { afterAll, beforeAll, describe, expect, test } from '@rstest/core';
 import { tNumber, tObject, tProperty } from '@testing';
 import { readFileSync } from 'fs';
 import { format, initialize, jq, tokenize } from './index';
@@ -14,6 +14,15 @@ rstest.mock('./helpers.ts', () => ({
 }));
 
 describe('worker-core.wasm', () => {
+  beforeAll(() => {
+    rstest.spyOn(console, 'log')
+      .mockReturnValue();
+  });
+
+  afterAll(() => {
+    rstest.resetAllMocks();
+  });
+
   beforeAll(() => initialize());
 
   describe('tokenize', () => {

@@ -3351,6 +3351,7 @@ __metadata:
     lit: "npm:^3.3.1"
     marked: "npm:^17.0.1"
     marked-gfm-heading-id: "npm:^4.1.3"
+    rsbuild-lit-markdown: "npm:^1.0.1"
     typed-assert: "npm:^1.0.9"
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.50.0"
@@ -3871,6 +3872,20 @@ __metadata:
     hash-base: "npm:^3.1.2"
     inherits: "npm:^2.0.4"
   checksum: 10c0/3f472fb453241cfe692a77349accafca38dbcdc9d96d5848c088b2932ba41eb968630ecff7b175d291c7487a4945aee5a81e30c064d1f94e36070f7e0c37ed6c
+  languageName: node
+  linkType: hard
+
+"rsbuild-lit-markdown@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "rsbuild-lit-markdown@npm:1.0.1"
+  peerDependencies:
+    "@rsbuild/core": 1.x
+    lit: ~3.3.2
+    marked: ~17.0.1
+  peerDependenciesMeta:
+    "@rsbuild/core":
+      optional: true
+  checksum: 10c0/f09cd6a1064076292d9946d7f801285cf1bf2d51d1a583e5de36c594ccf21b70bda66582a8fd4a398f9d7d657e728e7ba9bbae54817c780195bd5a8d6096967a
   languageName: node
   linkType: hard
 

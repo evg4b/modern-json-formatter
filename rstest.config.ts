@@ -1,6 +1,7 @@
 import { defineConfig } from '@rstest/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { mdPlugin } from './rsbuild.md.plugin';
+import { litMarkdown } from 'rsbuild-lit-markdown';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
 
 export default defineConfig({
   testEnvironment: 'happy-dom',
@@ -25,7 +26,9 @@ export default defineConfig({
   },
   plugins: [
     pluginSass(),
-    mdPlugin(),
+    litMarkdown({
+      extensions: [gfmHeadingId({ prefix: 'mjf-' })],
+    }),
   ],
   source: {
     decorators: {

@@ -8,7 +8,7 @@ describe('demo', () => {
   });
 
   test('format', () => {
-    expect(format('Hello {name}!')).toEqual('Hello {name}!');
+    expect(format('{"asd":123123}')).toEqual('Hello {name}!');
   });
 
   test('tokenize', () => {

@@ -61,7 +61,7 @@ export const buildNode = (object: TokenNode): HTMLElement => {
       return buildStringNode(object);
     case 'number':
       return buildNumberNode(object);
-    case 'bool':
+    case 'boolean':
       return buildBoolNode(object);
     case 'null':
       return buildNullNode();

@@ -42,10 +42,10 @@ describe('buildDom', () => {
                 type: 'array',
                 items: [
                   { type: 'null' },
-                  { type: 'bool', value: true },
+                  { type: 'boolean', value: true },
                   {
                     value: false,
-                    type: 'bool',
+                    type: 'boolean',
                   },
                   { type: 'number', value: '1' },
                   { type: 'number', value: '1234567890' },
@@ -112,7 +112,7 @@ describe('buildDom', () => {
                                                       {
                                                         key: '7',
                                                         value: {
-                                                          type: 'bool',
+                                                          type: 'boolean',
                                                           value: true,
                                                         },
                                                       },
@@ -162,7 +162,7 @@ describe('buildDom', () => {
                                                 {
                                                   key: 'deeper',
                                                   value: {
-                                                    type: 'bool',
+                                                    type: 'boolean',
                                                     value: false,
                                                   },
                                                 },
@@ -269,7 +269,7 @@ describe('buildDom', () => {
         { name: 'empty array', input: tArray() },
         { name: 'string', input: tString('foo') },
         { name: 'number', input: tNumber('1') },
-        { name: 'bool', input: tBool(true) },
+        { name: 'boolean', input: tBool(true) },
         { name: 'null', input: tNull() },
       ];
 
@@ -341,7 +341,7 @@ describe('buildDom', () => {
         { name: 'empty array', input: tArray() },
         { name: 'string', input: tString('foo') },
         { name: 'number', input: tNumber('1') },
-        { name: 'bool', input: tBool(true) },
+        { name: 'boolean', input: tBool(true) },
         { name: 'null', input: tNull() },
       ];
 

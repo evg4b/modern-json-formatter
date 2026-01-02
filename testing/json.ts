@@ -12,7 +12,7 @@ import type {
 
 export const tNull = (): NullNode => ({ type: 'null' });
 export const tBool = (value: boolean): BooleanNode => ({
-  type: 'bool',
+  type: 'boolean',
   value: value,
 });
 export const tString = (value: string): StringNode => ({

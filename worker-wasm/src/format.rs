@@ -1,6 +1,6 @@
 use serde_json::Value;
-use wasm_bindgen::JsError;
 use wasm_bindgen::prelude::wasm_bindgen;
+use wasm_bindgen::JsError;
 
 #[wasm_bindgen]
 pub fn format(input: &str) -> Result<String, JsError> {

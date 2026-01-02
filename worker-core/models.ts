@@ -30,7 +30,7 @@ export interface NumberNode {
 }
 
 export interface BooleanNode {
-  type: 'bool';
+  type: 'boolean';
   value: boolean;
 }
 

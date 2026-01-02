@@ -7,16 +7,26 @@ pub struct Property {
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(tag = "type", content = "value", rename_all = "lowercase")] // для enum с разными вариантами
+#[serde(tag = "type", rename_all = "lowercase")] // для enum с разными вариантами
 pub enum ResultValue {
     Null,
-    Object(Vec<Property>),
-    Array(Vec<ResultValue>),
+    Object {
+        properties: Vec<Property>,
+    },
+    Array {
+        items: Vec<ResultValue>,
+    },
     String {
         value: String,
         variant: Option<String>,
     },
-    Number(String),
-    Boolean(bool),
-    Tuple(Vec<ResultValue>),
+    Number {
+        value: String,
+    },
+    Boolean {
+        value: bool,
+    },
+    Tuple {
+        items: Vec<ResultValue>,
+    },
 }

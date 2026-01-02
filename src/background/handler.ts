@@ -1,6 +1,7 @@
 import { DomainCountResponse, HistoryResponse, Message, TokenizerResponse } from '@core/background';
-import { ErrorNode, format, jq, tokenize } from '@worker-core';
+import { ErrorNode, jq, tokenize } from '@worker-core';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
+import { format } from '../../worker-wasm/pkg';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
 
@@ -10,7 +11,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
       case 'tokenize':
         return await tokenize(message.payload);
       case 'format':
-        return await format(message.payload);
+        return format(message.payload);
       case 'jq':
         return await jq(message.payload);
       case 'get-history':

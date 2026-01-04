@@ -1,4 +1,4 @@
-name: CI (nodejs and golang)
+name: CI
 
 on:
   push:
@@ -14,32 +14,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: 'worker-core/go.mod'
-          cache-dependency-path: |
-            worker-core/go.mod
-            worker-core/go.sum
-
-
-      - name: Set up TinyGo
-        uses: acifani/setup-tinygo@v2
-        with:
-          tinygo-version: '0.35.0'
-
-      - name: Build worker wasm
-        working-directory: ./worker-core
-        run: make
-
-      - name: Test Go code
-        working-directory: ./worker-core
-        run: go test -v -timeout 1m -coverprofile=coverage.out -json ./internal/... > test-report.out
-
       - name: Install
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-      - run: wasm-pack test --headless --chrome
+      - name: Build WASM
+        run: wasm-pack build
+        working-directory: ./worker-wasm
+
+      - name: Test wasm
+        run: wasm-pack test --headless --chrome
         working-directory: ./worker-wasm
 
       - name: Use Node.js

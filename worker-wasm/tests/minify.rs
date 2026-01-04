@@ -9,13 +9,13 @@ use worker_wasm::minify::minify;
 wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen_test]
-fn pass() {
-    let demo = minify(r#"{
+fn test_minify() {
+    let actual = minify(r#"{
         "foo":   "bar",
         "baz": [1, 2, 3]
     }"#).unwrap();
 
-    assert_eq!(demo, "{\"foo\":\"bar\",\"baz\":[1,2,3]}");
+    assert_eq!(actual, "{\"baz\":[1,2,3],\"foo\":\"bar\"}");
 }
 
 

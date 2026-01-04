@@ -20,9 +20,7 @@ export default defineConfig({
   ],
   coverage: {
     enabled: false,
-    exclude: [
-      'testing/**/*',
-    ],
+    exclude: ['testing/**/*'],
     include: [
       'src/**/*.ts',
       'worker-core/**/*.ts',

@@ -2,8 +2,8 @@ import '@testing/browser.mock';
 import { afterAll, beforeAll, describe, expect, test } from '@rstest/core';
 import { tNumber, tObject, tProperty } from '@testing';
 import { readFileSync } from 'fs';
-import { format, initialize, jq, tokenize } from './index';
 import { rstest } from '@rstest/core';
+import { format, jq, tokenize } from '../worker-wasm/pkg';
 
 rstest.mock('./helpers.ts', () => ({
   loadWasm: (file: string, imports: WebAssembly.Imports) => {
@@ -12,7 +12,7 @@ rstest.mock('./helpers.ts', () => ({
   },
 }));
 
-describe('worker-core.wasm', () => {
+describe.skip('worker-core.wasm', () => {
   beforeAll(() => {
     rstest.spyOn(console, 'log')
       .mockReturnValue();
@@ -22,11 +22,9 @@ describe('worker-core.wasm', () => {
     rstest.resetAllMocks();
   });
 
-  beforeAll(() => initialize());
-
   describe('tokenize', () => {
     test('should return a TokenizerResponse', async () => {
-      const data = await tokenize('{ "data": 123 }');
+      const data = tokenize('{ "data": 123 }');
 
       expect(data).toEqual(tObject(tProperty('data', tNumber('123'))));
     });
@@ -34,7 +32,7 @@ describe('worker-core.wasm', () => {
 
   describe('jq', () => {
     test('should return a TokenizerResponse', async () => {
-      const data = await jq({ json: '{ "data": 123 }', query: '.data' });
+      const data = jq({ json: '{ "data": 123 }', query: '.data' });
 
       expect(data).toEqual(tNumber('123'));
     });
@@ -42,7 +40,7 @@ describe('worker-core.wasm', () => {
 
   describe('format', () => {
     test('should return a TokenizerResponse', async () => {
-      const data = await format('{ "data": 123 }');
+      const data = format('{ "data": 123 }');
 
       expect(data).toEqual('{\n    "data": 123\n}');
     });

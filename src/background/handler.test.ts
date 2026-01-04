@@ -1,8 +1,8 @@
-import '@testing/worker-core.mock';
+import '@testing/worker-wasm.mock';
 import { type Message } from '@core/background';
 import { describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
-import { format, jq, tokenize } from '@worker-core';
+import { format, jq, tokenize } from '../../worker-wasm/pkg';
 import { handler } from './handler';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
@@ -41,7 +41,7 @@ describe('handler', () => {
 
       const response = await handler(message);
 
-      expect(jq).toHaveBeenCalledWith(message.payload);
+      expect(jq).toHaveBeenCalledWith(message.payload.json, message.payload.query);
       expect(response).toEqual('jq');
     });
   });

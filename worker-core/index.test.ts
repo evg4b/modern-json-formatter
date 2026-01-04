@@ -1,4 +1,3 @@
-import './wasm_exec';
 import '@testing/wasm';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';

@@ -1,4 +1,3 @@
-import './wasm_exec';
 import '@testing/browser.mock';
 import { afterAll, beforeAll, describe, expect, test } from '@rstest/core';
 import { tNumber, tObject, tProperty } from '@testing';

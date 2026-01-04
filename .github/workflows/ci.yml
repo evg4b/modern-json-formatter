@@ -7,16 +7,6 @@ on:
     branches: [ 'main' ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Install
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-
-      - run: wasm-pack test --headless --chrome
-        working-directory: ./worker-wasm
   build:
     runs-on: ubuntu-latest
     steps:
@@ -32,6 +22,7 @@ jobs:
             worker-core/go.mod
             worker-core/go.sum
 
+
       - name: Set up TinyGo
         uses: acifani/setup-tinygo@v2
         with:
@@ -44,6 +35,12 @@ jobs:
       - name: Test Go code
         working-directory: ./worker-core
         run: go test -v -timeout 1m -coverprofile=coverage.out -json ./internal/... > test-report.out
+
+      - name: Install
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - run: wasm-pack test --headless --chrome
+        working-directory: ./worker-wasm
 
       - name: Use Node.js
         uses: actions/setup-node@v3

@@ -8,9 +8,7 @@ describe('demo', () => {
     console.log(demp);
     expect(demp).toEqual({
       type: 'tuple',
-      items: [
-        tNumber('123213'),
-      ],
+      items: [tNumber('123213')],
     });
   });
 });

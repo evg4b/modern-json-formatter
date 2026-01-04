@@ -13,7 +13,6 @@ export default defineConfig({
     filenameHash: false,
     sourceMap: true,
     copy: [
-      { from: './worker-core/worker-core.wasm', to: '' },
       { from: '*', context: './assets/debug' },
       { from: '*', context: './assets' },
     ],

@@ -1,4 +1,4 @@
-default: build-worker-core build-extension pack-extension
+default: build-worker-wasm build-extension pack-extension
 
 check:
 	@echo "Checking packages..."
@@ -8,9 +8,9 @@ check:
 build-extension:
 	@yarn build:production
 
-build-worker-core:
+build-worker-wasm:
 	@echo "Building WASM..."
-	@cd worker-core && $(MAKE)
+	@cd worker-wasm && $(MAKE)
 
 pack-extension:
 	@echo "Packing extension for Chrome Store..."
@@ -20,16 +20,13 @@ pack-extension:
 	@mv ./dist/manifest.back.json ./dist/manifest.json
 	@cd ./dist && zip -r -X ../extention-msdn.zip *
 
-clean:
+clear:
 	@echo "Cleaning extension..."
 	@rm -rf ./dist
 	@rm -f ./extention.zip
 	@rm -f ./extention-msdn.zip
-	@rm -f ./worker-core/*.out
-	@rm -f ./worker-core/worker-core.wasm
-	@rm -f ./worker-core/worker-core.wasm.bak
-	@rm -f ./worker-core/wasm_exec.js
 	@cd worker-core && $(MAKE) clean
+	@cd worker-wasm && $(MAKE) clear
 
 release:
 	@echo "Updating version ($(TYPE))..."

@@ -1,4 +1,3 @@
-import '../../worker-core/wasm_exec.js';
 import { type Message } from '@core/background';
 import { initialize } from '@worker-core';
 import { handler } from './handler';

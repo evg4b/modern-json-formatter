@@ -77,7 +77,6 @@ export default [
   {
     ignores: [
       'dist/',
-      'worker-core/wasm_exec.js',
     ],
   },
 ];

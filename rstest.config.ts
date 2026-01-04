@@ -22,7 +22,6 @@ export default defineConfig({
     enabled: false,
     exclude: [
       'testing/**/*',
-      'worker-core/wasm_exec.js',
     ],
     include: [
       'src/**/*.ts',

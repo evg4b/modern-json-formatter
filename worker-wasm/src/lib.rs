@@ -1,5 +1,6 @@
-mod format;
-mod jq;
-mod node;
-mod tokenize;
-mod utils;
+pub mod format;
+pub mod jq;
+pub mod node;
+pub mod tokenize;
+pub mod utils;
+pub mod minify;

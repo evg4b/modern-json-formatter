@@ -2,6 +2,7 @@ import { describe, expect, test } from '@rstest/core';
 import { format, jq, tokenize } from '../worker-wasm/pkg';
 
 describe('demo', () => {
+
   test('jq', () => {
     const demp = jq('Hello ', 'word!');
     expect(demp).toEqual('Hello word!');
@@ -12,6 +13,6 @@ describe('demo', () => {
   });
 
   test('tokenize', () => {
-    expect(tokenize('Hello {name}!')).toEqual('tokenize');
+    expect(tokenize('{"asd":123123}')).toEqual('tokenize');
   });
 });

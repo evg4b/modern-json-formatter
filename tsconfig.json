@@ -40,8 +40,11 @@
       "@testing": [
         "testing"
       ],
-      "@worker-core": [
-        "worker-core"
+      "@wasm": [
+        "worker-wasm/pkg"
+      ],
+      "@wasm/types": [
+        "worker-wasm/types"
       ]
     }
   },

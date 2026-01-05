@@ -1,6 +1,6 @@
 import { rstest } from '@rstest/core';
 
-rstest.mock('../worker-wasm/pkg', () => ({
+rstest.mock('@wasm', () => ({
   initialize: rstest.fn(),
   jq: rstest.fn(),
   tokenize: rstest.fn(),

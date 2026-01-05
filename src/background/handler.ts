@@ -1,7 +1,7 @@
 import { type DomainCountResponse, type HistoryResponse, type Message, type TokenizerResponse } from '@core/background';
-import { type ErrorNode } from '@worker-core';
+import { type ErrorNode } from '@wasm/types';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
-import { format, tokenize, jq } from '../../worker-wasm/pkg';
+import { format, tokenize, jq } from '@wasm';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
 

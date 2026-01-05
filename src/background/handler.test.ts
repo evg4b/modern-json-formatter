@@ -2,7 +2,7 @@ import '@testing/worker-wasm.mock';
 import { type Message } from '@core/background';
 import { describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
-import { format, jq, tokenize } from '../../worker-wasm/pkg';
+import { format, jq, tokenize } from '@wasm';
 import { handler } from './handler';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 

@@ -1,3 +1,4 @@
+import { describe, expect, test } from '@rstest/core';
 import { bracket, colon, comma, ellipsis, itemsCount, propertiesCount, squareBracket, toggle } from './elements';
 
 describe('elements', () => {

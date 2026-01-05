@@ -9,7 +9,7 @@ import { gfmHeadingId } from 'marked-gfm-heading-id';
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
   output: {
-    distPath: { css: '', js: '' },
+    distPath: { css: '', js: '', wasm: '' },
     filenameHash: false,
     sourceMap: true,
     copy: [
@@ -46,7 +46,7 @@ export default defineConfig({
       extensions: [gfmHeadingId({ prefix: 'mjf-' })],
     }),
     pluginSass(),
-    pluginTypeCheck({ enable: false }),
+    pluginTypeCheck({ enable: true }),
     pluginNodePolyfill(),
     manifestGeneratorPlugin({
       manifestPath: './src/manifest.json',

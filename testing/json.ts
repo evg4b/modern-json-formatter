@@ -8,7 +8,7 @@ import type {
   PropertyNode,
   StringNode,
   TokenNode,
-} from '@worker-core';
+} from '@wasm/types';
 
 export const tNull = (): NullNode => ({ type: 'null' });
 export const tBool = (value: boolean): BooleanNode => ({
@@ -39,4 +39,8 @@ export const tErrorNode = (error: string, scope?: ErrorNode['scope']): ErrorNode
   type: 'error',
   error,
   scope: scope ?? 'worker',
+});
+export const tTuple = (items: TokenNode[]) => ({
+  type: 'tuple',
+  items,
 });

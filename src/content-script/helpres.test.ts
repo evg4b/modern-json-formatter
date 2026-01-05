@@ -1,7 +1,7 @@
 import { createElement } from '@core/dom';
 import { beforeEach, describe, expect, test } from '@rstest/core';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing';
-import { type ErrorNode } from '@worker-core';
+import { type ErrorNode } from '@wasm/types';
 import { assetTabType, isErrorNode, query, throws } from './helpers';
 
 describe('helpers', () => {

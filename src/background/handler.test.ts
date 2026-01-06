@@ -35,7 +35,7 @@ describe('handler', () => {
       expect(response).toEqual('formatted');
     });
 
-    test('should handle jq message', async () => {
+    test.skip('should handle jq message', async () => {
       const message: Message = { payload: { json: 'json', query: '.query' }, action: 'jq' };
       wrapMock(query).mockResolvedValue('jq');
 

@@ -1,6 +1,6 @@
 build:
 	wasm-pack build
 test:
-	wasm-pack test --headless --chrome
+	cargo test --manifest-path core/Cargo.toml
 clear:
-	rm -rf pkg target
+	rm -rf pkg target core/target

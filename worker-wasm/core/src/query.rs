@@ -1,46 +1,37 @@
-use crate::node::{Property, Node};
-use jaq_core::{load, Compiler, Ctx, RcIter};
+use crate::node::{Node, Property};
+use crate::utils::determinate_variant;
+use jaq_core::{Compiler, Ctx, RcIter, load};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
 use serde_json::Value;
-use serde_wasm_bindgen::to_value;
-use wasm_bindgen::prelude::wasm_bindgen;
-use wasm_bindgen::{JsError, JsValue};
+use std::error::Error;
 
 fn to_return_value(value: Val) -> Node {
     match value {
         Val::Null => Node::Null,
-        Val::Bool(val) => Node::Boolean { value: val },
-        Val::Int(number) => Node::Number {
-            value: number.to_string(),
-        },
-        Val::Float(number) => Node::Number {
-            value: number.to_string(),
-        },
-        Val::Num(number) => Node::Number {
-            value: number.to_string(),
-        },
-        Val::Str(str) => Node::String {
-            value: str.to_string(),
-            variant: None,
-        },
-        Val::Arr(items) => Node::Array {
-            items: items.iter().map(|i| to_return_value(i.clone())).collect(),
-        },
-        Val::Obj(items) => Node::Object {
-            properties: items
+        Val::Bool(bool) => Node::bool(bool),
+        Val::Int(number) => Node::number(number.to_string().as_str()),
+        Val::Float(number) => Node::number(number.to_string().as_str()),
+        Val::Num(number) => Node::number(number.to_string().as_str()),
+        Val::Str(str) => Node::string(str.as_str(), determinate_variant(str.as_str().trim())),
+        Val::Arr(items) => Node::array(
+            items.iter()
+                .map(|i| to_return_value(i.clone()))
+                .collect(),
+        ),
+        Val::Obj(items) => Node::object(
+            items
                 .iter()
                 .map(|(k, v)| Property {
                     key: k.to_string(),
                     value: to_return_value(v.clone()),
                 })
                 .collect(),
-        },
+        ),
     }
 }
 
-#[wasm_bindgen]
-pub fn query(json: &str, query: &str) -> Result<JsValue, JsError> {
+pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     let input = serde_json::from_str::<Value>(json)?;
     let program = File {
         code: query,
@@ -66,11 +57,11 @@ pub fn query(json: &str, query: &str) -> Result<JsValue, JsError> {
     for item in collection {
         match item {
             Ok(v) => items.push(to_return_value(v)),
-            Err(e) => {
-                return Err(JsError::new(&format!("Error: {}", e)));
+            Err(err) => {
+                return Err(Box::from(err.to_string()));
             }
         }
     }
 
-    Ok(to_value(&Node::Tuple { items })?)
+    Ok(Node::Tuple { items })
 }

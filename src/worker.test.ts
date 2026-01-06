@@ -157,14 +157,11 @@ describe('worker-wasm', () => {
         input: `{ "demo": ${input} }`,
         expected: tObject(tProperty('demo', expected)),
       },
-
-      /*
-       * {
-       *   name: `${name} with nested array`,
-       *   input: `[ ${input} ]`,
-       *   expected: tArray(expected),
-       * },
-       */
+      {
+        name: `${name} with nested array`,
+        input: `[ ${input} ]`,
+        expected: tArray(expected),
+      },
       {
         name: `${name} with spaces`,
         input: `     ${input}     `,

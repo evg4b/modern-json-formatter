@@ -132,3 +132,4 @@ dist
 
 worker-core/*.out
 worker-core/*.wasm
+worker-wasm/core/target

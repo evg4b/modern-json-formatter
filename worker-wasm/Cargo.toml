@@ -3,6 +3,9 @@ name = "worker-wasm"
 version = "0.1.0"
 authors = ["Evgeny Abramovich <evg.abramovitch@gmail.com>"]
 edition = "2018"
+description = "A WebAssembly module for formatting JSON data in web workers"
+license = "MIT"
+repository = "git@github.com:evg4b/modern-json-formatter.git"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -18,19 +21,8 @@ wasm-bindgen = { version = "0.2.84", features = ["serde-serialize"] }
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
-serde = { version = "1.0.228", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
-serde_json = "1.0.148"
-json-event-parser = "0.2.2"
-jaq-json = { version = "1.1.3", features = ["serde_json"] }
-jaq-core = "2.2.1"
-jaq-std = "2.1.2"
-email_address = "0.2.9"
-url = "2.5.7"
-json5 = "1.3.0"
-
-[dev-dependencies]
-wasm-bindgen-test = "0.3.34"
+core = { path = "./core" }
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.

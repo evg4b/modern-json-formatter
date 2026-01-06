@@ -10,7 +10,7 @@ pub struct Property {
 #[serde(rename_all = "lowercase")] // для enum с разными вариантами
 pub enum StringVariant {
     Url,
-    Email
+    Email,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -36,4 +36,38 @@ pub enum Node {
     Tuple {
         items: Vec<Node>,
     },
+}
+
+impl Node {
+    pub fn bool(value: bool) -> Node {
+        Node::Boolean { value }
+    }
+
+    pub fn property(key: &str, value: Node) -> Property {
+        Property {
+            key: key.to_string(),
+            value,
+        }
+    }
+
+    pub fn string(value: &str, variant: Option<StringVariant>) -> Node {
+        Node::String {
+            value: value.to_string(),
+            variant,
+        }
+    }
+
+    pub fn number(value: &str) -> Node {
+        Node::Number {
+            value: value.to_string(),
+        }
+    }
+
+    pub fn array(items: Vec<Node>) -> Node {
+        Node::Array { items }
+    }
+
+    pub fn object(properties: Vec<Property>) -> Node {
+        Node::Object { properties }
+    }
 }

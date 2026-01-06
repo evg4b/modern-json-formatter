@@ -1,6 +1,6 @@
 pub mod format;
-pub mod jq;
+pub mod minify;
 pub mod node;
+pub mod query;
 pub mod tokenize;
 pub mod utils;
-pub mod minify;

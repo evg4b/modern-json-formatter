@@ -1,25 +1,46 @@
-use crate::node::{Property, ResultValue};
+use crate::node::{Property, Node, StringVariant};
+use email_address::EmailAddress;
 use json_event_parser::{JsonEvent, ReaderJsonParser};
 use serde_wasm_bindgen::to_value;
 use std::io::{Cursor, Error};
+use url::Url;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsError, JsValue};
 
+fn is_url(value: &str) -> bool {
+    let url = match Url::parse(value) {
+        Ok(url) => url,
+        Err(_) => return false,
+    };
+
+    matches!(url.scheme(), "http" | "https" | "ftp" | "mailto")
+}
+
+fn determinate_variant(string: &str) -> Option<StringVariant> {
+    if is_url(string) {
+        return Some(StringVariant::Url);
+    }
+
+    if EmailAddress::is_valid(string) {
+        return Some(StringVariant::Email);
+    }
+
+    None
+}
+
 fn tokenize_value<R: std::io::Read>(
     parser: &mut ReaderJsonParser<R>,
-) -> Result<Option<ResultValue>, Error> {
+) -> Result<Option<Node>, Error> {
     match parser.parse_next()? {
-        JsonEvent::String(value) => Ok(Some(ResultValue::String {
+        JsonEvent::String(value) => Ok(Some(Node::String {
             value: value.to_string(),
-            variant: None,
+            variant: determinate_variant(value.trim()),
         })),
-        JsonEvent::Number(value) => Ok(Some(ResultValue::Number {
+        JsonEvent::Number(value) => Ok(Some(Node::Number {
             value: value.to_string(),
         })),
-        JsonEvent::Boolean(value) => Ok(Some(ResultValue::Boolean {
-            value
-        })),
-        JsonEvent::Null => Ok(Some(ResultValue::Null)),
+        JsonEvent::Boolean(value) => Ok(Some(Node::Boolean { value })),
+        JsonEvent::Null => Ok(Some(Node::Null)),
         JsonEvent::StartArray => {
             let mut items = vec![];
             loop {
@@ -28,7 +49,7 @@ fn tokenize_value<R: std::io::Read>(
                     None => break,
                 }
             }
-            Ok(Some(ResultValue::Array { items: vec![] }))
+            Ok(Some(Node::Array { items: vec![] }))
         }
         JsonEvent::StartObject => {
             let mut properties = vec![];
@@ -36,27 +57,26 @@ fn tokenize_value<R: std::io::Read>(
                 let key = match parser.parse_next()? {
                     JsonEvent::ObjectKey(key) => key.to_string(),
                     JsonEvent::EndObject => break,
-                    _ => return Err(Error::new(
-                        std::io::ErrorKind::InvalidData,
-                        "Expected object key or end of object",
-                    )),
+                    _ => {
+                        return Err(Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            "Expected object key or end of object",
+                        ))
+                    }
                 };
                 match tokenize_value(parser)? {
-                    Some(value) => properties.push(Property {
-                        key,
-                        value,
-                    }),
-                    None => return Err(Error::new(
-                        std::io::ErrorKind::InvalidData,
-                        "Expected value after object key",
-                    ))
+                    Some(value) => properties.push(Property { key, value }),
+                    None => {
+                        return Err(Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            "Expected value after object key",
+                        ))
+                    }
                 }
             }
-            Ok(Some(ResultValue::Object { properties }))
+            Ok(Some(Node::Object { properties }))
         }
-        JsonEvent::ObjectKey(_) => {
-            Ok(None)
-        },
+        JsonEvent::ObjectKey(_) => Ok(None),
         JsonEvent::EndArray | JsonEvent::EndObject | JsonEvent::Eof => Ok(None),
     }
 }
@@ -65,11 +85,11 @@ fn tokenize_value<R: std::io::Read>(
 pub fn tokenize(json: &str) -> Result<JsValue, JsError> {
     let mut parser = ReaderJsonParser::new(Cursor::new(json.as_bytes()));
 
-    match tokenize_value(&mut parser) {
-        Ok(v) => match to_value(&v) {
-            Ok(js_value) => Ok(js_value),
-            Err(e) => Err(JsError::from(e)),
-        },
-        Err(err) => Err(JsError::from(err)),
+    match tokenize_value(&mut parser)? {
+        Some(value) => Ok(to_value(&value).map_err(|e| JsError::from(e))?),
+        None => Err(JsError::from(Error::new(
+            std::io::ErrorKind::InvalidData,
+            "No value found",
+        ))),
     }
 }

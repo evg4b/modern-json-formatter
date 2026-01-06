@@ -18,10 +18,12 @@ export interface TupleNode {
   items: TokenNode[];
 }
 
+export type StringNodeType = 'url' | 'email';
+
 export interface StringNode {
   type: 'string';
   value: string;
-  variant?: 'url' | 'email';
+  variant?: StringNodeType;
 }
 
 export interface NumberNode {

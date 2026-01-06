@@ -27,7 +27,7 @@ type TabType = 'raw' | 'formatted' | 'query';
 declare module '@wasm' {
   export function format(input: string): string;
 
-  export function jq(json: string, query: string): import('@wasm/types').TupleNode;
+  export function query(json: string, query: string): import('@wasm/types').TupleNode;
 
   export function minify(input: string): string;
 

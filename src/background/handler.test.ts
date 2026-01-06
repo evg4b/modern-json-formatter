@@ -2,7 +2,7 @@ import '@testing/worker-wasm.mock';
 import { type Message } from '@core/background';
 import { describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
-import { format, jq, tokenize } from '@wasm';
+import { format, query, tokenize } from '@wasm';
 import { handler } from './handler';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
 
@@ -37,11 +37,11 @@ describe('handler', () => {
 
     test('should handle jq message', async () => {
       const message: Message = { payload: { json: 'json', query: '.query' }, action: 'jq' };
-      wrapMock(jq).mockResolvedValue('jq');
+      wrapMock(query).mockResolvedValue('jq');
 
       const response = await handler(message);
 
-      expect(jq).toHaveBeenCalledWith(message.payload.json, message.payload.query);
+      expect(query).toHaveBeenCalledWith(message.payload.json, message.payload.query);
       expect(response).toEqual('jq');
     });
   });

@@ -14,16 +14,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install
+      - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build WASM
         run: wasm-pack build
         working-directory: ./worker-wasm
 
-      - name: Test wasm
-        run: wasm-pack test --headless --chrome
-        working-directory: ./worker-wasm
+      - name: Test Rust
+        run: cargo test --workspace --all-features
+        working-directory: ./worker-wasm/core
+
+
+#      - name: Test wasm
+#        run: wasm-pack test --headless --chrome
+#        working-directory: ./worker-wasm
 
       - name: Use Node.js
         uses: actions/setup-node@v3

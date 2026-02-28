@@ -23,15 +23,15 @@ describe('worker-wasm', () => {
         query: '.',
         expected: tNumber('123'),
       },
-      // {
-      //   name: 'json with comment',
-      //   input: `
-      //     // coment
-      //     { "test": 123 }
-      //   `,
-      //   query: '.test',
-      //   expected: tNumber('123'),
-      // },
+      {
+        name: 'json with comment',
+        input: `
+          // coment
+          { "test": 123 }
+        `,
+        query: '.test',
+        expected: tNumber('123'),
+      },
       {
         name: 'unexisting property',
         input: `

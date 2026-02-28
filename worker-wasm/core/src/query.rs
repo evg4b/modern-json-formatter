@@ -5,6 +5,7 @@ use jaq_json::Val;
 use load::{Arena, File, Loader};
 use serde_json::Value;
 use std::error::Error;
+use json5::from_str;
 
 fn to_return_value(value: Val) -> Node {
     match value {
@@ -32,7 +33,7 @@ fn to_return_value(value: Val) -> Node {
 }
 
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
-    let input = serde_json::from_str::<Value>(json)?;
+    let input = from_str::<Value>(json)?;
     let program = File {
         code: query,
         path: (),
@@ -64,4 +65,41 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     }
 
     Ok(Node::Tuple { items })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn query_json_works() {
+        let json = r#"
+        {
+            "a": 1,
+            "b": 2,
+            "c": {
+                "d": 3,
+                "e": 4
+            }
+        }
+        "#;
+
+        let query = r#".a"#;
+        let result = query_json(json, query).unwrap();
+        assert_eq!(result, Node::Tuple { items: vec![Node::number("1")]});
+    }
+
+    #[test]
+    fn query_json_with_comments() {
+        let json = r#"
+        {
+            // comment before
+            "a": 1,
+            "b": 2 // comment after
+        }
+        "#;
+        let query = r#".a"#;
+        let result = query_json(json, query).unwrap();
+        assert_eq!(result, Node::Tuple { items: vec![Node::number("1")] });
+    }
 }

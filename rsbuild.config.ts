@@ -9,11 +9,10 @@ import { gfmHeadingId } from 'marked-gfm-heading-id';
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
   output: {
-    distPath: { css: '', js: '' },
+    distPath: { css: '', js: '', wasm: '' },
     filenameHash: false,
     sourceMap: true,
     copy: [
-      { from: './worker-core/worker-core.wasm', to: '' },
       { from: '*', context: './assets/debug' },
       { from: '*', context: './assets' },
     ],
@@ -47,14 +46,14 @@ export default defineConfig({
       extensions: [gfmHeadingId({ prefix: 'mjf-' })],
     }),
     pluginSass(),
-    pluginTypeCheck({ enable: false }),
+    pluginTypeCheck({ enable: true }),
     pluginNodePolyfill(),
     manifestGeneratorPlugin({
       manifestPath: './src/manifest.json',
     }),
   ],
   html: {
-    template: a => `./src/${a.entryName}/${a.entryName}.html`,
+    template: ({ entryName }) => `./src/${entryName}/${entryName}.html`,
   },
   tools: {
     rspack: {

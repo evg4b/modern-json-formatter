@@ -1,5 +1,5 @@
 import { sendMessage } from '@core/browser';
-import type { ErrorNode, TokenizerResponse } from '@worker-core';
+import type { ErrorNode, TokenizerResponse } from '@wasm/types';
 import { isErrorNode } from '../../content-script/helpers';
 import {
   type ClearHistoryParams,

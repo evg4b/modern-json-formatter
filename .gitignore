@@ -132,4 +132,4 @@ dist
 
 worker-core/*.out
 worker-core/*.wasm
-worker-core/wasm_exec.js
+worker-wasm/core/target

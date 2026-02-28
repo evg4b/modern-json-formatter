@@ -1,5 +1,5 @@
 import { createElement } from '@core/dom';
-import { type ArrayNode } from '@worker-core';
+import { type ArrayNode } from '@wasm/types';
 import { buildNode } from './build-dom';
 import { comma, ellipsis, squareBracket, toggle } from './elements';
 import { buildInfoNode, isValueExpandable } from './helpers';

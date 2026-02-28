@@ -1,7 +1,6 @@
-import type { format, jq, tokenize } from '@worker-core';
+import type { format, tokenize } from '@wasm';
 import { clearHistory, type DomainCount, type getDomains, type getHistory, type pushHistory } from '../../background/history';
-
-export { type TokenizerResponse } from '@worker-core';
+export { type TokenizerResponse } from '@wasm/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Payload<T extends (...args: any) => any> = Parameters<T>[0];
@@ -18,7 +17,10 @@ export interface FormatParams {
 
 export interface JqParams {
   action: 'jq';
-  payload: Payload<typeof jq>;
+  payload: {
+    json: string;
+    query: string;
+  };
 }
 
 export interface GetHistoryParams {

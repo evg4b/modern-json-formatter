@@ -1,6 +1,7 @@
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { colon, toggle } from './elements';
 import { buildInfoNode, isToggleElement, isValueExpandable } from './helpers';
+import { describe, expect, test } from '@rstest/core';
 
 describe('dom helpers', () => {
   describe('isValueExpandable', () => {

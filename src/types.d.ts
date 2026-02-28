@@ -1,4 +1,4 @@
-declare module '*.svg' {
+declare module '*.svg?raw' {
   const styles: string;
   export default styles;
 }
@@ -15,9 +15,21 @@ declare module '*.md' {
   export default file;
 }
 
-declare module '*.css?raw' {
+declare module '*.scss?inline' {
   const content: string;
   export default content;
 }
 
+declare module '*.scss';
+
 type TabType = 'raw' | 'formatted' | 'query';
+
+declare module '@wasm' {
+  export function format(input: string): string;
+
+  export function query(json: string, query: string): import('@wasm/types').TupleNode;
+
+  export function minify(input: string): string;
+
+  export function tokenize(json: string): import('@wasm/types').TokenizerResponse;
+}

@@ -20,10 +20,7 @@ export default defineConfig({
   ],
   coverage: {
     enabled: false,
-    exclude: [
-      'testing/**/*',
-      'worker-core/wasm_exec.js',
-    ],
+    exclude: ['testing/**/*'],
     include: [
       'src/**/*.ts',
       'worker-core/**/*.ts',

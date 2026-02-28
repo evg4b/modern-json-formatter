@@ -7,21 +7,23 @@ import type {
   ObjectNode,
   PropertyNode,
   StringNode,
+  StringNodeType,
   TokenNode,
-} from '@worker-core';
+} from '@wasm/types';
 
 export const tNull = (): NullNode => ({ type: 'null' });
 export const tBool = (value: boolean): BooleanNode => ({
-  type: 'bool',
-  value: value,
+  type: 'boolean',
+  value,
 });
-export const tString = (value: string): StringNode => ({
+export const tString = (value: string, variant?: StringNodeType): StringNode => ({
   type: 'string',
-  value: value,
+  value,
+  variant,
 });
 export const tNumber = (value: string): NumberNode => ({
   type: 'number',
-  value: value,
+  value,
 });
 export const tArray = (...items: TokenNode[]): ArrayNode => ({
   type: 'array',
@@ -33,10 +35,14 @@ export const tObject = (...properties: PropertyNode[]): ObjectNode => ({
 });
 export const tProperty = (key: string, value: TokenNode): PropertyNode => ({
   key,
-  value: value,
+  value,
 });
 export const tErrorNode = (error: string, scope?: ErrorNode['scope']): ErrorNode => ({
   type: 'error',
   error,
   scope: scope ?? 'worker',
+});
+export const tTuple = (...items: TokenNode[]) => ({
+  type: 'tuple',
+  items,
 });

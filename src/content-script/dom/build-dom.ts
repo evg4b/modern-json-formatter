@@ -1,5 +1,5 @@
 import { createElement } from '@core/dom';
-import { type TokenNode, type TupleNode } from '@worker-core';
+import { type TokenNode, type TupleNode } from '@wasm/types';
 import { buildArrayNode } from './build-array-node';
 import { buildObjectNode } from './build-object-node';
 import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from './build-primitive-nodes';
@@ -61,7 +61,7 @@ export const buildNode = (object: TokenNode): HTMLElement => {
       return buildStringNode(object);
     case 'number':
       return buildNumberNode(object);
-    case 'bool':
+    case 'boolean':
       return buildBoolNode(object);
     case 'null':
       return buildNullNode();

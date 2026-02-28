@@ -1,6 +1,11 @@
-# WASMs for modern-json-formatter
+<div align="center">
+  <h1><code>worker-wasm</code></h1>
 
-Custom JSON tokenizer written in GO and compiled to WASM.
+  <strong>
+    Custom JSON tokenizer written in <a title="RUST" href="https://rust-lang.org/">🦀🕸</a> and compiled to WASM using <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.
+  </strong>
+</div>
+
 
 ## Schema
 

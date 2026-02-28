@@ -1,0 +1,29 @@
+[package]
+name = "worker-wasm"
+version = "0.1.0"
+authors = ["Evgeny Abramovich <evg.abramovitch@gmail.com>"]
+edition = "2018"
+description = "A WebAssembly module for formatting JSON data in web workers"
+license = "MIT"
+repository = "git@github.com:evg4b/modern-json-formatter.git"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook"]
+
+[dependencies]
+wasm-bindgen = { version = "0.2.84", features = ["serde-serialize"] }
+
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.7", optional = true }
+serde-wasm-bindgen = "0.6.5"
+core = { path = "./core" }
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"

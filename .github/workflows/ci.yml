@@ -12,22 +12,46 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  wasm:
+    name: Build WASM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Build WASM
+        run: wasm-pack build
+        working-directory: ./worker-wasm
+
+      - name: Upload wasm-pkg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-pkg
+          path: ./worker-wasm/pkg
+
   rust:
     name: Rust Coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install cargo-llvm-cov
         run: cargo install cargo-llvm-cov
 
-      - name: Test Rust + Coverage
+      - name: Run Rust tests with coverage
         working-directory: ./worker-wasm/core
         run: cargo llvm-cov --workspace --lcov --output-path rust-lcov.info
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Rust coverage artifact
+        uses: actions/upload-artifact@v4
         with:
           name: rust-coverage
           path: worker-wasm/core/rust-lcov.info
@@ -35,31 +59,33 @@ jobs:
   js:
     name: JS Coverage
     runs-on: ubuntu-latest
+    needs: [wasm]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Download wasm-pkg artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: wasm-pkg
+          path: ./worker-wasm/pkg
 
-      - name: Install dependencies
+      - name: Install npm dependencies
         run: yarn install --immutable
 
-      - name: Build WASM
-        run: wasm-pack build
-        working-directory: ./worker-wasm
-
-      - name: Lint
+      - name: Lint code
         run: yarn lint
 
-      - name: Test
+      - name: Run tests with coverage
         run: yarn test:cover
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload JS coverage artifact
+        uses: actions/upload-artifact@v4
         with:
           name: js-coverage
           path: coverage/lcov.info
@@ -67,48 +93,52 @@ jobs:
   build:
     name: Build Extension
     runs-on: ubuntu-latest
+    needs: [wasm]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Download wasm-pkg artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: wasm-pkg
+          path: ./worker-wasm/pkg
 
-      - name: Install dependencies
+      - name: Install npm dependencies
         run: yarn install --immutable
 
-      - name: Build WASM
-        run: wasm-pack build
-        working-directory: ./worker-wasm
+      - name: Build extension
+        run: make build-extension
 
-      - name: Build
-        run: make build
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension
+          path: dist
 
   analyze:
     name: Analyze with SonarCloud
     runs-on: ubuntu-latest
     needs: [build, rust, js]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/download-artifact@v4
+      - name: Download Rust coverage artifact
+        uses: actions/download-artifact@v4
         with:
           name: rust-coverage
           path: ./worker-wasm/core
 
-      - name: Display structure of downloaded files
-        run: ls -R ./worker-wasm/core
-
-      - uses: actions/download-artifact@v4
+      - name: Download JS coverage artifact
+        uses: actions/download-artifact@v4
         with:
           name: js-coverage
           path: ./coverage
-
-      - name: Display structure of downloaded files
-        run: ls -R ./coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@master

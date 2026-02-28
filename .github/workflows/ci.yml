@@ -32,6 +32,38 @@ jobs:
           name: rust-coverage
           path: worker-wasm/core/rust-lcov.info
 
+  js:
+    name: JS Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build WASM
+        run: wasm-pack build
+        working-directory: ./worker-wasm
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test:cover
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: js-coverage
+          path: coverage/lcov.info
+
   build:
     runs-on: ubuntu-latest
     steps:

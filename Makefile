@@ -1,5 +1,10 @@
 default: build-worker-wasm build-extension pack-extension
 
+build:
+	@echo "Building extension..."
+	@$(MAKE) build-worker-wasm
+	@$(MAKE) build-extension
+
 check:
 	@echo "Checking packages..."
 	@yarn lint

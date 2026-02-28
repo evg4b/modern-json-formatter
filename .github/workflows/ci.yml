@@ -1,4 +1,5 @@
 name: CI
+run-name: CI [${{ github.head_ref || github.ref_name }}]
 
 on:
   push:
@@ -6,7 +7,31 @@ on:
   pull_request:
     branches: [ 'main' ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
+  rust:
+    name: Rust Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install cargo-llvm-cov
+        run: cargo install cargo-llvm-cov
+
+      - name: Test Rust + Coverage
+        working-directory: ./worker-wasm/core
+        run: cargo llvm-cov --workspace --lcov --output-path rust-lcov.info
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rust-coverage
+          path: worker-wasm/core/rust-lcov.info
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,11 +49,6 @@ jobs:
       - name: Test Rust
         run: cargo test --workspace --all-features
         working-directory: ./worker-wasm/core
-
-
-#      - name: Test wasm
-#        run: wasm-pack test --headless --chrome
-#        working-directory: ./worker-wasm
 
       - name: Use Node.js
         uses: actions/setup-node@v3

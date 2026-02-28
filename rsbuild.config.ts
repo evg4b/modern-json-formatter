@@ -53,7 +53,7 @@ export default defineConfig({
     }),
   ],
   html: {
-    template: a => `./src/${a.entryName}/${a.entryName}.html`,
+    template: ({ entryName }) => `./src/${entryName}/${entryName}.html`,
   },
   tools: {
     rspack: {

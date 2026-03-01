@@ -12,10 +12,6 @@ export default defineConfig({
     distPath: { css: '', js: '', wasm: '' },
     filenameHash: false,
     sourceMap: true,
-    copy: [
-      { from: '*', context: './assets/debug' },
-      { from: '*', context: './assets' },
-    ],
   },
   source: {
     define: { require: null },
@@ -50,6 +46,12 @@ export default defineConfig({
     pluginNodePolyfill(),
     manifestGeneratorPlugin({
       manifestPath: './src/manifest.json',
+      development: process.env.NODE_ENV !== 'production',
+      assets: [
+        { from: '*', context: './assets/production', type: 'production' },
+        { from: '*', context: './assets/debug', type: 'development' },
+        { from: '*', context: './assets' },
+      ],
     }),
   ],
   html: {

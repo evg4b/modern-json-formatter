@@ -18,7 +18,7 @@
   "license": "MIT",
   "packageManager": "yarn@4.12.0",
   "scripts": {
-    "build": "rsbuild build",
+    "build": "NODE_ENV=development rsbuild build",
     "build:production": "NODE_ENV=production rsbuild build",
     "dev": "rsbuild dev --open",
     "lint": "eslint .",

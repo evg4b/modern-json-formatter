@@ -1,4 +1,4 @@
-import { type RsbuildPlugin } from '@rsbuild/core';
+import type { OutputConfig, RsbuildPlugin } from '@rsbuild/core';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
@@ -11,14 +11,34 @@ const getFileByExtension = (files: string[], extension: string): string => {
   return filteredFiles[0];
 };
 
+type ArrayElementsOnly<T> = T extends (infer U)[] ? U : never;
+type AssetType = ArrayElementsOnly<OutputConfig['copy']> & {
+  type?: 'production' | 'development';
+};
+
 export type ManifestGeneratorParams = {
   manifestPath?: string;
   pages?: string[];
+  development?: boolean;
+  assets?: AssetType[];
 };
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
   setup(api) {
+    api.modifyRsbuildConfig((config, utils) => {
+      const isDevelopment = options?.development ?? true;
+      const assets = options?.assets ?? [];
+      const targetType = isDevelopment ? 'development' : 'production';
+      const filteredAssets = assets.filter(({ type }) => !type || type === targetType);
+
+      return utils.mergeRsbuildConfig(config, {
+        output: {
+          copy: filteredAssets,
+        },
+      });
+    });
+
     api.onAfterBuild(async params => {
       const stats = params.stats?.toJson('detailed');
       if (!stats) {

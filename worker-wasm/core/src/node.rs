@@ -7,7 +7,7 @@ pub struct Property {
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")] // для enum с разными вариантами
+#[serde(rename_all = "lowercase")]
 pub enum StringVariant {
     Url,
     Email,
@@ -69,5 +69,9 @@ impl Node {
 
     pub fn object(properties: Vec<Property>) -> Node {
         Node::Object { properties }
+    }
+
+    pub fn tuple(items: Vec<Node>) -> Node {
+        Node::Tuple { items }
     }
 }

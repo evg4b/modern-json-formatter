@@ -2,10 +2,10 @@ use crate::node::{Node, Property};
 use crate::utils::determinate_variant;
 use jaq_core::{Compiler, Ctx, RcIter, load};
 use jaq_json::Val;
+use json5::from_str;
 use load::{Arena, File, Loader};
 use serde_json::Value;
 use std::error::Error;
-use json5::from_str;
 
 fn to_return_value(value: Val) -> Node {
     match value {
@@ -15,11 +15,7 @@ fn to_return_value(value: Val) -> Node {
         Val::Float(number) => Node::number(number.to_string().as_str()),
         Val::Num(number) => Node::number(number.to_string().as_str()),
         Val::Str(str) => Node::string(str.as_str(), determinate_variant(str.as_str().trim())),
-        Val::Arr(items) => Node::array(
-            items.iter()
-                .map(|i| to_return_value(i.clone()))
-                .collect(),
-        ),
+        Val::Arr(items) => Node::array(items.iter().map(|i| to_return_value(i.clone())).collect()),
         Val::Obj(items) => Node::object(
             items
                 .iter()
@@ -64,29 +60,32 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
         }
     }
 
-    Ok(Node::Tuple { items })
+    Ok(Node::tuple(items))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn query_json_works() {
-        let json = r#"
+    const JSON: &str = r#"
         {
             "a": 1,
             "b": 2,
             "c": {
                 "d": 3,
-                "e": 4
+                "e": [ 4, 5, 6 ]
             }
         }
-        "#;
+    "#;
 
-        let query = r#".a"#;
-        let result = query_json(json, query).unwrap();
-        assert_eq!(result, Node::Tuple { items: vec![Node::number("1")]});
+    #[test]
+    fn query_json_works() {
+        let result = query_json(JSON, ".a").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![
+                Node::number("1"),
+            ]),
+        );
     }
 
     #[test]
@@ -98,8 +97,22 @@ mod tests {
             "b": 2 // comment after
         }
         "#;
-        let query = r#".a"#;
-        let result = query_json(json, query).unwrap();
-        assert_eq!(result, Node::Tuple { items: vec![Node::number("1")] });
+
+        let result = query_json(json, ".a").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![
+                Node::number("1")
+            ]),
+        );
+    }
+
+    #[test]
+    fn query_json_with_empty_string() {
+        let result = query_json("{}", ".[]").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![])
+        );
     }
 }

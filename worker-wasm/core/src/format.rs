@@ -90,7 +90,14 @@ mod tests {
     }
 
     #[test]
-    fn fails_on_invalid_json5() {
+    fn formats_empty_json() {
+        let input = "{}";
+        let result = format_json(input).unwrap();
+        assert_eq!(result, "{}");
+    }
+
+    #[test]
+    fn fails_on_invalid_json() {
         let input = r#"
         {
             "a": 1,
@@ -99,6 +106,6 @@ mod tests {
         "#;
 
         let err = format_json(input).unwrap_err();
-        assert!(!err.to_string().is_empty());
+        assert_eq!(err.to_string(), "expected value at line 5 column 9");
     }
 }

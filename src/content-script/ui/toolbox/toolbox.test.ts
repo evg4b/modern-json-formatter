@@ -28,7 +28,13 @@ describe('mjf-toolbox', () => {
     });
 
     test.each(buttonNames)('should have a %s button', buttonName => {
-      expect(buttons.find(b => b.innerText.trim() === buttonName)).toBeDefined();
+      expect(buttons.find(b => b.innerText.trim() === buttonName))
+        .toBeDefined();
+    });
+
+    test('should have a download button', () => {
+      expect(buttons.find(b => b.classList.contains('square')))
+        .toBeDefined();
     });
 
     describe('by default', () => {
@@ -78,6 +84,11 @@ describe('mjf-toolbox', () => {
         expect(event.type).toBe('tab-changed');
       });
     });
+  });
+
+  test('should have rendered dropdown', () => {
+    expect(toolbox.shadowRoot?.querySelector('mjf-dropdown'))
+      .toBeDefined();
   });
 
   describe.each(without(buttonValues, 'query'))('should reflect tab="%s" property', tabValue => {

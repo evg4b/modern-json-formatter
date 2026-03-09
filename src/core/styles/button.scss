@@ -31,4 +31,9 @@ button {
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  &.square {
+    padding: 3px 4px;
+    min-width: unset;
+  }
 }

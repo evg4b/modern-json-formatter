@@ -7,7 +7,7 @@ import '../info-button';
 import '../dropdown';
 import { map } from 'lit/directives/map.js';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
-import { createDropdown } from '../dropdown';
+import { dropdown } from '../dropdown';
 import downloadSvg from './download.svg?raw';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
@@ -78,11 +78,11 @@ export class ToolboxElement extends LitElement {
     { tab: 'raw', label: 'Raw' },
   ];
 
-  private readonly dropdown = createDropdown([
+  private readonly dropdown = [
     { label: 'Raw', onClick: () => this.dispatchEvent(new DownloadEvent('raw')) },
     { label: 'Formatted', onClick: () => this.dispatchEvent(new DownloadEvent('formatted')) },
     { label: 'Minified', onClick: () => this.dispatchEvent(new DownloadEvent('minified')) },
-  ]);
+  ];
 
   public override render() {
     const input = this.tab === 'query'
@@ -91,18 +91,18 @@ export class ToolboxElement extends LitElement {
 
     return html`
       ${input}
-      <div class="bcutton-container">
+      <div class="button-container">
         ${map(this.tabs, ({ tab, label }) => html`
           <button class=${classMap({ active: this.tab === tab })}
-                      @click=${this.clickHandler}
-                      data-type=${tab}>
+                  title=${label}
+                  @click=${this.clickHandler}
+                  data-type=${tab}>
             ${label}
           </button>
         `)}
-        <mjf-button demo=${this.dropdown.id}>
+        <button ${dropdown(this.dropdown)} class="square" title="Download">
           ${unsafeSVG(downloadSvg)}
-        </mjf-button>
-        ${this.dropdown.element}
+        </button>
       </div>
     `;
   }

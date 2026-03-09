@@ -11,6 +11,8 @@ const getFileByExtension = (files: string[], extension: string): string => {
   return filteredFiles[0];
 };
 
+const cleanupChunks = (chunks: string[]) => chunks.filter(chunk => !chunk.endsWith('.hot-update.js'));
+
 type ArrayElementsOnly<T> = T extends (infer U)[] ? U : never;
 type AssetType = ArrayElementsOnly<OutputConfig['copy']> & {
   type?: 'production' | 'development';
@@ -50,8 +52,8 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
       manifestPath = resolve(config.root, manifestPath ?? 'manifest.json');
 
       const chunks = stats.assetsByChunkName ?? {};
-      const contentScript = getFileByExtension(chunks['content-script'] ?? [], '.js');
-      const backgroundScript = getFileByExtension(chunks['background'] ?? [], '.js');
+      const contentScript = getFileByExtension(cleanupChunks(chunks['content-script'] ?? []), '.js');
+      const backgroundScript = getFileByExtension(cleanupChunks(chunks['background'] ?? []), '.js');
 
       const file = await readFile(manifestPath, 'utf-8');
       const srcManifest = JSON.parse(file);

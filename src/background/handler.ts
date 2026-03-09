@@ -1,6 +1,7 @@
 import { type DomainCountResponse, type HistoryResponse, type Message, type TokenizerResponse } from '@core/background';
 import { type ErrorNode } from '@wasm/types';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
+import { download } from './download';
 import { format, tokenize, query } from '@wasm';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
@@ -23,6 +24,10 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
         return await clearHistory();
       case 'get-domains':
         return await getDomains();
+      case 'download': {
+        const { type, filename, content } = message.payload;
+        return await download(type, content, filename);
+      }
       default: {
         const type: string = message['action'] ?? 'N/A';
 

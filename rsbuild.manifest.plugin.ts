@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const getFileByExtension = (files: string[], extension: string): string => {
-  const filteredFiles = files.filter(file => file.endsWith(extension));
+  const filteredFiles = files.filter(file => file.endsWith(extension) && !file.endsWith('.hot-update.js'));
   if (filteredFiles.length !== 1) {
     throw new Error(`Expected one file with extension ${extension}, found ${filteredFiles.length}`);
   }

@@ -3,7 +3,7 @@ import type { ErrorNode, TokenizerResponse } from '@wasm/types';
 import { isErrorNode } from '../../content-script/helpers';
 import {
   type ClearHistoryParams,
-  type DomainCountResponse,
+  type DomainCountResponse, type DownaodParams,
   type FormatParams,
   type GetDomainsParams,
   type GetHistoryParams,
@@ -12,6 +12,7 @@ import {
   type PushHistoryParams,
   type TokenizeParams,
 } from './models';
+import type { DownloadType } from '../../content-script/ui/toolbox/toolbox.ts';
 
 const bridge = async <M, R>(request: M) => {
   const response = await sendMessage<M, R | ErrorNode>(request);
@@ -48,4 +49,8 @@ export const pushHistory = async (domain: string, query: string): Promise<void> 
 
 export const getDomains = async (): Promise<DomainCountResponse> => {
   return bridge<GetDomainsParams, DomainCountResponse>({ action: 'get-domains', payload: undefined });
+};
+
+export const download = async (type: DownloadType, content: string, filename: string): Promise<void> => {
+  return bridge<DownaodParams, void>({ action: 'download', payload: { type, content, filename } });
 };

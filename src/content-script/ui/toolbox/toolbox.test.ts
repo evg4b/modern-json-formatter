@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
+import { beforeEach, describe, expect, it, type Mock, rstest, test } from '@rstest/core';
 import { TabChangedEvent, ToolboxElement } from './toolbox';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { without } from 'es-toolkit';
@@ -102,5 +102,11 @@ describe('mjf-toolbox', () => {
       expect(toolbox.shadowRoot?.querySelector('mjf-query-input'))
         .toBeDefined();
     });
+  });
+
+  it('should have download dropdown', () => {
+    const element = toolbox.shadowRoot?.querySelector('mjf-dropdown');
+
+    expect(element).toBeDefined();
   });
 });

@@ -1,5 +1,6 @@
 import type { format, tokenize } from '@wasm';
 import { clearHistory, type DomainCount, type getDomains, type getHistory, type pushHistory } from '../../background/history';
+import type { DownloadType } from '../../content-script/ui/toolbox/toolbox.ts';
 export { type TokenizerResponse } from '@wasm/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,6 +47,15 @@ export interface GetDomainsParams {
   payload: Payload<typeof getDomains>;
 }
 
+export interface DownaodParams {
+  action: 'download';
+  payload: {
+    type: DownloadType;
+    filename: string;
+    content: string;
+  };
+}
+
 export type Message
   = TokenizeParams
     | JqParams
@@ -53,4 +63,5 @@ export type Message
     | GetHistoryParams
     | PushHistoryParams
     | ClearHistoryParams
-    | GetDomainsParams;
+    | GetDomainsParams
+    | DownaodParams;

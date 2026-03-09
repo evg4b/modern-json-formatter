@@ -2,7 +2,6 @@ import '@testing/browser.mock';
 import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
 import { TabChangedEvent, ToolboxElement } from './toolbox';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
-import { ButtonElement } from '@core/ui/button';
 import { without } from 'es-toolkit';
 
 describe('mjf-toolbox', () => {
@@ -18,10 +17,10 @@ describe('mjf-toolbox', () => {
   const buttonValues = Object.values(mapping) as TabType[];
 
   describe('buttons', () => {
-    let buttons: ButtonElement[];
+    let buttons: HTMLButtonElement[];
 
     beforeEach(() => {
-      buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('mjf-button') ?? []);
+      buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('button') ?? []);
     });
 
     test('should have 3 buttons', () => {
@@ -35,12 +34,14 @@ describe('mjf-toolbox', () => {
     describe('by default', () => {
       test('Formatted should be active', () => {
         const button = buttons.find(b => b.innerText.trim() === 'Formatted');
-        expect(button?.active).toBe(true);
+        expect(button?.classList.contains('active'))
+          .toBe(true);
       });
 
       test.each(['Raw', 'Query'])('%s should be inactive', () => {
         const button = buttons.find(b => b.innerText.trim() === 'Raw');
-        expect(button?.active).toBe(false);
+        expect(button?.classList.contains('active'))
+          .toBe(false);
       });
     });
 
@@ -58,12 +59,12 @@ describe('mjf-toolbox', () => {
       });
 
       test.each(without(buttonNames, buttonName))('%s button should be inactive', buttonName => {
-        expect(buttons.find(b => b.innerText.trim() === buttonName)?.active)
+        expect(buttons.find(b => b.innerText.trim() === buttonName)?.classList.contains('active'))
           .toBe(false);
       });
 
       test(`${buttonName} button should be active`, () => {
-        expect(buttons.find(b => b.innerText.trim() === buttonName)?.active)
+        expect(buttons.find(b => b.innerText.trim() === buttonName)?.classList.contains('active'))
           .toBe(true);
       });
 

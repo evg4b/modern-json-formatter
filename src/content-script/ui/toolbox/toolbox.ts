@@ -4,9 +4,8 @@ import { classMap } from 'lit/directives/class-map.js';
 import { isInstanceOf } from 'typed-assert';
 import '../query-input';
 import '../info-button';
-import { ButtonElement } from '@core/ui/button';
 import { map } from 'lit/directives/map.js';
-import { boxingFixCss } from '@core/styles/lit';
+import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {
@@ -28,6 +27,7 @@ declare global {
 export class ToolboxElement extends LitElement {
   public static override readonly styles = [
     boxingFixCss,
+    buttonStylesCss,
     css`
       :host {
         display: flex;
@@ -66,19 +66,18 @@ export class ToolboxElement extends LitElement {
       ${input}
       <div class="button-container">
         ${map(this.tabs, ({ tab, label }) => html`
-          <mjf-button class=${classMap({ active: this.tab === tab })}
+          <button class=${classMap({ active: this.tab === tab })}
                       @click=${this.clickHandler}
-                      .active=${this.tab === tab}
                       data-type=${tab}>
             ${label}
-          </mjf-button>
+          </button>
         `)}
       </div>
     `;
   }
 
   private clickHandler(event: MouseEvent) {
-    isInstanceOf(event.target, ButtonElement);
+    isInstanceOf(event.target, HTMLButtonElement);
     this.tab = event.target.dataset.type as TabType;
     this.dispatchEvent(new TabChangedEvent(this.tab));
   }

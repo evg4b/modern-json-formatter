@@ -23,8 +23,8 @@ describe('mjf-toolbox', () => {
       buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('button') ?? []);
     });
 
-    test('should have 3 buttons', () => {
-      expect(buttons).toHaveLength(3);
+    test('should have 4 buttons', () => {
+      expect(buttons).toHaveLength(4);
     });
 
     test.each(buttonNames)('should have a %s button', buttonName => {

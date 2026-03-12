@@ -107,15 +107,20 @@ describe('dropdown', () => {
 
 describe('DropdownDirective', () => {
   test('render() should return empty string', () => {
-    // DropdownDirective.render() is required by Lit but always returns ''
-    // instantiate via the directive factory using a child part info
+
+    /*
+     * DropdownDirective.render() is required by Lit but always returns ''
+     * instantiate via the directive factory using a child part info
+     */
     const hostDiv = document.createElement('div');
     document.body.appendChild(hostDiv);
     const markup = html`<button ${dropdown([])}>test</button>`;
     render(markup, hostDiv);
 
-    // The directive instance's render() is called by Lit server-side rendering;
-    // we verify it produces no DOM output (returns '')
+    /*
+     * The directive instance's render() is called by Lit server-side rendering;
+     * we verify it produces no DOM output (returns '')
+     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = new DropdownDirective({ type: PartType.ELEMENT } as any).render([]);
     expect(result).toBe('');

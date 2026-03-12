@@ -1,6 +1,6 @@
 import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { colon, toggle } from './elements';
-import { buildInfoNode, isToggleElement, isValueExpandable } from './helpers';
+import { buildInfoNode, isLinkElement, isToggleElement, isValueExpandable } from './helpers';
 import { describe, expect, test } from '@rstest/core';
 
 describe('dom helpers', () => {
@@ -42,6 +42,31 @@ describe('dom helpers', () => {
     });
     test('should return false for non-toggle element', () => {
       expect(isToggleElement(colon())).toBe(false);
+    });
+    test('should return false for null', () => {
+      expect(isToggleElement(null)).toBe(false);
+    });
+  });
+
+  describe('isLinkElement', () => {
+    test('should return true for url element', () => {
+      const el = document.createElement('span');
+      el.classList.add('url');
+      expect(isLinkElement(el)).toBe(true);
+    });
+
+    test('should return true for email element', () => {
+      const el = document.createElement('span');
+      el.classList.add('email');
+      expect(isLinkElement(el)).toBe(true);
+    });
+
+    test('should return false for non-link element', () => {
+      expect(isLinkElement(colon())).toBe(false);
+    });
+
+    test('should return false for null', () => {
+      expect(isLinkElement(null)).toBe(false);
     });
   });
 

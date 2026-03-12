@@ -1,8 +1,8 @@
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing';
 import { type TokenNode } from '@wasm/types';
 import assert from 'node:assert';
 import { buildDom } from './build-dom';
-import { describe, expect, test } from '@rstest/core';
+import { describe, expect, rstest, test } from '@rstest/core';
 
 describe('buildDom', () => {
   const parsedJson: TokenNode = {
@@ -260,6 +260,138 @@ describe('buildDom', () => {
     } as unknown as TokenNode;
 
     expect(() => buildDom(invalidJson)).toThrow('Unknown type');
+  });
+
+  describe('tuple', () => {
+    test('should render a div with class tuple for TupleNode', () => {
+      const tuple = tTuple(tString('a'), tNumber('1'));
+      const dom = buildDom(tuple as unknown as TokenNode);
+
+      expect(dom.tagName.toLowerCase()).toBe('div');
+      expect(dom.classList.contains('tuple')).toBe(true);
+    });
+
+    test('should render children for each tuple item', () => {
+      const tuple = tTuple(tString('x'), tBool(true), tNull());
+      const dom = buildDom(tuple as unknown as TokenNode);
+
+      expect(dom.children).toHaveLength(3);
+    });
+  });
+
+  describe('event handlers', () => {
+    describe('keydown / keyup — active-links class', () => {
+      test('should add active-links class on Meta keydown', () => {
+        const dom = buildDom(tString('test'));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', bubbles: true }));
+        expect(dom.classList.contains('active-links')).toBe(true);
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Meta', bubbles: true }));
+      });
+
+      test('should add active-links class on Control keydown', () => {
+        const dom = buildDom(tString('test'));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+        expect(dom.classList.contains('active-links')).toBe(true);
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Control', bubbles: true }));
+      });
+
+      test('should not add active-links for other keys', () => {
+        const dom = buildDom(tString('test'));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+        expect(dom.classList.contains('active-links')).toBe(false);
+      });
+
+      test('should remove active-links class on Meta keyup', () => {
+        const dom = buildDom(tString('test'));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', bubbles: true }));
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Meta', bubbles: true }));
+        expect(dom.classList.contains('active-links')).toBe(false);
+      });
+
+      test('should remove active-links class on Control keyup', () => {
+        const dom = buildDom(tString('test'));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Control', bubbles: true }));
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Control', bubbles: true }));
+        expect(dom.classList.contains('active-links')).toBe(false);
+      });
+
+      test('should not remove active-links for other keys on keyup', () => {
+        const dom = buildDom(tString('test'));
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', bubbles: true }));
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Shift', bubbles: true }));
+        expect(dom.classList.contains('active-links')).toBe(true);
+        // cleanup
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Meta', bubbles: true }));
+      });
+    });
+
+    describe('click — toggle collapse', () => {
+      test('should toggle collapsed class on parent when toggle element is clicked', () => {
+        const dom = buildDom(tObject(tProperty('key', tString('val'))));
+        const toggleEl = dom.querySelector('.toggle') as HTMLElement;
+        const parent = toggleEl.parentNode as HTMLElement;
+
+        toggleEl.click();
+
+        expect(parent.classList.contains('collapsed')).toBe(true);
+      });
+
+      test('should un-toggle collapsed class on second click', () => {
+        const dom = buildDom(tObject(tProperty('key', tString('val'))));
+        const toggleEl = dom.querySelector('.toggle') as HTMLElement;
+        const parent = toggleEl.parentNode as HTMLElement;
+
+        toggleEl.click();
+        toggleEl.click();
+
+        expect(parent.classList.contains('collapsed')).toBe(false);
+      });
+
+      test('should open url link when Meta+click on url element', () => {
+        const openSpy = rstest.spyOn(window, 'open').mockImplementation(() => null);
+
+        const dom = buildDom(tString('https://example.com', 'url'));
+        const urlEl = dom.querySelector('.url') as HTMLElement;
+        urlEl.setAttribute('href', 'https://example.com');
+
+        document.body.appendChild(dom);
+        urlEl.dispatchEvent(new MouseEvent('click', { bubbles: true, metaKey: true }));
+        document.body.removeChild(dom);
+
+        expect(openSpy).toHaveBeenCalledWith('https://example.com', '_blank', 'noopener,noreferrer');
+        openSpy.mockRestore();
+      });
+
+      test('should open email link when Ctrl+click on email element', () => {
+        const openSpy = rstest.spyOn(window, 'open').mockImplementation(() => null);
+
+        const dom = buildDom(tString('test@example.com', 'email'));
+        const emailEl = dom.querySelector('.email') as HTMLElement;
+        emailEl.setAttribute('href', 'mailto:test@example.com');
+
+        document.body.appendChild(dom);
+        emailEl.dispatchEvent(new MouseEvent('click', { bubbles: true, ctrlKey: true }));
+        document.body.removeChild(dom);
+
+        expect(openSpy).toHaveBeenCalledWith('mailto:test@example.com', '_blank', 'noopener,noreferrer');
+        openSpy.mockRestore();
+      });
+
+      test('should not open url without Meta/Ctrl key', () => {
+        const openSpy = rstest.spyOn(window, 'open').mockImplementation(() => null);
+
+        const dom = buildDom(tString('https://example.com', 'url'));
+        const urlEl = dom.querySelector('.url') as HTMLElement;
+        urlEl.setAttribute('href', 'https://example.com');
+
+        document.body.appendChild(dom);
+        urlEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        document.body.removeChild(dom);
+
+        expect(openSpy).not.toHaveBeenCalled();
+        openSpy.mockRestore();
+      });
+    });
   });
 
   describe('expand/collapse', () => {

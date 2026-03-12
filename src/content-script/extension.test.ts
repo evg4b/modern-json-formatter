@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import '@testing/browser.mock';
 import '@testing/background.mock';
-import { format, tokenize } from '@core/background';
+import { download, format, jq, pushHistory, tokenize } from '@core/background';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
@@ -81,6 +81,23 @@ describe('runExtension', () => {
     expect(tokenize).not.toHaveBeenCalled();
   });
 
+  test('when content is too large and format returns error', async () => {
+    const preNode = createElement({
+      element: 'pre',
+      content: 'X'.repeat(LIMIT + 10),
+    });
+
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' } as any);
+
+    await runExtension();
+
+    expect(format).toHaveBeenCalled();
+    expect(rawContainer.children.length).toBeGreaterThan(0);
+    expect(tokenize).not.toHaveBeenCalled();
+  });
+
   test('when content is base', async () => {
     const preNode = createElement({
       element: 'pre',
@@ -103,5 +120,124 @@ describe('runExtension', () => {
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();
+  });
+
+  test('when tokenize returns error response', async () => {
+    const preNode = createElement({
+      element: 'pre',
+      content: '{ invalid }',
+    });
+
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    wrapMock(tokenize).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Parse error' } as any);
+
+    await runExtension();
+
+    expect(tokenize).toHaveBeenCalled();
+    expect(formatContainer.children.length).toBeGreaterThan(0);
+  });
+
+  describe('toolbox event handlers', () => {
+    let toolboxElement: HTMLElement;
+
+    beforeEach(async () => {
+      rstest.useFakeTimers();
+
+      // Use prototype directly to avoid infinite recursion when spy is reset between tests
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const nativeCreate = (HTMLDocument.prototype as any).createElement;
+      rstest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        const el = nativeCreate.call(document, tag);
+        if (tag === 'mjf-toolbox') {
+          toolboxElement = el;
+        }
+        return el;
+      });
+
+      const preNode = createElement({ element: 'pre', content: '{ "key": "value" }' });
+      wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+      wrapMock(tokenize).mockResolvedValue(tObject(tProperty('key', tString('value'))));
+
+      await runExtension();
+      rstest.runAllTimers();
+      rstest.useRealTimers();
+    });
+
+    test('tab-changed: query', () => {
+      toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'query' }));
+
+      expect(rootContainer.classList.contains('query')).toBe(true);
+      expect(rootContainer.classList.contains('raw')).toBe(false);
+      expect(rootContainer.classList.contains('formatted')).toBe(false);
+    });
+
+    test('tab-changed: raw', () => {
+      toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'raw' }));
+
+      expect(rootContainer.classList.contains('raw')).toBe(true);
+    });
+
+    test('tab-changed: formatted', () => {
+      toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'formatted' }));
+
+      expect(rootContainer.classList.contains('formatted')).toBe(true);
+    });
+
+    test('download event: raw', async () => {
+      wrapMock(download).mockResolvedValue(undefined);
+      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'raw' }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(download).toHaveBeenCalledWith('raw', expect.any(String), expect.stringContaining('.json'));
+    });
+
+    test('download event: formatted adds suffix', async () => {
+      wrapMock(download).mockResolvedValue(undefined);
+      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(download).toHaveBeenCalledWith('formatted', expect.any(String), expect.stringContaining('_formatted'));
+    });
+
+    test('jq-query: success calls jq and pushHistory', async () => {
+      wrapMock(jq).mockResolvedValue(tObject(tProperty('key', tString('value'))));
+      wrapMock(pushHistory).mockResolvedValue(undefined);
+
+      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(jq).toHaveBeenCalledWith(expect.any(String), '.key');
+      expect(pushHistory).toHaveBeenCalled();
+    });
+
+    test('jq-query error: jq scope sets toolbox error', async () => {
+      wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'jq', error: 'syntax error' });
+
+      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.invalid' }));
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((toolboxElement as any).error).toBe('syntax error');
+    });
+
+    test('jq-query error: non-jq scope appends error to root', async () => {
+      wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'worker', error: 'worker error', stack: 'stack' });
+
+      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(rootContainer.children.length).toBeGreaterThan(0);
+    });
+
+    test('jq-query error: non-ErrorNode logs to console', async () => {
+      const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
+      wrapMock(jq).mockRejectedValue('unexpected error');
+
+      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(consoleSpy).toHaveBeenCalledWith('unexpected error');
+    });
   });
 });

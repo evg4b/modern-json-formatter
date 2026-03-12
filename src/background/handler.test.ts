@@ -139,4 +139,35 @@ describe('handler', () => {
       });
     });
   });
+
+  describe('error handling', () => {
+    test('should return error node when action throws an Error instance', async () => {
+      const error = new Error('something went wrong');
+      error.stack = 'Error: something went wrong\n  at handler';
+      wrapMock(getHistory).mockRejectedValue(error);
+
+      const message: Message = { payload: { domain: 'x', prefix: '' }, action: 'get-history' };
+      const response = await handler(message);
+
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'worker',
+        stack: error.stack,
+        error: 'something went wrong',
+      });
+    });
+
+    test('should return error node when action throws a non-Error value', async () => {
+      wrapMock(getHistory).mockRejectedValue('plain string error');
+
+      const message: Message = { payload: { domain: 'x', prefix: '' }, action: 'get-history' };
+      const response = await handler(message);
+
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'worker',
+        error: 'Unknown error: plain string error',
+      });
+    });
+  });
 });

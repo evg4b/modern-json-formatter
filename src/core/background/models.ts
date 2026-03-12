@@ -47,7 +47,7 @@ export interface GetDomainsParams {
   payload: Payload<typeof getDomains>;
 }
 
-export interface DownaodParams {
+export interface DownloadParams {
   action: 'download';
   payload: {
     type: DownloadType;
@@ -64,4 +64,4 @@ export type Message
     | PushHistoryParams
     | ClearHistoryParams
     | GetDomainsParams
-    | DownaodParams;
+    | DownloadParams;

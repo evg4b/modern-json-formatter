@@ -5,12 +5,17 @@ import { wrapMock } from '@testing/helpers';
 import { format, query, tokenize } from '@wasm';
 import { handler } from './handler';
 import { clearHistory, getDomains, getHistory, pushHistory } from './history';
+import { download } from './download';
 
 rstest.mock('./history', () => ({
   getHistory: rstest.fn(),
   clearHistory: rstest.fn(),
   pushHistory: rstest.fn(),
   getDomains: rstest.fn(),
+}));
+
+rstest.mock('./download', () => ({
+  download: rstest.fn(),
 }));
 
 describe('handler', () => {
@@ -87,6 +92,25 @@ describe('handler', () => {
 
       expect(getDomains).toHaveBeenCalled();
       expect(response).toEqual(expected);
+    });
+  });
+
+  describe('download', () => {
+    test('should handle download message', async () => {
+      const message: Message = {
+        action: 'download',
+        payload: { type: 'formatted', content: '{"key":"value"}', filename: 'test.json' },
+      };
+
+      wrapMock(download).mockResolvedValue(undefined);
+
+      await handler(message);
+
+      expect(download).toHaveBeenCalledWith(
+        message.payload.type,
+        message.payload.content,
+        message.payload.filename,
+      );
     });
   });
 

@@ -3,6 +3,15 @@ import { html, render } from 'lit';
 import { dropdown } from './directive.ts';
 import { DropdownElement, type DropdownOption } from './dropdown.ts';
 import { throws } from '../../helpers.ts';
+import { defaultLitAsserts, renderLitElement } from '@testing/lit';
+
+// happy-dom does not implement the Popover API
+if (!HTMLElement.prototype.hidePopover) {
+  HTMLElement.prototype.hidePopover = () => { /* noop */ };
+}
+if (!HTMLElement.prototype.showPopover) {
+  HTMLElement.prototype.showPopover = () => { /* noop */ };
+}
 
 describe('dropdown', () => {
   const handler1 = rstest.fn().mockName('handler1');
@@ -91,6 +100,55 @@ describe('dropdown', () => {
 
       expect(popovertarget)
         .toBe(id);
+    });
+  });
+});
+
+describe('DropdownElement', () => {
+  let element: DropdownElement;
+  let handlerA: ReturnType<typeof rstest.fn>;
+  let handlerB: ReturnType<typeof rstest.fn>;
+
+  renderLitElement('mjf-dropdown', async el => {
+    element = el;
+    handlerA = rstest.fn().mockName('handlerA');
+    handlerB = rstest.fn().mockName('handlerB');
+    element.options = [
+      { label: 'Option A', onClick: handlerA },
+      { label: 'Option B', onClick: handlerB },
+    ];
+    await el.updateComplete;
+  });
+
+  defaultLitAsserts(DropdownElement, () => element);
+
+  test('should have popover attribute set to "auto" when connected', () => {
+    expect(element.getAttribute('popover')).toBe('auto');
+  });
+
+  describe('rendered buttons', () => {
+    let buttons: HTMLButtonElement[];
+
+    beforeEach(() => {
+      buttons = Array.from(element.shadowRoot?.querySelectorAll('button') ?? []);
+    });
+
+    test('should render a button for each option', () => {
+      expect(buttons).toHaveLength(2);
+    });
+
+    test.each(['Option A', 'Option B'])('should render button with label "%s"', label => {
+      expect(buttons.find(b => b.textContent?.trim() === label)).toBeDefined();
+    });
+
+    test('should call handlerA when first button is clicked', () => {
+      buttons[0]?.click();
+      expect(handlerA).toHaveBeenCalledTimes(1);
+    });
+
+    test('should call handlerB when second button is clicked', () => {
+      buttons[1]?.click();
+      expect(handlerB).toHaveBeenCalledTimes(1);
     });
   });
 });

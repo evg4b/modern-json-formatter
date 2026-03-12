@@ -8,4 +8,5 @@ rstest.mock('@core/background', () => ({
   clearHistory: rstest.fn(),
   pushHistory: rstest.fn(),
   getDomains: rstest.fn(),
+  download: rstest.fn(),
 }));

@@ -3,7 +3,7 @@ import type { ErrorNode, TokenizerResponse } from '@wasm/types';
 import { isErrorNode } from '../../content-script/helpers';
 import {
   type ClearHistoryParams,
-  type DomainCountResponse, type DownaodParams,
+  type DomainCountResponse, type DownloadParams,
   type FormatParams,
   type GetDomainsParams,
   type GetHistoryParams,
@@ -52,5 +52,5 @@ export const getDomains = async (): Promise<DomainCountResponse> => {
 };
 
 export const download = async (type: DownloadType, content: string, filename: string): Promise<void> => {
-  return bridge<DownaodParams, void>({ action: 'download', payload: { type, content, filename } });
+  return bridge<DownloadParams, void>({ action: 'download', payload: { type, content, filename } });
 };

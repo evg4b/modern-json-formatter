@@ -10,12 +10,12 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
   try {
     switch (message.action) {
       case 'tokenize': {
-        return tokenize(message.payload);
+        return await tokenize(message.payload);
       }
       case 'format':
-        return format(message.payload);
+        return await format(message.payload);
       case 'jq':
-        return query(message.payload.json, message.payload.query);
+        return await query(message.payload.json, message.payload.query);
       case 'get-history':
         return await getHistory(message.payload);
       case 'push-history':
@@ -39,10 +39,16 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
       }
     }
   } catch (err: unknown) {
+    const scope: ErrorNode['scope'] = ['tokenize', 'format'].includes(message.action)
+      ? 'tokenizer'
+      : message.action === 'jq'
+        ? 'jq'
+        : 'worker';
+
     if (err instanceof Error) {
       return {
         type: 'error',
-        scope: 'worker',
+        scope,
         stack: err.stack,
         error: err.message,
       };
@@ -50,7 +56,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
 
     return {
       type: 'error',
-      scope: 'worker',
+      scope,
       error: `Unknown error: ${String(err)}`,
     };
   }

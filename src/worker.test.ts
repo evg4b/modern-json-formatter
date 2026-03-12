@@ -194,7 +194,7 @@ describe('worker-wasm', () => {
     });
   });
 
-  describe.skip('format', () => {
+  describe('format', () => {
     test('should return a TokenizerResponse', async () => {
       const data = format('{ "data": 123 }');
 

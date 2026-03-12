@@ -40,7 +40,7 @@ describe('handler', () => {
       expect(response).toEqual('formatted');
     });
 
-    test.skip('should handle jq message', async () => {
+    test('should handle jq message', async () => {
       const message: Message = { payload: { json: 'json', query: '.query' }, action: 'jq' };
       wrapMock(query).mockResolvedValue('jq');
 
@@ -154,6 +154,38 @@ describe('handler', () => {
         scope: 'worker',
         stack: error.stack,
         error: 'something went wrong',
+      });
+    });
+
+    test('should set scope to tokenizer for tokenize errors', async () => {
+      const error = new Error('tokenize failed');
+      error.stack = 'stack';
+      wrapMock(tokenize).mockRejectedValue(error);
+
+      const message: Message = { payload: 'json', action: 'tokenize' };
+      const response = await handler(message);
+
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'tokenizer',
+        stack: error.stack,
+        error: 'tokenize failed',
+      });
+    });
+
+    test('should set scope to jq for jq errors', async () => {
+      const error = new Error('jq failed');
+      error.stack = 'stack';
+      wrapMock(query).mockRejectedValue(error);
+
+      const message: Message = { payload: { json: 'json', query: '.foo' }, action: 'jq' };
+      const response = await handler(message);
+
+      expect(response).toEqual({
+        type: 'error',
+        scope: 'jq',
+        stack: error.stack,
+        error: 'jq failed',
       });
     });
 

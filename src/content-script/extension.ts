@@ -34,21 +34,44 @@ export const runExtension = async () => {
 
   const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadowRoot);
 
+  const renderError = (
+    error: unknown,
+    target: HTMLElement,
+    header = 'Invalid JSON file.',
+    replace = true,
+  ): void => {
+    if (isErrorNode(error)) {
+      if (replace) {
+        target.innerHTML = '';
+      }
+      target.appendChild(buildErrorNode(header, error.error));
+      return;
+    }
+
+    console.error(error);
+  };
+
   if (content.length > LIMIT) {
     preNode.remove();
 
     rootContainer.classList.remove('formatted', 'query');
     rootContainer.classList.add('raw');
 
-    const formatted = await format(content);
-    if (typeof formatted === 'object') {
-      return rawContainer.appendChild(buildErrorNode('Invalid JSON file.', formatted.error));
-    }
+    try {
+      const formatted = await format(content);
+      if (typeof formatted === 'object') {
+        return rawContainer.appendChild(buildErrorNode('Invalid JSON file.', formatted.error));
+      }
 
-    rawContainer.appendChild(createElement({
-      element: 'pre',
-      content: formatted,
-    }));
+      rawContainer.appendChild(createElement({
+        element: 'pre',
+        content: formatted,
+      }));
+    } catch (error: unknown) {
+      renderError(error, rawContainer);
+      rootContainer.classList.remove('loading');
+      return;
+    }
 
     const creeated = createElement({
       element: 'mjf-floating-message',
@@ -106,7 +129,11 @@ export const runExtension = async () => {
     toolbox.addEventListener('download', async event => {
       const filename = extractFileName(location.toString());
       const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
-      await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
+      try {
+        await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
+      } catch (error: unknown) {
+        renderError(error, rootContainer, 'Unable to download the file.', false);
+      }
     });
 
     shadowRoot.appendChild(panel);
@@ -135,6 +162,7 @@ export const runExtension = async () => {
           });
 
           rootContainer.appendChild(errorMessage);
+          return;
         }
 
         console.error(error);
@@ -142,10 +170,16 @@ export const runExtension = async () => {
     };
   });
 
-  const response = await wrapper(tokenize(preNode.innerText));
-  formatContainer.appendChild(
-    prepareResponse(response),
-  );
+  try {
+    const response = await wrapper(tokenize(preNode.innerText));
+    formatContainer.appendChild(
+      prepareResponse(response),
+    );
+  } catch (error: unknown) {
+    renderError(error, formatContainer);
+    rootContainer.classList.remove('loading');
+    return;
+  }
   rootContainer.classList.remove('loading');
 
   return undefined;

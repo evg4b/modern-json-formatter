@@ -25,10 +25,11 @@ export class DropdownElement extends LitElement {
       :host-context(:popover-open) {
         display: flex;
         flex-direction: column;
-        background-color: #282828;
-        border: 1px solid #636363;
+        background-color: var(--background);
+        color: var(--base-text-color);
+        border: 1px solid var(--border-color);
         border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 10px var(--box-shadow-color);
         z-index: 1000;
         position-area: bottom !important;
         top: anchor(bottom);
@@ -50,7 +51,7 @@ export class DropdownElement extends LitElement {
         align-items: center;
 
         &:hover {
-          background-color: #3c3c3c;
+          background-color: var(--background-hover);
         }
       }
     `,

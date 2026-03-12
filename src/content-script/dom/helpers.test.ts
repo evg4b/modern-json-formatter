@@ -1,4 +1,4 @@
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString } from '@testing/json';
 import { colon, toggle } from './elements';
 import { buildInfoNode, isLinkElement, isToggleElement, isValueExpandable } from './helpers';
 import { describe, expect, test } from '@rstest/core';

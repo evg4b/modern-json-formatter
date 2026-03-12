@@ -5,7 +5,7 @@ import { download, format, jq, pushHistory, tokenize } from '@core/background';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
-import { tNull, tObject, tProperty, tString } from '@testing';
+import { tNull, tObject, tProperty, tString } from '@testing/json';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';

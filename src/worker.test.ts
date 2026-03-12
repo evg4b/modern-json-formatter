@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@rstest/core';
 import { format, query, tokenize } from '@wasm';
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing/json';
 
 describe('worker-wasm', () => {
   describe('query', () => {

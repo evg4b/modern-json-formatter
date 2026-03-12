@@ -31,7 +31,7 @@ export const extractFileName = (url: string | undefined | null): string => {
   const lastRawSection = last(pathname.split('/'));
   const lastSection = head(lastRawSection?.split('.') ?? []);
 
-  return !lastSection
-    ? hostname.replaceAll('.', '-')
-    : lastSection;
+  return lastSection
+    ? lastSection
+    : hostname.replaceAll('.', '-');
 };

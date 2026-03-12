@@ -105,7 +105,7 @@ export const runExtension = async () => {
 
     toolbox.addEventListener('download', async event => {
       const filename = extractFileName(location.toString());
-      const suffix = event.detail !== 'raw' ? `_${event.detail}` : '';
+      const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
       await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
     });
 

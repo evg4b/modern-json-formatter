@@ -101,7 +101,10 @@ export class SectionElement extends LitElement {
   public sidebarController!: SidebarController;
 
   public override updated() {
-    this.sidebarController.registerSection(this.ref.value!);
+    const section = this.ref.value;
+    if (section) {
+      this.sidebarController.registerSection(section);
+    }
   }
 
   public override render() {

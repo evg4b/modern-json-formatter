@@ -1,5 +1,5 @@
 import '@testing/browser.mock';
-import { describe } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import { RoundedButtonElement } from '@core/ui';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import './rounded-button';
@@ -12,4 +12,9 @@ describe('mjf-rounded-button', () => {
   });
 
   defaultLitAsserts(RoundedButtonElement, () => button);
+
+  test('should render a button element', () => {
+    const innerButton = button.shadowRoot?.querySelector('button');
+    expect(innerButton).not.toBeNull();
+  });
 });

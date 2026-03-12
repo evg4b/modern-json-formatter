@@ -17,7 +17,7 @@ declare global {
 
 @customElement('mjf-dropdown')
 export class DropdownElement extends LitElement {
-  public static formAssociated = true;
+  public static readonly formAssociated = true;
 
   public static override readonly styles = [
     boxingFixCss,

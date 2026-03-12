@@ -1,4 +1,4 @@
-import { describe } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import { SideBarLinkElement } from './side-bar-link';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 
@@ -10,4 +10,9 @@ describe('mjf-sidebar-link', () => {
   });
 
   defaultLitAsserts(SideBarLinkElement, () => sidebarLink);
+
+  test('should render anchor element', () => {
+    const anchor = sidebarLink.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('href')).toBe('#');
+  });
 });

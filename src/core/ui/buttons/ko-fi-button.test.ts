@@ -1,7 +1,8 @@
 import '@testing/browser.mock';
-import { describe } from '@rstest/core';
+import { describe, expect, test } from '@rstest/core';
 import { KoFiButtonElement } from '@core/ui';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
+import { BUTTONS } from '@core/constants';
 import './ko-fi-button';
 
 describe('mjf-ko-fi-button', () => {
@@ -12,4 +13,9 @@ describe('mjf-ko-fi-button', () => {
   });
 
   defaultLitAsserts(KoFiButtonElement, () => button);
+
+  test('should render link to Ko-Fi', () => {
+    const anchor = button.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('href')).toBe(BUTTONS.KO_FI.URL);
+  });
 });

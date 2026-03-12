@@ -107,7 +107,7 @@ export class QueryInputElement extends LitElement {
   public error: string | null = null;
 
   private readonly historyManager = new HistoryManager<HistoryItem>();
-  private readonly autocomplete = new AutocompleteController(this, window.location.hostname);
+  private readonly autocomplete = new AutocompleteController(this, globalThis.location.hostname);
 
   private readonly inputRef = createRef<HTMLInputElement>();
 
@@ -170,7 +170,7 @@ export class QueryInputElement extends LitElement {
 
   private onInput() {
     this.saveState();
-    void this.autocomplete.updateHistory(this.inputElement.value);
+    this.autocomplete.updateHistory(this.inputElement.value);
   }
 
   private onWrapEvent(event: KeyboardEvent) {

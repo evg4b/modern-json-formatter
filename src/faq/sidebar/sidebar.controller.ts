@@ -54,7 +54,7 @@ export class SidebarController implements ReactiveController {
     this.host.requestUpdate();
   }
 
-  private scrollEndHandler = () => {
+  private readonly scrollEndHandler = () => {
     const visibleItems = this.items
       .flatMap(item => [item, ...item.children ?? []])
       .flatMap(item => {

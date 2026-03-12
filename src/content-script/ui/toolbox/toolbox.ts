@@ -4,7 +4,6 @@ import { classMap } from 'lit/directives/class-map.js';
 import { isInstanceOf } from 'typed-assert';
 import '../query-input';
 import '../info-button';
-import '../dropdown';
 import { map } from 'lit/directives/map.js';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
 import { dropdown } from '../dropdown';

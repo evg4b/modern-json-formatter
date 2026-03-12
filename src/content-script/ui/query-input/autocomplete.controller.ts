@@ -14,11 +14,11 @@ export class AutocompleteController implements ReactiveController {
   }
 
   public hostConnected() {
-    void this.loadHistory('');
+    this.loadHistory('');
   }
 
   public updateHistory(prefix: string) {
-    void this.loadHistory(prefix);
+    this.loadHistory(prefix);
   }
 
   private readonly loadHistory = debounce(async (prefix: string) => {

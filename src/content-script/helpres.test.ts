@@ -2,7 +2,7 @@ import { createElement } from '@core/dom';
 import { beforeEach, describe, expect, test } from '@rstest/core';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing';
 import { type ErrorNode } from '@wasm/types';
-import { assetTabType, isErrorNode, query, throws } from './helpers';
+import { assetTabType, extractFileName, isErrorNode, query, throws } from './helpers';
 
 describe('helpers', () => {
   test('should work', () => {
@@ -112,5 +112,22 @@ describe('query', () => {
 
   test('should throw error if element not found', () => {
     expect(() => query(container, '.non-existent-element')).toThrow('Element .non-existent-element not found');
+  });
+});
+
+describe('extractFileName', () => {
+  const cases = [
+    { input: 'https://api.github.com/repos/evg4b/modern-json-formatter', expected: 'modern-json-formatter' },
+    { input: 'https://api.github.com/repos/evg4b/modern-json-formatter.json', expected: 'modern-json-formatter' },
+    { input: 'https://api.github.com/', expected: 'api-github-com' },
+    { input: null, expected: 'data' },
+    { input: undefined, expected: 'data' },
+    { input: '', expected: 'data' },
+  ];
+
+  test.each(cases)('should extract file name from url', ({ input, expected }) => {
+    const result = extractFileName(input);
+
+    expect(result).toEqual(expected);
   });
 });

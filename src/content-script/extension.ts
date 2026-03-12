@@ -1,9 +1,9 @@
-import { format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
+import { download, format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom, buildErrorNode } from './dom';
-import { isErrorNode } from './helpers';
+import { extractFileName, isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { buildContainers } from './ui';
 import './ui/toolbox';
@@ -101,6 +101,12 @@ export const runExtension = async () => {
 
     toolbox.addEventListener('jq-query', async event => {
       await wrapper(jqQuery(event.detail));
+    });
+
+    toolbox.addEventListener('download', async event => {
+      const filename = extractFileName(location.toString());
+      const suffix = event.detail !== 'raw' ? `_${event.detail}` : '';
+      await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
     });
 
     shadowRoot.appendChild(panel);

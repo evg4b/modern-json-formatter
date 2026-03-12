@@ -9,6 +9,7 @@
   "short_name": "JSON fmt",
   "minimum_chrome_version": "88",
   "options_page": "options.html",
+  "permissions": ["downloads"],
   "content_scripts": [
     {
       "matches": [

@@ -72,6 +72,18 @@ export default [
       '@stylistic/function-paren-newline': ['error', 'multiline-arguments'],
       '@stylistic/multiline-ternary': ['error', 'always-multiline'],
       '@typescript-eslint/implicit-arrow-linebreak': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   {

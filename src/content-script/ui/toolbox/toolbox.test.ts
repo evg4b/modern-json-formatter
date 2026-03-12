@@ -1,6 +1,6 @@
 import '@testing/browser.mock';
 import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
-import { TabChangedEvent, ToolboxElement } from './toolbox';
+import { DownloadEvent, TabChangedEvent, ToolboxElement } from './toolbox';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { without } from 'es-toolkit';
 
@@ -23,12 +23,18 @@ describe('mjf-toolbox', () => {
       buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('button') ?? []);
     });
 
-    test('should have 3 buttons', () => {
-      expect(buttons).toHaveLength(3);
+    test('should have 4 buttons', () => {
+      expect(buttons).toHaveLength(4);
     });
 
     test.each(buttonNames)('should have a %s button', buttonName => {
-      expect(buttons.find(b => b.innerText.trim() === buttonName)).toBeDefined();
+      expect(buttons.find(b => b.innerText.trim() === buttonName))
+        .toBeDefined();
+    });
+
+    test('should have a download button', () => {
+      expect(buttons.find(b => b.classList.contains('square')))
+        .toBeDefined();
     });
 
     describe('by default', () => {
@@ -80,6 +86,32 @@ describe('mjf-toolbox', () => {
     });
   });
 
+  describe('download dropdown', () => {
+    describe.each([
+      { label: 'Raw', type: 'raw' },
+      { label: 'Formatted', type: 'formatted' },
+      { label: 'Minified', type: 'minified' },
+    ] as const)('clicking "$label" option', ({ label, type }) => {
+      let handler: Mock<(event: DownloadEvent) => void>;
+
+      beforeEach(() => {
+        handler = rstest.fn();
+        toolbox.addEventListener('download', handler);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const options = (toolbox as any).dropdown as Array<{ label: string; onClick: () => void }>;
+        options.find(o => o.label === label)?.onClick();
+      });
+
+      test(`should emit download event with type="${type}"`, () => {
+        expect(handler).toHaveBeenCalledTimes(1);
+        const event = handler.mock.calls[0][0];
+        expect(event).toBeInstanceOf(DownloadEvent);
+        expect(event.detail).toBe(type);
+        expect(event.type).toBe('download');
+      });
+    });
+  });
+
   describe.each(without(buttonValues, 'query'))('should reflect tab="%s" property', tabValue => {
     beforeEach(async () => {
       toolbox.tab = tabValue;
@@ -100,7 +132,7 @@ describe('mjf-toolbox', () => {
 
     test('should render input', () => {
       expect(toolbox.shadowRoot?.querySelector('mjf-query-input'))
-        .toBeDefined();
+        .not.toBeNull();
     });
   });
 });

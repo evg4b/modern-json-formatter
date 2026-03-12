@@ -1,4 +1,5 @@
 import { type ErrorNode } from '@wasm/types';
+import { last, head } from 'es-toolkit';
 
 export const throws = (value?: string): never => {
   throw new Error(value ?? 'Unexpected value');
@@ -19,4 +20,18 @@ export function assetTabType(s?: string | null): asserts s is TabType {
 
 export const isErrorNode = (node: unknown): node is ErrorNode => {
   return !!node && typeof node === 'object' && 'type' in node && node.type === 'error';
+};
+
+export const extractFileName = (url: string | undefined | null): string => {
+  if (!url) {
+    return 'data';
+  }
+
+  const { pathname, hostname } = new URL(url);
+  const lastRawSection = last(pathname.split('/'));
+  const lastSection = head(lastRawSection?.split('.') ?? []);
+
+  return !lastSection
+    ? hostname.replaceAll('.', '-')
+    : lastSection;
 };

@@ -8,7 +8,11 @@
   --toggle-size: 17px;
 
   --background: #282828;
+  --background-hover: #3c3c3c;
   --base-text-color: #f8f8f2;
+
+  --border-color: #636363;
+  --box-shadow-color: rgba(0, 0, 0, 0.5);
 
   --meta-info-color: #717171;
   --guideline-color: #3b3b3b;
@@ -72,7 +76,11 @@
   @media (prefers-color-scheme: light) {
     /* code */
     --background: #f3f3f3;
+    --background-hover: #e6e6e6;
     --base-text-color: #1f1f1f;
+
+    --border-color: #bebebe;
+    --box-shadow-color: rgba(0, 0, 0, 0.2);
 
     --meta-info-color: #898989;
     --guideline-color: #81a4e6;

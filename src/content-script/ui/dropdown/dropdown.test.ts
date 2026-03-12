@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
-import { html, render, nothing } from 'lit';
+import { html, render } from 'lit';
 import { dropdown, DropdownDirective } from './directive.ts';
 import { DropdownElement, type DropdownOption } from './dropdown.ts';
 import { throws } from '../../helpers.ts';
@@ -116,14 +116,16 @@ describe('DropdownDirective', () => {
 
     // The directive instance's render() is called by Lit server-side rendering;
     // we verify it produces no DOM output (returns '')
-    const result = new DropdownDirective({ type: PartType.ELEMENT } as Parameters<typeof DropdownDirective['prototype']['render']>[0] extends never ? never : Parameters<typeof DropdownDirective>[0]).render([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = new DropdownDirective({ type: PartType.ELEMENT } as any).render([]);
     expect(result).toBe('');
 
     document.body.removeChild(hostDiv);
   });
 
   test('update() should throw when used on a non-ELEMENT part', () => {
-    const directive = new DropdownDirective({ type: PartType.ELEMENT } as Parameters<typeof DropdownDirective>[0]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const directive = new DropdownDirective({ type: PartType.ELEMENT } as any);
     const nonElementPartInfo = { type: PartType.CHILD };
 
     expect(() => directive.update(nonElementPartInfo as Parameters<typeof directive.update>[0], [[]])).toThrow(

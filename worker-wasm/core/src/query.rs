@@ -38,12 +38,25 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     let loader = Loader::new(jaq_std::defs().chain(jaq_json::defs()));
     let arena = Arena::default();
 
-    let modules = loader.load(&arena, program).unwrap();
+    let modules = loader
+        .load(&arena, program)
+        .map_err(|errors| {
+            let messages: Vec<String> = errors.iter().map(|(_, e)| format!("{e:?}")).collect();
+            Box::<dyn Error>::from(messages.join("; "))
+        })?;
 
     let filter = Compiler::default()
         .with_funs(jaq_std::funs().chain(jaq_json::funs()))
         .compile(modules)
-        .unwrap();
+        .map_err(|errors| {
+            let messages: Vec<String> = errors
+                .iter()
+                .flat_map(|(_, errs)| {
+                    errs.iter().map(|(name, undef)| format!("undefined {}: {name}", undef.as_str()))
+                })
+                .collect();
+            Box::<dyn Error>::from(messages.join("; "))
+        })?;
 
     let inputs = RcIter::new(core::iter::empty());
 

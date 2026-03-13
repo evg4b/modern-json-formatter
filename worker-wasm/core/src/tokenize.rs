@@ -67,6 +67,7 @@ pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn std::error::Error>> {
         ))),
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;

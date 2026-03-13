@@ -198,4 +198,49 @@ mod tests {
 
         assert_eq!(node, Node::array(vec![Node::object(vec![])]))
     }
+
+    #[test]
+    fn parses_boolean_true() {
+        assert_eq!(tokenize_json("true").unwrap(), Node::Boolean { value: true });
+    }
+
+    #[test]
+    fn parses_float_number() {
+        assert_eq!(
+            tokenize_json("3.14").unwrap(),
+            Node::Number {
+                value: "3.14".to_string(),
+            },
+        );
+    }
+
+    #[test]
+    fn parses_negative_number() {
+        assert_eq!(
+            tokenize_json("-42").unwrap(),
+            Node::Number {
+                value: "-42".to_string(),
+            },
+        );
+    }
+
+    #[test]
+    fn parses_empty_array() {
+        assert_eq!(tokenize_json("[]").unwrap(), Node::array(vec![]));
+    }
+
+    #[test]
+    fn parses_empty_string_value() {
+        assert_eq!(tokenize_json(r#""""#).unwrap(), Node::string("", None));
+    }
+
+    #[test]
+    fn fails_on_empty_input() {
+        assert!(tokenize_json("").is_err());
+    }
+
+    #[test]
+    fn fails_on_invalid_json() {
+        assert!(tokenize_json("{invalid}").is_err());
+    }
 }

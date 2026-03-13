@@ -76,7 +76,7 @@ describe('pushHistory', () => {
     expect(history).toEqual(['query1']);
   });
 
-  test('should push history', async () => {
+  test('should deduplicate history entries', async () => {
     await pushHistory({ domain: 'example.com', query: '.' });
     await pushHistory({ domain: 'example.com', query: '.[]' });
     await pushHistory({ domain: 'example.com', query: '.' });

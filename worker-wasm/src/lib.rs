@@ -9,14 +9,14 @@ pub mod utils;
 pub fn tokenize(json: &str) -> Result<JsValue, JsError> {
     tokenize_json(json)
         .map_err(|e| JsError::new(&e.to_string()))
-        .and_then(|node| to_value(&node).map_err(|e| JsError::from(e)))
+        .and_then(|node| to_value(&node).map_err(JsError::from))
 }
 
 #[wasm_bindgen]
 pub fn query(json: &str, query: &str) -> Result<JsValue, JsError> {
     query_json(json, query)
         .map_err(|e| JsError::new(&e.to_string()))
-        .and_then(|result| to_value(&result).map_err(|e| JsError::from(e)))
+        .and_then(|result| to_value(&result).map_err(JsError::from))
 }
 
 #[wasm_bindgen]

@@ -8,6 +8,7 @@ import { registerStyle } from '@core/ui/helpers';
 import { tNull, tObject, tProperty, tString } from '@testing/json';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
+import { ToolboxElement } from './ui/toolbox/toolbox';
 import { findNodeWithCode } from './json-detector';
 import { buildContainers } from './ui';
 
@@ -25,10 +26,10 @@ rstest.mock('@core/ui/helpers', () => ({
 }));
 
 describe('runExtension', () => {
-  let rootContainer: HTMLElement;
-  let formatContainer: HTMLElement;
-  let rawContainer: HTMLElement;
-  let queryContainer: HTMLElement;
+  let rootContainer: HTMLDivElement;
+  let formatContainer: HTMLDivElement;
+  let rawContainer: HTMLDivElement;
+  let queryContainer: HTMLDivElement;
   let body: HTMLElement;
   let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
 
@@ -88,8 +89,7 @@ describe('runExtension', () => {
     });
 
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' } as any);
+    wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
 
     await runExtension();
 
@@ -129,8 +129,7 @@ describe('runExtension', () => {
     });
 
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    wrapMock(tokenize).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Parse error' } as any);
+    wrapMock(tokenize).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Parse error' });
 
     await runExtension();
 
@@ -139,18 +138,17 @@ describe('runExtension', () => {
   });
 
   describe('toolbox event handlers', () => {
-    let toolboxElement: HTMLElement;
+    let toolboxElement: ToolboxElement;
 
     beforeEach(async () => {
       rstest.useFakeTimers();
 
       // Use prototype directly to avoid infinite recursion when spy is reset between tests
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const nativeCreate = (HTMLDocument.prototype as any).createElement;
+      const nativeCreate = Document.prototype.createElement;
       rstest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
         const el = nativeCreate.call(document, tag);
         if (tag === 'mjf-toolbox') {
-          toolboxElement = el;
+          toolboxElement = el as ToolboxElement;
         }
         return el;
       });
@@ -225,8 +223,7 @@ describe('runExtension', () => {
       toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.invalid' }));
       await new Promise(resolve => setTimeout(resolve, 10));
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect((toolboxElement as any).error).toBe('syntax error');
+      expect(toolboxElement.error).toBe('syntax error');
     });
 
     test('jq-query error: non-jq scope appends error to root', async () => {

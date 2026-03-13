@@ -28,6 +28,39 @@ fn to_return_value(value: Val) -> Node {
     }
 }
 
+fn format_load_error(e: &load::Error<&str>) -> String {
+    match e {
+        load::Error::Lex(errs) => errs
+            .iter()
+            .map(|(expected, found)| {
+                let ch = found.chars().next().map(|c| format!("'{c}'")).unwrap_or_else(|| "end of input".to_string());
+                match expected {
+                    load::lex::Expect::Token => format!("unexpected character {ch}"),
+                    _ => format!("unexpected {ch}, expected {}", expected.as_str()),
+                }
+            })
+            .collect::<Vec<_>>()
+            .join("; "),
+        load::Error::Parse(errs) => errs
+            .iter()
+            .map(|(expected, found)| {
+                let found_desc = if found.is_empty() {
+                    "end of input".to_string()
+                } else {
+                    format!("'{found}'")
+                };
+                format!("unexpected {found_desc}, expected {}", expected.as_str())
+            })
+            .collect::<Vec<_>>()
+            .join("; "),
+        load::Error::Io(errs) => errs
+            .iter()
+            .map(|(path, err)| format!("cannot load '{path}': {err}"))
+            .collect::<Vec<_>>()
+            .join("; "),
+    }
+}
+
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     let input = from_str::<Value>(json)?;
     let program = File {
@@ -41,7 +74,7 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     let modules = loader
         .load(&arena, program)
         .map_err(|errors| {
-            let messages: Vec<String> = errors.iter().map(|(_, e)| format!("{e:?}")).collect();
+            let messages: Vec<String> = errors.iter().map(|(_, e)| format_load_error(e)).collect();
             Box::<dyn Error>::from(messages.join("; "))
         })?;
 
@@ -127,5 +160,17 @@ mod tests {
             result,
             Node::tuple(vec![])
         );
+    }
+
+    #[test]
+    fn query_json_empty_query_gives_readable_error() {
+        let err = query_json(JSON, "").unwrap_err();
+        assert_eq!(err.to_string(), "unexpected end of input, expected term");
+    }
+
+    #[test]
+    fn query_json_unexpected_token_gives_readable_error() {
+        let err = query_json(JSON, ". | ]").unwrap_err();
+        assert_eq!(err.to_string(), "unexpected character ']'");
     }
 }

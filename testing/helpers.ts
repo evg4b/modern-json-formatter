@@ -1,12 +1,5 @@
-import { rstest, type Mock } from '@rstest/core';
+import { type Mock } from '@rstest/core';
 
-// @ts-expect-error temporal solution
-export const wrapMock = <T>(mock: unknown): Mock<T> => {
-  if (rstest.isMockFunction(mock)) {
-    // @ts-expect-error - temporal solution
-    return mock as unknown as Mock<T>;
-  }
-
-  // @ts-expect-error temporal solution
-  return mock as Mock<T>;
+export const wrapMock = <T extends (...args: Parameters<T>) => ReturnType<T>>(mock: T): Mock<T> => {
+  return mock as unknown as Mock<T>;
 };

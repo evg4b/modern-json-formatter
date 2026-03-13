@@ -23,9 +23,8 @@ export const renderLitElement = <T extends TagName>(tag: T, callback: (element: 
   });
 };
 
-export const defaultLitAsserts = <T extends TagName>(type: unknown, getter: () => Element<T>) => {
-  // @ts-expect-error incorrect type definition
-  test(`should be instance of ${type?.name}`, () => {
+export const defaultLitAsserts = <T extends TagName>(type: abstract new (...args: never[]) => Element<T>, getter: () => Element<T>) => {
+  test(`should be instance of ${type.name}`, () => {
     expect(getter()).toBeInstanceOf(type);
   });
 
@@ -33,4 +32,3 @@ export const defaultLitAsserts = <T extends TagName>(type: unknown, getter: () =
     expect(getter().shadowRoot).not.toBeNull();
   });
 };
-

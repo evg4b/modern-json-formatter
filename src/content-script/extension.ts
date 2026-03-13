@@ -139,6 +139,7 @@ export const runExtension = async () => {
     shadowRoot.appendChild(panel);
 
     const jqQuery = async (query: string) => {
+      toolbox.error = null;
       try {
         const info = await jq(preNode.innerText, query);
         queryContainer.innerHTML = '';

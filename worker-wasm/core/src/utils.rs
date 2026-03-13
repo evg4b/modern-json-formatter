@@ -49,6 +49,16 @@ mod tests_is_url {
     fn unsupported_scheme_returns_false() {
         assert!(!is_url("data:text/plain;base64,SGVsbG8sIFdvcmxkIQ%3D%3D"));
     }
+
+    #[test]
+    fn return_true_for_url_with_leading_and_trailing_whitespace() {
+        assert!(is_url("  https://example.com  "));
+    }
+
+    #[test]
+    fn return_true_for_url_with_path_query_and_fragment() {
+        assert!(is_url("https://example.com/path?query=value&other=2#section"));
+    }
 }
 
 
@@ -84,5 +94,16 @@ mod tests_determinate_variant {
     fn returns_none_for_invalid_string() {
         let actual = determinate_variant("not_a_url_or_email");
         assert!(actual.is_none());
+    }
+
+    #[test]
+    fn returns_url_for_mailto_link() {
+        let actual = determinate_variant("mailto:user@example.com").unwrap();
+        assert_eq!(actual, StringVariant::Url);
+    }
+
+    #[test]
+    fn returns_none_for_empty_string() {
+        assert!(determinate_variant("").is_none());
     }
 }

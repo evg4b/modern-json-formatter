@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/evg4b/modern-json-formatter",
   "license": "MIT",
-  "packageManager": "yarn@4.12.0",
+  "packageManager": "yarn@4.13.0",
   "scripts": {
     "build": "NODE_ENV=development rsbuild build",
     "build:production": "NODE_ENV=production rsbuild build",

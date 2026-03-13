@@ -112,6 +112,7 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::StringVariant;
     const JSON: &str = r#"
         {
             "a": 1,
@@ -172,5 +173,127 @@ mod tests {
     fn query_json_unexpected_token_gives_readable_error() {
         let err = query_json(JSON, ". | ]").unwrap_err();
         assert_eq!(err.to_string(), "unexpected character ']'");
+    }
+
+    // --- to_return_value branch coverage ---
+
+    #[test]
+    fn query_returns_null_value() {
+        let result = query_json(r#"{"a": null}"#, ".a").unwrap();
+        assert_eq!(result, Node::tuple(vec![Node::Null]));
+    }
+
+    #[test]
+    fn query_returns_boolean_true() {
+        let result = query_json(r#"{"flag": true}"#, ".flag").unwrap();
+        assert_eq!(result, Node::tuple(vec![Node::bool(true)]));
+    }
+
+    #[test]
+    fn query_returns_boolean_false() {
+        let result = query_json(r#"{"flag": false}"#, ".flag").unwrap();
+        assert_eq!(result, Node::tuple(vec![Node::bool(false)]));
+    }
+
+    #[test]
+    fn query_returns_plain_string() {
+        let result = query_json(r#"{"name": "alice"}"#, ".name").unwrap();
+        assert_eq!(result, Node::tuple(vec![Node::string("alice", None)]));
+    }
+
+    #[test]
+    fn query_returns_string_with_url_variant() {
+        let result = query_json(r#"{"link": "https://example.com"}"#, ".link").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![Node::string(
+                "https://example.com",
+                Some(StringVariant::Url),
+            )]),
+        );
+    }
+
+    #[test]
+    fn query_returns_string_with_email_variant() {
+        let result = query_json(r#"{"email": "user@example.com"}"#, ".email").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![Node::string(
+                "user@example.com",
+                Some(StringVariant::Email),
+            )]),
+        );
+    }
+
+    #[test]
+    fn query_returns_integer_from_arithmetic() {
+        // Val::Int branch: integer arithmetic produces Val::Int
+        let result = query_json("{}", "1 + 2").unwrap();
+        assert_eq!(result, Node::tuple(vec![Node::number("3")]));
+    }
+
+    #[test]
+    fn query_returns_float_literal() {
+        // Val::Float branch: float literal in filter produces Val::Float
+        let result = query_json("{}", "1.5").unwrap();
+        assert_eq!(result, Node::tuple(vec![Node::number("1.5")]));
+    }
+
+    #[test]
+    fn query_returns_array_value() {
+        let result = query_json(r#"{"items": [1, 2]}"#, ".items").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![Node::array(vec![
+                Node::number("1"),
+                Node::number("2"),
+            ])]),
+        );
+    }
+
+    #[test]
+    fn query_returns_object_value() {
+        let result = query_json(r#"{"nested": {"x": 1}}"#, ".nested").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![Node::object(vec![Node::property(
+                "x",
+                Node::number("1"),
+            )])]),
+        );
+    }
+
+    #[test]
+    fn query_returns_multiple_results() {
+        let result = query_json(r#"[1, 2, 3]"#, ".[]").unwrap();
+        assert_eq!(
+            result,
+            Node::tuple(vec![
+                Node::number("1"),
+                Node::number("2"),
+                Node::number("3"),
+            ]),
+        );
+    }
+
+    // --- error path coverage ---
+
+    #[test]
+    fn query_fails_on_invalid_json_input() {
+        assert!(query_json("{invalid}", ".").is_err());
+    }
+
+    #[test]
+    fn query_runtime_error_propagates() {
+        // 'error' built-in raises the input as a runtime error
+        let err = query_json("{}", "error").unwrap_err();
+        assert!(!err.to_string().is_empty());
+    }
+
+    #[test]
+    fn query_fails_on_undefined_function() {
+        // Calling an undefined 0-arity function triggers a compile error
+        let err = query_json("{}", "undefined_custom_func_xyz").unwrap_err();
+        assert!(err.to_string().contains("undefined"));
     }
 }

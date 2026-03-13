@@ -1,5 +1,6 @@
 import '@testing/worker-wasm.mock';
 import { type Message } from '@core/background';
+import { type TupleNode, type TokenizerResponse } from '@wasm/types';
 import { describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { format, query, tokenize } from '@wasm';
@@ -22,12 +23,13 @@ describe('handler', () => {
   describe('worker-core', () => {
     test('should handle tokenize message', async () => {
       const message: Message = { payload: 'json', action: 'tokenize' };
-      wrapMock(tokenize).mockResolvedValue('tokenized');
+      const tokenized: TokenizerResponse = { type: 'null' };
+      wrapMock(tokenize).mockResolvedValue(tokenized);
 
       const response = await handler(message);
 
       expect(tokenize).toHaveBeenCalledWith(message.payload);
-      expect(response).toEqual('tokenized');
+      expect(response).toEqual(tokenized);
     });
 
     test('should handle format message', async () => {
@@ -42,12 +44,13 @@ describe('handler', () => {
 
     test('should handle jq message', async () => {
       const message: Message = { payload: { json: 'json', query: '.query' }, action: 'jq' };
-      wrapMock(query).mockResolvedValue('jq');
+      const queryResult: TupleNode = { type: 'tuple', items: [] };
+      wrapMock(query).mockResolvedValue(queryResult);
 
       const response = await handler(message);
 
       expect(query).toHaveBeenCalledWith(message.payload.json, message.payload.query);
-      expect(response).toEqual('jq');
+      expect(response).toEqual(queryResult);
     });
   });
 

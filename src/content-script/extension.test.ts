@@ -26,10 +26,10 @@ rstest.mock('@core/ui/helpers', () => ({
 }));
 
 describe('runExtension', () => {
-  let rootContainer: HTMLElement;
-  let formatContainer: HTMLElement;
-  let rawContainer: HTMLElement;
-  let queryContainer: HTMLElement;
+  let rootContainer: HTMLDivElement;
+  let formatContainer: HTMLDivElement;
+  let rawContainer: HTMLDivElement;
+  let queryContainer: HTMLDivElement;
   let body: HTMLElement;
   let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
 

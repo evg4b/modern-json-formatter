@@ -1,6 +1,6 @@
 import { createElement } from '@core/dom';
 import { beforeEach, describe, expect, test } from '@rstest/core';
-import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing';
+import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing/json';
 import { type ErrorNode } from '@wasm/types';
 import { assetTabType, extractFileName, isErrorNode, query, throws } from './helpers';
 

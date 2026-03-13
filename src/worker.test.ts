@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@rstest/core';
 import { format, query, tokenize } from '@wasm';
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing/json';
 
 describe('worker-wasm', () => {
   describe('query', () => {
@@ -194,7 +194,7 @@ describe('worker-wasm', () => {
     });
   });
 
-  describe.skip('format', () => {
+  describe('format', () => {
     test('should return a TokenizerResponse', async () => {
       const data = format('{ "data": 123 }');
 

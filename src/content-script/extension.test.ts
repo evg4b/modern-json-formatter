@@ -5,7 +5,7 @@ import { download, format, jq, pushHistory, tokenize } from '@core/background';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
-import { tNull, tObject, tProperty, tString } from '@testing';
+import { tNull, tObject, tProperty, tString } from '@testing/json';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { findNodeWithCode } from './json-detector';
@@ -89,12 +89,12 @@ describe('runExtension', () => {
 
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' } as any);
+    wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' } as any);
 
     await runExtension();
 
     expect(format).toHaveBeenCalled();
-    expect(rawContainer.children.length).toBeGreaterThan(0);
+    expect(rawContainer.querySelector('.error')).not.toBeNull();
     expect(tokenize).not.toHaveBeenCalled();
   });
 
@@ -130,12 +130,12 @@ describe('runExtension', () => {
 
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    wrapMock(tokenize).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Parse error' } as any);
+    wrapMock(tokenize).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Parse error' } as any);
 
     await runExtension();
 
     expect(tokenize).toHaveBeenCalled();
-    expect(formatContainer.children.length).toBeGreaterThan(0);
+    expect(formatContainer.querySelector('.error')).not.toBeNull();
   });
 
   describe('toolbox event handlers', () => {
@@ -200,6 +200,14 @@ describe('runExtension', () => {
       expect(download).toHaveBeenCalledWith('formatted', expect.any(String), expect.stringContaining('_formatted'));
     });
 
+    test('download event: errors are rendered', async () => {
+      wrapMock(download).mockRejectedValue({ type: 'error', scope: 'worker', error: 'failed' });
+      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(rootContainer.querySelector('.error')).not.toBeNull();
+    });
+
     test('jq-query: success calls jq and pushHistory', async () => {
       wrapMock(jq).mockResolvedValue(tObject(tProperty('key', tString('value'))));
       wrapMock(pushHistory).mockResolvedValue(undefined);
@@ -222,12 +230,14 @@ describe('runExtension', () => {
     });
 
     test('jq-query error: non-jq scope appends error to root', async () => {
+      const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
       wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'worker', error: 'worker error', stack: 'stack' });
 
       toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
       await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(rootContainer.children.length).toBeGreaterThan(0);
+      expect(consoleSpy).not.toHaveBeenCalled();
     });
 
     test('jq-query error: non-ErrorNode logs to console', async () => {

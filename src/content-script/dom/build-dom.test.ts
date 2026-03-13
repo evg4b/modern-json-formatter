@@ -1,4 +1,4 @@
-import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing';
+import { tArray, tBool, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing/json';
 import { type TokenNode } from '@wasm/types';
 import assert from 'node:assert';
 import { buildDom } from './build-dom';

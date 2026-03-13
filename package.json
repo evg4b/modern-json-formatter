@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/evg4b/modern-json-formatter",
   "license": "MIT",
-  "packageManager": "yarn@4.12.0",
+  "packageManager": "yarn@4.13.0",
   "scripts": {
     "build": "NODE_ENV=development rsbuild build",
     "build:production": "NODE_ENV=production rsbuild build",
@@ -45,7 +45,7 @@
     "eslint-plugin-wc": "^3.1.0",
     "fake-indexeddb": "^6.2.5",
     "globals": "^17.4.0",
-    "happy-dom": "^20.8.3",
+    "happy-dom": "^20.8.4",
     "htmlnano": "^3.2.0",
     "lit": "^3.3.2",
     "marked": "^17.0.4",

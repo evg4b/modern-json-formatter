@@ -73,7 +73,7 @@ export const runExtension = async () => {
       return;
     }
 
-    const creeated = createElement({
+    const created = createElement({
       element: 'mjf-floating-message',
       attributes: {
         type: 'info-message',
@@ -82,7 +82,7 @@ export const runExtension = async () => {
       content: 'File is too large to be processed (More than 3MB). It has been formatted instead.',
     });
 
-    rootContainer.appendChild(creeated);
+    rootContainer.appendChild(created);
 
     rootContainer.classList.remove('loading');
 

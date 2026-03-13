@@ -108,4 +108,40 @@ mod tests {
         let err = format_json(input).unwrap_err();
         assert_eq!(err.to_string(), "expected value at line 5 column 9");
     }
+
+    #[test]
+    fn formats_array_root() {
+        let result = format_json(r#"[1,2,3]"#).unwrap();
+        assert_eq!(result, "[\n  1,\n  2,\n  3\n]");
+    }
+
+    #[test]
+    fn formats_boolean_true() {
+        assert_eq!(format_json("true").unwrap(), "true");
+    }
+
+    #[test]
+    fn formats_boolean_false() {
+        assert_eq!(format_json("false").unwrap(), "false");
+    }
+
+    #[test]
+    fn formats_null_value() {
+        assert_eq!(format_json("null").unwrap(), "null");
+    }
+
+    #[test]
+    fn formats_string_value() {
+        assert_eq!(format_json(r#""hello world""#).unwrap(), r#""hello world""#);
+    }
+
+    #[test]
+    fn formats_integer_number() {
+        assert_eq!(format_json("42").unwrap(), "42");
+    }
+
+    #[test]
+    fn formats_float_number() {
+        assert_eq!(format_json("3.14").unwrap(), "3.14");
+    }
 }

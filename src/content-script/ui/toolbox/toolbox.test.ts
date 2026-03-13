@@ -1,6 +1,7 @@
 import '@testing/browser.mock';
 import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
 import { DownloadEvent, TabChangedEvent, ToolboxElement } from './toolbox';
+import { type DropdownOption } from '../dropdown/dropdown.ts';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { without } from 'es-toolkit';
 
@@ -97,8 +98,7 @@ describe('mjf-toolbox', () => {
       beforeEach(() => {
         handler = rstest.fn();
         toolbox.addEventListener('download', handler);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const options = (toolbox as any).dropdown as Array<{ label: string; onClick: () => void }>;
+        const options = (toolbox as unknown as { dropdown: DropdownOption[] }).dropdown;
         options.find(o => o.label === label)?.onClick();
       });
 

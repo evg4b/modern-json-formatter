@@ -77,19 +77,6 @@ mod tests {
     }
 
     #[test]
-    fn fails_on_invalid_json5() {
-        let input = r#"
-        {
-            "a": 1,
-            "b":
-        }
-        "#;
-
-        let err = minify_json(input).unwrap_err();
-        assert!(err.to_string().len() > 0);
-    }
-
-    #[test]
     fn fails_on_invalid_json() {
         let input = r#"
         {

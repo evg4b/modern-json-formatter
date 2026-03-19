@@ -1,4 +1,4 @@
-import type { OutputConfig, RsbuildPlugin } from '@rsbuild/core';
+import type { OutputConfig, RsbuildEntry, RsbuildPlugin } from '@rsbuild/core';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
@@ -20,23 +20,59 @@ type AssetType = ArrayElementsOnly<OutputConfig['copy']> & {
 
 export type ManifestGeneratorParams = {
   manifestPath?: string;
-  pages?: string[];
+  pages?: Record<string, string>;
   development?: boolean;
   assets?: AssetType[];
+  background?: string;
+  contentScripts?: string;
+  options?: string;
+};
+
+const buildPlainScript = (name: string, path?: string): RsbuildEntry => {
+  return path
+    ? { [name]: { import: path, html: false } }
+    : {};
+};
+
+const buildHtmlPage = (name: string, path?: string): RsbuildEntry => {
+  return path
+    ? { [name]: { import: path, html: true } }
+    : {};
 };
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
   setup(api) {
     api.modifyRsbuildConfig((config, utils) => {
-      const isDevelopment = options?.development ?? true;
+      const isDevelopment = options?.development ?? process.env.NODE_ENV !== 'production';
       const assets = options?.assets ?? [];
       const targetType = isDevelopment ? 'development' : 'production';
       const filteredAssets = assets.filter(({ type }) => !type || type === targetType);
 
       return utils.mergeRsbuildConfig(config, {
+        source: {
+          entry: {
+            ...buildPlainScript('background', options?.background),
+            ...buildPlainScript('content-script', options?.contentScripts),
+            ...buildHtmlPage('options', options?.options),
+            ...Object.entries(options?.pages ?? {})
+              .reduce((accumulator: RsbuildEntry, [name, path]) => ({
+                ...accumulator,
+                ...buildHtmlPage(name, path),
+              }), {}),
+          },
+          decorators: {
+            version: 'legacy',
+          },
+        },
+        html: {
+          template: ({ entryName }) => `./src/${entryName}/${entryName}.html`,
+        },
         output: {
           copy: filteredAssets,
+          distPath: { css: '', js: '', wasm: '' },
+          sourceMap: isDevelopment,
+          filenameHash: false,
         },
       });
     });
@@ -74,12 +110,12 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
         web_accessible_resources: [
           {
             resources: [
-              'faq.html',
-              'faq.scss',
-              'faq.js',
-              'options.html',
-              'options.scss',
-              'options.js',
+              ...chunks['options'] ?? [],
+              ...Object.entries(options?.pages ?? {})
+                .reduce((accumulator: string[], [name]) => [
+                  ...accumulator,
+                  ...chunks[name] ?? [],
+                ], []),
             ],
             matches: ['<all_urls>'],
           },

@@ -6,16 +6,28 @@ import { format, tokenize, query } from '@wasm';
 
 type HandlerResult = ErrorNode | TokenizerResponse | string | HistoryResponse | DomainCountResponse;
 
+const getErrorScope = (action: string): ErrorNode['scope'] => {
+  if (['tokenize', 'format'].includes(action)) {
+    return 'tokenizer';
+  }
+
+  if (action === 'jq') {
+    return 'jq';
+  }
+
+  return 'worker';
+};
+
 export const handler = async (message: Message): Promise<HandlerResult | void> => {
   try {
     switch (message.action) {
       case 'tokenize': {
-        return await tokenize(message.payload);
+        return tokenize(message.payload);
       }
       case 'format':
-        return await format(message.payload);
+        return format(message.payload);
       case 'jq':
-        return await query(message.payload.json, message.payload.query);
+        return query(message.payload.json, message.payload.query);
       case 'get-history':
         return await getHistory(message.payload);
       case 'push-history':
@@ -39,11 +51,7 @@ export const handler = async (message: Message): Promise<HandlerResult | void> =
       }
     }
   } catch (err: unknown) {
-    const scope: ErrorNode['scope'] = ['tokenize', 'format'].includes(message.action)
-      ? 'tokenizer'
-      : message.action === 'jq'
-        ? 'jq'
-        : 'worker';
+    const scope = getErrorScope(message.action);
 
     if (err instanceof Error) {
       return {

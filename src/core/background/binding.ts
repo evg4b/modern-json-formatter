@@ -17,7 +17,7 @@ import type { DownloadType } from '../../content-script/ui/toolbox/toolbox.ts';
 const bridge = async <M, R>(request: M) => {
   const response = await sendMessage<M, R | ErrorNode>(request);
   if (isErrorNode(response)) {
-    return Promise.reject(response);
+    throw new Error(response.error);
   }
 
   return response as R;

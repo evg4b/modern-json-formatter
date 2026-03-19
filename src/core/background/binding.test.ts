@@ -74,11 +74,11 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'get-domains', payload: undefined });
   });
 
-  test('should reject with ErrorNode if response is an error', async () => {
+  test('should reject with Error if response is an ErrorNode', async () => {
     const mockError: ErrorNode = { error: 'error', type: 'error', scope: 'jq' };
     mockSendMessage.mockResolvedValue(mockError);
 
-    await expect(format('json')).rejects.toEqual(mockError);
+    await expect(format('json')).rejects.toThrow('error');
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'format', payload: 'json' });
   });
 });

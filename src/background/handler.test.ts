@@ -24,7 +24,7 @@ describe('handler', () => {
     test('should handle tokenize message', async () => {
       const message: Message = { payload: 'json', action: 'tokenize' };
       const tokenized: TokenizerResponse = { type: 'null' };
-      wrapMock(tokenize).mockResolvedValue(tokenized);
+      wrapMock(tokenize).mockReturnValue(tokenized);
 
       const response = await handler(message);
 
@@ -34,7 +34,7 @@ describe('handler', () => {
 
     test('should handle format message', async () => {
       const message: Message = { payload: 'json', action: 'format' };
-      wrapMock(format).mockResolvedValue('formatted');
+      wrapMock(format).mockReturnValue('formatted');
 
       const response = await handler(message);
 
@@ -45,7 +45,7 @@ describe('handler', () => {
     test('should handle jq message', async () => {
       const message: Message = { payload: { json: 'json', query: '.query' }, action: 'jq' };
       const queryResult: TupleNode = { type: 'tuple', items: [] };
-      wrapMock(query).mockResolvedValue(queryResult);
+      wrapMock(query).mockReturnValue(queryResult);
 
       const response = await handler(message);
 
@@ -163,7 +163,9 @@ describe('handler', () => {
     test('should set scope to tokenizer for tokenize errors', async () => {
       const error = new Error('tokenize failed');
       error.stack = 'stack';
-      wrapMock(tokenize).mockRejectedValue(error);
+      wrapMock(tokenize).mockImplementation(() => {
+        throw error;
+      });
 
       const message: Message = { payload: 'json', action: 'tokenize' };
       const response = await handler(message);
@@ -179,7 +181,9 @@ describe('handler', () => {
     test('should set scope to jq for jq errors', async () => {
       const error = new Error('jq failed');
       error.stack = 'stack';
-      wrapMock(query).mockRejectedValue(error);
+      wrapMock(query).mockImplementation(() => {
+        throw error;
+      });
 
       const message: Message = { payload: { json: 'json', query: '.foo' }, action: 'jq' };
       const response = await handler(message);

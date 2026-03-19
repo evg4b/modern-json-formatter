@@ -60,9 +60,12 @@ describe('Chrome Browser', () => {
         .mockRejectedValue(new Error(CONNECTION_ERROR));
 
       const resultPromise = sendMessage({ action: 'test' });
-      // Register the rejection handler BEFORE advancing timers to prevent
-      // the unhandled rejection warning that would otherwise appear when
-      // runAllTimersAsync completes and the promise rejects before our assertion runs.
+
+      /*
+       * Register the rejection handler BEFORE advancing timers to prevent
+       * the unhandled rejection warning that would otherwise appear when
+       * runAllTimersAsync completes and the promise rejects before our assertion runs.
+       */
       const assertion = expect(resultPromise).rejects.toThrow(CONNECTION_ERROR);
       await rstest.runAllTimersAsync();
       await assertion;

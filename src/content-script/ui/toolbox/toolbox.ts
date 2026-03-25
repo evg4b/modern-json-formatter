@@ -45,7 +45,6 @@ export class ToolboxElement extends LitElement {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-bottom: 10px;
         gap: 10px;
       }
 

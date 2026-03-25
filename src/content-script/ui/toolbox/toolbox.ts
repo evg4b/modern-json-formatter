@@ -6,7 +6,7 @@ import '../query-input';
 import '../info-button';
 import { map } from 'lit/directives/map.js';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
-import { dropdown } from '../dropdown';
+import { dropdown } from '@core/ui';
 import downloadSvg from './download.svg?raw';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 

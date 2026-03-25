@@ -1,7 +1,7 @@
 import '@testing/browser.mock';
 import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/core';
 import { DownloadEvent, TabChangedEvent, ToolboxElement } from './toolbox';
-import { type DropdownOption } from '../dropdown/dropdown.ts';
+import { type DropdownOption } from '@core/ui';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { without } from 'es-toolkit';
 

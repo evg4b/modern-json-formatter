@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { html, render } from 'lit';
-import { dropdown, DropdownDirective } from './directive.ts';
-import { DropdownElement, type DropdownOption } from './dropdown.ts';
-import { throws } from '../../helpers.ts';
+import { dropdown, DropdownDirective } from './directive';
+import { DropdownElement, type DropdownOption } from './dropdown';
+import { throws } from '../../../content-script/helpers';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { type ElementPartInfo, PartType } from 'lit-html/directive.js';
 

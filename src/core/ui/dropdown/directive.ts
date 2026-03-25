@@ -1,8 +1,8 @@
 import { type ElementPart } from 'lit';
 import { Directive, directive } from 'lit/directive.js';
 import { type PartInfo, PartType } from 'lit-html/directive.js';
-import type { DropdownOption } from './dropdown.ts';
-import './dropdown.ts';
+import type { DropdownOption } from './dropdown';
+import './dropdown';
 
 export class DropdownDirective extends Directive {
   private readonly _id = crypto.randomUUID();

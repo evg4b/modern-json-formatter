@@ -22,27 +22,19 @@ rstest.mock('@core/ui/helpers', () => ({
 }));
 
 describe('runExtension', () => {
-  let containerElement: ContainerElement;
-  let toolboxElement: ToolboxElement;
+  let shadowRoot: ShadowRoot;
   let body: HTMLElement;
   let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
 
   beforeEach(() => {
     body = createElement({ element: 'body' });
 
+    const boundAttachShadow = body.attachShadow.bind(body);
     attachShadowSpy = rstest.spyOn(document.body, 'attachShadow')
-      .mockImplementation(body.attachShadow.bind(body));
-
-    const nativeCreate = Document.prototype.createElement;
-    rstest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
-      const el = nativeCreate.call(document, tag);
-      if (tag === 'mjf-container') {
-        containerElement = el as ContainerElement;
-      } else if (tag === 'mjf-toolbox') {
-        toolboxElement = el as ToolboxElement;
-      }
-      return el;
-    });
+      .mockImplementation((init: ShadowRootInit) => {
+        shadowRoot = boundAttachShadow(init);
+        return shadowRoot;
+      });
   });
 
   afterEach(() => {
@@ -135,6 +127,9 @@ describe('runExtension', () => {
   });
 
   describe('toolbox event handlers', () => {
+    let containerElement: ContainerElement;
+    let toolboxElement: ToolboxElement;
+
     beforeEach(async () => {
       rstest.useFakeTimers();
 
@@ -145,6 +140,9 @@ describe('runExtension', () => {
       await runExtension();
       rstest.runAllTimers();
       rstest.useRealTimers();
+
+      containerElement = shadowRoot.querySelector('mjf-container') as ContainerElement;
+      toolboxElement = shadowRoot.querySelector('mjf-toolbox') as ToolboxElement;
     });
 
     test('tab-changed: query', () => {

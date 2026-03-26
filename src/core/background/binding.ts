@@ -12,12 +12,12 @@ import {
   type PushHistoryParams,
   type TokenizeParams,
 } from './models';
-import type { DownloadType } from '../../content-script/ui/toolbox/toolbox.ts';
+import type { DownloadType } from '../../content-script/ui/toolbox/toolbox';
 
 const bridge = async <M, R>(request: M) => {
   const response = await sendMessage<M, R | ErrorNode>(request);
   if (isErrorNode(response)) {
-    throw new Error(response.error);
+    throw response;
   }
 
   return response as R;

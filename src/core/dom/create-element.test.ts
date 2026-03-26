@@ -49,6 +49,8 @@ describe('createElement', () => {
     { element: 'input', class: 'test' },
     { element: 'input', class: ['test1', 'test2', 'test3'] },
     { element: 'input', content: 'test content', attributes: { test: 'data' } },
+    { element: 'span', id: 'my-id' },
+    { element: 'div', id: 'section-1', class: 'container' },
   ];
 
   test.each(testCases)('%p', options => {

@@ -1,0 +1,37 @@
+@import "../../styles/host";
+@import "../../styles/code";
+
+:host {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .loader {
+    display: none;
+  }
+}
+
+:host-context([loading]) {
+  .loader {
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: fixed;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 5px solid var(--guideline-color);
+    border-top: 5px solid var(--bracket-color);
+    animation: spin 2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

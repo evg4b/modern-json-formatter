@@ -115,6 +115,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
                 .reduce((accumulator: string[], [name]) => [
                   ...accumulator,
                   ...chunks[name] ?? [],
+                  `${name}.html`,
                 ], []),
             ],
             matches: ['<all_urls>'],

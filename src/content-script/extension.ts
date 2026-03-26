@@ -2,14 +2,16 @@ import { download, format, jq, pushHistory, tokenize, type TokenizerResponse } f
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
-import { buildDom, buildErrorNode } from './dom';
+import { buildDom } from './dom';
 import { extractFileName, isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers } from './ui';
+import { type TabChangedEvent } from './ui/toolbox/toolbox';
+import { type ErrorNodeElement } from './ui/error-node';
 import './ui/toolbox';
+import './ui/container/container';
+import './ui/error-node';
 import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
-import { TabChangedEvent } from './ui/toolbox/toolbox';
 
 import contentStyles from './content-script.scss?inline';
 import rootStyles from './root-styles.scss?inline';
@@ -32,71 +34,48 @@ export const runExtension = async () => {
   const content = preNode.textContent;
   isNotNull(content, 'No data found');
 
-  const { rootContainer, rawContainer, formatContainer, queryContainer } = buildContainers(shadowRoot);
+  const container = document.createElement('mjf-container');
 
-  const renderError = (
-    error: unknown,
-    target: HTMLElement,
-    header = 'Invalid JSON file.',
-    replace = true,
-  ): void => {
-    if (isErrorNode(error)) {
-      if (replace) {
-        target.innerHTML = '';
-      }
-      target.appendChild(buildErrorNode(header, error.error));
-      return;
-    }
-
-    console.error(error);
-  };
+  shadowRoot.appendChild(container);
 
   if (content.length > LIMIT) {
     preNode.remove();
 
-    rootContainer.classList.remove('formatted', 'query');
-    rootContainer.classList.add('raw');
-
     try {
       const formatted = await format(content);
       if (typeof formatted === 'object') {
-        return rawContainer.appendChild(buildErrorNode('Invalid JSON file.', formatted.error));
+        container.type = 'raw';
+        container.setRawContent(createErrorNode('Invalid JSON file.', formatted.error));
+        return;
       }
 
-      rawContainer.appendChild(createElement({
+      container.setRawContent(createElement({
         element: 'pre',
         content: formatted,
       }));
     } catch (error: unknown) {
-      renderError(error, rawContainer);
-      rootContainer.classList.remove('loading');
+      container.setError(error);
       return;
+    } finally {
+      container.stopLoading();
     }
 
-    const created = createElement({
-      element: 'mjf-floating-message',
-      attributes: {
-        type: 'info-message',
-        header: 'File is too large',
-      },
-      content: 'File is too large to be processed (More than 3MB). It has been formatted instead.',
-    });
-
-    rootContainer.appendChild(created);
-
-    rootContainer.classList.remove('loading');
+    container.message(
+      'File is too large',
+      'File is too large to be processed (More than 3MB). It has been formatted instead.',
+    );
 
     return;
   }
 
-  rawContainer.appendChild(preNode);
+  container.setRawContent(preNode);
 
   const wrapper = async <T>(promise: Promise<T>): Promise<T> => {
-    rootContainer.classList.add('loading');
     try {
+      container.startLoading();
       return await promise;
     } finally {
-      rootContainer.classList.remove('loading');
+      container.stopLoading();
     }
   };
 
@@ -105,21 +84,33 @@ export const runExtension = async () => {
     const panel = document.createElement('mjf-sticky-panel');
     panel.appendChild(toolbox);
 
-    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
-      switch (event.detail) {
-        case 'query':
-          rootContainer.classList.remove('raw', 'formatted');
-          rootContainer.classList.add('query');
+    const jqQuery = async (query: string) => {
+      toolbox.error = null;
+      try {
+        const info = await jq(preNode.innerText, query);
+        container.setQueryContent(prepareResponse(info));
+        await pushHistory(globalThis.location.hostname, query);
+      } catch (error: unknown) {
+        if (isErrorNode(error)) {
+          if (error.scope === 'jq') {
+            toolbox.error = error.error;
+            return;
+          }
+
+          container.message(
+            `Error ${error.error} in ${error.scope}`,
+            error.stack ? `Stack trace: ${error.stack}` : '',
+          );
+
           return;
-        case 'raw':
-          rootContainer.classList.remove('formatted', 'query');
-          rootContainer.classList.add('raw');
-          return;
-        case 'formatted':
-          rootContainer.classList.remove('raw', 'query');
-          rootContainer.classList.add('formatted');
-          return;
+        }
+
+        console.error(error);
       }
+    };
+
+    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
+      container.type = event.detail;
     });
 
     toolbox.addEventListener('jq-query', async event => {
@@ -132,62 +123,36 @@ export const runExtension = async () => {
       try {
         await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
       } catch (error: unknown) {
-        renderError(error, rootContainer, 'Unable to download the file.', false);
+        container.message(
+          'Unable to download file',
+          // @ts-expect-error incorrect typing
+          error?.error ?? error?.message ?? error,
+        );
       }
     });
 
     shadowRoot.appendChild(panel);
-
-    const jqQuery = async (query: string) => {
-      toolbox.error = null;
-      try {
-        const info = await jq(preNode.innerText, query);
-        queryContainer.innerHTML = '';
-        queryContainer.appendChild(prepareResponse(info));
-        // use globalThis for portability (Sonar: prefer globalThis over window)
-        await pushHistory(globalThis.location.hostname, query);
-      } catch (error: unknown) {
-        if (isErrorNode(error)) {
-          if (error.scope === 'jq') {
-            toolbox.error = error.error;
-            return;
-          }
-
-          const errorMessage = createElement({
-            element: 'mjf-floating-message',
-            attributes: {
-              type: 'error-message',
-              header: `Error ${error.error} in ${error.scope}`,
-            },
-            content: error.stack ? `Stack trace: ${error.stack}` : '',
-          });
-
-          rootContainer.appendChild(errorMessage);
-          return;
-        }
-
-        console.error(error);
-      }
-    };
   });
 
   try {
     const response = await wrapper(tokenize(preNode.innerText));
-    formatContainer.appendChild(
-      prepareResponse(response),
-    );
+    container.setFormattedContent(prepareResponse(response));
   } catch (error: unknown) {
-    renderError(error, formatContainer);
-    rootContainer.classList.remove('loading');
-    return;
+    container.setError(error);
+  } finally {
+    container.stopLoading();
   }
-  rootContainer.classList.remove('loading');
-
-  return undefined;
 };
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
   return response.type === 'error'
-    ? buildErrorNode('Invalid JSON file.', response.error)
+    ? createErrorNode('Invalid JSON file.', response.error)
     : buildDom(response);
+};
+
+const createErrorNode = (header: string, ...lines: string[]): ErrorNodeElement => {
+  const el = document.createElement('mjf-error-node') as ErrorNodeElement;
+  el.header = header;
+  el.lines = lines;
+  return el;
 };

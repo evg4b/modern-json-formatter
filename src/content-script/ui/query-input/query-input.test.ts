@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, type Mock, rstest, test } from '@rstest/c
 import { brackets, QueryInputElement } from './query-input';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { isNil } from 'es-toolkit';
-import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers.ts';
+import { isRedoEvent, isSubmitEvent, isUndoEvent, isWrapEvent } from './query-input.helpers';
 import { getHistory } from '@core/background';
 
 rstest.useFakeTimers();

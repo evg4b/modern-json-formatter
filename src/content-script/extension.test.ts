@@ -10,14 +10,10 @@ import { wrapMock } from '@testing/helpers';
 import { LIMIT, runExtension } from './extension';
 import { ToolboxElement } from './ui/toolbox/toolbox';
 import { findNodeWithCode } from './json-detector';
-import { buildContainers } from './ui';
+import type { ContainerElement } from './ui/container/container';
 
 rstest.mock('./json-detector', () => ({
   findNodeWithCode: rstest.fn().mockName('findNodeWithCode'),
-}));
-
-rstest.mock('./ui', () => ({
-  buildContainers: rstest.fn().mockName('buildContainers'),
 }));
 
 rstest.mock('@core/ui/helpers', () => ({
@@ -26,25 +22,19 @@ rstest.mock('@core/ui/helpers', () => ({
 }));
 
 describe('runExtension', () => {
-  let rootContainer: HTMLDivElement;
-  let formatContainer: HTMLDivElement;
-  let rawContainer: HTMLDivElement;
-  let queryContainer: HTMLDivElement;
+  let shadowRoot: ShadowRoot;
   let body: HTMLElement;
   let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
 
   beforeEach(() => {
-    rootContainer = createElement({ element: 'div' });
-    formatContainer = createElement({ element: 'div' });
-    rawContainer = createElement({ element: 'div' });
-    queryContainer = createElement({ element: 'div' });
     body = createElement({ element: 'body' });
 
+    const boundAttachShadow = body.attachShadow.bind(body);
     attachShadowSpy = rstest.spyOn(document.body, 'attachShadow')
-      .mockImplementation(body.attachShadow.bind(body));
-
-    wrapMock(buildContainers)
-      .mockReturnValue({ rootContainer, formatContainer, rawContainer, queryContainer });
+      .mockImplementation((init: ShadowRootInit) => {
+        shadowRoot = boundAttachShadow(init);
+        return shadowRoot;
+      });
   });
 
   afterEach(() => {
@@ -57,7 +47,6 @@ describe('runExtension', () => {
 
     await runExtension();
 
-    expect(buildContainers).not.toHaveBeenCalled();
     expect(attachShadowSpy).not.toHaveBeenCalled();
     expect(registerStyle).not.toHaveBeenCalled();
   });
@@ -74,7 +63,6 @@ describe('runExtension', () => {
 
     await runExtension();
 
-    expect(buildContainers).toHaveBeenCalled();
     expect(attachShadowSpy).toHaveBeenCalled();
     expect(registerStyle).toHaveBeenCalled();
     expect(format).toHaveBeenCalled();
@@ -82,19 +70,37 @@ describe('runExtension', () => {
     expect(tokenize).not.toHaveBeenCalled();
   });
 
-  test('when content is too large and format returns error', async () => {
+  test('when content is too large and format returns error object', async () => {
     const preNode = createElement({
       element: 'pre',
       content: 'X'.repeat(LIMIT + 10),
     });
 
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
+
+    await runExtension();
+
+    const containerElement = shadowRoot.querySelector('mjf-container') as ContainerElement;
+    expect(format).toHaveBeenCalled();
+    expect(containerElement.type).toBe('raw');
+    expect(tokenize).not.toHaveBeenCalled();
+  });
+
+  test('when content is too large and format throws', async () => {
+    const preNode = createElement({
+      element: 'pre',
+      content: 'X'.repeat(LIMIT + 10),
+    });
+
+    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
 
     await runExtension();
 
     expect(format).toHaveBeenCalled();
-    expect(rawContainer.querySelector('.error')).not.toBeNull();
+    expect(consoleSpy).toHaveBeenCalled();
     expect(tokenize).not.toHaveBeenCalled();
   });
 
@@ -114,12 +120,27 @@ describe('runExtension', () => {
 
     await runExtension();
 
-    expect(buildContainers).toHaveBeenCalled();
     expect(attachShadowSpy).toHaveBeenCalled();
     expect(registerStyle).toHaveBeenCalled();
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();
+  });
+
+  test('when tokenize resolves with error-type response', async () => {
+    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const preNode = createElement({
+      element: 'pre',
+      content: '{ invalid }',
+    });
+
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    wrapMock(tokenize).mockResolvedValue({ type: 'error', error: 'Parse error', scope: 'worker' });
+
+    await runExtension();
+
+    expect(tokenize).toHaveBeenCalled();
+    expect(consoleSpy).not.toHaveBeenCalled();
   });
 
   test('when tokenize returns error response', async () => {
@@ -128,30 +149,22 @@ describe('runExtension', () => {
       content: '{ invalid }',
     });
 
+    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(tokenize).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Parse error' });
 
     await runExtension();
 
     expect(tokenize).toHaveBeenCalled();
-    expect(formatContainer.querySelector('.error')).not.toBeNull();
+    expect(consoleSpy).toHaveBeenCalled();
   });
 
   describe('toolbox event handlers', () => {
+    let containerElement: ContainerElement;
     let toolboxElement: ToolboxElement;
 
     beforeEach(async () => {
       rstest.useFakeTimers();
-
-      // Use prototype directly to avoid infinite recursion when spy is reset between tests
-      const nativeCreate = Document.prototype.createElement;
-      rstest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
-        const el = nativeCreate.call(document, tag);
-        if (tag === 'mjf-toolbox') {
-          toolboxElement = el as ToolboxElement;
-        }
-        return el;
-      });
 
       const preNode = createElement({ element: 'pre', content: '{ "key": "value" }' });
       wrapMock(findNodeWithCode).mockResolvedValue(preNode);
@@ -160,26 +173,27 @@ describe('runExtension', () => {
       await runExtension();
       rstest.runAllTimers();
       rstest.useRealTimers();
+
+      containerElement = shadowRoot.querySelector('mjf-container') as ContainerElement;
+      toolboxElement = shadowRoot.querySelector('mjf-toolbox') as ToolboxElement;
     });
 
     test('tab-changed: query', () => {
       toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'query' }));
 
-      expect(rootContainer.classList.contains('query')).toBe(true);
-      expect(rootContainer.classList.contains('raw')).toBe(false);
-      expect(rootContainer.classList.contains('formatted')).toBe(false);
+      expect(containerElement.type).toBe('query');
     });
 
     test('tab-changed: raw', () => {
       toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'raw' }));
 
-      expect(rootContainer.classList.contains('raw')).toBe(true);
+      expect(containerElement.type).toBe('raw');
     });
 
     test('tab-changed: formatted', () => {
       toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'formatted' }));
 
-      expect(rootContainer.classList.contains('formatted')).toBe(true);
+      expect(containerElement.type).toBe('formatted');
     });
 
     test('download event: raw', async () => {
@@ -203,7 +217,7 @@ describe('runExtension', () => {
       toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(rootContainer.querySelector('.error')).not.toBeNull();
+      expect(containerElement.querySelector('mjf-floating-message')).not.toBeNull();
     });
 
     test('jq-query: success calls jq and pushHistory', async () => {
@@ -233,7 +247,7 @@ describe('runExtension', () => {
       toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
       await new Promise(resolve => setTimeout(resolve, 10));
 
-      expect(rootContainer.children.length).toBeGreaterThan(0);
+      expect(containerElement.children.length).toBeGreaterThan(0);
       expect(consoleSpy).not.toHaveBeenCalled();
     });
 

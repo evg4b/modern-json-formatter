@@ -1,4 +1,4 @@
-import type { DownloadType } from '../content-script/ui/toolbox/toolbox.ts';
+import type { DownloadType } from '../content-script/ui/toolbox/toolbox';
 import { format, minify } from '@wasm';
 
 const processContent = (type: DownloadType, content: string): string => {

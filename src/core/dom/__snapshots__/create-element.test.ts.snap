@@ -183,3 +183,16 @@ exports[`createElement > %p 25`] = `
   test content
 </input>
 `;
+
+exports[`createElement > %p 26`] = `
+<span
+  id="my-id"
+/>
+`;
+
+exports[`createElement > %p 27`] = `
+<div
+  class="container"
+  id="section-1"
+/>
+`;

@@ -2,10 +2,11 @@ import { download, format, jq, pushHistory, tokenize, type TokenizerResponse } f
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
-import { buildDom, buildErrorNode } from './dom';
+import { buildDom } from './dom';
 import { extractFileName, isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { type TabChangedEvent } from './ui/toolbox/toolbox';
+import { type ErrorNodeElement } from './ui/error-node';
 import './ui/toolbox';
 import './ui/container/container';
 import './ui/error-node';
@@ -44,10 +45,7 @@ export const runExtension = async () => {
       const formatted = await format(content);
       if (typeof formatted === 'object') {
         container.type = 'raw';
-        container.setRawContent(
-          buildErrorNode('Invalid JSON file.', formatted.error),
-        );
-
+        container.setRawContent(createErrorNode('Invalid JSON file.', formatted.error));
         return;
       }
 
@@ -148,6 +146,13 @@ export const runExtension = async () => {
 
 const prepareResponse = (response: TokenizerResponse): HTMLElement => {
   return response.type === 'error'
-    ? buildErrorNode('Invalid JSON file.', response.error)
+    ? createErrorNode('Invalid JSON file.', response.error)
     : buildDom(response);
+};
+
+const createErrorNode = (header: string, ...lines: string[]): ErrorNodeElement => {
+  const el = document.createElement('mjf-error-node') as ErrorNodeElement;
+  el.header = header;
+  el.lines = lines;
+  return el;
 };

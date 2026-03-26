@@ -84,30 +84,6 @@ export const runExtension = async () => {
     const panel = document.createElement('mjf-sticky-panel');
     panel.appendChild(toolbox);
 
-    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
-      container.type = event.detail;
-    });
-
-    toolbox.addEventListener('jq-query', async event => {
-      await wrapper(jqQuery(event.detail));
-    });
-
-    toolbox.addEventListener('download', async event => {
-      const filename = extractFileName(location.toString());
-      const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
-      try {
-        await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
-      } catch (error: unknown) {
-        container.message(
-          'Unable to download file',
-          // @ts-expect-error incorrect typeing
-          error?.error ?? error?.message ?? error,
-        );
-      }
-    });
-
-    shadowRoot.appendChild(panel);
-
     const jqQuery = async (query: string) => {
       toolbox.error = null;
       try {
@@ -132,6 +108,30 @@ export const runExtension = async () => {
         console.error(error);
       }
     };
+
+    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
+      container.type = event.detail;
+    });
+
+    toolbox.addEventListener('jq-query', async event => {
+      await wrapper(jqQuery(event.detail));
+    });
+
+    toolbox.addEventListener('download', async event => {
+      const filename = extractFileName(location.toString());
+      const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
+      try {
+        await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
+      } catch (error: unknown) {
+        container.message(
+          'Unable to download file',
+          // @ts-expect-error incorrect typing
+          error?.error ?? error?.message ?? error,
+        );
+      }
+    });
+
+    shadowRoot.appendChild(panel);
   });
 
   try {

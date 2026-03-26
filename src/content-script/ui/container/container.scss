@@ -21,8 +21,8 @@
     left: calc(50% - 15px);
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 5px solid #3b3b3b; /* Light grey */
-    border-top: 5px solid #eeeeee; /* Blue */
+    border: 5px solid var(--guideline-color);
+    border-top: 5px solid var(--bracket-color);
     animation: spin 2s linear infinite;
   }
 }

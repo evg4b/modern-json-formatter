@@ -20,7 +20,7 @@ export class ContainerElement extends LitElement {
   public static override readonly styles = [unsafeCSS(styles)];
 
   private readonly raw = document.createElement('div');
-  private readonly formated = document.createElement('div');
+  private readonly formatted = document.createElement('div');
   private readonly query = document.createElement('div');
   private readonly loader = createElement({ element: 'div', class: 'loader' });
 
@@ -37,7 +37,7 @@ export class ContainerElement extends LitElement {
   }
 
   public setFormattedContent(content: HTMLElement) {
-    this.formated.replaceChildren(content);
+    this.formatted.replaceChildren(content);
   }
 
   public setQueryContent(content: HTMLElement) {
@@ -61,7 +61,7 @@ export class ContainerElement extends LitElement {
       element: 'mjf-floating-message',
       attributes: {
         type: 'info-message',
-        header: header,
+        header,
       },
       content: content,
     });
@@ -74,7 +74,7 @@ export class ContainerElement extends LitElement {
       case 'raw':
         return this.raw;
       case 'formatted':
-        return this.formated;
+        return this.formatted;
       case 'query':
         return this.query;
       default:

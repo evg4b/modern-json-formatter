@@ -64,7 +64,7 @@ export class OptionsPageElement extends LitElement {
         margin-bottom: 35px;
         height: 1px;
         border: none;
-        background: #636363;
+        background: var(--border-color);
       }
 
       mjf-table-element {

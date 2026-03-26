@@ -23,7 +23,7 @@ export class TableElement extends LitElement {
       :host {
         --v-margin: 1em;
         --h-margin: 0;
-        --table-border: 1px solid #636363;
+        --table-border: 1px solid var(--border-color);
 
         display: flex;
         flex-direction: column;
@@ -45,14 +45,14 @@ export class TableElement extends LitElement {
         }
 
         th {
-          background-color: #3c3c3c;
+          background-color: var(--background-hover);
           user-select: none;
         }
 
         .empty {
           text-align: center;
           user-select: none;
-          color: #757575;
+          color: var(--meta-info-color);
         }
 
       }

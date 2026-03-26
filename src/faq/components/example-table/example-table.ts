@@ -1,9 +1,12 @@
-import { css, html, LitElement, nothing } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+import { map } from 'lit/directives/map.js';
 import { jq } from '@core/background';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import type { ArrayNode, BooleanNode, ErrorNode, NumberNode, ObjectNode, StringNode, TokenNode, TupleNode } from '@wasm/types';
+import '../example-error/example-error';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -11,29 +14,32 @@ declare global {
   }
 }
 
-const isErrorNode = (node: unknown): node is ErrorNode =>
-  !!node && typeof node === 'object' && 'type' in node && (node as { type: unknown }).type === 'error';
+const PLAY_ICON = `<svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
+  <path d="M3 2l10 6-10 6z"/>
+</svg>`;
+
+const isErrorNode = (node: unknown): node is ErrorNode => !!node && typeof node === 'object' && 'type' in node && (node as { type: unknown }).type === 'error';
 
 const tokenNodeToJson = (node: TokenNode): unknown => {
   switch (node.type) {
-    case 'null':    return null;
+    case 'null': return null;
     case 'boolean': return node.value;
-    case 'number':  return Number(node.value);
-    case 'string':  return node.value;
-    case 'object':  return Object.fromEntries((node as ObjectNode).properties.map(p => [p.key, tokenNodeToJson(p.value)]));
-    case 'array':   return (node as ArrayNode).items.map(tokenNodeToJson);
+    case 'number': return Number(node.value);
+    case 'string': return node.value;
+    case 'object': return Object.fromEntries((node as ObjectNode).properties.map(p => [p.key, tokenNodeToJson(p.value)]));
+    case 'array': return (node as ArrayNode).items.map(tokenNodeToJson);
   }
 };
 
 export const tokenNodeToString = (node: TokenNode | TupleNode): string => {
   switch (node.type) {
-    case 'tuple':   return (node as TupleNode).items.map(tokenNodeToString).join('\n');
-    case 'null':    return 'null';
+    case 'tuple': return (node as TupleNode).items.map(tokenNodeToString).join('\n');
+    case 'null': return 'null';
     case 'boolean': return String((node as BooleanNode).value);
-    case 'number':  return (node as NumberNode).value;
-    case 'string':  return JSON.stringify((node as StringNode).value);
-    case 'object':  return JSON.stringify(Object.fromEntries((node as ObjectNode).properties.map(p => [p.key, tokenNodeToJson(p.value)])));
-    case 'array':   return JSON.stringify((node as ArrayNode).items.map(tokenNodeToJson));
+    case 'number': return (node as NumberNode).value;
+    case 'string': return JSON.stringify((node as StringNode).value);
+    case 'object': return JSON.stringify(Object.fromEntries((node as ObjectNode).properties.map(p => [p.key, tokenNodeToJson(p.value)])));
+    case 'array': return JSON.stringify((node as ArrayNode).items.map(tokenNodeToJson));
   }
 };
 
@@ -48,24 +54,19 @@ export class ExampleTableElement extends LitElement {
       }
 
       .wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .wrapper.static {
+        position: relative;
         cursor: pointer;
       }
 
-      .wrapper.static:hover table {
-        background: var(--code-background-hover, color-mix(in srgb, var(--code-background) 90%, white));
+      .wrapper.edit {
+        cursor: default;
       }
 
       table {
         width: 100%;
         text-align: left;
         background: var(--code-background);
-        padding: 10px;
+        padding: 10px 10px;
         border-radius: 5px;
         border-collapse: collapse;
       }
@@ -86,47 +87,58 @@ export class ExampleTableElement extends LitElement {
         font-family: monospace;
         font-weight: 400;
         color: var(--code-color);
+        white-space: pre-line;
       }
 
       input {
-        width: 100%;
-        background: var(--input-background);
-        color: var(--input-color);
-        border: 1px solid var(--input-border-color);
-        border-radius: var(--input-border-radius, 4px);
-        padding: 2px 6px;
-        font-family: monospace;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid transparent;
         outline: none;
-        box-sizing: border-box;
+        color: var(--code-color);
+        font-family: monospace;
+        font-weight: 400;
+        font-size: inherit;
+        width: 100%;
+        padding: 0;
+        display: block;
 
         &:focus {
-          border-color: var(--input-focus-border-color);
+          border-bottom-color: var(--input-focus-border-color, var(--input-border-color));
         }
       }
 
-      .controls {
+      .play-btn {
+        position: absolute;
+        top: 6px;
+        right: 6px;
         display: flex;
-        flex-direction: row;
-        gap: 8px;
-        padding: 0 10px 5px;
         align-items: center;
-      }
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: none;
+        border-radius: 4px;
+        background: var(--meta-info-color);
+        color: var(--code-background);
+        cursor: pointer;
+        opacity: 0.7;
+        line-height: 1;
 
-      .error-message {
-        color: var(--error-color);
-        font-size: 12px;
+        &:hover {
+          opacity: 1;
+        }
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: default;
+        }
       }
 
       .loading {
         color: var(--meta-info-color);
         font-style: italic;
-      }
-
-      .hint {
-        font-size: 11px;
-        color: var(--meta-info-color);
-        padding: 2px 10px 4px;
-        user-select: none;
       }
     `,
   ];
@@ -160,23 +172,24 @@ export class ExampleTableElement extends LitElement {
   }
 
   private renderStaticMode() {
+    const outputLines = this.output.split('\n');
     return html`
-      <div class="wrapper static" @click=${this.onActivate}>
+      <div class="wrapper" @click=${this.onActivate}>
         <table>
           <tbody>
             <tr><th>Query</th><td>${this.query}</td></tr>
             <tr><th>Input</th><td>${this.input}</td></tr>
-            <tr><th>Output</th><td>${this.output}</td></tr>
+            ${this.renderOutputRows(outputLines)}
           </tbody>
         </table>
-        <div class="hint">Click to try interactively</div>
       </div>
     `;
   }
 
   private renderEditMode() {
+    const outputLines = this.result?.split('\n') ?? this.output.split('\n');
     return html`
-      <div class="wrapper">
+      <div class="wrapper edit">
         <table>
           <tbody>
             <tr>
@@ -187,35 +200,35 @@ export class ExampleTableElement extends LitElement {
               <th>Input</th>
               <td><input type="text" .value=${this.input} ${ref(this.inputRef)} /></td>
             </tr>
-            <tr>
-              <th>Output</th>
-              <td>${this.renderOutput()}</td>
-            </tr>
+            ${this.error ? this.renderErrorRow() : this.renderOutputRows(outputLines)}
           </tbody>
         </table>
-        <div class="controls">
-          <button @click=${this.onExec} ?disabled=${this.loading}>Exec</button>
-          ${this.renderError()}
-        </div>
+        <button
+          class="play-btn"
+          @click=${this.onExec}
+          ?disabled=${this.loading}
+          title="Run query"
+        >${unsafeSVG(PLAY_ICON)}</button>
       </div>
     `;
   }
 
-  private renderOutput() {
-    if (this.loading) {
-      return html`<span class="loading">Running...</span>`;
-    }
-    if (this.result !== null) {
-      return this.result;
-    }
-    return this.output;
+  private renderOutputRows(lines: string[]) {
+    return map(lines, (line, i) => html`
+      <tr>
+        <th>${i === 0 ? 'Output' : ''}</th>
+        <td class=${this.loading && i === 0 ? 'loading' : ''}>${this.loading && i === 0 ? 'Running…' : line}</td>
+      </tr>
+    `);
   }
 
-  private renderError() {
-    if (!this.error) {
-      return nothing;
-    }
-    return html`<span class="error-message">${this.error}</span>`;
+  private renderErrorRow() {
+    return html`
+      <tr>
+        <th>Error</th>
+        <td><mjf-example-error message=${this.error!}></mjf-example-error></td>
+      </tr>
+    `;
   }
 
   private onActivate() {

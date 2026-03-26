@@ -99,83 +99,56 @@ For programming language theorists, it's more accurate to say that jq variables 
 particular there's no way to change the value of a binding; one can only setup a new binding with the same name, but
 which will not be visible where the old one was.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example93" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.bar as $x | .foo | . + $x</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo":10, "bar":200}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">210</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. as $i|[(.*2|. as $i| $i), $i]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">5</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[10,5]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. as [$a, $b, {c: $c}] | $a + $b + $c</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[2, 3, {"c": 4, "d": 5}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">9</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] as [$a, $b] | {a: $a, b: $b}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[0], [0, 1], [2, 1, 0]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":0,"b":null}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"a":0,"b":1}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"a":2,"b":1}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".bar as $x | .foo | . + $x" input='{"foo":10, "bar":200}' output="210"></mjf-example-table>
+<mjf-example-table query=". as $i|[(.*2|. as $i| $i), $i]" input='5' output="[10,5]"></mjf-example-table>
+<mjf-example-table query=". as [$a, $b, {c: $c}] | $a + $b + $c" input='[2, 3, {"c": 4, "d": 5}]' output="9"></mjf-example-table>
+<mjf-example-table query=".[] as [$a, $b] | {a: $a, b: $b}" input='[[0], [0, 1], [2, 1, 0]]' output="{&quot;a&quot;:0,&quot;b&quot;:null}&#10;{&quot;a&quot;:0,&quot;b&quot;:1}&#10;{&quot;a&quot;:2,&quot;b&quot;:1}"></mjf-example-table>
+
+### Destructuring Alternative Operator: `?//`
+
+The destructuring alternative operator provides a concise mechanism for destructuring an input that can take one of
+several forms.
+
+Suppose we have an API that returns a list of resources and events associated with them, and we want to get the user_id
+and timestamp of the first event for each resource. The API (having been clumsily converted from XML) will only wrap the
+events in an array if the resource has multiple events:
+
+```
+{"resources": [{"id": 1, "kind": "widget", "events": {"action": "create", "user_id": 1, "ts": 13}},
+               {"id": 2, "kind": "widget", "events": [{"action": "create", "user_id": 1, "ts": 14}, {"action": "destroy", "user_id": 1, "ts": 15}]}]}
+```
+
+We can use the destructuring alternative operator to handle this structural change simply:
+
+```
+.resources[] as {$id, $kind, events: {$user_id, $ts}} ?// {$id, $kind, events: [{$user_id, $ts}]} | {$user_id, $kind, $id, $ts}
+```
+
+Or, if we aren't sure if the input is an array of values or an object:
+
+```
+.[] as [$id, $kind, $user_id, $ts] ?// {$id, $kind, $user_id, $ts} | ...
+```
+
+Each alternative need not define all of the same variables, but all named variables will be available to the subsequent
+expression. Variables not matched in the alternative that succeeded will be `null`:
+
+```
+.resources[] as {$id, $kind, events: {$user_id, $ts}} ?// {$id, $kind, events: [{$first_user_id, $first_ts}]} | {$user_id, $first_user_id, $kind, $id, $ts, $first_ts}
+```
+
+Additionally, if the subsequent expression returns an error, the alternative operator will attempt to try the next
+binding. Errors that occur during the final alternative are passed through.
+
+```
+[[3]] | .[] as [$a] ?// [$b] | if $a != null then error("err: \($a)") else {$a,$b} end
+```
+
+#### Examples:
+<mjf-example-table query=".[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} | {$a, $b, $d, $e}" input='[{"a": 1, "b": 2, "c": {"d": 3, "e": 4}}, {"a": 1, "b": 2, "c": [{"d": 3, "e": 4}]}]' output="{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:3,&quot;e&quot;:4}&#10;{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:3,&quot;e&quot;:4}"></mjf-example-table>
+<mjf-example-table query=".[] as {$a, $b, c: {$d}} ?// {$a, $b, c: [{$e}]} | {$a, $b, $d, $e}" input='[{"a": 1, "b": 2, "c": {"d": 3, "e": 4}}, {"a": 1, "b": 2, "c": [{"d": 3, "e": 4}]}]' output="{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:3,&quot;e&quot;:null}&#10;{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:null,&quot;e&quot;:4}"></mjf-example-table>
+<mjf-example-table query=".[] as [$a] ?// [$b] | if $a != null then error(&quot;err: \($a)&quot;) else {$a,$b} end" input='[[3]]' output="{&quot;a&quot;:null,&quot;b&quot;:3}"></mjf-example-table>
 
 ### Defining Functions
 
@@ -224,43 +197,9 @@ Multiple definitions using the same function name are allowed. Each re-definitio
 number of function arguments, but only for references from functions (or main program) subsequent to the re-definition.
 See also the section below on scoping.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example95" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">def addvalue(f): . + [f]; map(addvalue(.[0]))</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[1,2],[10,20]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[1,2,1], [10,20,10]]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">def addvalue(f): f as $x | map(. + $x); addvalue(.[0])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[1,2],[10,20]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[1,2,1,2], [10,20,1,2]]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="def addvalue(f): . + [f]; map(addvalue(.[0]))" input='[[1,2],[10,20]]' output="[[1,2,1], [10,20,10]]"></mjf-example-table>
+<mjf-example-table query="def addvalue(f): f as $x | map(. + $x); addvalue(.[0])" input='[[1,2],[10,20]]' output="[[1,2,1,2], [10,20,1,2]]"></mjf-example-table>
 
 ### Scoping
 
@@ -277,85 +216,17 @@ closing parenthesis.
 
 Returns true if `exp` produces no outputs, false otherwise.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example96" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">isempty(empty)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">isempty(.[])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">isempty(.[])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="isempty(empty)" input='null' output="true"></mjf-example-table>
+<mjf-example-table query="isempty(.[])" input='[]' output="true"></mjf-example-table>
+<mjf-example-table query="isempty(.[])" input='[1,2,3]' output="false"></mjf-example-table>
 
 ### `limit(n; exp)`
 
 The `limit` function extracts up to `n` outputs from `exp`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example97" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[limit(3;.[])]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,3,4,5,6,7,8,9]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,1,2]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[limit(3;.[])]" input='[0,1,2,3,4,5,6,7,8,9]' output="[0,1,2]"></mjf-example-table>
 
 ### `first(expr)`, `last(expr)`, `nth(n; expr)`
 
@@ -364,27 +235,8 @@ The `first(expr)` and `last(expr)` functions extract the first and last values f
 The `nth(n; expr)` function extracts the nth value output by `expr`. Note that `nth(n; expr)` doesn't support negative
 values of `n`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example98" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[first(range(.)), last(range(.)), nth(./2; range(.))]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">10</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,9,5]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[first(range(.)), last(range(.)), nth(./2; range(.))]" input='10' output="[0,9,5]"></mjf-example-table>
 
 ### `first`, `last`, `nth(n)`
 
@@ -392,27 +244,8 @@ The `first` and `last` functions extract the first and last values from any arra
 
 The `nth(n)` function extracts the nth value of any array at `.`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example99" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[range(.)]|[first, last, nth(5)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">10</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,9,5]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[range(.)]|[first, last, nth(5)]" input='10' output="[0,9,5]"></mjf-example-table>
 
 ### `reduce`
 
@@ -433,43 +266,10 @@ this:
     3 as $item | . + $item
 ```
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example100" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">reduce .[] as $item (0; . + $item)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3,4,5]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">15</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">reduce .[] as [$i,$j] (0; . + $i * $j)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[1,2],[3,4],[5,6]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">44</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="reduce .[] as $item (0; . + $item)" input='[1,2,3,4,5]' output="15"></mjf-example-table>
+<mjf-example-table query="reduce .[] as [$i,$j] (0; . + $i * $j)" input='[[1,2],[3,4],[5,6]]' output="44"></mjf-example-table>
+<mjf-example-table query="reduce .[] as {$x,$y} (null; .x += $x | .y += [$y])" input='[{"x":"a","y":1},{"x":"b","y":2},{"x":"c","y":3}]' output="{&quot;x&quot;:&quot;abc&quot;,&quot;y&quot;:[1,2,3]}"></mjf-example-table>
 
 ### `foreach`
 
@@ -494,99 +294,10 @@ produces `[1,2]`, `[2,6]`, and `[3,12]`. So the effect is similar to running som
 
 When `EXTRACT` is omitted, the identity filter is used. That is, it outputs the intermediate values as they are.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example101" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">foreach .[] as $item (0; . + $item)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3,4,5]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">3</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">6</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">10</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">15</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">foreach .[] as $item (0; . + $item; [$item, . * 2])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3,4,5]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[2,6]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[3,12]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[4,20]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[5,30]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">foreach .[] as $item (0; . + 1; {index: ., $item})</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["foo", "bar", "baz"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"index":1,"item":"foo"}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"index":2,"item":"bar"}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"index":3,"item":"baz"}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="foreach .[] as $item (0; . + $item)" input='[1,2,3,4,5]' output="1&#10;3&#10;6&#10;10&#10;15"></mjf-example-table>
+<mjf-example-table query="foreach .[] as $item (0; . + $item; [$item, . * 2])" input='[1,2,3,4,5]' output="[1,2]&#10;[2,6]&#10;[3,12]&#10;[4,20]&#10;[5,30]"></mjf-example-table>
+<mjf-example-table query="foreach .[] as $item (0; . + 1; {index: ., $item})" input='["foo", "bar", "baz"]' output="{&quot;index&quot;:1,&quot;item&quot;:&quot;foo&quot;}&#10;{&quot;index&quot;:2,&quot;item&quot;:&quot;bar&quot;}&#10;{&quot;index&quot;:3,&quot;item&quot;:&quot;baz&quot;}"></mjf-example-table>
 
 ### Recursion
 
@@ -626,62 +337,6 @@ using only recursion and the comma operator. If recursive calls are "in tail pos
 efficient. In the example below the recursive call by `_range` to itself is in tail position. The example shows off
 three advanced topics: tail recursion, generator construction, and sub-functions.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example102" class="mx-3 small d-print-block collapse show">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">
-          def range(init; upto; by): def _range: if (by &gt; 0 and . &lt; upto) or (by &lt; 0 and
-          . &gt;
-          upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end |
-          select((by
-          &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt; upto)); range(0; 10; 3)
-        </td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">0</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">3</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">6</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">9</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">
-          def while(cond; update): def _while: if cond then ., (update | _while) else empty end;
-          _while;
-          [while(.&lt;100; .*2)]
-        </td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2,4,8,16,32,64]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="def range(init; upto; by): def _range: if (by &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt; upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end | select((by &gt; 0 and . &lt; upto) or (by &lt; 0 and . &gt; upto)); range(0; 10; 3)" input='null' output="0&#10;3&#10;6&#10;9"></mjf-example-table>
+<mjf-example-table query="def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while; [while(.&lt;100; .*2)]" input='1' output="[1,2,4,8,16,32,64]"></mjf-example-table>

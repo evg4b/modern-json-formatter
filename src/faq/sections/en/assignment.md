@@ -45,54 +45,16 @@ If the right-hand side outputs no values (i.e., `empty`), then the left-hand sid
 If the right-hand side outputs multiple values, only the first one will be used (COMPATIBILITY NOTE: in jq 1.5 and
 earlier releases, it used to be that only the last one was used).
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example106" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(..|select(type=="boolean")) |= if . then 1 else 0 end</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[true,false,[5,true,[true,[false]],false]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,0,[5,1,[1,[0]],0]]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="(..|select(type==&quot;boolean&quot;)) |= if . then 1 else 0 end" input='[true,false,[5,true,[true,[false]],false]]' output="[1,0,[5,1,[1,[0]],0]]"></mjf-example-table>
 
 ### Arithmetic update-assignment: `+=`, `-=`, `*=`, `/=`, `%=`, `//=`
 
 jq has a few operators of the form `a op= b`, which are all equivalent to `a |= . op b`. So, `+= 1` can be used to
 increment values, being the same as `|= . + 1`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example107" class="mx-3 small d-print-block collapse show">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.foo += 1</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 42}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"foo": 43}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".foo += 1" input='{"foo": 42}' output='{"foo": 43}'></mjf-example-table>
 
 ### Plain assignment: `=`
 
@@ -122,43 +84,11 @@ The former will set the `a` field of the input to the `b` field of the input, an
 `{"a": 20, "b": 20}`. The latter will set the `a` field of the input to the `a` field's `b` field, producing
 `{"a": 10, "b": 20}`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example108" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.a = .b</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": {"b": 10}, "b": 20}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":20,"b":20}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.a |= .b</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": {"b": 10}, "b": 20}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":10,"b":20}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".a = .b" input='{"a": {"b": 10}, "b": 20}' output='{"a":20,"b":20}'></mjf-example-table>
+<mjf-example-table query=".a |= .b" input='{"a": {"b": 10}, "b": 20}' output='{"a":10,"b":20}'></mjf-example-table>
+<mjf-example-table query="(.a, .b) = range(3)" input='null' output='{"a":0,"b":0}&#10;{"a":1,"b":1}&#10;{"a":2,"b":2}'></mjf-example-table>
+<mjf-example-table query="(.a, .b) |= range(3)" input='null' output='{"a":0,"b":0}'></mjf-example-table>
 
 ### Complex assignments
 

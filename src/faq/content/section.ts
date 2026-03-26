@@ -35,7 +35,7 @@ export class SectionElement extends LitElement {
         margin: 50px 0 20px 0;
       }
 
-      h4.examples {
+      h4 {
         margin: 5px 0;
         font-weight: 400;
       }
@@ -55,39 +55,8 @@ export class SectionElement extends LitElement {
         }
       }
 
-      .d-print-block {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-
-        table {
-          width: 100%;
-          text-align: left;
-          background: var(--code-background);
-          padding: 10px 10px;
-          border-radius: 5px;
-
-          th,
-          td {
-            padding: 5px 10px;
-          }
-
-          th {
-            color: var(--meta-info-color);
-            font-weight: 400;
-            user-select: none;
-          }
-
-          td.font-monospace {
-            font-family: monospace;
-            font-weight: 400;
-            color: var(--code-color);
-          }
-        }
-
-        .pe-3 {
-          width: 65px;
-        }
+      mjf-example-table + mjf-example-table {
+        margin-top: 10px;
       }
     `,
   ];

@@ -1,3 +1,4 @@
+import '@testing/browser.mock';
 import '@testing/background.mock';
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { jq } from '@core/background';
@@ -6,6 +7,7 @@ import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing/json';
 import type { TupleNode } from '@wasm/types';
 import { ExampleTableElement, tokenNodeToString } from './example-table';
+import type { ExampleErrorElement } from '../example-error/example-error';
 
 describe('ExampleTableElement', () => {
   let element: ExampleTableElement;
@@ -48,10 +50,6 @@ describe('ExampleTableElement', () => {
       expect(element.shadowRoot!.querySelectorAll('input').length).toBe(0);
     });
 
-    test('renders a hint to click', async () => {
-      await element.updateComplete;
-      expect(element.shadowRoot!.querySelector('.hint')).not.toBeNull();
-    });
   });
 
   describe('edit mode (after click)', () => {
@@ -89,12 +87,9 @@ describe('ExampleTableElement', () => {
     });
 
     test('does not show error message', () => {
-      expect(element.shadowRoot!.querySelector('.error-message')).toBeNull();
+      expect(element.shadowRoot!.querySelector('mjf-example-error')).toBeNull();
     });
 
-    test('does not render hint', () => {
-      expect(element.shadowRoot!.querySelector('.hint')).toBeNull();
-    });
   });
 
   describe('Exec with successful result', () => {
@@ -125,7 +120,7 @@ describe('ExampleTableElement', () => {
     });
 
     test('does not show error message', () => {
-      expect(element.shadowRoot!.querySelector('.error-message')).toBeNull();
+      expect(element.shadowRoot!.querySelector('mjf-example-error')).toBeNull();
     });
   });
 
@@ -146,14 +141,21 @@ describe('ExampleTableElement', () => {
       await element.updateComplete;
     });
 
-    test('shows error message', () => {
-      const errorEl = element.shadowRoot!.querySelector('.error-message');
-      expect(errorEl?.textContent?.trim()).toBe('unexpected token');
+    test('shows error in a table row with Error label', () => {
+      const ths = element.shadowRoot!.querySelectorAll('th');
+      const errorTh = Array.from(ths).find(th => th.textContent === 'Error');
+      expect(errorTh).not.toBeNull();
     });
 
-    test('result remains null (shows original output)', () => {
-      const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[2].textContent?.trim()).toBe('');
+    test('shows mjf-example-error with correct message', () => {
+      const errorEl = element.shadowRoot!.querySelector('mjf-example-error') as ExampleErrorElement | null;
+      expect(errorEl?.message).toBe('unexpected token');
+    });
+
+    test('hides output rows when error is shown', () => {
+      const ths = element.shadowRoot!.querySelectorAll('th');
+      const outputTh = Array.from(ths).find(th => th.textContent === 'Output');
+      expect(outputTh).toBeUndefined();
     });
   });
 
@@ -174,9 +176,9 @@ describe('ExampleTableElement', () => {
       await element.updateComplete;
     });
 
-    test('shows generic error message', () => {
-      const errorEl = element.shadowRoot!.querySelector('.error-message');
-      expect(errorEl?.textContent?.trim()).toBe('Unexpected error');
+    test('shows mjf-example-error with generic message', () => {
+      const errorEl = element.shadowRoot!.querySelector('mjf-example-error') as ExampleErrorElement | null;
+      expect(errorEl?.message).toBe('Unexpected error');
     });
   });
 
@@ -192,7 +194,9 @@ describe('ExampleTableElement', () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let resolve!: (v: any) => void;
-      mockJq.mockReturnValue(new Promise(res => { resolve = res; }));
+      mockJq.mockReturnValue(new Promise(res => {
+        resolve = res;
+      }));
 
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
@@ -216,13 +220,15 @@ describe('ExampleTableElement', () => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let resolve!: (v: any) => void;
-      mockJq.mockReturnValue(new Promise(res => { resolve = res; }));
+      mockJq.mockReturnValue(new Promise(res => {
+        resolve = res;
+      }));
 
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
 
       const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[2].textContent?.trim()).toBe('Running...');
+      expect(tds[2].textContent?.trim()).toBe('Running…');
 
       resolve(tNull());
       await Promise.resolve();

@@ -27,134 +27,21 @@ means depends on the types involved:
 
 `null` can be added to any value, and returns the other value unchanged.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example13" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.a + 1</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": 7}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">8</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.a + .b</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": [1,2], "b": [3,4]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2,3,4]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.a + null</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": 1}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.a + 1</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">{a: 1} + {b: 2} + {c: 3} + {a: 42}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a": 42, "b": 2, "c": 3}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".a + 1" input='{"a": 7}' output="8"></mjf-example-table>
+<mjf-example-table query=".a + .b" input='{"a": [1,2], "b": [3,4]}' output="[1,2,3,4]"></mjf-example-table>
+<mjf-example-table query=".a + null" input='{"a": 1}' output="1"></mjf-example-table>
+<mjf-example-table query=".a + 1" input='{}' output="1"></mjf-example-table>
+<mjf-example-table query="{a: 1} + {b: 2} + {c: 3} + {a: 42}" input='null' output='{"a": 42, "b": 2, "c": 3}'></mjf-example-table>
 
 ### Subtraction: `-`
 
 As well as normal arithmetic subtraction on numbers, the `-` operator can be used on arrays to remove all occurrences of
 the second array's elements from the first array.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example14" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">4 - .a</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":3}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. - ["xml", "yaml"]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["xml", "yaml", "json"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["json"]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="4 - .a" input='{"a":3}' output="1"></mjf-example-table>
+<mjf-example-table query='. - ["xml", "yaml"]' input='["xml", "yaml", "json"]' output='["json"]'></mjf-example-table>
 
 ### Multiplication, division, modulo: `*`, `/`, `%`
 
@@ -168,43 +55,11 @@ Dividing a string by another splits the first using the second as separators.
 Multiplying two objects will merge them recursively: this works like addition but if both objects contain a value for
 the same key, and the values are objects, the two are merged with the same strategy.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example15" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. / ", "</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"a, b,c,d, e"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["a","b,c,d","e"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">{"k": {"a": 1, "b": 2}} * {"k": {"a": 0,"c": 3}}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"k": {"a": 0, "b": 2, "c": 3}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="10 / . * 3" input='5' output="6"></mjf-example-table>
+<mjf-example-table query='. / ", "' input='"a, b,c,d, e"' output='["a","b,c,d","e"]'></mjf-example-table>
+<mjf-example-table query='{"k": {"a": 1, "b": 2}} * {"k": {"a": 0,"c": 3}}' input='null' output='{"k": {"a": 0, "b": 2, "c": 3}}'></mjf-example-table>
+<mjf-example-table query=".[] | (1 / .)?" input='[1,0,-1]' output="1&#10;-1"></mjf-example-table>
 
 ### `abs`
 
@@ -215,27 +70,8 @@ definition for numeric input.
 
 To compute the absolute value of a number as a floating point number, you may wish use `fabs`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example16" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(abs)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[-10, -1.1, -1e-1]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[10,1.1,1e-1]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="map(abs)" input='[-10, -1.1, -1e-1]' output="[10,1.1,1e-1]"></mjf-example-table>
 
 ### `length`
 
@@ -249,69 +85,15 @@ The builtin function `length` gets the length of various different types of valu
 - The length of **null** is zero.
 - It is an error to use `length` on a **boolean**.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example17" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | length</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[1,2], "string", {"a":2}, null, -5]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">6</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">0</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">5</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".[] | length" input='[[1,2], "string", {"a":2}, null, -5]' output="2&#10;6&#10;1&#10;0&#10;5"></mjf-example-table>
 
 ### `utf8bytelength`
 
 The builtin function `utf8bytelength` outputs the number of bytes used to encode a string in UTF-8.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example18" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">utf8bytelength</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"\u03bc"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="utf8bytelength" input='"\u03bc"' output="2"></mjf-example-table>
 
 ### `keys`, `keys_unsorted`
 
@@ -326,43 +108,9 @@ When `keys` is given an array, it returns the valid indices for that array: the 
 The `keys_unsorted` function is just like `keys`, but if the input is an object then the keys will not be sorted,
 instead the keys will roughly be in insertion order.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example19" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">keys</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"abc": 1, "abcd": 2, "Foo": 3}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["Foo", "abc", "abcd"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">keys</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[42,3,35]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,1,2]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="keys" input='{"abc": 1, "abcd": 2, "Foo": 3}' output='["Foo", "abc", "abcd"]'></mjf-example-table>
+<mjf-example-table query="keys" input='[42,3,35]' output="[0,1,2]"></mjf-example-table>
 
 ### `has(key)`
 
@@ -372,90 +120,18 @@ given index.
 `has($key)` has the same effect as checking whether `$key` is a member of the array returned by `keys`, although `has`
 will be faster.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example20" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(has("foo"))</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"foo": 42}, {}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[true, false]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(has(2))</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[0,1], ["a","b","c"]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[false, true]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='map(has("foo"))' input='[{"foo": 42}, {}]' output="[true, false]"></mjf-example-table>
+<mjf-example-table query="map(has(2))" input='[[0,1], ["a","b","c"]]' output="[false, true]"></mjf-example-table>
 
 ### `in`
 
 The builtin function `in` returns whether or not the input key is in the given object, or the input index corresponds to
 an element in the given array. It is, essentially, an inversed version of `has`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example21" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | in({"foo": 42})</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["foo", "bar"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(in([0,1]))</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[2, 0]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[false, true]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='.[] | in({"foo": 42})' input='["foo", "bar"]' output="true&#10;false"></mjf-example-table>
+<mjf-example-table query="map(in([0,1]))" input='[2, 0]' output="[false, true]"></mjf-example-table>
 
 ### `map(f)`, `map_values(f)`
 
@@ -491,75 +167,11 @@ map_values(empty) #=>  []
 
 In fact, these are their implementations.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example22" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(.+1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[2,3,4]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map_values(.+1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": 1, "b": 2, "c": 3}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a": 2, "b": 3, "c": 4}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(., .)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,1,2,2]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map_values(. // empty)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": null, "b": true, "c": false}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"b":true}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="map(.+1)" input='[1,2,3]' output="[2,3,4]"></mjf-example-table>
+<mjf-example-table query="map_values(.+1)" input='{"a": 1, "b": 2, "c": 3}' output='{"a": 2, "b": 3, "c": 4}'></mjf-example-table>
+<mjf-example-table query="map(., .)" input='[1,2]' output="[1,1,2,2]"></mjf-example-table>
+<mjf-example-table query="map_values(. // empty)" input='{"a": null, "b": true, "c": false}' output='{"b":true}'></mjf-example-table>
 
 ### `pick(pathexps)`
 
@@ -567,27 +179,9 @@ Emit the projection of the input object or array defined by the specified sequen
 is any one of these specifications, then `(. | p)` will evaluate to the same value as `(. | pick(pathexps) | p)`. For
 arrays, negative indices and `.[m:n]` specifications should not be used.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example23" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">pick(.a, .b.c, .x)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": 1, "b": {"c": 2, "d": 3}, "e": 4}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":1,"b":{"c":2},"x":null}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="pick(.a, .b.c, .x)" input='{"a": 1, "b": {"c": 2, "d": 3}, "e": 4}' output='{"a":1,"b":{"c":2},"x":null}'></mjf-example-table>
+<mjf-example-table query="pick(.[2], .[0], .[0])" input='[1,2,3,4]' output="[1,null,3]"></mjf-example-table>
 
 ### `path(path_expression)`
 
@@ -605,164 +199,42 @@ match exactly, and ones that cannot. For example, `.a.b.c` is an exact match pat
 Note that the path expressions are not different from normal expressions. The expression
 `path(..|select(type=="boolean"))` outputs all the paths to boolean values in `.`, and only those paths.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example24" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">path(.a[0].b)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["a",0,"b"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[path(..)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":[{"b":1}]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[],["a"],["a",0],["a",0,"b"]]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="path(.a[0].b)" input='null' output='["a",0,"b"]'></mjf-example-table>
+<mjf-example-table query="[path(..)]" input='{"a":[{"b":1}]}' output='[[],["a"],["a",0],["a",0,"b"]]'></mjf-example-table>
 
 ### `del(path_expression)`
 
 The builtin function `del` removes a key and its corresponding value from an object.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example25" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">del(.foo)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 42, "bar": 9001, "baz": 42}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"baz": 42, "bar": 9001}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="del(.foo)" input='{"foo": 42, "bar": 9001, "baz": 42}' output='{"bar": 9001, "baz": 42}'></mjf-example-table>
+<mjf-example-table query="del(.[1, 2])" input='["foo", "bar", "baz"]' output='["foo"]'></mjf-example-table>
 
 ### `getpath(PATHS)`
 
 The builtin function `getpath` outputs the values in `.` found at each path in `PATHS`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example26" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">getpath(["a","b"])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[getpath(["a","b"], ["a","c"])]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":{"b":0, "c":1}}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0, 1]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='getpath(["a","b"])' input='null' output="null"></mjf-example-table>
+<mjf-example-table query='[getpath(["a","b"], ["a","c"])]' input='{"a":{"b":0, "c":1}}' output="[0, 1]"></mjf-example-table>
 
 ### `setpath(PATHS; VALUE)`
 
 The builtin function `setpath` sets the `PATHS` in `.` to `VALUE`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example27" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">setpath(["a","b"]; 1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":{"b":0}}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a": {"b": 1}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='setpath(["a","b"]; 1)' input='null' output='{"a": {"b": 1}}'></mjf-example-table>
+<mjf-example-table query='setpath(["a","b"]; 1)' input='{"a":{"b":0}}' output='{"a": {"b": 1}}'></mjf-example-table>
+<mjf-example-table query='setpath([0,"a"]; 1)' input='null' output='[{"a":1}]'></mjf-example-table>
 
 ### `delpaths(PATHS)`
 
 The builtin function `delpaths` deletes the `PATHS` in `.`. `PATHS` must be an array of paths, where each path is an
 array of strings and numbers.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example28" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">delpaths([["a","b"]])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":{"b":1},"x":{"y":2}}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":{},"x":{"y":2}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='delpaths([["a","b"]])' input='{"a":{"b":1},"x":{"y":2}}' output='{"a":{},"x":{"y":2}}'></mjf-example-table>
 
 ### `to_entries`, `from_entries`, `with_entries(f)`
 
@@ -773,59 +245,10 @@ each `k: v` entry in the input, the output array includes `{"key": k, "value": v
 `to_entries | map(f) | from_entries`, useful for doing some operation to all keys and values of an object.
 `from_entries` accepts `"key"`, `"Key"`, `"name"`, `"Name"`, `"value"`, and `"Value"` as keys.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example29" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">to_entries</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": 1, "b": 2}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[{"key":"a", "value":1}, {"key":"b", "value":2}]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">from_entries</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"key":"a", "value":1}, {"key":"b", "value":2}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a": 1, "b": 2}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">with_entries(.key |= "KEY_" + .)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a": 1, "b": 2}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"KEY_a": 1, "KEY_b": 2}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="to_entries" input='{"a": 1, "b": 2}' output='[{"key":"a", "value":1}, {"key":"b", "value":2}]'></mjf-example-table>
+<mjf-example-table query="from_entries" input='[{"key":"a", "value":1}, {"key":"b", "value":2}]' output='{"a": 1, "b": 2}'></mjf-example-table>
+<mjf-example-table query='with_entries(.key |= "KEY_" + .)' input='{"a": 1, "b": 2}' output='{"KEY_a": 1, "KEY_b": 2}'></mjf-example-table>
 
 ### `select(boolean_expression)`
 
@@ -834,43 +257,9 @@ otherwise.
 
 It's useful for filtering lists: `[1,2,3] | map(select(. >= 2))` will give you `[2,3]`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example30" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(select(. &gt;= 2))</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,5,3,0,7]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[5,3,7]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | select(.id == "second")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"id": "first", "val": 1}, {"id": "second", "val": 2}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"id": "second", "val": 2}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="map(select(. &gt;= 2))" input='[1,5,3,0,7]' output="[5,3,7]"></mjf-example-table>
+<mjf-example-table query='.[] | select(.id == "second")' input='[{"id": "first", "val": 1}, {"id": "second", "val": 2}]' output='{"id": "second", "val": 2}'></mjf-example-table>
 
 ### `arrays`, `objects`, `iterables`, `booleans`, `numbers`, `normals`, `finites`, `strings`, `nulls`, `values`,
 
@@ -879,27 +268,8 @@ It's useful for filtering lists: `[1,2,3] | map(select(. >= 2))` will give you `
 These built-ins select only inputs that are arrays, objects, iterables (arrays or objects), booleans, numbers, normal
 numbers, finite numbers, strings, null, non-null values, and non-iterables, respectively.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example31" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[]|numbers</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[],{},1,"foo",null,true,false]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".[]|numbers" input='[[],{},1,"foo",null,true,false]' output="1"></mjf-example-table>
 
 ### `empty`
 
@@ -907,90 +277,18 @@ numbers, finite numbers, strings, null, non-null values, and non-iterables, resp
 
 It's useful on occasion. You'll know if you need it :)
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example32" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">1, empty, 2</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">2</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[1,2,empty,3]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2,3]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="1, empty, 2" input='null' output="1&#10;2"></mjf-example-table>
+<mjf-example-table query="[1,2,empty,3]" input='null' output="[1,2,3]"></mjf-example-table>
 
 ### `error`, `error(message)`
 
 Produces an error with the input value, or with the message given as the argument. Errors can be caught with try/catch;
 see below.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example33" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">try error catch .</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"error message"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"error message"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">try error("invalid value: \(.)") catch .</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">42</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"invalid value: 42"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="try error catch ." input='"error message"' output='"error message"'></mjf-example-table>
+<mjf-example-table query='try error("invalid value: \(.)") catch .' input='42' output='"invalid value: 42"'></mjf-example-table>
 
 ### `halt`
 
@@ -1013,43 +311,9 @@ itself).
 `paths(f)` outputs the paths to any values for which `f` is `true`. That is, `paths(type == "number")` outputs the paths
 to all numeric values.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example35" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[paths]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,[[],{"a":2}]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[0],[1],[1,0],[1,1],[1,1,"a"]]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[paths(type == "number")]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,[[],{"a":2}]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[0],[1,1,"a"]]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[paths]" input='[1,[[],{"a":2}]]' output='[[0],[1],[1,0],[1,1],[1,1,"a"]]'></mjf-example-table>
+<mjf-example-table query='[paths(type == "number")]' input='[1,[[],{"a":2}]]' output='[[0],[1,1,"a"]]'></mjf-example-table>
 
 ### `add`
 
@@ -1059,59 +323,10 @@ as those for the `+` operator (described above).
 
 If the input is an empty array, `add` returns `null`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example36" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">add</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["a","b","c"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"abc"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">add</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, 2, 3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">6</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">add</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="add" input='["a","b","c"]' output='"abc"'></mjf-example-table>
+<mjf-example-table query="add" input='[1, 2, 3]' output="6"></mjf-example-table>
+<mjf-example-table query="add" input='[]' output="null"></mjf-example-table>
 
 ### `any`, `any(condition)`, `any(generator; condition)`
 
@@ -1124,59 +339,10 @@ The `any(condition)` form applies the given condition to the elements of the inp
 
 The `any(generator; condition)` form applies the given condition to all the outputs of the given generator.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example37" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">any</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[true, false]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">any</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[false, false]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">any</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="any" input='[true, false]' output="true"></mjf-example-table>
+<mjf-example-table query="any" input='[false, false]' output="false"></mjf-example-table>
+<mjf-example-table query="any" input='[]' output="false"></mjf-example-table>
 
 ### `all`, `all(condition)`, `all(generator; condition)`
 
@@ -1189,59 +355,10 @@ The `all(generator; condition)` form applies the given condition to all the outp
 
 If the input is an empty array, `all` returns `true`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example38" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">all</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[true, false]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">all</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[true, true]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">all</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="all" input='[true, false]' output="false"></mjf-example-table>
+<mjf-example-table query="all" input='[true, true]' output="true"></mjf-example-table>
+<mjf-example-table query="all" input='[]' output="true"></mjf-example-table>
 
 ### `flatten`, `flatten(depth)`
 
@@ -1251,75 +368,11 @@ of nesting to flatten.
 
 `flatten(2)` is like `flatten`, but going only up to two levels deep.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example39" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">flatten</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, [2], [[3]]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1, 2, 3]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">flatten(1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, [2], [[3]]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1, 2, [3]]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">flatten</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">flatten</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"foo": "bar"}, [{"foo": "baz"}]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[{"foo": "bar"}, {"foo": "baz"}]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="flatten" input='[1, [2], [[3]]]' output="[1, 2, 3]"></mjf-example-table>
+<mjf-example-table query="flatten(1)" input='[1, [2], [[3]]]' output="[1, 2, [3]]"></mjf-example-table>
+<mjf-example-table query="flatten" input='[[]]' output="[]"></mjf-example-table>
+<mjf-example-table query="flatten" input='[{"foo": "bar"}, [{"foo": "baz"}]]' output='[{"foo": "bar"}, {"foo": "baz"}]'></mjf-example-table>
 
 ### `range(upto)`, `range(from; upto)`, `range(from; upto; by)`
 
@@ -1332,255 +385,50 @@ The two argument form generates numbers from `from` to `upto` with an increment 
 
 The three argument form generates numbers `from` to `upto` with an increment of `by`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example40" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">range(2; 4)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">3</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[range(2; 4)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[2,3]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[range(4)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,1,2,3]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[range(0; 10; 3)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,3,6,9]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[range(0; 10; -1)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[range(0; -5; -1)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0,-1,-2,-3,-4]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="range(2; 4)" input='null' output="2&#10;3"></mjf-example-table>
+<mjf-example-table query="[range(2; 4)]" input='null' output="[2,3]"></mjf-example-table>
+<mjf-example-table query="[range(4)]" input='null' output="[0,1,2,3]"></mjf-example-table>
+<mjf-example-table query="[range(0; 10; 3)]" input='null' output="[0,3,6,9]"></mjf-example-table>
+<mjf-example-table query="[range(0; 10; -1)]" input='null' output="[]"></mjf-example-table>
+<mjf-example-table query="[range(0; -5; -1)]" input='null' output="[0,-1,-2,-3,-4]"></mjf-example-table>
 
 ### `floor`
 
 The `floor` function returns the floor of its numeric input.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example41" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">floor</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">3.14159</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">3</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="floor" input='3.14159' output="3"></mjf-example-table>
 
 ### `sqrt`
 
 The `sqrt` function returns the square root of its numeric input.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example42" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">sqrt</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">9</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">3.0</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="sqrt" input='9' output="3"></mjf-example-table>
 
 ### `tonumber`
 
 The `tonumber` function parses its input as a number. It will convert correctly-formatted strings to their numeric
 equivalent, leave numbers alone, and give an error on all other input.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example43" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | tonumber</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, "1"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".[] | tonumber" input='[1, "1"]' output="1&#10;1"></mjf-example-table>
 
 ### `tostring`
 
 The `tostring` function prints its input as a string. Strings are left unchanged, and all other values are JSON-encoded.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example44" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | tostring</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, "1", [1]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"1"</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">"1"</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">"[1]"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".[] | tostring" input='[1, "1", [1]]' output='"1"&#10;"1"&#10;"[1]"'></mjf-example-table>
 
 ### `type`
 
 The `type` function returns the type of its argument as a string, which is one of null, boolean, number, string, array
 or object.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example45" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map(type)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0, false, [], {}, null, "hello"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["number", "boolean", "array", "object", "null", "string"]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="map(type)" input='[0, false, [], {}, null, "hello"]' output='["number", "boolean", "array", "object", "null", "string"]'></mjf-example-table>
 
 ### `infinite`, `nan`, `isinfinite`, `isnan`, `isfinite`, `isnormal`
 
@@ -1593,51 +441,9 @@ Note that division by zero raises an error.
 
 Currently most arithmetic operations operating on infinities, NaNs, and sub-normals do not raise errors.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example46" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | (infinite * .) &lt; 0</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[-1, 1]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">infinite, nan | type</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"number"</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">"number"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".[] | (infinite * .) &lt; 0" input='[-1, 1]' output="true&#10;false"></mjf-example-table>
+<mjf-example-table query="infinite, nan | type" input='null' output='"number"&#10;"number"'></mjf-example-table>
 
 ### `sort`, `sort_by(path_expression)`
 
@@ -1658,65 +464,10 @@ sorted order), and if their keys are equal then the values are compared key by k
 two elements by comparing the result of `f` on each element. When `f` produces multiple values, it firstly compares the
 first values, and the second values if the first values are equal, and so on.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example47" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">sort</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[8,3,null,6]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[null,3,6,8]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">sort_by(.foo)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"foo":4, "bar":10}, {"foo":3, "bar":10}, {"foo":2, "bar":1}]
-        </td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[{"foo":2, "bar":1}, {"foo":3, "bar":10}, {"foo":4, "bar":10}]
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">sort_by(.foo, .bar)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">
-          [{"foo":4, "bar":10}, {"foo":3, "bar":20}, {"foo":2, "bar":1}, {"foo":3, "bar":10}]
-        </td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">
-          [{"foo":2, "bar":1}, {"foo":3, "bar":10}, {"foo":3, "bar":20}, {"foo":4, "bar":10}]
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="sort" input='[8,3,null,6]' output="[null,3,6,8]"></mjf-example-table>
+<mjf-example-table query="sort_by(.foo)" input='[{"foo":4, "bar":10}, {"foo":3, "bar":10}, {"foo":2, "bar":1}]' output='[{"foo":2, "bar":1}, {"foo":3, "bar":10}, {"foo":4, "bar":10}]'></mjf-example-table>
+<mjf-example-table query="sort_by(.foo, .bar)" input='[{"foo":4, "bar":10}, {"foo":3, "bar":20}, {"foo":2, "bar":1}, {"foo":3, "bar":10}]' output='[{"foo":2, "bar":1}, {"foo":3, "bar":10}, {"foo":3, "bar":20}, {"foo":4, "bar":10}]'></mjf-example-table>
 
 ### `group_by(path_expression)`
 
@@ -1726,30 +477,8 @@ produces all of these arrays as elements of a larger array, sorted by the value 
 Any jq expression, not just a field access, may be used in place of `.foo`. The sorting order is the same as described
 in the `sort` function above.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example48" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">group_by(.foo)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"foo":1, "bar":10}, {"foo":3, "bar":100}, {"foo":1, "bar":1}]
-        </td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[{"foo":1, "bar":10}, {"foo":1, "bar":1}], [{"foo":3,
-          "bar":100}]]
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="group_by(.foo)" input='[{"foo":1, "bar":10}, {"foo":3, "bar":100}, {"foo":1, "bar":1}]' output='[[{"foo":1, "bar":10}, {"foo":1, "bar":1}], [{"foo":3, "bar":100}]]'></mjf-example-table>
 
 ### `min`, `max`, `min_by(path_exp)`, `max_by(path_exp)`
 
@@ -1758,43 +487,9 @@ Find the minimum or maximum element of the input array.
 The `min_by(path_exp)` and `max_by(path_exp)` functions allow you to specify a particular field or property to examine,
 e.g. `min_by(.foo)` finds the object with the smallest `foo` field.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example49" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">min</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[5,4,2,7]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">max_by(.foo)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"foo":1, "bar":14}, {"foo":2, "bar":3}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"foo":2, "bar":3}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="min" input='[5,4,2,7]' output="2"></mjf-example-table>
+<mjf-example-table query="max_by(.foo)" input='[{"foo":1, "bar":14}, {"foo":2, "bar":3}]' output='{"foo":2, "bar":3}'></mjf-example-table>
 
 ### `unique`, `unique_by(path_exp)`
 
@@ -1804,87 +499,17 @@ duplicates removed.
 The `unique_by(path_exp)` function will keep only one element for each value obtained by applying the argument. Think of
 it as making an array by taking one element out of every group produced by `group`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example50" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">unique</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,5,3,5,3,1,3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2,3,5]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">unique_by(.foo)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{"foo": 1, "bar": 2}, {"foo": 1, "bar": 3}, {"foo": 4, "bar":
-          5}]
-        </td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[{"foo": 1, "bar": 2}, {"foo": 4, "bar": 5}]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">unique_by(length)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["chunky", "bacon", "kitten", "cicada", "asparagus"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["bacon", "chunky", "asparagus"]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="unique" input='[1,2,5,3,5,3,1,3]' output="[1,2,3,5]"></mjf-example-table>
+<mjf-example-table query="unique_by(.foo)" input='[{"foo": 1, "bar": 2}, {"foo": 1, "bar": 3}, {"foo": 4, "bar": 5}]' output='[{"foo": 1, "bar": 2}, {"foo": 4, "bar": 5}]'></mjf-example-table>
+<mjf-example-table query="unique_by(length)" input='["chunky", "bacon", "kitten", "cicada", "asparagus"]' output='["bacon", "chunky", "asparagus"]'></mjf-example-table>
 
 ### `reverse`
 
 This function reverses an array.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example51" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">reverse</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3,4]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[4,3,2,1]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="reverse" input='[1,2,3,4]' output="[4,3,2,1]"></mjf-example-table>
 
 ### `contains(element)`
 
@@ -1893,570 +518,97 @@ string A if B is a substring of A. An array B is contained in an array A if all 
 element in A. An object B is contained in object A if all of the values in B are contained in the value in A with the
 same key. All other types are assumed to be contained in each other if they are equal.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example52" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">contains("bar")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"foobar"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">contains(["baz", "bar"])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["foobar", "foobaz", "blarp"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">contains(["bazzzzz", "bar"])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["foobar", "foobaz", "blarp"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">contains({foo: 12, bar: [{barp: 12}]})</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">contains({foo: 12, bar: [{barp: 15}]})</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='contains("bar")' input='"foobar"' output="true"></mjf-example-table>
+<mjf-example-table query='contains(["baz", "bar"])' input='["foobar", "foobaz", "blarp"]' output="true"></mjf-example-table>
+<mjf-example-table query='contains(["bazzzzz", "bar"])' input='["foobar", "foobaz", "blarp"]' output="false"></mjf-example-table>
+<mjf-example-table query="contains({foo: 12, bar: [{barp: 12}]})" input='{"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]}' output="true"></mjf-example-table>
+<mjf-example-table query="contains({foo: 12, bar: [{barp: 15}]})" input='{"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]}' output="false"></mjf-example-table>
 
 ### `indices(s)`
 
 Outputs an array containing the indices in `.` where `s` occurs. The input may be an array, in which case if `s` is an
 array then the indices output will be those where all elements in `.` match those of `s`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example53" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">indices(", ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"a,b, cd, efg, hijk"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[3,7,12]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">indices(1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,1,3,1,4]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,3,5]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">indices([1,2])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,3,1,4,2,5,1,2,6,7]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,8]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='indices(", ")' input='"a,b, cd, efg, hijk"' output="[3,7,12]"></mjf-example-table>
+<mjf-example-table query="indices(1)" input='[0,1,2,1,3,1,4]' output="[1,3,5]"></mjf-example-table>
+<mjf-example-table query="indices([1,2])" input='[0,1,2,3,1,4,2,5,1,2,6,7]' output="[1,8]"></mjf-example-table>
 
 ### `index(s)`, `rindex(s)`
 
 Outputs the index of the first (`index`) or last (`rindex`) occurrence of `s` in the input.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example54" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">index(", ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"a,b, cd, efg, hijk"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">3</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">index(1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,1,3,1,4]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">index([1,2])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,3,1,4,2,5,1,2,6,7]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">rindex(", ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"a,b, cd, efg, hijk"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">12</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">rindex(1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,1,3,1,4]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">5</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">rindex([1,2])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1,2,3,1,4,2,5,1,2,6,7]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">8</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='index(", ")' input='"a,b, cd, efg, hijk"' output="3"></mjf-example-table>
+<mjf-example-table query="index(1)" input='[0,1,2,1,3,1,4]' output="1"></mjf-example-table>
+<mjf-example-table query="index([1,2])" input='[0,1,2,3,1,4,2,5,1,2,6,7]' output="1"></mjf-example-table>
+<mjf-example-table query='rindex(", ")' input='"a,b, cd, efg, hijk"' output="12"></mjf-example-table>
+<mjf-example-table query="rindex(1)" input='[0,1,2,1,3,1,4]' output="5"></mjf-example-table>
+<mjf-example-table query="rindex([1,2])" input='[0,1,2,3,1,4,2,5,1,2,6,7]' output="8"></mjf-example-table>
 
 ### `inside`
 
 The filter `inside(b)` will produce true if the input is completely contained within b. It is, essentially, an inversed
 version of `contains`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example55" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">inside("foobar")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"bar"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">inside(["foobar", "foobaz", "blarp"])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["baz", "bar"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">inside(["foobar", "foobaz", "blarp"])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["bazzzzz", "bar"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">inside({"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]})</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 12, "bar": [{"barp": 12}]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">inside({"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]})</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 12, "bar": [{"barp": 15}]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='inside("foobar")' input='"bar"' output="true"></mjf-example-table>
+<mjf-example-table query='inside(["foobar", "foobaz", "blarp"])' input='["baz", "bar"]' output="true"></mjf-example-table>
+<mjf-example-table query='inside(["foobar", "foobaz", "blarp"])' input='["bazzzzz", "bar"]' output="false"></mjf-example-table>
+<mjf-example-table query='inside({"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]})' input='{"foo": 12, "bar": [{"barp": 12}]}' output="true"></mjf-example-table>
+<mjf-example-table query='inside({"foo": 12, "bar":[1,2,{"barp":12, "blip":13}]})' input='{"foo": 12, "bar": [{"barp": 15}]}' output="false"></mjf-example-table>
 
 ### `startswith(str)`
 
 Outputs `true` if . starts with the given string argument.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example56" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|startswith("foo")]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["fo", "foo", "barfoo", "foobar", "barfoob"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[false, true, false, true, false]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='[.[]|startswith("foo")]' input='["fo", "foo", "barfoo", "foobar", "barfoob"]' output="[false, true, false, true, false]"></mjf-example-table>
 
 ### `endswith(str)`
 
 Outputs `true` if . ends with the given string argument.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example57" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|endswith("foo")]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["foobar", "barfoo"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[false, true]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='[.[]|endswith("foo")]' input='["foobar", "barfoo"]' output="[false, true]"></mjf-example-table>
 
 ### `combinations`, `combinations(n)`
 
 Outputs all combinations of the elements of the arrays in the input array. If given an argument `n`, it outputs all
 combinations of `n` repetitions of the input array.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example58" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">combinations</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[1,2], [3, 4]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1, 3]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[1, 4]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[2, 3]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[2, 4]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">combinations(2)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0, 1]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[0, 0]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[0, 1]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[1, 0]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[1, 1]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="combinations" input='[[1,2], [3, 4]]' output="[1, 3]&#10;[1, 4]&#10;[2, 3]&#10;[2, 4]"></mjf-example-table>
+<mjf-example-table query="combinations(2)" input='[0, 1]' output="[0, 0]&#10;[0, 1]&#10;[1, 0]&#10;[1, 1]"></mjf-example-table>
 
 ### `ltrimstr(str)`
 
 Outputs its input with the given prefix string removed, if it starts with it.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example59" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|ltrimstr("foo")]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["fo", "foo", "barfoo", "foobar", "afoo"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["fo","","barfoo","bar","afoo"]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='[.[]|ltrimstr("foo")]' input='["fo", "foo", "barfoo", "foobar", "afoo"]' output='["fo","","barfoo","bar","afoo"]'></mjf-example-table>
 
 ### `rtrimstr(str)`
 
 Outputs its input with the given suffix string removed, if it ends with it.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example60" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|rtrimstr("foo")]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["fo", "foo", "barfoo", "foobar", "foob"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["fo","","bar","foobar","foob"]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='[.[]|rtrimstr("foo")]' input='["fo", "foo", "barfoo", "foobar", "foob"]' output='["fo","","bar","foobar","foob"]'></mjf-example-table>
 
 ### `explode`
 
 Converts an input string into an array of the string's codepoint numbers.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example61" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">explode</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"foobar"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[102,111,111,98,97,114]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="explode" input='"foobar"' output="[102,111,111,98,97,114]"></mjf-example-table>
 
 ### `implode`
 
 The inverse of explode.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example62" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">implode</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[65, 66, 67]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"ABC"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="implode" input='[65, 66, 67]' output='"ABC"'></mjf-example-table>
 
 ### `split(str)`
 
@@ -2464,27 +616,8 @@ Splits an input string on the separator argument.
 
 `split` can also split on regex matches when called with two arguments (see the regular expressions section below).
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example63" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">split(", ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"a, b,c,d, e, "</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["a","b,c,d","e",""]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='split(", ")' input='"a, b,c,d, e, "' output='["a","b,c,d","e",""]'></mjf-example-table>
 
 ### `join(str)`
 
@@ -2494,69 +627,16 @@ running `split("foo") | join("foo")` over any input string returns said input st
 Numbers and booleans in the input are converted to strings. Null values are treated as empty strings. Arrays and objects
 in the input are not supported.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example64" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">join(", ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["a","b,c,d","e"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"a, b,c,d, e"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">join(" ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["a",1,2.3,true,null,false]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"a 1 2.3 true null false"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='join(", ")' input='["a","b,c,d","e"]' output='"a, b,c,d, e"'></mjf-example-table>
+<mjf-example-table query='join(" ")' input='["a",1,2.3,true,null,false]' output='"a 1 2.3 true false"'></mjf-example-table>
 
 ### `ascii_downcase`, `ascii_upcase`
 
 Emit a copy of the input string with its alphabetic characters (a-z and A-Z) converted to the specified case.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example65" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">ascii_upcase</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"useful but not for é"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"USEFUL BUT NOT FOR é"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="ascii_upcase" input='"useful but not for é"' output='"USEFUL BUT NOT FOR é"'></mjf-example-table>
 
 ### `while(cond; update)`
 
@@ -2565,27 +645,8 @@ The `while(cond; update)` function allows you to repeatedly apply an update to `
 Note that `while(cond; update)` is internally defined as a recursive jq function. Recursive calls within `while` will
 not consume additional memory if `update` produces at most one output for each input. See advanced topics below.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example66" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[while(.&lt;100; .*2)]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2,4,8,16,32,64]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[while(.&lt;100; .*2)]" input='1' output="[1,2,4,8,16,32,64]"></mjf-example-table>
 
 ### `repeat(exp)`
 
@@ -2594,27 +655,8 @@ The `repeat(exp)` function allows you to repeatedly apply expression `exp` to `.
 Note that `repeat(exp)` is internally defined as a recursive jq function. Recursive calls within `repeat` will not
 consume additional memory if `exp` produces at most one output for each input. See advanced topics below.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example67" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[repeat(.*2, error)?]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[2]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[repeat(.*2, error)?]" input='1' output="[2]"></mjf-example-table>
 
 ### `until(cond; next)`
 
@@ -2624,27 +666,8 @@ output, until `cond` is true. For example, this can be used to implement a facto
 Note that `until(cond; next)` is internally defined as a recursive jq function. Recursive calls within `until()` will
 not consume additional memory if `next` produces at most one output for each input. See advanced topics below.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example68" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.,1]|until(.[0] &lt; 1; [.[0] - 1, .[1] * .[0]])|.[1]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">4</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">24</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[.,1]|until(.[0] &lt; 1; [.[0] - 1, .[1] * .[0]])|.[1]" input='4' output="24"></mjf-example-table>
 
 ### `recurse(f)`, `recurse`, `recurse(f; condition)`
 
@@ -2679,91 +702,10 @@ one could write `recurse(.+1; true)`.
 The recursive calls in `recurse` will not consume additional memory whenever `f` produces at most a single output for
 each input.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example69" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">recurse(.foo[])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo":[{"foo": []}, {"foo":[{"foo":[]}]}]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"foo":[{"foo":[]},{"foo":[{"foo":[]}]}]}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"foo":[]}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"foo":[{"foo":[]}]}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"foo":[]}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">recurse</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":0,"b":[1]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":0,"b":[1]}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">0</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">[1]</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">recurse(. * .; . &lt; 20)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">4</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">16</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="recurse(.foo[])" input='{"foo":[{"foo": []}, {"foo":[{"foo":[]}]}]}' output='{"foo":[{"foo":[]},{"foo":[{"foo":[]}]}]}&#10;{"foo":[]}&#10;{"foo":[{"foo":[]}]}&#10;{"foo":[]}'></mjf-example-table>
+<mjf-example-table query="recurse" input='{"a":0,"b":[1]}' output='{"a":0,"b":[1]}&#10;0&#10;[1]&#10;1'></mjf-example-table>
+<mjf-example-table query="recurse(. * .; . &lt; 20)" input='2' output="2&#10;4&#10;16"></mjf-example-table>
 
 ### `walk(f)`
 
@@ -2774,45 +716,9 @@ examples. The first example highlights the usefulness of processing the elements
 the array itself. The second example shows how all the keys of all the objects within the input can be considered for
 alteration.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example70" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">walk(if type == "array" then sort else . end)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[4, 1, 7], [8, 5, 2], [3, 6, 9]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[1,4,7],[2,5,8],[3,6,9]]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">
-          walk( if type == "object" then with_entries( .key |= sub( "^_+"; "") ) else . end )
-        </td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[ { "_a": { "__b": 2 } } ]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[{"a":{"b":2}}]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='walk(if type == "array" then sort else . end)' input='[[4, 1, 7], [8, 5, 2], [3, 6, 9]]' output="[[1,4,7],[2,5,8],[3,6,9]]"></mjf-example-table>
+<mjf-example-table query='walk( if type == "object" then with_entries( .key |= sub( "^_+"; "") ) else . end )' input='[ { "_a": { "__b": 2 } } ]' output='[{"a":{"b":2}}]'></mjf-example-table>
 
 [//]: # "### `$ENV`, `env`"
 
@@ -2832,7 +738,7 @@ alteration.
 
 [//]: # '<div class="pb-3">'
 
-[//]: # '  <h4 class="examples">Examples:</h4>'
+[//]: # '  #### Examples:'
 
 [//]: # '  <div id="example71" class="collapse mx-3 small d-print-block">'
 
@@ -2908,27 +814,8 @@ alteration.
 
 Transpose a possibly jagged matrix (an array of arrays). Rows are padded with nulls so the result is always rectangular.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example72" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">transpose</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[1], [2,3]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[[1,2],[null,3]]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="transpose" input='[[1], [2,3]]' output="[[1,2],[null,3]]"></mjf-example-table>
 
 ### `bsearch(x)`
 
@@ -2937,70 +824,18 @@ will return its index in the array; otherwise, if the array is sorted, it will r
 point such that the array would still be sorted after the insertion of x at ix. If the array is not sorted, `bsearch(x)`
 will return an integer that is probably of no interest.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example73" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">bsearch(0)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[0,1]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">0</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">bsearch(0)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">-1</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="bsearch(0)" input='[0,1]' output="0"></mjf-example-table>
+<mjf-example-table query="bsearch(0)" input='[1,2,3]' output="-1"></mjf-example-table>
+<mjf-example-table query="bsearch(4) as $ix | if $ix &lt; 0 then .[-(1+$ix)] = 4 else . end" input='[1,2,3]' output="[1,2,3,4]"></mjf-example-table>
 
 ### String interpolation: `\(exp)`
 
 Inside a string, you can put an expression inside parens after a backslash. Whatever the expression returns will be
 interpolated into the string.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example74" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">"The input was \(.), which is one less than \(.+1)"</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">42</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"The input was 42, which is one less than 43"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query='"The input was \(.), which is one less than \(.+1)"' input='42' output='"The input was 42, which is one less than 43"'></mjf-example-table>
 
 ### Convert to/from JSON
 
@@ -3008,59 +843,10 @@ The `tojson` and `fromjson` builtins dump values as JSON texts or parse JSON tex
 `tojson` builtin differs from `tostring` in that `tostring` returns strings unmodified, while `tojson` encodes strings
 as JSON strings.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example75" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|tostring]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, "foo", ["foo"]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["1","foo","[\"foo\"]"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|tojson]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, "foo", ["foo"]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["1","\"foo\"","[\"foo\"]"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|tojson|fromjson]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, "foo", ["foo"]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,"foo",["foo"]]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[.[]|tostring]" input='[1, "foo", ["foo"]]' output='["1","foo","[\"foo\"]"]'></mjf-example-table>
+<mjf-example-table query="[.[]|tojson]" input='[1, "foo", ["foo"]]' output='["1","\"foo\"","[\"foo\"]"]'></mjf-example-table>
+<mjf-example-table query="[.[]|tojson|fromjson]" input='[1, "foo", ["foo"]]' output='[1,"foo",["foo"]]'></mjf-example-table>
 
 ### Format strings and escaping
 
@@ -3125,75 +911,11 @@ will produce the following output for the input `{"search":"what is jq?"}`:
 
 Note that the slashes, question mark, etc. in the URL are not escaped, as they were part of the string literal.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example76" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">@html</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"This works if x &lt; y"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"This works if x &amp;lt; y"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">@sh "echo \(.)"</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"O'Hara's Ale"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"echo 'O'\\''Hara'\\''s Ale'"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">@base64</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"This is a message"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"VGhpcyBpcyBhIG1lc3NhZ2U="</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">@base64d</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"VGhpcyBpcyBhIG1lc3NhZ2U="</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"This is a message"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="@html" input='"This works if x &lt; y"' output='"This works if x &amp;lt; y"'></mjf-example-table>
+<mjf-example-table query='@sh "echo \(.)"' input='"O&#39;Hara&#39;s Ale"' output='"echo &#39;O&#39;\\&#39;&#39;Hara\\&#39;&#39;s Ale&#39;"'></mjf-example-table>
+<mjf-example-table query="@base64" input='"This is a message"' output='"VGhpcyBpcyBhIG1lc3NhZ2U="'></mjf-example-table>
+<mjf-example-table query="@base64d" input='"VGhpcyBpcyBhIG1lc3NhZ2U="' output='"This is a message"'></mjf-example-table>
 
 ### Dates
 
@@ -3237,59 +959,10 @@ ISO 8601 datetime is `"%Y-%m-%dT%H:%M:%SZ"`.
 jq may not support some or all of this date functionality on some systems. In particular, the `%u` and `%j` specifiers
 for `strptime(fmt)` are not supported on macOS.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example77" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">fromdate</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"2015-03-05T23:51:47Z"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1425599507</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">strptime("%Y-%m-%dT%H:%M:%SZ")</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"2015-03-05T23:51:47Z"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[2015,2,5,23,51,47,4,63]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">strptime("%Y-%m-%dT%H:%M:%SZ")|mktime</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"2015-03-05T23:51:47Z"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1425599507</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="fromdate" input='"2015-03-05T23:51:47Z"' output="1425599507"></mjf-example-table>
+<mjf-example-table query='strptime("%Y-%m-%dT%H:%M:%SZ")' input='"2015-03-05T23:51:47Z"' output="[2015,2,5,23,51,47,4,63]"></mjf-example-table>
+<mjf-example-table query='strptime("%Y-%m-%dT%H:%M:%SZ")|mktime' input='"2015-03-05T23:51:47Z"' output="1425599507"></mjf-example-table>
 
 [//]: # "### SQL-Style Operators"
 

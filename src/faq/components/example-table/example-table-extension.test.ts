@@ -21,7 +21,8 @@ const makeTable = (query: string, input: string, output: string) =>
 
 const getPostprocess = () => {
   const ext = exampleTableExtension();
-  return ext.hooks!.postprocess!.bind({}) as (html: string) => string;
+  const fn = ext.hooks!.postprocess!;
+  return (html: string) => fn.call(fn as never, html) as string;
 };
 
 describe('encodeAttrValue', () => {

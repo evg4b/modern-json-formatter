@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { jq } from '@core/background';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
-import type { ArrayNode, BooleanNode, ErrorNode, NullNode, NumberNode, ObjectNode, StringNode, TokenNode, TupleNode } from '@wasm/types';
+import type { ArrayNode, BooleanNode, ErrorNode, NumberNode, ObjectNode, StringNode, TokenNode, TupleNode } from '@wasm/types';
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -4,6 +4,7 @@ import { jq } from '@core/background';
 import { wrapMock } from '@testing/helpers';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing/json';
+import type { TupleNode } from '@wasm/types';
 import { ExampleTableElement, tokenNodeToString } from './example-table';
 
 describe('ExampleTableElement', () => {
@@ -189,7 +190,8 @@ describe('ExampleTableElement', () => {
       element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
       await element.updateComplete;
 
-      let resolve!: (v: unknown) => void;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let resolve!: (v: any) => void;
       mockJq.mockReturnValue(new Promise(res => { resolve = res; }));
 
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
@@ -212,7 +214,8 @@ describe('ExampleTableElement', () => {
       element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
       await element.updateComplete;
 
-      let resolve!: (v: unknown) => void;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let resolve!: (v: any) => void;
       mockJq.mockReturnValue(new Promise(res => { resolve = res; }));
 
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
@@ -261,7 +264,7 @@ describe('tokenNodeToString', () => {
   });
 
   test('tuple joins items with newline', () => {
-    expect(tokenNodeToString(tTuple(tString('a'), tString('b')))).toBe('"a"\n"b"');
+    expect(tokenNodeToString(tTuple(tString('a'), tString('b')) as TupleNode)).toBe('"a"\n"b"');
   });
 
   test('nested object in array', () => {

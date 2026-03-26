@@ -11,7 +11,7 @@ declare global {
 
 @customElement('mjf-container')
 export class ContainerElement extends LitElement {
-  public static override shadowRootOptions: ShadowRootInit = {
+  public static override readonly shadowRootOptions: ShadowRootInit = {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
     mode: 'closed',
@@ -48,12 +48,12 @@ export class ContainerElement extends LitElement {
     console.error(error);
   }
 
-  public setLoadingState(isLoading: boolean) {
-    if (isLoading) {
-      this.setAttribute('loading', 'true');
-    } else {
-      this.removeAttribute('loading');
-    }
+  public startLoading() {
+    this.setAttribute('loading', 'true');
+  }
+
+  public stopLoading() {
+    this.removeAttribute('loading');
   }
 
   public message(header: string, content: string) {

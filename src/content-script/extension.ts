@@ -58,7 +58,7 @@ export const runExtension = async () => {
       container.setError(error);
       return;
     } finally {
-      container.setLoadingState(false);
+      container.stopLoading();
     }
 
     container.message(
@@ -73,10 +73,10 @@ export const runExtension = async () => {
 
   const wrapper = async <T>(promise: Promise<T>): Promise<T> => {
     try {
-      container.setLoadingState(true);
+      container.startLoading();
       return await promise;
     } finally {
-      container.setLoadingState(false);
+      container.stopLoading();
     }
   };
 
@@ -141,7 +141,7 @@ export const runExtension = async () => {
   } catch (error: unknown) {
     container.setError(error);
   } finally {
-    container.setLoadingState(false);
+    container.stopLoading();
   }
 };
 

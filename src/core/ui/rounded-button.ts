@@ -17,8 +17,8 @@ export class RoundedButtonElement extends LitElement {
         display: inline-flex;
 
         button {
-          border: 1px solid #a8c7fa;
-          color: #a8c7fa;
+          border: 1px solid var(--button-border-color);
+          color: var(--button-color);
           border-radius: 30px;
           padding: 3px 10px;
           background-color: transparent;
@@ -29,9 +29,9 @@ export class RoundedButtonElement extends LitElement {
 
           &:hover {
             cursor: pointer;
-            border-color: #a8c7fa;
-            color: #282828;
-            background-color: #a8c7fa;
+            border-color: var(--button-hover-border-color);
+            color: var(--button-hover-color);
+            background-color: var(--button-hover-background);
           }
         }
       }

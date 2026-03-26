@@ -17,18 +17,18 @@ export class SideBarLinkElement extends LitElement {
     boxingFixCss,
     css`
       :host {
-        --sidebar-link-background: #282828;
-        --sidebar-link-color: #eee;
+        --sidebar-link-background: var(--background);
+        --sidebar-link-color: var(--base-text-color);
         display: flex;
         flex-direction: column;
 
         a {
           border-radius: 0 30px 30px 0;
           padding: 5px 10px 5px 20px;
-          color: var(--sidebar-link-color, #eee);
+          color: var(--sidebar-link-color);
           overflow: hidden;
           position: relative;
-          background: var(--sidebar-link-background, #282828);
+          background: var(--sidebar-link-background);
           transition-property: background-color, color;
           transition-duration: 150ms;
           transition-timing-function: ease-in-out;
@@ -36,12 +36,12 @@ export class SideBarLinkElement extends LitElement {
           display: flex;
 
           &:hover {
-            --sidebar-link-background: #6e6e6e;
+            --sidebar-link-background: var(--background-hover);
           }
 
           &.active {
-            --sidebar-link-background: #7cacf8;
-            --sidebar-link-color: #282828;
+            --sidebar-link-background: var(--button-active-background);
+            --sidebar-link-color: var(--button-active-color);
           }
         }
       }

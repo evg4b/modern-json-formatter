@@ -1,7 +1,7 @@
 code:not(pre code) {
-  color: #a8c7fa;
+  color: var(--code-color);
   font-family: monospace;
   padding: 1px 5px;
   border-radius: 3px;
-  background: #3c3c3c;
+  background: var(--code-background);
 }

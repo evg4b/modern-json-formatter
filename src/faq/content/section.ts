@@ -42,11 +42,11 @@ export class SectionElement extends LitElement {
 
       pre {
         display: block;
-        color: #a8c7fa;
+        color: var(--code-color);
         font-family: monospace;
         padding: 10px 10px;
         border-radius: 3px;
-        background: #3c3c3c;
+        background: var(--code-background);
         overflow: auto;
 
         code {
@@ -63,7 +63,7 @@ export class SectionElement extends LitElement {
         table {
           width: 100%;
           text-align: left;
-          background: #3c3c3c;
+          background: var(--code-background);
           padding: 10px 10px;
           border-radius: 5px;
 
@@ -73,7 +73,7 @@ export class SectionElement extends LitElement {
           }
 
           th {
-            color: #696969;
+            color: var(--meta-info-color);
             font-weight: 400;
             user-select: none;
           }
@@ -81,7 +81,7 @@ export class SectionElement extends LitElement {
           td.font-monospace {
             font-family: monospace;
             font-weight: 400;
-            color: #a8c7fa;
+            color: var(--code-color);
           }
         }
 

@@ -4,6 +4,7 @@ import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { litMarkdown } from 'rsbuild-lit-markdown';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
+import { exampleTableExtension } from './src/faq/components/example-table/example-table-extension';
 import { lowerCase } from 'es-toolkit';
 
 // Docs: https://rsbuild.rs/config/
@@ -11,7 +12,7 @@ export default defineConfig({
   mode: lowerCase(process.env.NODE_ENV ?? 'development') as RsbuildMode,
   source: { decorators: { version: 'legacy' } },
   plugins: [
-    litMarkdown({ extensions: [gfmHeadingId({ prefix: 'mjf-' })] }),
+    litMarkdown({ extensions: [gfmHeadingId({ prefix: 'mjf-' }), exampleTableExtension()] }),
     pluginSass(),
     pluginTypeCheck({ enable: true }),
     manifestGeneratorPlugin({

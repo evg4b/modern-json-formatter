@@ -32,6 +32,11 @@ To run a single test file:
 yarn test src/path/to/file.test.ts
 ```
 
+To run Rust unit tests in the WASM core:
+```bash
+cargo test --manifest-path worker-wasm/core/Cargo.toml
+```
+
 ## Architecture
 
 ### Extension Entry Points
@@ -51,6 +56,8 @@ The performance-critical JSON parsing lives in `worker-wasm/` (Rust, compiled to
 
 The WASM module must be pre-built (`make build-worker-wasm`) before the TypeScript build. In tests, it's mocked via `testing/worker-wasm.mock.ts`.
 
+The Rust logic is split into two crates: `worker-wasm/` (WASM bindings via `wasm-bindgen`) and `worker-wasm/core/` (pure Rust logic — tokenize, query, format, minify). The core crate uses `serde_json`, `jaq-*` for JQ queries, and `json-event-parser` for streaming.
+
 ### Content Script Pipeline
 
 1. `json-detector/` — scans the page DOM for a `<pre>` or `<code>` node containing raw JSON
@@ -61,9 +68,11 @@ The WASM module must be pre-built (`make build-worker-wasm`) before the TypeScri
 ### UI Components
 
 Built with **Lit** (web components). Components live in:
-- `src/content-script/ui/` — toolbar (`toolbox/`), JQ query input (`query-input/`), dropdown, info button
+- `src/content-script/ui/` — toolbar (`toolbox/`), JQ query input (`query-input/`), container (`container/`), info button
 - `src/core/ui/` — reusable primitives (`buttons/`, `floating-message/`, `sticky-panel/`, `rounded-button.ts`, `table.ts`, `logo.ts`)
 - Styles use SASS; shared variables in `src/core/styles/`
+
+The main container (`mjf-container`) uses a **closed** shadow root and exposes `type: TabType` (`'formatted' | 'raw' | 'query'`) as a Lit `@property` to switch between views.
 
 ### Core Shared Module
 
@@ -73,14 +82,30 @@ Built with **Lit** (web components). Components live in:
 - `helpers/` — utility functions
 - `constants/` — extension-wide constants
 
+### TypeScript Path Aliases
+
+Defined in `tsconfig.json`:
+- `@core/*` → `src/core/*`
+- `@testing/*` → `testing/*`
+- `@wasm` → `worker-wasm/pkg` (compiled WASM bindings)
+- `@wasm/types` → `worker-wasm/types` (shared WASM type definitions)
+
 ### Testing
 
 Tests use **Rstest** (Rsbuild's test runner, Vitest-compatible) with **happy-dom** for DOM APIs.
 
 - Test files are co-located with source (`file.ts` → `file.test.ts`)
 - Tests cover both `src/` and `worker-core/`
-- Mocks for browser APIs, WASM, and background scripts are in `testing/`
 - Snapshots live in `__snapshots__/` directories
+
+**Available mocks in `testing/`:**
+- `browser.mock.ts` — Chrome extension APIs (`resource`, `sendMessage`)
+- `background.mock.ts` — Background script message handlers (`download`, `format`, `jq`, `tokenize`, `pushHistory`)
+- `worker-wasm.mock.ts` — WASM exports (`initialize`, `jq`, `tokenize`, `format`, `minify`)
+- `helpers.ts` — `wrapMock<T>()` utility for typing mocked functions
+- `json.ts` — `TokenNode` test fixtures (`tObject`, `tArray`, `tString`, `tNull`, etc.)
+
+Import side-effect mocks at the top of test files: `import '@testing/browser.mock'`.
 
 ### Build System
 

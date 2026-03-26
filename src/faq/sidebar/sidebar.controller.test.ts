@@ -4,6 +4,7 @@ import type { ReactiveControllerHost } from '@lit/reactive-element/reactive-cont
 
 const makeHost = (): ReactiveControllerHost => ({
   addController: rstest.fn(),
+  removeController: rstest.fn(),
   requestUpdate: rstest.fn(),
   updateComplete: Promise.resolve(true),
 });
@@ -73,7 +74,11 @@ describe('SidebarController', () => {
       const h2 = section.querySelector('h2')!;
       rstest.spyOn(h2, 'getBoundingClientRect').mockReturnValue({
         top: globalThis.innerHeight + 100,
-        left: 0, right: 0, bottom: 0, width: 0, height: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
         toJSON: () => ({}),
       } as DOMRect);
       controller.registerSection(section);

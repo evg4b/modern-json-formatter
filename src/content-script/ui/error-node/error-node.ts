@@ -19,13 +19,17 @@ export class ErrorNodeElement extends LitElement {
   @property({ type: Array })
   public lines: string[] = [];
 
+  private get lineTemplates() {
+    return this.lines.map(line => html`<span>${line}</span>`);
+  }
+
   public override render() {
     return html`
       <div class="error">
-        <img src="${resource('invalid.svg')}" alt="Error">
+        <img src=${resource('invalid.svg')} alt="Error">
         <div class="message">
           <span>${this.header}</span>
-          ${this.lines.map(line => html`<span>${line}</span>`)}
+          ${this.lineTemplates}
         </div>
       </div>
     `;

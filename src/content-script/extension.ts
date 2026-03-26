@@ -8,6 +8,7 @@ import { findNodeWithCode } from './json-detector';
 import { type TabChangedEvent } from './ui/toolbox/toolbox';
 import './ui/toolbox';
 import './ui/container/container';
+import './ui/error-node';
 import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
 

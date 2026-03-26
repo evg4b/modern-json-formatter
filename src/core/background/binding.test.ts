@@ -2,7 +2,7 @@ import '@testing/browser.mock';
 import { sendMessage } from '@core/browser';
 import { wrapMock } from '@testing/helpers';
 import type { ErrorNode, TokenizerResponse } from '@wasm/types';
-import { clearHistory, format, getDomains, getHistory, jq, pushHistory, tokenize } from './binding';
+import { clearHistory, download, format, getDomains, getHistory, jq, pushHistory, tokenize } from './binding';
 import { type DomainCountResponse, type HistoryResponse } from './models';
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 
@@ -63,6 +63,16 @@ describe('binding', () => {
     await pushHistory('domain', 'query');
     expect(mockSendMessage)
       .toHaveBeenCalledWith({ action: 'push-history', payload: { domain: 'domain', query: 'query' } });
+  });
+
+  test('download should call sendMessage with correct payload', async () => {
+    mockSendMessage.mockResolvedValue(undefined);
+
+    await download('raw', 'content', 'file.json');
+    expect(mockSendMessage).toHaveBeenCalledWith({
+      action: 'download',
+      payload: { type: 'raw', content: 'content', filename: 'file.json' },
+    });
   });
 
   test('getDomains should resolve with DomainCountResponse', async () => {

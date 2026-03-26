@@ -70,7 +70,24 @@ describe('runExtension', () => {
     expect(tokenize).not.toHaveBeenCalled();
   });
 
-  test('when content is too large and format returns error', async () => {
+  test('when content is too large and format returns error object', async () => {
+    const preNode = createElement({
+      element: 'pre',
+      content: 'X'.repeat(LIMIT + 10),
+    });
+
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
+
+    await runExtension();
+
+    const containerElement = shadowRoot.querySelector('mjf-container') as ContainerElement;
+    expect(format).toHaveBeenCalled();
+    expect(containerElement.type).toBe('raw');
+    expect(tokenize).not.toHaveBeenCalled();
+  });
+
+  test('when content is too large and format throws', async () => {
     const preNode = createElement({
       element: 'pre',
       content: 'X'.repeat(LIMIT + 10),
@@ -108,6 +125,22 @@ describe('runExtension', () => {
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();
+  });
+
+  test('when tokenize resolves with error-type response', async () => {
+    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const preNode = createElement({
+      element: 'pre',
+      content: '{ invalid }',
+    });
+
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    wrapMock(tokenize).mockResolvedValue({ type: 'error', error: 'Parse error', scope: 'worker' });
+
+    await runExtension();
+
+    expect(tokenize).toHaveBeenCalled();
+    expect(consoleSpy).not.toHaveBeenCalled();
   });
 
   test('when tokenize returns error response', async () => {

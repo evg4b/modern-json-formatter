@@ -12,6 +12,7 @@ import './ui/container/container';
 import './ui/error-node';
 import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
+import { getSettings } from '@core/settings';
 
 import contentStyles from './content-script.scss?inline';
 import rootStyles from './root-styles.scss?inline';
@@ -79,8 +80,12 @@ export const runExtension = async () => {
     }
   };
 
+  const settings = await getSettings();
+
   setTimeout(() => {
     const toolbox = document.createElement('mjf-toolbox');
+    toolbox.buttons = settings.buttons;
+    toolbox.downloadMode = settings.downloadMode;
     const panel = document.createElement('mjf-sticky-panel');
     panel.appendChild(toolbox);
 

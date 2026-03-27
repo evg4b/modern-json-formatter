@@ -9,8 +9,14 @@ import '@core/ui';
 import './options.scss';
 import './sections/toolbar-buttons-section';
 import './sections/download-mode-section';
-import { DEFAULT_SETTINGS, getSettings, saveSettings, type ExtensionSettings } from '@core/settings';
-import type { ToolbarButtonsSettings, DownloadMode } from '@core/settings';
+import {
+  DEFAULT_SETTINGS,
+  getSettings,
+  saveSettings,
+  type DownloadMode,
+  type ExtensionSettings,
+  type ToolbarButtonsSettings,
+} from '@core/settings';
 
 const columns: TableColumn[] = [
   { title: 'Domain', path: 'domain' },

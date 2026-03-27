@@ -126,11 +126,7 @@ export class ToolboxElement extends LitElement {
       `;
     }
 
-    const title = this.downloadMode === 'formatted'
-      ? 'Download Formatted'
-      : this.downloadMode === 'minified'
-        ? 'Download Minified'
-        : 'Download Raw';
+    const title = this.directDownloadTitle();
 
     return html`
       <button class="square" title=${title}
@@ -140,13 +136,20 @@ export class ToolboxElement extends LitElement {
     `;
   }
 
+  private directDownloadTitle(): string {
+    if (this.downloadMode === 'formatted') return 'Download Formatted';
+    if (this.downloadMode === 'minified') return 'Download Minified';
+    return 'Download Raw';
+  }
+
+  private directDownloadType(): DownloadType {
+    if (this.downloadMode === 'formatted') return 'formatted';
+    if (this.downloadMode === 'minified') return 'minified';
+    return 'raw';
+  }
+
   private directDownloadHandler() {
-    const type: DownloadType = this.downloadMode === 'formatted'
-      ? 'formatted'
-      : this.downloadMode === 'minified'
-        ? 'minified'
-        : 'raw';
-    this.dispatchEvent(new DownloadEvent(type));
+    this.dispatchEvent(new DownloadEvent(this.directDownloadType()));
   }
 
   private clickHandler(event: MouseEvent) {

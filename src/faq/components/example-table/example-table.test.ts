@@ -27,67 +27,29 @@ describe('ExampleTableElement', () => {
     expect(customElements.get('mjf-example-table')).toBeDefined();
   });
 
-  describe('static mode (default)', () => {
-    test('renders Query, Input, Output rows from properties', async () => {
+  describe('default state', () => {
+    test('pre-populates input fields and output row from properties', async () => {
       element.query = '.foo';
       element.input = '{"foo": 1}';
       element.output = '1';
       await element.updateComplete;
 
+      const inputs = element.shadowRoot!.querySelectorAll<HTMLInputElement>('input');
+      expect(inputs[0].value).toBe('.foo');
+      expect(inputs[1].value).toBe('{"foo": 1}');
+
       const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[0].textContent?.trim()).toBe('.foo');
-      expect(tds[1].textContent?.trim()).toBe('{"foo": 1}');
       expect(tds[2].textContent?.trim()).toBe('1');
     });
 
-    test('does not render Exec button in static mode', async () => {
+    test('renders Exec button', async () => {
       await element.updateComplete;
-      expect(element.shadowRoot!.querySelector('button')).toBeNull();
-    });
-
-    test('does not render input fields in static mode', async () => {
-      await element.updateComplete;
-      expect(element.shadowRoot!.querySelectorAll('input').length).toBe(0);
-    });
-
-  });
-
-  describe('edit mode (after click)', () => {
-    beforeEach(async () => {
-      element.query = '.';
-      element.input = '"hello"';
-      element.output = '"hello"';
-      await element.updateComplete;
-
-      element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
-      await element.updateComplete;
-    });
-
-    test('renders two input fields', () => {
-      expect(element.shadowRoot!.querySelectorAll('input').length).toBe(2);
-    });
-
-    test('pre-populates query input with property value', () => {
-      const inputs = element.shadowRoot!.querySelectorAll<HTMLInputElement>('input');
-      expect(inputs[0].value).toBe('.');
-    });
-
-    test('pre-populates input field with property value', () => {
-      const inputs = element.shadowRoot!.querySelectorAll<HTMLInputElement>('input');
-      expect(inputs[1].value).toBe('"hello"');
-    });
-
-    test('renders Exec button', () => {
       expect(element.shadowRoot!.querySelector('button')).not.toBeNull();
     });
 
-    test('output row shows initial expected value before Exec', () => {
-      const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[2].textContent?.trim()).toBe('"hello"');
-    });
-
-    test('does not show error message', () => {
-      expect(element.shadowRoot!.querySelector('mjf-example-error')).toBeNull();
+    test('renders two input fields', async () => {
+      await element.updateComplete;
+      expect(element.shadowRoot!.querySelectorAll('input').length).toBe(2);
     });
 
   });
@@ -97,9 +59,6 @@ describe('ExampleTableElement', () => {
       element.query = '.';
       element.input = '"hello"';
       element.output = '"hello"';
-      await element.updateComplete;
-
-      element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
       await element.updateComplete;
 
       mockJq.mockResolvedValue(tString('hello'));
@@ -129,9 +88,6 @@ describe('ExampleTableElement', () => {
       element.query = 'invalid';
       element.input = '{}';
       element.output = '';
-      await element.updateComplete;
-
-      element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
       await element.updateComplete;
 
       mockJq.mockRejectedValue(tErrorNode('unexpected token', 'jq'));
@@ -166,9 +122,6 @@ describe('ExampleTableElement', () => {
       element.output = 'null';
       await element.updateComplete;
 
-      element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
-      await element.updateComplete;
-
       mockJq.mockRejectedValue(new Error('Network error'));
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
@@ -187,9 +140,6 @@ describe('ExampleTableElement', () => {
       element.query = '.';
       element.input = 'null';
       element.output = 'null';
-      await element.updateComplete;
-
-      element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
       await element.updateComplete;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -213,9 +163,6 @@ describe('ExampleTableElement', () => {
       element.query = '.';
       element.input = 'null';
       element.output = 'null';
-      await element.updateComplete;
-
-      element.shadowRoot!.querySelector<HTMLElement>('.wrapper')!.click();
       await element.updateComplete;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -262,19 +209,22 @@ describe('tokenNodeToString', () => {
   });
 
   test('object node returns JSON object string', () => {
-    expect(tokenNodeToString(tObject(tProperty('a', tNumber('1')), tProperty('b', tNull())))).toBe('{"a":1,"b":null}');
+    expect(tokenNodeToString(tObject(tProperty('a', tNumber('1')), tProperty('b', tNull()))))
+      .toBe('{"a": 1, "b": null}');
   });
 
   test('array node returns JSON array string', () => {
-    expect(tokenNodeToString(tArray(tNull(), tBool(true), tNumber('3')))).toBe('[null,true,3]');
+    expect(tokenNodeToString(tArray(tNull(), tBool(true), tNumber('3'))))
+      .toBe('[null, true, 3]');
   });
 
   test('tuple joins items with newline', () => {
-    expect(tokenNodeToString(tTuple(tString('a'), tString('b')) as TupleNode)).toBe('"a"\n"b"');
+    expect(tokenNodeToString(tTuple(tString('a'), tString('b')) as TupleNode))
+      .toBe('"a"\n"b"');
   });
 
   test('nested object in array', () => {
     const result = tokenNodeToString(tArray(tObject(tProperty('x', tNumber('1')))));
-    expect(result).toBe('[{"x":1}]');
+    expect(result).toBe('[{"x": 1}]');
   });
 });

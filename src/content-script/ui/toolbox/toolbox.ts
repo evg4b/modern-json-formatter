@@ -79,7 +79,7 @@ export class ToolboxElement extends LitElement {
     download: true,
   };
 
-  @property({ type: String })
+  @property({ type: String, attribute: 'download-mode' })
   public downloadMode: DownloadMode = 'dropdown';
 
   private readonly allTabs: { tab: TabType; label: string; key: keyof ToolbarButtonsSettings }[] = [
@@ -126,19 +126,27 @@ export class ToolboxElement extends LitElement {
       `;
     }
 
-    const type: DownloadType = this.downloadMode === 'formatted' ? 'formatted'
-      : this.downloadMode === 'minified' ? 'minified'
-      : 'raw';
-    const title = this.downloadMode === 'formatted' ? 'Download Formatted'
-      : this.downloadMode === 'minified' ? 'Download Minified'
-      : 'Download Raw';
+    const title = this.downloadMode === 'formatted'
+      ? 'Download Formatted'
+      : this.downloadMode === 'minified'
+        ? 'Download Minified'
+        : 'Download Raw';
 
     return html`
       <button class="square" title=${title}
-              @click=${() => this.dispatchEvent(new DownloadEvent(type))}>
+              @click=${this.directDownloadHandler}>
         ${unsafeSVG(downloadSvg)}
       </button>
     `;
+  }
+
+  private directDownloadHandler() {
+    const type: DownloadType = this.downloadMode === 'formatted'
+      ? 'formatted'
+      : this.downloadMode === 'minified'
+        ? 'minified'
+        : 'raw';
+    this.dispatchEvent(new DownloadEvent(type));
   }
 
   private clickHandler(event: MouseEvent) {

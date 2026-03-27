@@ -116,9 +116,10 @@ export class OptionsPageElement extends LitElement {
   @state()
   private settings: ExtensionSettings = DEFAULT_SETTINGS;
 
-  override async connectedCallback() {
-    super.connectedCallback();
-    this.settings = await getSettings();
+  override firstUpdated() {
+    void getSettings().then(settings => {
+      this.settings = settings;
+    });
   }
 
   public override render() {
@@ -142,26 +143,30 @@ export class OptionsPageElement extends LitElement {
           <div class="checkbox-group">
             <label>
               <input type="checkbox"
+                     data-key="query"
                      .checked=${this.settings.buttons.query}
-                     @change=${(e: Event) => this.onButtonToggle('query', (e.target as HTMLInputElement).checked)}>
+                     @change=${this.onButtonCheckboxChange}>
               Query
             </label>
             <label>
               <input type="checkbox"
+                     data-key="formatted"
                      .checked=${this.settings.buttons.formatted}
-                     @change=${(e: Event) => this.onButtonToggle('formatted', (e.target as HTMLInputElement).checked)}>
+                     @change=${this.onButtonCheckboxChange}>
               Formatted
             </label>
             <label>
               <input type="checkbox"
+                     data-key="raw"
                      .checked=${this.settings.buttons.raw}
-                     @change=${(e: Event) => this.onButtonToggle('raw', (e.target as HTMLInputElement).checked)}>
+                     @change=${this.onButtonCheckboxChange}>
               Raw
             </label>
             <label>
               <input type="checkbox"
+                     data-key="download"
                      .checked=${this.settings.buttons.download}
-                     @change=${(e: Event) => this.onButtonToggle('download', (e.target as HTMLInputElement).checked)}>
+                     @change=${this.onButtonCheckboxChange}>
               Download
             </label>
           </div>
@@ -177,7 +182,7 @@ export class OptionsPageElement extends LitElement {
                      name="downloadMode"
                      value="dropdown"
                      .checked=${this.settings.downloadMode === 'dropdown'}
-                     @change=${() => this.onDownloadModeChange('dropdown')}>
+                     @change=${this.onRadioChange}>
               Show all options in a dropdown menu
             </label>
             <label>
@@ -185,7 +190,7 @@ export class OptionsPageElement extends LitElement {
                      name="downloadMode"
                      value="raw"
                      .checked=${this.settings.downloadMode === 'raw'}
-                     @change=${() => this.onDownloadModeChange('raw')}>
+                     @change=${this.onRadioChange}>
               Directly download Raw file
             </label>
             <label>
@@ -193,7 +198,7 @@ export class OptionsPageElement extends LitElement {
                      name="downloadMode"
                      value="formatted"
                      .checked=${this.settings.downloadMode === 'formatted'}
-                     @change=${() => this.onDownloadModeChange('formatted')}>
+                     @change=${this.onRadioChange}>
               Directly download Formatted file
             </label>
             <label>
@@ -201,7 +206,7 @@ export class OptionsPageElement extends LitElement {
                      name="downloadMode"
                      value="minified"
                      .checked=${this.settings.downloadMode === 'minified'}
-                     @change=${() => this.onDownloadModeChange('minified')}>
+                     @change=${this.onRadioChange}>
               Directly download Minified file
             </label>
           </div>
@@ -227,16 +232,19 @@ export class OptionsPageElement extends LitElement {
     `;
   }
 
-  private async onButtonToggle(key: keyof ExtensionSettings['buttons'], value: boolean) {
+  private async onButtonCheckboxChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const key = target.dataset.key as keyof ExtensionSettings['buttons'];
     this.settings = {
       ...this.settings,
-      buttons: { ...this.settings.buttons, [key]: value },
+      buttons: { ...this.settings.buttons, [key]: target.checked },
     };
     await saveSettings(this.settings);
   }
 
-  private async onDownloadModeChange(mode: ExtensionSettings['downloadMode']) {
-    this.settings = { ...this.settings, downloadMode: mode };
+  private async onRadioChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.settings = { ...this.settings, downloadMode: target.value as ExtensionSettings['downloadMode'] };
     await saveSettings(this.settings);
   }
 

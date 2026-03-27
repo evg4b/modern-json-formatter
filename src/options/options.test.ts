@@ -1,7 +1,7 @@
 import '@testing/browser.mock';
 import '@testing/background.mock';
 import '@testing/settings.mock';
-import { beforeEach, describe, expect, rstest, test, type Mock } from '@rstest/core';
+import { beforeEach, describe, expect, test, type Mock } from '@rstest/core';
 import { OptionsPageElement } from './options';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { clearHistory, type DomainCountResponse, getDomains } from '@core/background';
@@ -123,7 +123,7 @@ describe('mjf-options-page', () => {
           ...DEFAULT_SETTINGS,
           buttons: { ...DEFAULT_SETTINGS.buttons, download: false },
         });
-        optionsPageElement.connectedCallback();
+        optionsPageElement.firstUpdated(new Map());
         await optionsPageElement.updateComplete;
       });
 

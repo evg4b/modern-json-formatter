@@ -1,4 +1,4 @@
-export type DownloadMode = 'dropdown' | 'raw' | 'formatted';
+export type DownloadMode = 'dropdown' | 'raw' | 'formatted' | 'minified';
 
 export interface ToolbarButtonsSettings {
   query: boolean;

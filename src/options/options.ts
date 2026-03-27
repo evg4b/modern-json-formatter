@@ -196,6 +196,14 @@ export class OptionsPageElement extends LitElement {
                      @change=${() => this.onDownloadModeChange('formatted')}>
               Directly download Formatted file
             </label>
+            <label>
+              <input type="radio"
+                     name="downloadMode"
+                     value="minified"
+                     .checked=${this.settings.downloadMode === 'minified'}
+                     @change=${() => this.onDownloadModeChange('minified')}>
+              Directly download Minified file
+            </label>
           </div>
         </div>
 

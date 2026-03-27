@@ -126,8 +126,12 @@ export class ToolboxElement extends LitElement {
       `;
     }
 
-    const type: DownloadType = this.downloadMode === 'formatted' ? 'formatted' : 'raw';
-    const title = this.downloadMode === 'formatted' ? 'Download Formatted' : 'Download Raw';
+    const type: DownloadType = this.downloadMode === 'formatted' ? 'formatted'
+      : this.downloadMode === 'minified' ? 'minified'
+      : 'raw';
+    const title = this.downloadMode === 'formatted' ? 'Download Formatted'
+      : this.downloadMode === 'minified' ? 'Download Minified'
+      : 'Download Raw';
 
     return html`
       <button class="square" title=${title}

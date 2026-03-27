@@ -85,7 +85,7 @@ describe('mjf-download-mode-section', () => {
 
         beforeEach(async () => {
           handler = rstest.fn();
-          element.addEventListener('mode-change', handler as EventListener);
+          element.addEventListener('mode-change', handler as unknown as EventListener);
           const radio = radios.find(r => r.value === mode)!;
           radio.dispatchEvent(new Event('change', { bubbles: true }));
           await element.updateComplete;

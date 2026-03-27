@@ -77,7 +77,7 @@ describe('mjf-toolbar-buttons-section', () => {
 
         beforeEach(async () => {
           handler = rstest.fn();
-          element.addEventListener('buttons-change', handler as EventListener);
+          element.addEventListener('buttons-change', handler as unknown as EventListener);
           const cb = checkboxes.find(c => c.dataset.key === key)!;
           cb.checked = false;
           cb.dispatchEvent(new Event('change', { bubbles: true }));

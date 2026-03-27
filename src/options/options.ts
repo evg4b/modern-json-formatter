@@ -7,6 +7,16 @@ import { boxingFixCss } from '@core/styles/lit';
 import '@core/ui';
 
 import './options.scss';
+import './sections/toolbar-buttons-section';
+import './sections/download-mode-section';
+import {
+  DEFAULT_SETTINGS,
+  getSettings,
+  saveSettings,
+  type DownloadMode,
+  type ExtensionSettings,
+  type ToolbarButtonsSettings,
+} from '@core/settings';
 
 const columns: TableColumn[] = [
   { title: 'Domain', path: 'domain' },
@@ -76,6 +86,15 @@ export class OptionsPageElement extends LitElement {
   @state()
   private content = getDomains();
 
+  @state()
+  private settings: ExtensionSettings = DEFAULT_SETTINGS;
+
+  override firstUpdated() {
+    void getSettings().then(settings => {
+      this.settings = settings;
+    });
+  }
+
   public override render() {
     return html`
       <div class="container">
@@ -89,6 +108,22 @@ export class OptionsPageElement extends LitElement {
           <mjf-chrome-web-store-button></mjf-chrome-web-store-button>
         </div>
         <div class="separator"></div>
+
+        <mjf-toolbar-buttons-section
+          .buttons=${this.settings.buttons}
+          @buttons-change=${this.onButtonsChange}>
+        </mjf-toolbar-buttons-section>
+
+        <div class="separator"></div>
+
+        <mjf-download-mode-section
+          .mode=${this.settings.downloadMode}
+          ?disabled=${!this.settings.buttons.download}
+          @mode-change=${this.onModeChange}>
+        </mjf-download-mode-section>
+
+        <div class="separator"></div>
+
         <div class="section">
           <h2>Query history data</h2>
           <mjf-rounded-button @click=${this.onClearClick}>
@@ -105,6 +140,18 @@ export class OptionsPageElement extends LitElement {
         )}
       </div>
     `;
+  }
+
+  private async onButtonsChange(event: Event) {
+    const buttons = (event as CustomEvent<ToolbarButtonsSettings>).detail;
+    this.settings = { ...this.settings, buttons };
+    await saveSettings(this.settings);
+  }
+
+  private async onModeChange(event: Event) {
+    const downloadMode = (event as CustomEvent<DownloadMode>).detail;
+    this.settings = { ...this.settings, downloadMode };
+    await saveSettings(this.settings);
   }
 
   private async onClearClick() {

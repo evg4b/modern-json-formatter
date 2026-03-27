@@ -98,7 +98,7 @@ describe('mjf-toolbox', () => {
       beforeEach(() => {
         handler = rstest.fn();
         toolbox.addEventListener('download', handler);
-        const options = (toolbox as unknown as { dropdown: DropdownOption[] }).dropdown;
+        const options = (toolbox as unknown as { dropdownItems: DropdownOption[] }).dropdownItems;
         options.find(o => o.label === label)?.onClick();
       });
 
@@ -108,6 +108,73 @@ describe('mjf-toolbox', () => {
         expect(event).toBeInstanceOf(DownloadEvent);
         expect(event.detail).toBe(type);
         expect(event.type).toBe('download');
+      });
+    });
+  });
+
+  describe('button visibility', () => {
+    describe.each([
+      { key: 'query' as const, label: 'Query' },
+      { key: 'formatted' as const, label: 'Formatted' },
+      { key: 'raw' as const, label: 'Raw' },
+    ])('when buttons.$key is false', ({ key, label }) => {
+      beforeEach(async () => {
+        toolbox.buttons = { ...toolbox.buttons, [key]: false };
+        await toolbox.updateComplete;
+      });
+
+      test(`should not render the ${label} button`, () => {
+        const buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('button') ?? []);
+        expect(buttons.find(b => b.innerText.trim() === label)).toBeUndefined();
+      });
+    });
+
+    describe('when buttons.download is false', () => {
+      beforeEach(async () => {
+        toolbox.buttons = { ...toolbox.buttons, download: false };
+        await toolbox.updateComplete;
+      });
+
+      test('should not render the download button', () => {
+        const buttons = Array.from(toolbox.shadowRoot?.querySelectorAll('button') ?? []);
+        expect(buttons.find(b => b.classList.contains('square'))).toBeUndefined();
+      });
+    });
+  });
+
+  describe('direct download mode', () => {
+    describe.each([
+      { mode: 'raw' as const, expectedType: 'raw', expectedTitle: 'Download Raw' },
+      { mode: 'formatted' as const, expectedType: 'formatted', expectedTitle: 'Download Formatted' },
+      { mode: 'minified' as const, expectedType: 'minified', expectedTitle: 'Download Minified' },
+    ])('when downloadMode="$mode"', ({ mode, expectedType, expectedTitle }) => {
+      let handler: Mock<(event: DownloadEvent) => void>;
+
+      beforeEach(async () => {
+        handler = rstest.fn();
+        toolbox.addEventListener('download', handler);
+        toolbox.downloadMode = mode;
+        await toolbox.updateComplete;
+      });
+
+      test('renders a single download button (not dropdown)', () => {
+        const button = toolbox.shadowRoot?.querySelector('button.square');
+        expect(button).not.toBeNull();
+        expect(button?.hasAttribute('directive')).toBe(false);
+      });
+
+      test(`button title is "${expectedTitle}"`, () => {
+        const button = toolbox.shadowRoot?.querySelector<HTMLButtonElement>('button.square');
+        expect(button?.title).toBe(expectedTitle);
+      });
+
+      test(`clicking dispatches DownloadEvent with type="${expectedType}"`, async () => {
+        toolbox.shadowRoot?.querySelector<HTMLButtonElement>('button.square')?.click();
+        await toolbox.updateComplete;
+        expect(handler).toHaveBeenCalledTimes(1);
+        const event = handler.mock.calls[0][0];
+        expect(event).toBeInstanceOf(DownloadEvent);
+        expect(event.detail).toBe(expectedType);
       });
     });
   });

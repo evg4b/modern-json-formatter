@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import '@testing/browser.mock';
 import '@testing/background.mock';
+import '@testing/settings.mock';
 import { download, format, jq, pushHistory, tokenize } from '@core/background';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';

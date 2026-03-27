@@ -16,6 +16,7 @@ yarn build:production # Production build (minified)
 
 # Quality
 yarn lint             # ESLint
+yarn lint --fix       # ESLint with auto-fix
 yarn test             # Run all tests
 yarn test:cover       # Run tests with coverage
 
@@ -26,6 +27,20 @@ make build-extension  # Production build
 make pack-extension   # Zip for Chrome + Edge stores
 make release TYPE=patch|minor|major  # Bump version, tag, and push
 ```
+
+## Mandatory End-of-Implementation Checklist
+
+After every implementation — no exceptions — run the following sequence before considering the task done:
+
+```bash
+yarn lint --fix && yarn test && yarn build:production
+```
+
+- `yarn lint --fix` — auto-fixes code style issues (quote style, import order, etc.) and reports any remaining errors that require manual attention
+- `yarn test` — runs the full test suite; all tests must pass
+- `yarn build:production` — full production build with TypeScript type-checking; catches type errors that the test runner does not
+
+If any step fails, fix the issue and re-run the full sequence from the beginning.
 
 To run a single test file:
 ```bash

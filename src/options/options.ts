@@ -7,7 +7,10 @@ import { boxingFixCss } from '@core/styles/lit';
 import '@core/ui';
 
 import './options.scss';
+import './sections/toolbar-buttons-section';
+import './sections/download-mode-section';
 import { DEFAULT_SETTINGS, getSettings, saveSettings, type ExtensionSettings } from '@core/settings';
+import type { ToolbarButtonsSettings, DownloadMode } from '@core/settings';
 
 const columns: TableColumn[] = [
   { title: 'Domain', path: 'domain' },
@@ -71,67 +74,6 @@ export class OptionsPageElement extends LitElement {
       mjf-table-element {
         width: 100%;
       }
-
-      .settings-section {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-
-      .settings-section h3 {
-        margin: 0 0 4px 0;
-        font-size: 1rem;
-      }
-
-      .section-hint {
-        margin: 0 0 14px 0;
-        font-size: 0.82rem;
-        color: var(--meta-info-color);
-        line-height: 1.4;
-      }
-
-      .checkbox-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .checkbox-group label,
-      .radio-group label {
-        display: flex;
-        align-items: flex-start;
-        gap: 8px;
-        cursor: pointer;
-        user-select: none;
-      }
-
-      .checkbox-group input,
-      .radio-group input {
-        margin-top: 2px;
-        flex-shrink: 0;
-      }
-
-      .option-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .option-hint {
-        font-size: 0.78rem;
-        color: var(--meta-info-color);
-        line-height: 1.4;
-      }
-
-      .radio-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .settings-section.disabled {
-        opacity: 0.4;
-        pointer-events: none;
-      }
     `,
   ];
 
@@ -148,8 +90,6 @@ export class OptionsPageElement extends LitElement {
   }
 
   public override render() {
-    const downloadDisabled = !this.settings.buttons.download;
-
     return html`
       <div class="container">
         <div class="header">
@@ -163,105 +103,18 @@ export class OptionsPageElement extends LitElement {
         </div>
         <div class="separator"></div>
 
-        <div class="settings-section">
-          <h3>Toolbar Buttons</h3>
-          <p class="section-hint">Choose which buttons appear in the toolbar when viewing a JSON page.</p>
-          <div class="checkbox-group">
-            <label>
-              <input type="checkbox"
-                     data-key="query"
-                     .checked=${this.settings.buttons.query}
-                     @change=${this.onButtonCheckboxChange}>
-              <div class="option-text">
-                <span>Query</span>
-                <span class="option-hint">Opens the JQ query panel to filter and transform the JSON using jq expressions.</span>
-              </div>
-            </label>
-            <label>
-              <input type="checkbox"
-                     data-key="formatted"
-                     .checked=${this.settings.buttons.formatted}
-                     @change=${this.onButtonCheckboxChange}>
-              <div class="option-text">
-                <span>Formatted</span>
-                <span class="option-hint">Shows the JSON with syntax highlighting, collapsible nodes, and indentation.</span>
-              </div>
-            </label>
-            <label>
-              <input type="checkbox"
-                     data-key="raw"
-                     .checked=${this.settings.buttons.raw}
-                     @change=${this.onButtonCheckboxChange}>
-              <div class="option-text">
-                <span>Raw</span>
-                <span class="option-hint">Shows the original unmodified JSON exactly as received from the server.</span>
-              </div>
-            </label>
-            <label>
-              <input type="checkbox"
-                     data-key="download"
-                     .checked=${this.settings.buttons.download}
-                     @change=${this.onButtonCheckboxChange}>
-              <div class="option-text">
-                <span>Download</span>
-                <span class="option-hint">Adds a download button to save the current JSON to a file.</span>
-              </div>
-            </label>
-          </div>
-        </div>
+        <mjf-toolbar-buttons-section
+          .buttons=${this.settings.buttons}
+          @buttons-change=${this.onButtonsChange}>
+        </mjf-toolbar-buttons-section>
 
         <div class="separator"></div>
 
-        <div class="settings-section ${downloadDisabled ? 'disabled' : ''}">
-          <h3>Download Button Mode</h3>
-          <p class="section-hint">Controls what happens when you click the download button.</p>
-          <div class="radio-group">
-            <label>
-              <input type="radio"
-                     name="downloadMode"
-                     value="dropdown"
-                     .checked=${this.settings.downloadMode === 'dropdown'}
-                     @change=${this.onRadioChange}>
-              <div class="option-text">
-                <span>Dropdown menu</span>
-                <span class="option-hint">Clicking the button opens a menu letting you choose between Raw, Formatted, or Minified on each download.</span>
-              </div>
-            </label>
-            <label>
-              <input type="radio"
-                     name="downloadMode"
-                     value="raw"
-                     .checked=${this.settings.downloadMode === 'raw'}
-                     @change=${this.onRadioChange}>
-              <div class="option-text">
-                <span>Direct — Raw</span>
-                <span class="option-hint">One click saves the original JSON exactly as received from the server, without any changes.</span>
-              </div>
-            </label>
-            <label>
-              <input type="radio"
-                     name="downloadMode"
-                     value="formatted"
-                     .checked=${this.settings.downloadMode === 'formatted'}
-                     @change=${this.onRadioChange}>
-              <div class="option-text">
-                <span>Direct — Formatted</span>
-                <span class="option-hint">One click saves the JSON with consistent indentation and guaranteed key ordering.</span>
-              </div>
-            </label>
-            <label>
-              <input type="radio"
-                     name="downloadMode"
-                     value="minified"
-                     .checked=${this.settings.downloadMode === 'minified'}
-                     @change=${this.onRadioChange}>
-              <div class="option-text">
-                <span>Direct — Minified</span>
-                <span class="option-hint">One click saves the JSON compacted into a single line with all whitespace removed.</span>
-              </div>
-            </label>
-          </div>
-        </div>
+        <mjf-download-mode-section
+          .mode=${this.settings.downloadMode}
+          ?disabled=${!this.settings.buttons.download}
+          @mode-change=${this.onModeChange}>
+        </mjf-download-mode-section>
 
         <div class="separator"></div>
 
@@ -283,19 +136,15 @@ export class OptionsPageElement extends LitElement {
     `;
   }
 
-  private async onButtonCheckboxChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const key = target.dataset.key as keyof ExtensionSettings['buttons'];
-    this.settings = {
-      ...this.settings,
-      buttons: { ...this.settings.buttons, [key]: target.checked },
-    };
+  private async onButtonsChange(event: Event) {
+    const buttons = (event as CustomEvent<ToolbarButtonsSettings>).detail;
+    this.settings = { ...this.settings, buttons };
     await saveSettings(this.settings);
   }
 
-  private async onRadioChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    this.settings = { ...this.settings, downloadMode: target.value as ExtensionSettings['downloadMode'] };
+  private async onModeChange(event: Event) {
+    const downloadMode = (event as CustomEvent<DownloadMode>).detail;
+    this.settings = { ...this.settings, downloadMode };
     await saveSettings(this.settings);
   }
 

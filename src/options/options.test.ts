@@ -6,6 +6,10 @@ import { OptionsPageElement } from './options';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { clearHistory, type DomainCountResponse, getDomains } from '@core/background';
 import { DEFAULT_SETTINGS, getSettings, saveSettings, type ExtensionSettings } from '@core/settings';
+import type { ToolbarButtonsSettings } from '@core/settings';
+
+import type { ToolbarButtonsSectionElement } from './sections/toolbar-buttons-section';
+import type { DownloadModeSectionElement } from './sections/download-mode-section';
 
 import '@core/ui';
 
@@ -16,7 +20,7 @@ describe('mjf-options-page', () => {
     (getDomains as Mock<typeof getDomains>).mockReturnValue(
       Promise.resolve<DomainCountResponse>([
         { domain: 'demo.com', count: 1 },
-        { domain: 'demo.com', count: 1 },
+        { domain: 'example.com', count: 2 },
       ]),
     );
     (getSettings as Mock<typeof getSettings>).mockResolvedValue(DEFAULT_SETTINGS);
@@ -26,98 +30,35 @@ describe('mjf-options-page', () => {
 
   defaultLitAsserts(OptionsPageElement, () => optionsPageElement);
 
-  test('should call clearHistory and refresh content on clear button click', async () => {
-    (clearHistory as Mock<typeof clearHistory>).mockResolvedValue(undefined);
-    (getDomains as Mock<typeof getDomains>).mockReturnValue(Promise.resolve<DomainCountResponse>([]));
-
-    const clearButton = optionsPageElement.shadowRoot?.querySelector('mjf-rounded-button');
-    expect(clearButton).not.toBeNull();
-
-    (getDomains as Mock<typeof getDomains>).mockClear();
-    clearButton?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    await new Promise(resolve => setTimeout(resolve, 0));
-
-    expect(clearHistory).toHaveBeenCalled();
-    expect(getDomains).toHaveBeenCalledTimes(1);
-  });
-
-  describe('Toolbar Buttons section', () => {
-    let checkboxes: HTMLInputElement[];
-
-    beforeEach(() => {
-      checkboxes = Array.from(
-        optionsPageElement.shadowRoot?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]') ?? [],
-      );
+  describe('section components', () => {
+    test('renders mjf-toolbar-buttons-section', () => {
+      const section = optionsPageElement.shadowRoot?.querySelector('mjf-toolbar-buttons-section');
+      expect(section).not.toBeNull();
     });
 
-    test('renders four checkboxes', () => {
-      expect(checkboxes).toHaveLength(4);
+    test('renders mjf-download-mode-section', () => {
+      const section = optionsPageElement.shadowRoot?.querySelector('mjf-download-mode-section');
+      expect(section).not.toBeNull();
     });
 
-    test.each(['query', 'formatted', 'raw', 'download'])('"%s" checkbox is checked by default', name => {
-      const checkbox = checkboxes.find(cb => cb.dataset.key === name);
-      expect(checkbox?.checked).toBe(true);
+    test('passes buttons settings to mjf-toolbar-buttons-section', () => {
+      const section = optionsPageElement.shadowRoot
+        ?.querySelector<ToolbarButtonsSectionElement>('mjf-toolbar-buttons-section');
+      expect(section?.buttons).toEqual(DEFAULT_SETTINGS.buttons);
     });
 
-    describe.each([
-      { label: 'Query', key: 'query' as const },
-      { label: 'Formatted', key: 'formatted' as const },
-      { label: 'Raw', key: 'raw' as const },
-      { label: 'Download', key: 'download' as const },
-    ])('toggling "$label" checkbox', ({ label: _label, key }) => {
-      beforeEach(async () => {
-        (saveSettings as Mock<typeof saveSettings>).mockClear();
-        const checkbox = checkboxes.find(cb => cb.dataset.key === key);
-        checkbox!.checked = false;
-        checkbox!.dispatchEvent(new Event('change', { bubbles: true }));
-        await new Promise(resolve => setTimeout(resolve, 0));
-      });
-
-      test('calls saveSettings with the updated value', () => {
-        expect(saveSettings).toHaveBeenCalledTimes(1);
-        const saved = (saveSettings as Mock<typeof saveSettings>).mock.calls[0][0] as ExtensionSettings;
-        expect(saved.buttons[key]).toBe(false);
-      });
-    });
-  });
-
-  describe('Download Button Mode section', () => {
-    let radios: HTMLInputElement[];
-
-    beforeEach(() => {
-      radios = Array.from(
-        optionsPageElement.shadowRoot?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? [],
-      );
+    test('passes downloadMode to mjf-download-mode-section', () => {
+      const section = optionsPageElement.shadowRoot
+        ?.querySelector<DownloadModeSectionElement>('mjf-download-mode-section');
+      expect(section?.mode).toBe(DEFAULT_SETTINGS.downloadMode);
     });
 
-    test('renders four radio buttons', () => {
-      expect(radios).toHaveLength(4);
+    test('mjf-download-mode-section is not disabled when download button is on', () => {
+      const section = optionsPageElement.shadowRoot?.querySelector('mjf-download-mode-section');
+      expect(section?.hasAttribute('disabled')).toBe(false);
     });
 
-    test('"dropdown" radio is checked by default', () => {
-      expect(radios.find(r => r.value === 'dropdown')?.checked).toBe(true);
-    });
-
-    test.each(['raw', 'formatted', 'minified'])('"%s" radio is unchecked by default', value => {
-      expect(radios.find(r => r.value === value)?.checked).toBe(false);
-    });
-
-    describe.each(['dropdown', 'raw', 'formatted', 'minified'] as const)('selecting "%s"', mode => {
-      beforeEach(async () => {
-        (saveSettings as Mock<typeof saveSettings>).mockClear();
-        const radio = radios.find(r => r.value === mode);
-        radio!.dispatchEvent(new Event('change', { bubbles: true }));
-        await new Promise(resolve => setTimeout(resolve, 0));
-      });
-
-      test('calls saveSettings with the correct downloadMode', () => {
-        expect(saveSettings).toHaveBeenCalledTimes(1);
-        const saved = (saveSettings as Mock<typeof saveSettings>).mock.calls[0][0] as ExtensionSettings;
-        expect(saved.downloadMode).toBe(mode);
-      });
-    });
-
-    describe('when download button is disabled', () => {
+    describe('when download button setting is off', () => {
       beforeEach(async () => {
         (getSettings as Mock<typeof getSettings>).mockResolvedValue({
           ...DEFAULT_SETTINGS,
@@ -127,12 +68,76 @@ describe('mjf-options-page', () => {
         await optionsPageElement.updateComplete;
       });
 
-      test('download mode section has disabled class', () => {
-        const section = Array.from(
-          optionsPageElement.shadowRoot?.querySelectorAll('.settings-section') ?? [],
-        ).find(el => el.querySelector('input[type="radio"]'));
-        expect(section?.classList.contains('disabled')).toBe(true);
+      test('mjf-download-mode-section has disabled attribute', () => {
+        const section = optionsPageElement.shadowRoot?.querySelector('mjf-download-mode-section');
+        expect(section?.hasAttribute('disabled')).toBe(true);
       });
+    });
+  });
+
+  describe('settings persistence', () => {
+    beforeEach(() => {
+      (saveSettings as Mock<typeof saveSettings>).mockClear();
+    });
+
+    describe('when buttons-change fires from toolbar section', () => {
+      const updatedButtons: ToolbarButtonsSettings = { ...DEFAULT_SETTINGS.buttons, query: false };
+
+      beforeEach(async () => {
+        const section = optionsPageElement.shadowRoot?.querySelector('mjf-toolbar-buttons-section');
+        section?.dispatchEvent(
+          new CustomEvent<ToolbarButtonsSettings>('buttons-change', {
+            detail: updatedButtons,
+            bubbles: true,
+          }),
+        );
+        await new Promise(resolve => setTimeout(resolve, 0));
+      });
+
+      test('calls saveSettings once', () => {
+        expect(saveSettings).toHaveBeenCalledTimes(1);
+      });
+
+      test('saveSettings receives updated buttons', () => {
+        const saved = (saveSettings as Mock<typeof saveSettings>).mock.calls[0][0] as ExtensionSettings;
+        expect(saved.buttons).toEqual(updatedButtons);
+      });
+    });
+
+    describe.each(['dropdown', 'raw', 'formatted', 'minified'] as const)(
+      'when mode-change fires with "%s"',
+      mode => {
+        beforeEach(async () => {
+          const section = optionsPageElement.shadowRoot?.querySelector('mjf-download-mode-section');
+          section?.dispatchEvent(
+            new CustomEvent('mode-change', { detail: mode, bubbles: true }),
+          );
+          await new Promise(resolve => setTimeout(resolve, 0));
+        });
+
+        test('calls saveSettings with the correct downloadMode', () => {
+          expect(saveSettings).toHaveBeenCalledTimes(1);
+          const saved = (saveSettings as Mock<typeof saveSettings>).mock.calls[0][0] as ExtensionSettings;
+          expect(saved.downloadMode).toBe(mode);
+        });
+      },
+    );
+  });
+
+  describe('query history', () => {
+    test('calls clearHistory and refreshes content on clear button click', async () => {
+      (clearHistory as Mock<typeof clearHistory>).mockResolvedValue(undefined);
+      (getDomains as Mock<typeof getDomains>).mockReturnValue(Promise.resolve<DomainCountResponse>([]));
+
+      const clearButton = optionsPageElement.shadowRoot?.querySelector('mjf-rounded-button');
+      expect(clearButton).not.toBeNull();
+
+      (getDomains as Mock<typeof getDomains>).mockClear();
+      clearButton?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(clearHistory).toHaveBeenCalled();
+      expect(getDomains).toHaveBeenCalledTimes(1);
     });
   });
 });

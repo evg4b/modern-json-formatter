@@ -13,6 +13,11 @@ build-worker-wasm:
 	@cd worker-wasm && $(MAKE)
 
 pack-extension:
+	@echo "Generating per-file checksums from dist/..."
+	@cd ./dist && find . -type f | sort | xargs shasum -a 256 > ../checksums.sha256.txt
+	@cd ./dist && find . -type f | sort | xargs md5 -r > ../checksums.md5.txt 2>/dev/null || \
+		cd ./dist && find . -type f | sort | xargs md5sum > ../checksums.md5.txt
+	@echo "Checksums written to checksums.sha256.txt and checksums.md5.txt"
 	@echo "Packing extension for Chrome Store..."
 	@cd ./dist && zip -r -X ../extention.zip *
 	@echo "Packing extension for Microsoft Store..."
@@ -25,6 +30,8 @@ clear:
 	@rm -rf ./dist
 	@rm -f ./extention.zip
 	@rm -f ./extention-msdn.zip
+	@rm -f ./checksums.sha256.txt
+	@rm -f ./checksums.md5.txt
 	@cd worker-core && $(MAKE) clean
 	@cd worker-wasm && $(MAKE) clear
 

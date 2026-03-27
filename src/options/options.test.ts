@@ -123,7 +123,7 @@ describe('mjf-options-page', () => {
           ...DEFAULT_SETTINGS,
           buttons: { ...DEFAULT_SETTINGS.buttons, download: false },
         });
-        optionsPageElement.firstUpdated(new Map());
+        optionsPageElement.firstUpdated();
         await optionsPageElement.updateComplete;
       });
 

@@ -98,7 +98,7 @@ describe('mjf-toolbox', () => {
       beforeEach(() => {
         handler = rstest.fn();
         toolbox.addEventListener('download', handler);
-        const options = (toolbox as unknown as { dropdown: DropdownOption[] }).dropdown;
+        const options = (toolbox as unknown as { dropdownItems: DropdownOption[] }).dropdownItems;
         options.find(o => o.label === label)?.onClick();
       });
 

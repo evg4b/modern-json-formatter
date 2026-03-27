@@ -55,7 +55,7 @@ describe('mjf-options-page', () => {
     });
 
     test.each(['query', 'formatted', 'raw', 'download'])('"%s" checkbox is checked by default', name => {
-      const checkbox = checkboxes.find(cb => cb.closest('label')?.textContent?.trim().toLowerCase() === name);
+      const checkbox = checkboxes.find(cb => cb.dataset.key === name);
       expect(checkbox?.checked).toBe(true);
     });
 
@@ -64,10 +64,10 @@ describe('mjf-options-page', () => {
       { label: 'Formatted', key: 'formatted' as const },
       { label: 'Raw', key: 'raw' as const },
       { label: 'Download', key: 'download' as const },
-    ])('toggling "$label" checkbox', ({ label, key }) => {
+    ])('toggling "$label" checkbox', ({ label: _label, key }) => {
       beforeEach(async () => {
         (saveSettings as Mock<typeof saveSettings>).mockClear();
-        const checkbox = checkboxes.find(cb => cb.closest('label')?.textContent?.trim() === label);
+        const checkbox = checkboxes.find(cb => cb.dataset.key === key);
         checkbox!.checked = false;
         checkbox!.dispatchEvent(new Event('change', { bubbles: true }));
         await new Promise(resolve => setTimeout(resolve, 0));

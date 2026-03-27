@@ -78,29 +78,54 @@ export class OptionsPageElement extends LitElement {
       }
 
       .settings-section h3 {
-        margin: 0 0 12px 0;
+        margin: 0 0 4px 0;
         font-size: 1rem;
+      }
+
+      .section-hint {
+        margin: 0 0 14px 0;
+        font-size: 0.82rem;
+        color: var(--meta-info-color);
+        line-height: 1.4;
       }
 
       .checkbox-group {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
       }
 
       .checkbox-group label,
       .radio-group label {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 8px;
         cursor: pointer;
         user-select: none;
       }
 
+      .checkbox-group input,
+      .radio-group input {
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .option-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .option-hint {
+        font-size: 0.78rem;
+        color: var(--meta-info-color);
+        line-height: 1.4;
+      }
+
       .radio-group {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
       }
 
       .settings-section.disabled {
@@ -140,34 +165,47 @@ export class OptionsPageElement extends LitElement {
 
         <div class="settings-section">
           <h3>Toolbar Buttons</h3>
+          <p class="section-hint">Choose which buttons appear in the toolbar when viewing a JSON page.</p>
           <div class="checkbox-group">
             <label>
               <input type="checkbox"
                      data-key="query"
                      .checked=${this.settings.buttons.query}
                      @change=${this.onButtonCheckboxChange}>
-              Query
+              <div class="option-text">
+                <span>Query</span>
+                <span class="option-hint">Opens the JQ query panel to filter and transform the JSON using jq expressions.</span>
+              </div>
             </label>
             <label>
               <input type="checkbox"
                      data-key="formatted"
                      .checked=${this.settings.buttons.formatted}
                      @change=${this.onButtonCheckboxChange}>
-              Formatted
+              <div class="option-text">
+                <span>Formatted</span>
+                <span class="option-hint">Shows the JSON with syntax highlighting, collapsible nodes, and indentation.</span>
+              </div>
             </label>
             <label>
               <input type="checkbox"
                      data-key="raw"
                      .checked=${this.settings.buttons.raw}
                      @change=${this.onButtonCheckboxChange}>
-              Raw
+              <div class="option-text">
+                <span>Raw</span>
+                <span class="option-hint">Shows the original unmodified JSON exactly as received from the server.</span>
+              </div>
             </label>
             <label>
               <input type="checkbox"
                      data-key="download"
                      .checked=${this.settings.buttons.download}
                      @change=${this.onButtonCheckboxChange}>
-              Download
+              <div class="option-text">
+                <span>Download</span>
+                <span class="option-hint">Adds a download button to save the current JSON to a file.</span>
+              </div>
             </label>
           </div>
         </div>
@@ -176,6 +214,7 @@ export class OptionsPageElement extends LitElement {
 
         <div class="settings-section ${downloadDisabled ? 'disabled' : ''}">
           <h3>Download Button Mode</h3>
+          <p class="section-hint">Controls what happens when you click the download button.</p>
           <div class="radio-group">
             <label>
               <input type="radio"
@@ -183,7 +222,10 @@ export class OptionsPageElement extends LitElement {
                      value="dropdown"
                      .checked=${this.settings.downloadMode === 'dropdown'}
                      @change=${this.onRadioChange}>
-              Show all options in a dropdown menu
+              <div class="option-text">
+                <span>Dropdown menu</span>
+                <span class="option-hint">Clicking the button opens a menu letting you choose between Raw, Formatted, or Minified on each download.</span>
+              </div>
             </label>
             <label>
               <input type="radio"
@@ -191,7 +233,10 @@ export class OptionsPageElement extends LitElement {
                      value="raw"
                      .checked=${this.settings.downloadMode === 'raw'}
                      @change=${this.onRadioChange}>
-              Directly download Raw file
+              <div class="option-text">
+                <span>Direct — Raw</span>
+                <span class="option-hint">One click saves the original JSON exactly as received from the server, without any changes.</span>
+              </div>
             </label>
             <label>
               <input type="radio"
@@ -199,7 +244,10 @@ export class OptionsPageElement extends LitElement {
                      value="formatted"
                      .checked=${this.settings.downloadMode === 'formatted'}
                      @change=${this.onRadioChange}>
-              Directly download Formatted file
+              <div class="option-text">
+                <span>Direct — Formatted</span>
+                <span class="option-hint">One click saves the JSON with consistent indentation and guaranteed key ordering.</span>
+              </div>
             </label>
             <label>
               <input type="radio"
@@ -207,7 +255,10 @@ export class OptionsPageElement extends LitElement {
                      value="minified"
                      .checked=${this.settings.downloadMode === 'minified'}
                      @change=${this.onRadioChange}>
-              Directly download Minified file
+              <div class="option-text">
+                <span>Direct — Minified</span>
+                <span class="option-hint">One click saves the JSON compacted into a single line with all whitespace removed.</span>
+              </div>
             </label>
           </div>
         </div>

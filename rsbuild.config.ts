@@ -1,5 +1,5 @@
 import { defineConfig } from '@rsbuild/core';
-import { manifestGeneratorPlugin } from './rsbuild.manifest.plugin';
+import { manifestGeneratorPlugin } from './plugins/rsbuild-v3-manifest-plugin';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginSass } from '@rsbuild/plugin-sass';

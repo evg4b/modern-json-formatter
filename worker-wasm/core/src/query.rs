@@ -1,26 +1,58 @@
+use std::error::Error;
 use crate::node::{Node, Property};
 use crate::utils::determinate_variant;
-use jaq_core::{Compiler, Ctx, RcIter, load};
-use jaq_json::Val;
-use json5::from_str;
+use jaq_core::{Compiler, Ctx, Vars, data, load, unwrap_valr};
+use jaq_json::{Map, Num, Val};
 use load::{Arena, File, Loader};
 use serde_json::Value;
-use std::error::Error;
+use hifijson::{Expect, LexAlloc, SliceLexer};
+use hifijson::token::Lex;
+
+fn val_key_to_string(k: &Val) -> String {
+    match k {
+        Val::TStr(b) | Val::BStr(b) => String::from_utf8_lossy(b).into_owned(),
+        _ => k.to_string(),
+    }
+}
+
+fn serde_json_to_val(value: Value) -> Val {
+    match value {
+        Value::Null => Val::Null,
+        Value::Bool(b) => Val::Bool(b),
+        Value::Number(n) => {
+            if let Some(i) = n.as_i64() {
+                Val::Num(Num::from_integral(i))
+            } else {
+                Val::Num(Num::Float(n.as_f64().unwrap_or(f64::NAN)))
+            }
+        }
+        Value::String(s) => Val::utf8_str(s.into_bytes()),
+        Value::Array(arr) => arr.into_iter().map(serde_json_to_val).collect(),
+        Value::Object(obj) => {
+            let m = obj
+                .into_iter()
+                .map(|(k, v)| (Val::utf8_str(k.into_bytes()), serde_json_to_val(v)))
+                .collect();
+            Val::obj(m)
+        }
+    }
+}
 
 fn to_return_value(value: Val) -> Node {
     match value {
         Val::Null => Node::Null,
         Val::Bool(bool) => Node::bool(bool),
-        Val::Int(number) => Node::number(number.to_string().as_str()),
-        Val::Float(number) => Node::number(number.to_string().as_str()),
         Val::Num(number) => Node::number(number.to_string().as_str()),
-        Val::Str(str) => Node::string(str.as_str(), determinate_variant(str.as_str().trim())),
+        Val::TStr(b) | Val::BStr(b) => {
+            let s = String::from_utf8_lossy(&b);
+            Node::string(s.as_ref(), determinate_variant(s.trim()))
+        }
         Val::Arr(items) => Node::array(items.iter().map(|i| to_return_value(i.clone())).collect()),
         Val::Obj(items) => Node::object(
             items
                 .iter()
                 .map(|(k, v)| Property {
-                    key: k.to_string(),
+                    key: val_key_to_string(k),
                     value: to_return_value(v.clone()),
                 })
                 .collect(),
@@ -61,14 +93,112 @@ fn format_load_error(e: &load::Error<&str>) -> String {
     }
 }
 
+fn parse_json_to_val(json: &str) -> Result<Val, Box<dyn Error>> {
+    match parse_single(json.as_bytes()) {
+        Ok(vall) => Ok(vall),
+        Err(err) => Err(Box::<dyn Error>::from(err.to_string())),
+    }
+}
+
+fn ws_tk<L: Lex>(lexer: &mut L) -> Option<u8> {
+    loop {
+        lexer.eat_whitespace();
+        match lexer.peek_next() {
+            Some(b'#') => lexer.skip_until(|c| c == b'\n'),
+            next => return next,
+        }
+    }
+}
+
+pub fn parse_single(slice: &[u8]) -> Result<Val, Box<dyn Error>> {
+    let offset = |rest: &[u8]| rest.as_ptr() as usize - slice.as_ptr() as usize;
+    let mut lexer = SliceLexer::new(slice);
+    lexer
+        .exactly_one(ws_tk, parse)
+        .map_err(|e| {
+            // jaq_json::read::Error(offset(lexer.as_slice()), e)
+            Box::<dyn Error>::from("ERRROR".to_string())
+        })
+}
+
+fn parse<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
+    Ok(match next {
+        b'n' if lexer.strip_prefix(b"null") => Val::Null,
+        b't' if lexer.strip_prefix(b"true") => Val::Bool(true),
+        b'f' if lexer.strip_prefix(b"false") => Val::Bool(false),
+        b'b' if lexer.strip_prefix(b"b\"") => Val::byte_str(parse_string(lexer, true)?),
+        b'N' if lexer.strip_prefix(b"NaN") => Val::Num(Num::Float(f64::NAN)),
+        b'I' if lexer.strip_prefix(b"Infinity") => Val::Num(Num::Float(f64::INFINITY)),
+        b'0'..=b'9' | b'+' | b'-' => Val::Num(parse_num(lexer)?),
+        b'"' => Val::utf8_str(parse_string(lexer.discarded(), false)?),
+        b'[' => Val::Arr({
+            let mut arr = Vec::new();
+            lexer.discarded().seq(b']', ws_tk, |next, lexer| {
+                arr.push(parse(next, lexer)?);
+                Ok::<_, hifijson::Error>(())
+            })?;
+            arr.into()
+        }),
+        b'{' => Val::obj({
+            let mut obj = Map::default();
+            lexer.discarded().seq(b'}', ws_tk, |next, lexer| {
+                let key = parse(next, lexer)?;
+                lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
+                let value = parse(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
+                obj.insert(key, value);
+                Ok::<_, hifijson::Error>(())
+            })?;
+            obj
+        }),
+        _ => Err(Expect::Value)?,
+    })
+}
+
+
+/// Parse a JSON string as byte or text string, preserving invalid UTF-8 as-is.
+fn parse_string<L: LexAlloc>(lexer: &mut L, bytes: bool) -> Result<Vec<u8>, hifijson::Error> {
+    let on_string = |bytes: &mut L::Bytes, out: &mut Vec<u8>| {
+        out.extend(bytes.as_ref());
+        Ok(())
+    };
+    let s = lexer.str_fold(Vec::new(), on_string, |lexer, out| {
+        use hifijson::escape::Error;
+        match lexer.take_next().ok_or(Error::Eof)? {
+            b'u' if bytes => Err(Error::InvalidKind(b'u'))?,
+            b'x' if bytes => out.push(lexer.hex()?),
+            c => out.extend(lexer.escape(c)?.encode_utf8(&mut [0; 4]).as_bytes()),
+        }
+        Ok(())
+    });
+    s.map_err(hifijson::Error::Str)
+}
+
+fn parse_num<L: LexAlloc>(lexer: &mut L) -> Result<Num, hifijson::Error> {
+    let num = hifijson::num::Num::signed_digits();
+    let (num, parts) = lexer.num_string_with(num).unvalidated();
+    let num = num.as_ref();
+    Ok(match num {
+        "+" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::INFINITY),
+        "-" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::NEG_INFINITY),
+        _ if num.ends_with(|c: char| c.is_ascii_digit()) => {
+            if parts.is_int() {
+                Num::from_str_radix(num, 10).unwrap()
+            } else {
+                Num::Dec(num.to_string().into())
+            }
+        }
+        _ => Err(hifijson::num::Error::ExpectedDigit)?,
+    })
+}
+
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
-    let input = from_str::<Value>(json)?;
+    let input = parse_json_to_val(json)?;
     let program = File {
         code: query,
         path: (),
     };
 
-    let loader = Loader::new(jaq_std::defs().chain(jaq_json::defs()));
+    let loader = Loader::new(jaq_core::defs().chain(jaq_std::defs()).chain(jaq_json::defs()));
     let arena = Arena::default();
 
     let modules = loader
@@ -78,8 +208,8 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
             Box::<dyn Error>::from(messages.join("; "))
         })?;
 
-    let filter = Compiler::default()
-        .with_funs(jaq_std::funs().chain(jaq_json::funs()))
+    let filter: jaq_core::Filter<data::JustLut<Val>> = Compiler::default()
+        .with_funs(jaq_core::funs::<data::JustLut<Val>>().chain(jaq_std::funs::<data::JustLut<Val>>()).chain(jaq_json::funs::<data::JustLut<Val>>()))
         .compile(modules)
         .map_err(|errors| {
             let messages: Vec<String> = errors
@@ -91,17 +221,16 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
             Box::<dyn Error>::from(messages.join("; "))
         })?;
 
-    let inputs = RcIter::new(core::iter::empty());
-
-    let collection = filter.run((Ctx::new([], &inputs), Val::from(input)));
+    let ctx = Ctx::<data::JustLut<Val>>::new(&filter.lut, Vars::new([]));
+    let collection = filter.id.run((ctx, input));
 
     let mut items: Vec<Node> = vec![];
 
     for item in collection {
-        match item {
+        match unwrap_valr(item) {
             Ok(v) => items.push(to_return_value(v)),
             Err(err) => {
-                return Err(Box::from(err.to_string()));
+                return Err(Box::<dyn Error>::from(err.to_string()));
             }
         }
     }

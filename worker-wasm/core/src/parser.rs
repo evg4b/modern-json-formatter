@@ -59,23 +59,6 @@ fn parse_num<L: LexAlloc>(lexer: &mut L) -> Result<Num, hifijson::Error> {
     })
 }
 
-// ── Serialisation ────────────────────────────────────────────────────────────
-
-pub fn val_to_minified(val: &Val) -> String {
-    val.to_string()
-}
-
-pub fn val_to_formatted(val: &Val) -> String {
-    let pp = jaq_json::write::Pp {
-        indent: Some("  ".to_string()),
-        sep_space: true,
-        ..jaq_json::write::Pp::default()
-    };
-    let mut buf = Vec::<u8>::new();
-    jaq_json::write::write(&mut buf, &pp, 0, val).unwrap();
-    String::from_utf8_lossy(&buf).into_owned()
-}
-
 // ── Parsing ───────────────────────────────────────────────────────────────────
 
 fn ws_tk<L: LexAlloc>(lexer: &mut L) -> Option<u8> {
@@ -83,6 +66,19 @@ fn ws_tk<L: LexAlloc>(lexer: &mut L) -> Option<u8> {
         lexer.eat_whitespace();
         match lexer.peek_next() {
             Some(b'/') if lexer.strip_prefix(b"//") => lexer.skip_until(|c| c == b'\n'),
+            Some(b'/') if lexer.strip_prefix(b"/*") => {
+                loop {
+                    lexer.skip_until(|c| c == b'*');
+                    if lexer.peek_next().is_none() {
+                        break;
+                    }
+                    lexer.take_next(); // consume '*'
+                    if lexer.peek_next() == Some(b'/') {
+                        lexer.take_next(); // consume '/'
+                        break;
+                    }
+                }
+            }
             Some(b'#') => lexer.skip_until(|c| c == b'\n'),
             next => return next,
         }
@@ -101,164 +97,62 @@ fn parse<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
         b'"' => Val::utf8_str(parse_string(lexer.discarded(), false)?),
         b'[' => Val::Arr({
             let mut arr = Vec::new();
-            lexer.discarded().seq(b']', ws_tk, |next, lexer| {
-                arr.push(parse(next, lexer)?);
-                Ok::<_, hifijson::Error>(())
-            })?;
+            lexer.take_next(); // consume '['
+            let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+            if next != b']' {
+                loop {
+                    arr.push(parse(next, lexer)?);
+                    next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
+                    if next == b']' {
+                        lexer.take_next();
+                        break;
+                    }
+                    if next != b',' {
+                        return Err(Expect::CommaOrEnd.into());
+                    }
+                    lexer.take_next(); // consume ','
+                    next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+                    if next == b']' {
+                        lexer.take_next(); // trailing comma — accept
+                        break;
+                    }
+                }
+            } else {
+                lexer.take_next(); // consume ']'
+            }
             arr.into()
         }),
         b'{' => Val::obj({
             let mut obj = Map::default();
-            lexer.discarded().seq(b'}', ws_tk, |next, lexer| {
-                let key = parse(next, lexer)?;
-                lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
-                let value = parse(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
-                obj.insert(key, value);
-                Ok::<_, hifijson::Error>(())
-            })?;
+            lexer.take_next(); // consume '{'
+            let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+            if next != b'}' {
+                loop {
+                    let key = parse(next, lexer)?;
+                    lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
+                    let value = parse(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
+                    obj.insert(key, value);
+                    next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
+                    if next == b'}' {
+                        lexer.take_next();
+                        break;
+                    }
+                    if next != b',' {
+                        return Err(Expect::CommaOrEnd.into());
+                    }
+                    lexer.take_next(); // consume ','
+                    next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+                    if next == b'}' {
+                        lexer.take_next(); // trailing comma — accept
+                        break;
+                    }
+                }
+            } else {
+                lexer.take_next(); // consume '}'
+            }
             obj
         }),
         _ => Err(Expect::Value)?,
     })
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    // helpers: parse then re-serialise
-    fn minified(json: &str) -> String {
-        val_to_minified(&parse_json(json.as_bytes()).unwrap())
-    }
-    fn formatted(json: &str) -> String {
-        val_to_formatted(&parse_json(json.as_bytes()).unwrap())
-    }
-
-    // ── val_to_minified ───────────────────────────────────────────────────────
-
-    #[test]
-    fn minified_null() {
-        assert_eq!(minified("null"), "null");
-    }
-
-    #[test]
-    fn minified_bool_true() {
-        assert_eq!(minified("true"), "true");
-    }
-
-    #[test]
-    fn minified_bool_false() {
-        assert_eq!(minified("false"), "false");
-    }
-
-    #[test]
-    fn minified_integer() {
-        assert_eq!(minified("42"), "42");
-    }
-
-    #[test]
-    fn minified_float() {
-        assert_eq!(minified("3.14"), "3.14");
-    }
-
-    #[test]
-    fn minified_string() {
-        assert_eq!(minified(r#""hello""#), r#""hello""#);
-    }
-
-    #[test]
-    fn minified_string_escapes_special_chars() {
-        assert_eq!(minified(r#""a\nb\tc""#), r#""a\nb\tc""#);
-    }
-
-    #[test]
-    fn minified_empty_array() {
-        assert_eq!(minified("[]"), "[]");
-    }
-
-    #[test]
-    fn minified_array() {
-        assert_eq!(minified("[1, 2, 3]"), "[1,2,3]");
-    }
-
-    #[test]
-    fn minified_empty_object() {
-        assert_eq!(minified("{}"), "{}");
-    }
-
-    #[test]
-    fn minified_object() {
-        assert_eq!(minified(r#"{ "a": 1, "b": 2 }"#), r#"{"a":1,"b":2}"#);
-    }
-
-    #[test]
-    fn minified_nested() {
-        assert_eq!(
-            minified(r#"{"x": [1, {"y": true}]}"#),
-            r#"{"x":[1,{"y":true}]}"#,
-        );
-    }
-
-    // ── val_to_formatted ──────────────────────────────────────────────────────
-
-    #[test]
-    fn formatted_null() {
-        assert_eq!(formatted("null"), "null");
-    }
-
-    #[test]
-    fn formatted_bool_true() {
-        assert_eq!(formatted("true"), "true");
-    }
-
-    #[test]
-    fn formatted_bool_false() {
-        assert_eq!(formatted("false"), "false");
-    }
-
-    #[test]
-    fn formatted_integer() {
-        assert_eq!(formatted("42"), "42");
-    }
-
-    #[test]
-    fn formatted_float() {
-        assert_eq!(formatted("3.14"), "3.14");
-    }
-
-    #[test]
-    fn formatted_string() {
-        assert_eq!(formatted(r#""hello""#), r#""hello""#);
-    }
-
-    #[test]
-    fn formatted_empty_array() {
-        assert_eq!(formatted("[]"), "[]");
-    }
-
-    #[test]
-    fn formatted_array() {
-        assert_eq!(formatted("[1,2,3]"), "[\n  1,\n  2,\n  3\n]");
-    }
-
-    #[test]
-    fn formatted_empty_object() {
-        assert_eq!(formatted("{}"), "{}");
-    }
-
-    #[test]
-    fn formatted_object() {
-        assert_eq!(
-            formatted(r#"{"a":1,"b":2}"#),
-            "{\n  \"a\": 1,\n  \"b\": 2\n}",
-        );
-    }
-
-    #[test]
-    fn formatted_nested() {
-        assert_eq!(
-            formatted(r#"{"x":[1,2]}"#),
-            "{\n  \"x\": [\n    1,\n    2\n  ]\n}",
-        );
-    }
-}

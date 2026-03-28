@@ -1,11 +1,16 @@
-use json5::from_str;
-use serde_json::Value;
-use serde_json::to_string_pretty;
+use jaq_json::write::{write as jaq_write, Pp};
 use std::error::Error;
 
 pub fn format_json(input: &str) -> Result<String, Box<dyn Error>> {
-    let value = from_str::<Value>(input)?;
-    Ok(to_string_pretty(&value)?)
+    let val = crate::parser::parse_json(input.as_bytes())?;
+    let pp = Pp {
+        indent: Some("  ".to_string()),
+        sep_space: true,
+        ..Pp::default()
+    };
+    let mut buf = Vec::<u8>::new();
+    jaq_write(&mut buf, &pp, 0, &val)?;
+    Ok(String::from_utf8_lossy(&buf).into_owned())
 }
 
 #[cfg(test)]
@@ -90,13 +95,6 @@ mod tests {
     }
 
     #[test]
-    fn formats_empty_json() {
-        let input = "{}";
-        let result = format_json(input).unwrap();
-        assert_eq!(result, "{}");
-    }
-
-    #[test]
     fn fails_on_invalid_json() {
         let input = r#"
         {
@@ -105,14 +103,17 @@ mod tests {
         }
         "#;
 
-        let err = format_json(input).unwrap_err();
-        assert_eq!(err.to_string(), "expected value at line 5 column 9");
+        assert!(format_json(input).is_err());
+    }
+
+    #[test]
+    fn formats_empty_json() {
+        assert_eq!(format_json("{}").unwrap(), "{}");
     }
 
     #[test]
     fn formats_array_root() {
-        let result = format_json(r#"[1,2,3]"#).unwrap();
-        assert_eq!(result, "[\n  1,\n  2,\n  3\n]");
+        assert_eq!(format_json("[1,2,3]").unwrap(), "[\n  1,\n  2,\n  3\n]");
     }
 
     #[test]

@@ -24,7 +24,7 @@ yarn test:cover       # Run tests with coverage
 make check            # lint + test
 make build-worker-wasm # Build Rust/WASM core
 make build-extension  # Production build
-make pack-extension   # Zip for Chrome + Edge stores
+make pack-extension   # Generate per-file checksums and zip for Chrome + Edge stores
 make release TYPE=patch|minor|major  # Bump version, tag, and push
 ```
 

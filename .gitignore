@@ -133,3 +133,5 @@ dist
 worker-core/*.out
 worker-core/*.wasm
 worker-wasm/core/target
+*.sha256.txt
+*.md5.txt

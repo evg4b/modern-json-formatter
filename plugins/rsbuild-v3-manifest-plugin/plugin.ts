@@ -1,49 +1,13 @@
-import type { OutputConfig, RsbuildEntry, RsbuildPlugin } from '@rsbuild/core';
+import type { RsbuildEntry, RsbuildPlugin } from '@rsbuild/core';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-
-const getFileByExtension = (files: string[], extension: string): string => {
-  const filteredFiles = files.filter(file => file.endsWith(extension) && !file.endsWith('.hot-update.js'));
-  if (filteredFiles.length !== 1) {
-    throw new Error(`Expected one file with extension ${extension}, found ${filteredFiles.length}`);
-  }
-
-  return filteredFiles[0];
-};
-
-const cleanupChunks = (chunks: string[]) => chunks.filter(chunk => !chunk.endsWith('.hot-update.js'));
-
-type ArrayElementsOnly<T> = T extends (infer U)[] ? U : never;
-type AssetType = ArrayElementsOnly<OutputConfig['copy']> & {
-  type?: 'production' | 'development';
-};
-
-export type ManifestGeneratorParams = {
-  manifestPath?: string;
-  pages?: Record<string, string>;
-  development?: boolean;
-  assets?: AssetType[];
-  background?: string;
-  contentScripts?: string;
-  options?: string;
-};
-
-const buildPlainScript = (name: string, path?: string): RsbuildEntry => {
-  return path
-    ? { [name]: { import: path, html: false } }
-    : {};
-};
-
-const buildHtmlPage = (name: string, path?: string): RsbuildEntry => {
-  return path
-    ? { [name]: { import: path, html: true } }
-    : {};
-};
+import { buildHtmlPage, buildPlainScript, cleanupChunks, getFileByExtension } from './helpers';
+import { type ManifestGeneratorParams } from './types';
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
   setup(api) {
-    api.modifyRsbuildConfig((config, utils) => {
+    api.modifyRsbuildConfig(async (config, utils) => {
       const isDevelopment = options?.development ?? process.env.NODE_ENV !== 'production';
       const assets = options?.assets ?? [];
       const targetType = isDevelopment ? 'development' : 'production';
@@ -60,9 +24,6 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
                 ...accumulator,
                 ...buildHtmlPage(name, path),
               }), {}),
-          },
-          decorators: {
-            version: 'legacy',
           },
         },
         html: {

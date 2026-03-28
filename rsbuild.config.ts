@@ -7,10 +7,9 @@ import { gfmHeadingId } from 'marked-gfm-heading-id';
 
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
+  source: { decorators: { version: 'legacy' } },
   plugins: [
-    litMarkdown({
-      extensions: [gfmHeadingId({ prefix: 'mjf-' })],
-    }),
+    litMarkdown({ extensions: [gfmHeadingId({ prefix: 'mjf-' })] }),
     pluginSass(),
     pluginTypeCheck({ enable: true }),
     manifestGeneratorPlugin({

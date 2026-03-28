@@ -19,8 +19,10 @@ export const getCurrentVersion = async ({ logger, getRsbuildConfig }: RsbuildPlu
 };
 
 export const resolveTemporalVersion = async (api: RsbuildPluginAPI): Promise<VersionResult> => {
+  const { logger } = api;
   const currentVersion = await getCurrentVersion(api) ?? VERSION_STUB;
   const hash = await getShortCommitHash();
+  logger.debug(`Current git commit hash: ${hash}`);
   const patchedVersion = inc(currentVersion, 'patch');
   const version = valid(patchedVersion) ?? VERSION_STUB;
 
@@ -31,8 +33,10 @@ export const resolveTemporalVersion = async (api: RsbuildPluginAPI): Promise<Ver
 };
 
 export const resolveVersion = async (api: RsbuildPluginAPI): Promise<VersionResult> => {
+  const { logger } = api;
   const currentVersion = await getCurrentVersion(api);
   assert(currentVersion !== null, 'Current version is not defined');
+  logger.info(`Extension version: ${currentVersion}`);
 
   return { version: currentVersion, version_name: currentVersion };
 };

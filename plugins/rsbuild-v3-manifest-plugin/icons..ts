@@ -1,4 +1,4 @@
-import { type OnAfterBuildFn } from '@rsbuild/core';
+import { logger, type OnAfterBuildFn } from '@rsbuild/core';
 
 type ManifestIcons = chrome.runtime.ManifestIcons;
 
@@ -21,6 +21,8 @@ export const extractIcons = (assets: Assets): ManifestIcons => {
     if (!size) {
       return [];
     }
+
+    logger.debug(`Found icon ${size} in ${p.name}`);
 
     return [[size, p.name]];
   });

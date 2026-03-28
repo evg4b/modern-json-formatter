@@ -11,12 +11,22 @@ type ManifestV3 = chrome.runtime.ManifestV3;
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
   setup(api) {
+    const { logger } = api;
+
     api.modifyRsbuildConfig(async (config, { mergeRsbuildConfig }) => {
       const isDevelopment = !isProduction(api);
 
       const assets = options?.assets ?? [];
       const targetType = isDevelopment ? 'development' : 'production';
       const filteredAssets = assets.filter(({ type }) => !type || type === targetType);
+
+      logger.info(`Building extension in ${targetType} mode`);
+      logger.debug('Configuring entry points:');
+      logger.debug(`  background=${options?.background ?? '(none)'}`);
+      logger.debug(`  content-script=${options?.contentScripts ?? '(none)'}`);
+      logger.debug(`  options=${options?.options ?? '(none)'}`);
+
+      logger.debug(`Copying ${filteredAssets.length} asset(s) for ${targetType} target`);
 
       return mergeRsbuildConfig(config, {
         source: {
@@ -55,9 +65,17 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
       const contentScript = getFileByExtension(cleanupChunks(chunks['content-script'] ?? []), '.js');
       const backgroundScript = getFileByExtension(cleanupChunks(chunks['background'] ?? []), '.js');
 
-      const baseManifest: BaseManifestV3 = options?.baseManifest ?? {};
+      logger.debug(`Resolved content script: ${contentScript}`);
+      logger.debug(`Resolved background script: ${backgroundScript}`);
 
-      await writeFile(resolve(stats?.outputPath ?? '', 'manifest.json'), JSON.stringify(<ManifestV3>{
+      const baseManifest: BaseManifestV3 = options?.baseManifest ?? {};
+      const outputPath = resolve(stats?.outputPath ?? '', 'manifest.json');
+
+      const icons = baseManifest.icons ?? extractIcons(stats.assets ?? []);
+
+      logger.info(`Generating manifest for ${baseManifest.name ?? 'unknown'} extension`);
+
+      await writeFile(outputPath, JSON.stringify(<ManifestV3>{
         $schema: 'https://json.schemastore.org/chrome-manifest.json',
         ...await mapPackageJsonToManifestV3(api),
         ...baseManifest ?? {},
@@ -74,7 +92,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
           service_worker: backgroundScript,
           type: 'module',
         },
-        icons: baseManifest.icons ?? extractIcons(stats.assets ?? []),
+        icons,
         web_accessible_resources: [
           ...baseManifest.web_accessible_resources ?? [],
           {
@@ -94,6 +112,8 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
             : [],
         ],
       }, null, 2), 'utf-8');
+
+      logger.info(`Manifest written to ${outputPath}`);
     });
   },
 });

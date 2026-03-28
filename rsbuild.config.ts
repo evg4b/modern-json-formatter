@@ -1,6 +1,5 @@
 import { defineConfig } from '@rsbuild/core';
 import { manifestGeneratorPlugin } from './plugins/rsbuild-v3-manifest-plugin';
-import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { litMarkdown } from 'rsbuild-lit-markdown';
@@ -14,7 +13,6 @@ export default defineConfig({
     }),
     pluginSass(),
     pluginTypeCheck({ enable: true }),
-    pluginNodePolyfill(),
     manifestGeneratorPlugin({
       manifestPath: './src/manifest.json',
       background: './src/background/background.ts',

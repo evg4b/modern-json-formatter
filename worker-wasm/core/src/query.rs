@@ -1,40 +1,15 @@
-use std::error::Error;
 use crate::node::{Node, Property};
 use crate::utils::determinate_variant;
-use jaq_core::{Compiler, Ctx, Vars, data, load, unwrap_valr};
-use jaq_json::{Map, Num, Val};
+use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
+use jaq_json::Val;
 use load::{Arena, File, Loader};
-use serde_json::Value;
-use hifijson::{Expect, LexAlloc, SliceLexer};
-use hifijson::token::Lex;
+use std::error::Error;
+use crate::parser;
 
 fn val_key_to_string(k: &Val) -> String {
     match k {
         Val::TStr(b) | Val::BStr(b) => String::from_utf8_lossy(b).into_owned(),
         _ => k.to_string(),
-    }
-}
-
-fn serde_json_to_val(value: Value) -> Val {
-    match value {
-        Value::Null => Val::Null,
-        Value::Bool(b) => Val::Bool(b),
-        Value::Number(n) => {
-            if let Some(i) = n.as_i64() {
-                Val::Num(Num::from_integral(i))
-            } else {
-                Val::Num(Num::Float(n.as_f64().unwrap_or(f64::NAN)))
-            }
-        }
-        Value::String(s) => Val::utf8_str(s.into_bytes()),
-        Value::Array(arr) => arr.into_iter().map(serde_json_to_val).collect(),
-        Value::Object(obj) => {
-            let m = obj
-                .into_iter()
-                .map(|(k, v)| (Val::utf8_str(k.into_bytes()), serde_json_to_val(v)))
-                .collect();
-            Val::obj(m)
-        }
     }
 }
 
@@ -94,102 +69,12 @@ fn format_load_error(e: &load::Error<&str>) -> String {
 }
 
 fn parse_json_to_val(json: &str) -> Result<Val, Box<dyn Error>> {
-    match parse_single(json.as_bytes()) {
+    match parser::parse_json(json.as_bytes()) {
         Ok(vall) => Ok(vall),
         Err(err) => Err(Box::<dyn Error>::from(err.to_string())),
     }
 }
 
-fn ws_tk<L: Lex>(lexer: &mut L) -> Option<u8> {
-    loop {
-        lexer.eat_whitespace();
-        match lexer.peek_next() {
-            Some(b'#') => lexer.skip_until(|c| c == b'\n'),
-            next => return next,
-        }
-    }
-}
-
-pub fn parse_single(slice: &[u8]) -> Result<Val, Box<dyn Error>> {
-    let offset = |rest: &[u8]| rest.as_ptr() as usize - slice.as_ptr() as usize;
-    let mut lexer = SliceLexer::new(slice);
-    lexer
-        .exactly_one(ws_tk, parse)
-        .map_err(|e| {
-            // jaq_json::read::Error(offset(lexer.as_slice()), e)
-            Box::<dyn Error>::from("ERRROR".to_string())
-        })
-}
-
-fn parse<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
-    Ok(match next {
-        b'n' if lexer.strip_prefix(b"null") => Val::Null,
-        b't' if lexer.strip_prefix(b"true") => Val::Bool(true),
-        b'f' if lexer.strip_prefix(b"false") => Val::Bool(false),
-        b'b' if lexer.strip_prefix(b"b\"") => Val::byte_str(parse_string(lexer, true)?),
-        b'N' if lexer.strip_prefix(b"NaN") => Val::Num(Num::Float(f64::NAN)),
-        b'I' if lexer.strip_prefix(b"Infinity") => Val::Num(Num::Float(f64::INFINITY)),
-        b'0'..=b'9' | b'+' | b'-' => Val::Num(parse_num(lexer)?),
-        b'"' => Val::utf8_str(parse_string(lexer.discarded(), false)?),
-        b'[' => Val::Arr({
-            let mut arr = Vec::new();
-            lexer.discarded().seq(b']', ws_tk, |next, lexer| {
-                arr.push(parse(next, lexer)?);
-                Ok::<_, hifijson::Error>(())
-            })?;
-            arr.into()
-        }),
-        b'{' => Val::obj({
-            let mut obj = Map::default();
-            lexer.discarded().seq(b'}', ws_tk, |next, lexer| {
-                let key = parse(next, lexer)?;
-                lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
-                let value = parse(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
-                obj.insert(key, value);
-                Ok::<_, hifijson::Error>(())
-            })?;
-            obj
-        }),
-        _ => Err(Expect::Value)?,
-    })
-}
-
-
-/// Parse a JSON string as byte or text string, preserving invalid UTF-8 as-is.
-fn parse_string<L: LexAlloc>(lexer: &mut L, bytes: bool) -> Result<Vec<u8>, hifijson::Error> {
-    let on_string = |bytes: &mut L::Bytes, out: &mut Vec<u8>| {
-        out.extend(bytes.as_ref());
-        Ok(())
-    };
-    let s = lexer.str_fold(Vec::new(), on_string, |lexer, out| {
-        use hifijson::escape::Error;
-        match lexer.take_next().ok_or(Error::Eof)? {
-            b'u' if bytes => Err(Error::InvalidKind(b'u'))?,
-            b'x' if bytes => out.push(lexer.hex()?),
-            c => out.extend(lexer.escape(c)?.encode_utf8(&mut [0; 4]).as_bytes()),
-        }
-        Ok(())
-    });
-    s.map_err(hifijson::Error::Str)
-}
-
-fn parse_num<L: LexAlloc>(lexer: &mut L) -> Result<Num, hifijson::Error> {
-    let num = hifijson::num::Num::signed_digits();
-    let (num, parts) = lexer.num_string_with(num).unvalidated();
-    let num = num.as_ref();
-    Ok(match num {
-        "+" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::INFINITY),
-        "-" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::NEG_INFINITY),
-        _ if num.ends_with(|c: char| c.is_ascii_digit()) => {
-            if parts.is_int() {
-                Num::from_str_radix(num, 10).unwrap()
-            } else {
-                Num::Dec(num.to_string().into())
-            }
-        }
-        _ => Err(hifijson::num::Error::ExpectedDigit)?,
-    })
-}
 
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     let input = parse_json_to_val(json)?;
@@ -281,6 +166,20 @@ mod tests {
                 Node::number("1")
             ]),
         );
+    }
+
+    #[test]
+    fn query_json_with_comments_incorrect() {
+        let json = r#"
+        {
+            / comment before
+            "a": 1,
+            "b": 2 // comment after
+        }
+        "#;
+
+        let result = query_json(json, ".a");
+        assert!(result.is_err());
     }
 
     #[test]

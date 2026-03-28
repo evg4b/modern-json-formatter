@@ -1,19 +1,22 @@
 import type { RsbuildEntry, RsbuildPlugin } from '@rsbuild/core';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { buildHtmlPage, buildPlainScript, cleanupChunks, getFileByExtension } from './helpers';
-import { type ManifestGeneratorParams } from './types';
+import { type BaseManifestV3, type ManifestGeneratorParams } from './types';
+import { upperCase } from 'es-toolkit';
+import { mapPackageJsonToManifestV3 } from './mapping';
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
   setup(api) {
-    api.modifyRsbuildConfig(async (config, utils) => {
-      const isDevelopment = options?.development ?? process.env.NODE_ENV !== 'production';
+    api.modifyRsbuildConfig(async (config, { mergeRsbuildConfig }) => {
+      const isDevelopment = upperCase(config?.mode ?? 'none') !== 'PRODUCTION';
+
       const assets = options?.assets ?? [];
       const targetType = isDevelopment ? 'development' : 'production';
       const filteredAssets = assets.filter(({ type }) => !type || type === targetType);
 
-      return utils.mergeRsbuildConfig(config, {
+      return mergeRsbuildConfig(config, {
         source: {
           entry: {
             ...buildPlainScript('background', options?.background),
@@ -44,20 +47,19 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
         throw new Error('No stats found');
       }
 
-      let { manifestPath } = options ?? {};
-      const config = api.getNormalizedConfig();
-      manifestPath = resolve(config.root, manifestPath ?? 'manifest.json');
-
       const chunks = stats.assetsByChunkName ?? {};
       const contentScript = getFileByExtension(cleanupChunks(chunks['content-script'] ?? []), '.js');
       const backgroundScript = getFileByExtension(cleanupChunks(chunks['background'] ?? []), '.js');
 
-      const file = await readFile(manifestPath, 'utf-8');
-      const srcManifest = JSON.parse(file);
+      const baseManifest: BaseManifestV3 = options?.baseManifest ?? {};
 
       await writeFile(resolve(stats?.outputPath ?? '', 'manifest.json'), JSON.stringify({
-        ...srcManifest,
+        $schema: 'https://json.schemastore.org/chrome-manifest.json',
+        ...await mapPackageJsonToManifestV3(api),
+        ...baseManifest ?? {},
+        manifest_version: 3,
         content_scripts: [
+          ...baseManifest.content_scripts ?? [],
           {
             matches: ['<all_urls>'],
             js: [contentScript],
@@ -69,6 +71,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
           type: 'module',
         },
         web_accessible_resources: [
+          ...baseManifest.web_accessible_resources ?? [],
           {
             resources: [
               ...chunks['options'] ?? [],
@@ -81,12 +84,8 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
             ],
             matches: ['<all_urls>'],
           },
-          {
-            resources: ['*.map'],
-            matches: ['<all_urls>'],
-          },
         ],
-      }));
+      }, null, 2), 'utf-8');
     });
   },
 });

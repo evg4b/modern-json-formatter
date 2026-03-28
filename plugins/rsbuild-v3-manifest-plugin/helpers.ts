@@ -1,4 +1,5 @@
-import type { RsbuildEntry } from '@rsbuild/core';
+import type { RsbuildEntry, RsbuildPluginAPI } from '@rsbuild/core';
+import { upperCase } from 'es-toolkit';
 
 export const getFileByExtension = (files: string[], extension: string): string => {
   const filteredFiles = files.filter(file => file.endsWith(extension) && !file.endsWith('.hot-update.js'));
@@ -21,4 +22,10 @@ export const buildHtmlPage = (name: string, path?: string): RsbuildEntry => {
   return path
     ? { [name]: { import: path, html: true } }
     : {};
+};
+
+export const isProduction = ({ getRsbuildConfig }: RsbuildPluginAPI): boolean => {
+  const { mode } = getRsbuildConfig();
+
+  return upperCase(mode ?? 'none') == 'PRODUCTION';
 };

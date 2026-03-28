@@ -1,9 +1,8 @@
 import type { RsbuildEntry, RsbuildPlugin } from '@rsbuild/core';
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { buildHtmlPage, buildPlainScript, cleanupChunks, getFileByExtension } from './helpers';
+import { buildHtmlPage, buildPlainScript, cleanupChunks, getFileByExtension, isProduction } from './helpers';
 import { type BaseManifestV3, type ManifestGeneratorParams } from './types';
-import { upperCase } from 'es-toolkit';
 import { mapPackageJsonToManifestV3 } from './mapping';
 import { extractIcons } from './icons.';
 
@@ -13,7 +12,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
   name: 'manifest-generator-plugin',
   setup(api) {
     api.modifyRsbuildConfig(async (config, { mergeRsbuildConfig }) => {
-      const isDevelopment = upperCase(config?.mode ?? 'none') !== 'PRODUCTION';
+      const isDevelopment = !isProduction(api);
 
       const assets = options?.assets ?? [];
       const targetType = isDevelopment ? 'development' : 'production';
@@ -45,6 +44,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
     });
 
     api.onAfterBuild(async params => {
+      const isDevelopment = !isProduction(api);
 
       const stats = params.stats?.toJson('detailed');
       if (!stats) {
@@ -89,6 +89,9 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
             ],
             matches: ['<all_urls>'],
           },
+          ...isDevelopment
+            ? [{ resources: ['*.map'], matches: ['<all_urls>'] }]
+            : [],
         ],
       }, null, 2), 'utf-8');
     });

@@ -1,4 +1,3 @@
-use jaq_json::Val;
 use std::error::Error;
 
 pub fn minify_json(input: &str) -> Result<String, Box<dyn Error>> {

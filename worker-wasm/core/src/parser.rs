@@ -19,7 +19,7 @@ impl std::error::Error for ParseError {}
 pub fn parse_json(slice: &[u8]) -> Result<Val, Box<dyn std::error::Error>> {
     let offset = |rest: &[u8]| rest.as_ptr() as usize - slice.as_ptr() as usize;
     let mut lexer = SliceLexer::new(slice);
-    lexer.exactly_one(ws_tk, parse).map_err(|e| {
+    lexer.exactly_one(ws_tk, parse_inner).map_err(|e| {
         Box::new(ParseError(offset(lexer.as_slice()), e)) as Box<dyn std::error::Error>
     })
 }
@@ -85,7 +85,262 @@ fn ws_tk<L: LexAlloc>(lexer: &mut L) -> Option<u8> {
     }
 }
 
-fn parse<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ── helpers ───────────────────────────────────────────────────────────────
+
+    fn parse(input: &str) -> Result<Val, Box<dyn std::error::Error>> {
+        parse_json(input.as_bytes())
+    }
+
+    fn ok(input: &str) -> Val {
+        parse(input).expect("expected valid JSON")
+    }
+
+    // ── classic JSON primitives ───────────────────────────────────────────────
+
+    #[test]
+    fn parses_null() {
+        assert_eq!(ok("null"), Val::Null);
+    }
+
+    #[test]
+    fn parses_true() {
+        assert_eq!(ok("true"), Val::Bool(true));
+    }
+
+    #[test]
+    fn parses_false() {
+        assert_eq!(ok("false"), Val::Bool(false));
+    }
+
+    #[test]
+    fn parses_integer() {
+        assert_eq!(ok("42").to_string(), "42");
+    }
+
+    #[test]
+    fn parses_negative_integer() {
+        assert_eq!(ok("-7").to_string(), "-7");
+    }
+
+    #[test]
+    fn parses_float() {
+        assert_eq!(ok("3.14").to_string(), "3.14");
+    }
+
+    #[test]
+    fn parses_string() {
+        assert_eq!(ok(r#""hello""#).to_string(), r#""hello""#);
+    }
+
+    #[test]
+    fn parses_string_with_escape_sequences() {
+        assert_eq!(ok(r#""a\nb\tc""#).to_string(), r#""a\nb\tc""#);
+    }
+
+    #[test]
+    fn parses_string_with_unicode_escape() {
+        assert_eq!(ok(r#""\u0041""#).to_string(), r#""A""#);
+    }
+
+    #[test]
+    fn parses_empty_object() {
+        assert_eq!(ok("{}").to_string(), "{}");
+    }
+
+    #[test]
+    fn parses_object_with_single_field() {
+        assert_eq!(ok(r#"{"a":1}"#).to_string(), r#"{"a":1}"#);
+    }
+
+    #[test]
+    fn parses_object_with_multiple_fields() {
+        assert_eq!(ok(r#"{"a":1,"b":2}"#).to_string(), r#"{"a":1,"b":2}"#);
+    }
+
+    #[test]
+    fn parses_empty_array() {
+        assert_eq!(ok("[]").to_string(), "[]");
+    }
+
+    #[test]
+    fn parses_array_with_values() {
+        assert_eq!(ok("[1,2,3]").to_string(), "[1,2,3]");
+    }
+
+    #[test]
+    fn parses_nested_structure() {
+        assert_eq!(
+            ok(r#"{"x":[1,{"y":true}]}"#).to_string(),
+            r#"{"x":[1,{"y":true}]}"#,
+        );
+    }
+
+    #[test]
+    fn parses_whitespace_around_values() {
+        assert_eq!(ok("  42  ").to_string(), "42");
+    }
+
+    // ── error cases ───────────────────────────────────────────────────────────
+
+    #[test]
+    fn fails_on_empty_input() {
+        assert!(parse("").is_err());
+    }
+
+    #[test]
+    fn fails_on_whitespace_only() {
+        assert!(parse("   ").is_err());
+    }
+
+    #[test]
+    fn fails_on_missing_value_in_object() {
+        assert!(parse(r#"{"a":}"#).is_err());
+    }
+
+    #[test]
+    fn fails_on_missing_colon_in_object() {
+        assert!(parse(r#"{"a" 1}"#).is_err());
+    }
+
+    #[test]
+    fn fails_on_unclosed_object() {
+        assert!(parse(r#"{"a":1"#).is_err());
+    }
+
+    #[test]
+    fn fails_on_unclosed_array() {
+        assert!(parse("[1,2").is_err());
+    }
+
+    #[test]
+    fn fails_on_double_comma_in_array() {
+        assert!(parse("[1,,2]").is_err());
+    }
+
+    #[test]
+    fn fails_on_double_comma_in_object() {
+        assert!(parse(r#"{"a":1,,"b":2}"#).is_err());
+    }
+
+    #[test]
+    fn fails_on_multiple_root_values() {
+        assert!(parse("1 2").is_err());
+    }
+
+    #[test]
+    fn fails_on_bare_identifier() {
+        assert!(parse("foo").is_err());
+    }
+
+    // ── JSON5: line comments (//) ─────────────────────────────────────────────
+
+    #[test]
+    fn single_line_comment_before_value() {
+        assert_eq!(ok("// comment\n42").to_string(), "42");
+    }
+
+    #[test]
+    fn single_line_comment_inside_object() {
+        let input = r#"{"a": 1, // comment
+"b": 2}"#;
+        assert_eq!(ok(input).to_string(), r#"{"a":1,"b":2}"#);
+    }
+
+    #[test]
+    fn single_line_comment_at_end_of_input() {
+        assert_eq!(ok("42 // comment").to_string(), "42");
+    }
+
+    #[test]
+    fn hash_comment_before_value() {
+        assert_eq!(ok("# comment\n42").to_string(), "42");
+    }
+
+    #[test]
+    fn single_slash_is_not_a_comment() {
+        assert!(parse(r#"{ / "a": 1 }"#).is_err());
+    }
+
+    // ── JSON5: block comments (/* */) ─────────────────────────────────────────
+
+    #[test]
+    fn block_comment_before_value() {
+        assert_eq!(ok("/* comment */ 42").to_string(), "42");
+    }
+
+    #[test]
+    fn block_comment_inside_object() {
+        assert_eq!(
+            ok(r#"{"a": /* comment */ 1}"#).to_string(),
+            r#"{"a":1}"#,
+        );
+    }
+
+    #[test]
+    fn block_comment_multiline() {
+        let input = "/* line1\n   line2\n*/42";
+        assert_eq!(ok(input).to_string(), "42");
+    }
+
+    #[test]
+    fn block_comment_with_star_inside() {
+        assert_eq!(ok("/* a * b */ 42").to_string(), "42");
+    }
+
+    #[test]
+    fn block_comment_back_to_back() {
+        assert_eq!(ok("/* a *//* b */ 42").to_string(), "42");
+    }
+
+    #[test]
+    fn unterminated_block_comment_fails() {
+        assert!(parse("/* oops 42").is_err());
+    }
+
+    // ── JSON5: trailing commas ────────────────────────────────────────────────
+
+    #[test]
+    fn trailing_comma_in_object() {
+        assert_eq!(ok(r#"{"a":1,"b":2,}"#).to_string(), r#"{"a":1,"b":2}"#);
+    }
+
+    #[test]
+    fn trailing_comma_in_array() {
+        assert_eq!(ok("[1,2,3,]").to_string(), "[1,2,3]");
+    }
+
+    #[test]
+    fn trailing_comma_in_empty_array_fails() {
+        assert!(parse("[,]").is_err());
+    }
+
+    #[test]
+    fn trailing_comma_in_empty_object_fails() {
+        assert!(parse("{,}").is_err());
+    }
+
+    #[test]
+    fn trailing_comma_nested_object() {
+        assert_eq!(
+            ok(r#"{"a":{"b":1,},"c":[2,3,],}"#).to_string(),
+            r#"{"a":{"b":1},"c":[2,3]}"#,
+        );
+    }
+
+    // ── error message format ──────────────────────────────────────────────────
+
+    #[test]
+    fn error_message_contains_byte_offset() {
+        let err = parse("   ???").unwrap_err();
+        assert!(err.to_string().contains("byte offset"));
+    }
+}
+
+fn parse_inner<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
     Ok(match next {
         b'n' if lexer.strip_prefix(b"null") => Val::Null,
         b't' if lexer.strip_prefix(b"true") => Val::Bool(true),
@@ -101,7 +356,7 @@ fn parse<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
             let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
             if next != b']' {
                 loop {
-                    arr.push(parse(next, lexer)?);
+                    arr.push(parse_inner(next, lexer)?);
                     next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
                     if next == b']' {
                         lexer.take_next();
@@ -128,9 +383,9 @@ fn parse<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
             let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
             if next != b'}' {
                 loop {
-                    let key = parse(next, lexer)?;
+                    let key = parse_inner(next, lexer)?;
                     lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
-                    let value = parse(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
+                    let value = parse_inner(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
                     obj.insert(key, value);
                     next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
                     if next == b'}' {

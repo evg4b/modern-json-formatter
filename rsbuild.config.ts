@@ -28,13 +28,6 @@ export default defineConfig({
         content_security_policy: {
           extension_pages: 'script-src \'self\' \'wasm-unsafe-eval\'; object-src \'self\';',
         },
-        icons: {
-          16: 'icon16.png',
-          32: 'icon32.png',
-          48: 'icon48.png',
-          128: 'icon128.png',
-          512: 'icon512.png',
-        },
       },
       background: './src/background/background.ts',
       contentScripts: './src/content-script/main.ts',

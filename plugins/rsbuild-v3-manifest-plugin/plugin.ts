@@ -5,6 +5,9 @@ import { buildHtmlPage, buildPlainScript, cleanupChunks, getFileByExtension } fr
 import { type BaseManifestV3, type ManifestGeneratorParams } from './types';
 import { upperCase } from 'es-toolkit';
 import { mapPackageJsonToManifestV3 } from './mapping';
+import { extractIcons } from './icons.';
+
+type ManifestV3 = chrome.runtime.ManifestV3;
 
 export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): RsbuildPlugin => ({
   name: 'manifest-generator-plugin',
@@ -42,6 +45,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
     });
 
     api.onAfterBuild(async params => {
+
       const stats = params.stats?.toJson('detailed');
       if (!stats) {
         throw new Error('No stats found');
@@ -53,7 +57,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
 
       const baseManifest: BaseManifestV3 = options?.baseManifest ?? {};
 
-      await writeFile(resolve(stats?.outputPath ?? '', 'manifest.json'), JSON.stringify({
+      await writeFile(resolve(stats?.outputPath ?? '', 'manifest.json'), JSON.stringify(<ManifestV3>{
         $schema: 'https://json.schemastore.org/chrome-manifest.json',
         ...await mapPackageJsonToManifestV3(api),
         ...baseManifest ?? {},
@@ -70,6 +74,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
           service_worker: backgroundScript,
           type: 'module',
         },
+        icons: baseManifest.icons ?? extractIcons(stats.assets ?? []),
         web_accessible_resources: [
           ...baseManifest.web_accessible_resources ?? [],
           {

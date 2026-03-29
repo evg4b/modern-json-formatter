@@ -3,8 +3,8 @@ use crate::utils::determinate_variant;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
+use crate::parser::parse_json;
 use std::error::Error;
-use crate::parser;
 
 fn val_key_to_string(k: &Val) -> String {
     match k {
@@ -68,16 +68,8 @@ fn format_load_error(e: &load::Error<&str>) -> String {
     }
 }
 
-fn parse_json_to_val(json: &str) -> Result<Val, Box<dyn Error>> {
-    match parser::parse_json(json.as_bytes()) {
-        Ok(vall) => Ok(vall),
-        Err(err) => Err(Box::<dyn Error>::from(err.to_string())),
-    }
-}
-
-
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
-    let input = parse_json_to_val(json)?;
+    let input = parse_json(json.as_bytes())?;
     let program = File {
         code: query,
         path: (),

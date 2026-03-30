@@ -1,39 +1,10 @@
-use crate::node::{Node, Property};
-use crate::utils::determinate_variant;
+use crate::convert::val_to_node;
+use crate::node::Node;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
 use crate::parser::parse_json;
 use std::error::Error;
-
-fn val_key_to_string(k: &Val) -> String {
-    match k {
-        Val::TStr(b) | Val::BStr(b) => String::from_utf8_lossy(b).into_owned(),
-        _ => k.to_string(),
-    }
-}
-
-fn to_return_value(value: Val) -> Node {
-    match value {
-        Val::Null => Node::Null,
-        Val::Bool(bool) => Node::bool(bool),
-        Val::Num(number) => Node::number(number.to_string().as_str()),
-        Val::TStr(b) | Val::BStr(b) => {
-            let s = String::from_utf8_lossy(&b);
-            Node::string(s.as_ref(), determinate_variant(s.trim()))
-        }
-        Val::Arr(items) => Node::array(items.iter().map(|i| to_return_value(i.clone())).collect()),
-        Val::Obj(items) => Node::object(
-            items
-                .iter()
-                .map(|(k, v)| Property {
-                    key: val_key_to_string(k),
-                    value: to_return_value(v.clone()),
-                })
-                .collect(),
-        ),
-    }
-}
 
 fn format_load_error(e: &load::Error<&str>) -> String {
     match e {
@@ -105,7 +76,7 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
 
     for item in collection {
         match unwrap_valr(item) {
-            Ok(v) => items.push(to_return_value(v)),
+            Ok(v) => items.push(val_to_node(v)),
             Err(err) => {
                 return Err(Box::<dyn Error>::from(err.to_string()));
             }

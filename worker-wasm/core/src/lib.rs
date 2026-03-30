@@ -1,12 +1,13 @@
 extern crate core;
 
+mod convert;
 mod format;
 mod minify;
 mod node;
+mod parser;
 mod query;
 mod tokenize;
 mod utils;
-mod parser;
 
 pub use node::{Node, Property, StringVariant};
 pub use format::{format_json};

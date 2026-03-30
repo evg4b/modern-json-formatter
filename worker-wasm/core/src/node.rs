@@ -1,20 +1,16 @@
-use serde::{Deserialize, Serialize};
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Property {
     pub key: String,
     pub value: Node,
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[derive(Clone, Debug, PartialEq)]
 pub enum StringVariant {
     Url,
     Email,
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type", rename_all = "lowercase")]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Node {
     Null,
     Object {

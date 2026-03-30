@@ -1,71 +1,10 @@
+use crate::convert::val_to_node;
 use crate::node::Node;
-use crate::utils::determinate_variant;
-use json_event_parser::{JsonEvent, ReaderJsonParser};
+use crate::parser::parse_json;
 use std::error::Error;
-use std::io::{Cursor, Error as StdError};
 
-fn tokenize_value<R: std::io::Read>(
-    parser: &mut ReaderJsonParser<R>,
-) -> Result<Option<Node>, Box<dyn Error>> {
-    match parser.parse_next()? {
-        JsonEvent::String(value) => Ok(Some(Node::String {
-            value: value.to_string(),
-            variant: determinate_variant(value.trim()),
-        })),
-        JsonEvent::Number(value) => Ok(Some(Node::Number {
-            value: value.to_string(),
-        })),
-        JsonEvent::Boolean(value) => Ok(Some(Node::bool(value))),
-        JsonEvent::Null => Ok(Some(Node::Null)),
-        JsonEvent::StartArray => {
-            let mut items = vec![];
-            loop {
-                match tokenize_value(parser)? {
-                    Some(value) => items.push(value),
-                    None => break,
-                }
-            }
-            Ok(Some(Node::array(items)))
-        }
-        JsonEvent::StartObject => {
-            let mut properties = vec![];
-            loop {
-                let key = match parser.parse_next()? {
-                    JsonEvent::ObjectKey(key) => key.to_string(),
-                    JsonEvent::EndObject => break,
-                    _ => {
-                        return Err(Box::new(StdError::new(
-                            std::io::ErrorKind::InvalidData,
-                            "Expected object key or end of object",
-                        )));
-                    }
-                };
-                match tokenize_value(parser)? {
-                    Some(value) => properties.push(Node::property(key.as_str(), value)),
-                    None => {
-                        return Err(Box::from(StdError::new(
-                            std::io::ErrorKind::InvalidData,
-                            "Expected value after object key",
-                        )));
-                    }
-                }
-            }
-            Ok(Some(Node::object(properties)))
-        }
-        JsonEvent::ObjectKey(_) => Ok(None),
-        JsonEvent::EndArray | JsonEvent::EndObject | JsonEvent::Eof => Ok(None),
-    }
-}
-
-pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn std::error::Error>> {
-    let mut parser = ReaderJsonParser::new(Cursor::new(json.as_bytes()));
-    match tokenize_value(&mut parser)? {
-        Some(node) => Ok(node),
-        None => Err(Box::new(StdError::new(
-            std::io::ErrorKind::InvalidData,
-            "No valid JSON value found",
-        ))),
-    }
+pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
+    parse_json(json.as_bytes()).map(val_to_node)
 }
 
 #[cfg(test)]

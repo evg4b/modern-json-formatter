@@ -50,7 +50,7 @@ fn parse_num<L: LexAlloc>(lexer: &mut L) -> Result<Num, hifijson::Error> {
         "-" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::NEG_INFINITY),
         _ if num.ends_with(|c: char| c.is_ascii_digit()) => {
             if parts.is_int() {
-                Num::from_str_radix(num, 10).unwrap()
+                Num::from_str_radix(num, 10).ok_or(hifijson::num::Error::ExpectedDigit)?
             } else {
                 Num::Dec(num.to_string().into())
             }

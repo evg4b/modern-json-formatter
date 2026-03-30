@@ -23,7 +23,7 @@ js-sys = "0.3"
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
 console_error_panic_hook = { version = "0.1.7", optional = true }
-core = { path = "./core" }
+core = { path = "core" }
 
 [profile.release]
 opt-level = "z"
@@ -34,6 +34,3 @@ panic = "abort"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = ["-Oz", "--enable-mutable-globals", "--enable-bulk-memory", "--enable-nontrapping-float-to-int"]
-
-[patch.crates-io]
-jaq-std = { path = "vendor/jaq-std" }

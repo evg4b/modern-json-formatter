@@ -8,6 +8,8 @@ mod parser;
 mod query;
 mod tokenize;
 mod utils;
+mod node_json_factory;
+mod jaq_json_factory;
 
 pub use node::{Node, Property, StringVariant};
 pub use format::{format_json};

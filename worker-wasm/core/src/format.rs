@@ -1,6 +1,6 @@
 use jaq_json::write::{write as jaq_write, Pp};
 use std::error::Error;
-use crate::parser::JaqJsonFactory;
+use crate::jaq_json_factory::JaqJsonFactory;
 
 pub fn format_json(input: &str) -> Result<String, Box<dyn Error>> {
     let val = crate::parser::parse_json(input.as_bytes(), JaqJsonFactory)?;

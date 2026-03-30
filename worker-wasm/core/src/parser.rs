@@ -1,11 +1,8 @@
 use hifijson::token::Lex;
 use hifijson::{Expect, LexAlloc, SliceLexer};
-use jaq_json::{Map, Num, Val};
+use jaq_json::Num;
 use std::fmt;
 use std::fmt::{Display, Formatter};
-use std::rc::Rc;
-use crate::Node;
-use crate::utils::determinate_variant;
 
 /// Parse error.
 #[derive(Debug)]
@@ -102,67 +99,6 @@ fn ws_tk<L: LexAlloc>(lexer: &mut L) -> Option<u8> {
     }
 }
 
-pub struct JaqJsonFactory;
-
-impl Factory<Val> for JaqJsonFactory {
-    fn null(&self) -> Val {
-        Val::Null
-    }
-
-    fn bool(&self, val: bool) -> Val {
-        Val::Bool(val)
-    }
-
-    fn number(&self, n: Num) -> Val {
-        Val::Num(n)
-    }
-
-    fn string(&self, s: Vec<u8>) -> Val {
-        Val::utf8_str(s)
-    }
-
-    fn array(&self, arr: Vec<Val>) -> Val {
-        Val::Arr(Rc::from(arr))
-    }
-
-    fn object(&self, obj: Vec<(String, Val)>) -> Val {
-        Val::Obj(Rc::from(
-            obj.into_iter()
-                .map(|(k, v)| (Val::utf8_str(k.into_bytes()), v))
-                .collect::<Map<Val, Val>>(),
-        ))
-    }
-}
-
-pub struct NodeJsonFactory;
-
-impl Factory<Node> for NodeJsonFactory {
-    fn null(&self) -> Node {
-        Node::Null
-    }
-
-    fn bool(&self, val: bool) -> Node {
-        Node::bool(val)
-    }
-
-    fn number(&self, n: Num) -> Node {
-        Node::number(n.to_string().as_str())
-    }
-
-    fn string(&self, s: Vec<u8>) -> Node {
-        let string = String::from_utf8_lossy(&s);
-        Node::string(&string, determinate_variant(string.trim()))
-    }
-
-    fn array(&self, arr: Vec<Node>) -> Node {
-        Node::array(arr)
-    }
-
-    fn object(&self, obj: Vec<(String, Node)>) -> Node {
-        Node::object(obj.into_iter().map(|(k, v)| Node::property(&k, v)).collect())
-    }
-}
-
 fn parse_inner<L: LexAlloc, T, U: Factory<T>>(
     next: u8,
     lexer: &mut L,
@@ -205,7 +141,7 @@ fn parse_inner<L: LexAlloc, T, U: Factory<T>>(
             arr.into()
         }),
         b'{' => factory.object({
-            let mut obj:Vec<(String, T)> = Vec::new();
+            let mut obj: Vec<(String, T)> = Vec::new();
             lexer.take_next(); // consume '{'
             let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
             if next != b'}' {
@@ -244,7 +180,9 @@ fn parse_inner<L: LexAlloc, T, U: Factory<T>>(
 
 #[cfg(test)]
 mod tests {
+    use jaq_json::Val;
     use super::*;
+    use crate::jaq_json_factory::JaqJsonFactory;
 
     // ── helpers ───────────────────────────────────────────────────────────────
 

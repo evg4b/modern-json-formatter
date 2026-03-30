@@ -1,6 +1,7 @@
 use crate::node::Node;
-use crate::parser::{parse_json, NodeJsonFactory};
+use crate::parser::{parse_json};
 use std::error::Error;
+use crate::node_json_factory::NodeJsonFactory;
 
 pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
     parse_json(json.as_bytes(), NodeJsonFactory)

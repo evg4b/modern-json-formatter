@@ -3,8 +3,9 @@ use crate::node::Node;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
-use crate::parser::{parse_json, JaqJsonFactory};
+use crate::parser::{parse_json};
 use std::error::Error;
+use crate::jaq_json_factory::JaqJsonFactory;
 
 fn format_load_error(e: &load::Error<&str>) -> String {
     match e {

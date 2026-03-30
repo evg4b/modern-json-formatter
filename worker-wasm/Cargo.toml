@@ -11,7 +11,8 @@ repository = "git@github.com:evg4b/modern-json-formatter.git"
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["console_error_panic_hook"]
+default = []
+dev = ["console_error_panic_hook"]
 
 [dependencies]
 wasm-bindgen = "0.2.84"
@@ -25,5 +26,14 @@ console_error_panic_hook = { version = "0.1.7", optional = true }
 core = { path = "./core" }
 
 [profile.release]
-# Tell `rustc` to optimize for small code size.
-opt-level = "s"
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+strip = "symbols"
+panic = "abort"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Oz", "--enable-mutable-globals", "--enable-bulk-memory", "--enable-nontrapping-float-to-int"]
+
+[patch.crates-io]
+jaq-std = { path = "vendor/jaq-std" }

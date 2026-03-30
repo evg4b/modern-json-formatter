@@ -1,14 +1,36 @@
-use email_address::EmailAddress;
-use url::Url;
 use crate::StringVariant;
 
 pub fn is_url(value: &str) -> bool {
-    let url = match Url::parse(value.trim()) {
-        Ok(url) => url,
-        Err(_) => return false,
-    };
+    let s = value.trim();
+    for scheme in ["https://", "http://", "ftp://"] {
+        if let Some(rest) = s.strip_prefix(scheme) {
+            return !rest.is_empty() && !rest.starts_with('/');
+        }
+    }
+    if let Some(rest) = s.strip_prefix("mailto:") {
+        return !rest.is_empty();
+    }
+    false
+}
 
-    matches!(url.scheme(), "http" | "https" | "ftp" | "mailto")
+fn is_email(value: &str) -> bool {
+    let at_pos = match value.find('@') {
+        Some(pos) => pos,
+        None => return false,
+    };
+    if value[at_pos + 1..].contains('@') {
+        return false;
+    }
+    let local = &value[..at_pos];
+    let domain = &value[at_pos + 1..];
+    if local.is_empty() || domain.is_empty() {
+        return false;
+    }
+    if let Some(dot_pos) = domain.rfind('.') {
+        dot_pos > 0 && dot_pos < domain.len() - 1
+    } else {
+        false
+    }
 }
 
 #[cfg(test)]
@@ -67,7 +89,7 @@ pub fn determinate_variant(string: &str) -> Option<StringVariant> {
         return Some(StringVariant::Url);
     }
 
-    if EmailAddress::is_valid(string) {
+    if is_email(string) {
         return Some(StringVariant::Email);
     }
 

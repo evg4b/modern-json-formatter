@@ -4,7 +4,8 @@ use jaq_json::{Map, Num, Val};
 use std::fmt;
 use std::fmt::{Display, Formatter};
 use std::rc::Rc;
-use num_bigint::{BigInt, BigUint, Sign};
+use crate::Node;
+use crate::utils::determinate_variant;
 
 /// Parse error.
 #[derive(Debug)]
@@ -130,6 +131,35 @@ impl Factory<Val> for JaqJsonFactory {
                 .map(|(k, v)| (Val::utf8_str(k.into_bytes()), v))
                 .collect::<Map<Val, Val>>(),
         ))
+    }
+}
+
+pub struct NodeJsonFactory;
+
+impl Factory<Node> for NodeJsonFactory {
+    fn null(&self) -> Node {
+        Node::Null
+    }
+
+    fn bool(&self, val: bool) -> Node {
+        Node::bool(val)
+    }
+
+    fn number(&self, n: Num) -> Node {
+        Node::number(n.to_string().as_str())
+    }
+
+    fn string(&self, s: Vec<u8>) -> Node {
+        let string = String::from_utf8_lossy(&s);
+        Node::string(&string, determinate_variant(string.trim()))
+    }
+
+    fn array(&self, arr: Vec<Node>) -> Node {
+        Node::array(arr)
+    }
+
+    fn object(&self, obj: Vec<(String, Node)>) -> Node {
+        Node::object(obj.into_iter().map(|(k, v)| Node::property(&k, v)).collect())
     }
 }
 

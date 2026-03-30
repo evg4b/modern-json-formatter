@@ -3,6 +3,8 @@ use hifijson::{Expect, LexAlloc, SliceLexer};
 use jaq_json::{Map, Num, Val};
 use std::fmt;
 use std::fmt::{Display, Formatter};
+use std::rc::Rc;
+use num_bigint::{BigInt, BigUint, Sign};
 
 /// Parse error.
 #[derive(Debug)]
@@ -16,12 +18,26 @@ impl Display for ParseError {
 
 impl std::error::Error for ParseError {}
 
-pub fn parse_json(slice: &[u8]) -> Result<Val, Box<dyn std::error::Error>> {
+pub trait Factory<T> {
+    fn null(&self) -> T;
+    fn bool(&self, val: bool) -> T;
+    fn number(&self, n: Num) -> T;
+    fn string(&self, s: Vec<u8>) -> T;
+    fn array(&self, arr: Vec<T>) -> T;
+    fn object(&self, obj: Vec<(String, T)>) -> T;
+}
+
+pub fn parse_json<T, U: Factory<T>>(
+    slice: &[u8],
+    factory: U,
+) -> Result<T, Box<dyn std::error::Error>> {
     let offset = |rest: &[u8]| rest.as_ptr() as usize - slice.as_ptr() as usize;
     let mut lexer = SliceLexer::new(slice);
-    lexer.exactly_one(ws_tk, parse_inner).map_err(|e| {
-        Box::new(ParseError(offset(lexer.as_slice()), e)) as Box<dyn std::error::Error>
-    })
+    lexer
+        .exactly_one(ws_tk, move |next, lexer| parse_inner(next, lexer, &factory))
+        .map_err(|e| {
+            Box::new(ParseError(offset(lexer.as_slice()), e)) as Box<dyn std::error::Error>
+        })
 }
 
 fn parse_string<L: LexAlloc>(lexer: &mut L, bytes: bool) -> Result<Vec<u8>, hifijson::Error> {
@@ -85,6 +101,117 @@ fn ws_tk<L: LexAlloc>(lexer: &mut L) -> Option<u8> {
     }
 }
 
+pub struct JaqJsonFactory;
+
+impl Factory<Val> for JaqJsonFactory {
+    fn null(&self) -> Val {
+        Val::Null
+    }
+
+    fn bool(&self, val: bool) -> Val {
+        Val::Bool(val)
+    }
+
+    fn number(&self, n: Num) -> Val {
+        Val::Num(n)
+    }
+
+    fn string(&self, s: Vec<u8>) -> Val {
+        Val::utf8_str(s)
+    }
+
+    fn array(&self, arr: Vec<Val>) -> Val {
+        Val::Arr(Rc::from(arr))
+    }
+
+    fn object(&self, obj: Vec<(String, Val)>) -> Val {
+        Val::Obj(Rc::from(
+            obj.into_iter()
+                .map(|(k, v)| (Val::utf8_str(k.into_bytes()), v))
+                .collect::<Map<Val, Val>>(),
+        ))
+    }
+}
+
+fn parse_inner<L: LexAlloc, T, U: Factory<T>>(
+    next: u8,
+    lexer: &mut L,
+    factory: &U,
+) -> Result<T, hifijson::Error> {
+    Ok(match next {
+        b'n' if lexer.strip_prefix(b"null") => factory.null(),
+        b't' if lexer.strip_prefix(b"true") => factory.bool(true),
+        b'f' if lexer.strip_prefix(b"false") => factory.bool(false),
+        b'b' if lexer.strip_prefix(b"b\"") => factory.string(parse_string(lexer, true)?),
+        b'N' if lexer.strip_prefix(b"NaN") => factory.number(Num::Float(f64::NAN)),
+        b'I' if lexer.strip_prefix(b"Infinity") => factory.number(Num::Float(f64::INFINITY)),
+        b'0'..=b'9' | b'+' | b'-' => factory.number(parse_num(lexer)?),
+        b'"' => factory.string(parse_string(lexer.discarded(), false)?),
+        b'[' => factory.array({
+            let mut arr = Vec::new();
+            lexer.take_next(); // consume '['
+            let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+            if next != b']' {
+                loop {
+                    arr.push(parse_inner(next, lexer, factory)?);
+                    next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
+                    if next == b']' {
+                        lexer.take_next();
+                        break;
+                    }
+                    if next != b',' {
+                        return Err(Expect::CommaOrEnd.into());
+                    }
+                    lexer.take_next(); // consume ','
+                    next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+                    if next == b']' {
+                        lexer.take_next(); // trailing comma — accept
+                        break;
+                    }
+                }
+            } else {
+                lexer.take_next(); // consume ']'
+            }
+            arr.into()
+        }),
+        b'{' => factory.object({
+            let mut obj:Vec<(String, T)> = Vec::new();
+            lexer.take_next(); // consume '{'
+            let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+            if next != b'}' {
+                loop {
+                    if next != b'"' {
+                        return Err(Expect::Value.into());
+                    }
+                    let key_bytes = parse_string(lexer.discarded(), false)?;
+                    let key = String::from_utf8(key_bytes).map_err(|_| Expect::Value)?;
+                    lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
+                    let value = parse_inner(ws_tk(lexer).ok_or(Expect::Value)?, lexer, factory)?;
+                    obj.push((key, value));
+                    next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
+                    if next == b'}' {
+                        lexer.take_next();
+                        break;
+                    }
+                    if next != b',' {
+                        return Err(Expect::CommaOrEnd.into());
+                    }
+                    lexer.take_next(); // consume ','
+                    next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
+                    if next == b'}' {
+                        lexer.take_next(); // trailing comma — accept
+                        break;
+                    }
+                }
+            } else {
+                lexer.take_next(); // consume '}'
+            }
+            obj
+        }),
+        _ => Err(Expect::Value)?,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -92,7 +219,7 @@ mod tests {
     // ── helpers ───────────────────────────────────────────────────────────────
 
     fn parse(input: &str) -> Result<Val, Box<dyn std::error::Error>> {
-        parse_json(input.as_bytes())
+        parse_json(input.as_bytes(), JaqJsonFactory)
     }
 
     fn ok(input: &str) -> Val {
@@ -274,10 +401,7 @@ mod tests {
 
     #[test]
     fn block_comment_inside_object() {
-        assert_eq!(
-            ok(r#"{"a": /* comment */ 1}"#).to_string(),
-            r#"{"a":1}"#,
-        );
+        assert_eq!(ok(r#"{"a": /* comment */ 1}"#).to_string(), r#"{"a":1}"#,);
     }
 
     #[test]
@@ -339,75 +463,3 @@ mod tests {
         assert!(err.to_string().contains("byte offset"));
     }
 }
-
-fn parse_inner<L: LexAlloc>(next: u8, lexer: &mut L) -> Result<Val, hifijson::Error> {
-    Ok(match next {
-        b'n' if lexer.strip_prefix(b"null") => Val::Null,
-        b't' if lexer.strip_prefix(b"true") => Val::Bool(true),
-        b'f' if lexer.strip_prefix(b"false") => Val::Bool(false),
-        b'b' if lexer.strip_prefix(b"b\"") => Val::byte_str(parse_string(lexer, true)?),
-        b'N' if lexer.strip_prefix(b"NaN") => Val::Num(Num::Float(f64::NAN)),
-        b'I' if lexer.strip_prefix(b"Infinity") => Val::Num(Num::Float(f64::INFINITY)),
-        b'0'..=b'9' | b'+' | b'-' => Val::Num(parse_num(lexer)?),
-        b'"' => Val::utf8_str(parse_string(lexer.discarded(), false)?),
-        b'[' => Val::Arr({
-            let mut arr = Vec::new();
-            lexer.take_next(); // consume '['
-            let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-            if next != b']' {
-                loop {
-                    arr.push(parse_inner(next, lexer)?);
-                    next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
-                    if next == b']' {
-                        lexer.take_next();
-                        break;
-                    }
-                    if next != b',' {
-                        return Err(Expect::CommaOrEnd.into());
-                    }
-                    lexer.take_next(); // consume ','
-                    next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-                    if next == b']' {
-                        lexer.take_next(); // trailing comma — accept
-                        break;
-                    }
-                }
-            } else {
-                lexer.take_next(); // consume ']'
-            }
-            arr.into()
-        }),
-        b'{' => Val::obj({
-            let mut obj = Map::default();
-            lexer.take_next(); // consume '{'
-            let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-            if next != b'}' {
-                loop {
-                    let key = parse_inner(next, lexer)?;
-                    lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
-                    let value = parse_inner(ws_tk(lexer).ok_or(Expect::Value)?, lexer)?;
-                    obj.insert(key, value);
-                    next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
-                    if next == b'}' {
-                        lexer.take_next();
-                        break;
-                    }
-                    if next != b',' {
-                        return Err(Expect::CommaOrEnd.into());
-                    }
-                    lexer.take_next(); // consume ','
-                    next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-                    if next == b'}' {
-                        lexer.take_next(); // trailing comma — accept
-                        break;
-                    }
-                }
-            } else {
-                lexer.take_next(); // consume '}'
-            }
-            obj
-        }),
-        _ => Err(Expect::Value)?,
-    })
-}
-

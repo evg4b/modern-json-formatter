@@ -1,10 +1,10 @@
 use crate::convert::val_to_node;
 use crate::node::Node;
-use crate::parser::parse_json;
+use crate::parser::{parse_json, JaqJsonFactory};
 use std::error::Error;
 
 pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
-    parse_json(json.as_bytes()).map(val_to_node)
+    parse_json(json.as_bytes(), JaqJsonFactory).map(val_to_node)
 }
 
 #[cfg(test)]

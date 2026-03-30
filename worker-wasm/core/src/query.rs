@@ -3,7 +3,7 @@ use crate::node::Node;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
-use crate::parser::parse_json;
+use crate::parser::{parse_json, JaqJsonFactory};
 use std::error::Error;
 
 fn format_load_error(e: &load::Error<&str>) -> String {
@@ -40,7 +40,7 @@ fn format_load_error(e: &load::Error<&str>) -> String {
 }
 
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
-    let input = parse_json(json.as_bytes())?;
+    let input = parse_json(json.as_bytes(), JaqJsonFactory)?;
     let program = File {
         code: query,
         path: (),

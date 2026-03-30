@@ -1,7 +1,8 @@
 use std::error::Error;
+use crate::parser::JaqJsonFactory;
 
 pub fn minify_json(input: &str) -> Result<String, Box<dyn Error>> {
-    let val = crate::parser::parse_json(input.as_bytes())?;
+    let val = crate::parser::parse_json(input.as_bytes(), JaqJsonFactory)?;
     Ok(val.to_string())
 }
 

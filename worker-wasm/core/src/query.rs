@@ -1,5 +1,6 @@
 use crate::convert::val_to_node;
 use crate::node::Node;
+use crate::node_json_factory::NodeJsonFactory;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
@@ -84,7 +85,7 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
         }
     }
 
-    Ok(Node::tuple(items))
+    Ok(NodeJsonFactory::tuple(items))
 }
 
 #[cfg(test)]
@@ -105,12 +106,7 @@ mod tests {
     #[test]
     fn query_json_works() {
         let result = query_json(JSON, ".a").unwrap();
-        assert_eq!(
-            result,
-            Node::tuple(vec![
-                Node::number("1"),
-            ]),
-        );
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::number("1")]));
     }
 
     #[test]
@@ -124,12 +120,7 @@ mod tests {
         "#;
 
         let result = query_json(json, ".a").unwrap();
-        assert_eq!(
-            result,
-            Node::tuple(vec![
-                Node::number("1")
-            ]),
-        );
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::number("1")]));
     }
 
     #[test]
@@ -149,10 +140,7 @@ mod tests {
     #[test]
     fn query_json_with_empty_string() {
         let result = query_json("{}", ".[]").unwrap();
-        assert_eq!(
-            result,
-            Node::tuple(vec![])
-        );
+        assert_eq!(result, NodeJsonFactory::tuple(vec![]));
     }
 
     #[test]
@@ -172,37 +160,31 @@ mod tests {
     #[test]
     fn query_returns_null_value() {
         let result = query_json(r#"{"a": null}"#, ".a").unwrap();
-        assert_eq!(result, Node::tuple(vec![Node::Null]));
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::null()]));
     }
 
     #[test]
     fn query_returns_boolean_true() {
         let result = query_json(r#"{"flag": true}"#, ".flag").unwrap();
-        assert_eq!(result, Node::tuple(vec![Node::bool(true)]));
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::bool(true)]));
     }
 
     #[test]
     fn query_returns_boolean_false() {
         let result = query_json(r#"{"flag": false}"#, ".flag").unwrap();
-        assert_eq!(result, Node::tuple(vec![Node::bool(false)]));
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::bool(false)]));
     }
 
     #[test]
     fn query_returns_plain_string() {
         let result = query_json(r#"{"name": "alice"}"#, ".name").unwrap();
-        assert_eq!(result, Node::tuple(vec![Node::string("alice", None)]));
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::string("alice", None)]));
     }
 
     #[test]
     fn query_returns_string_with_url_variant() {
         let result = query_json(r#"{"link": "https://example.com"}"#, ".link").unwrap();
-        assert_eq!(
-            result,
-            Node::tuple(vec![Node::string(
-                "https://example.com",
-                Some(StringVariant::Url),
-            )]),
-        );
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::string("https://example.com", Some(StringVariant::Url))]));
     }
 
     #[test]
@@ -210,10 +192,7 @@ mod tests {
         let result = query_json(r#"{"email": "user@example.com"}"#, ".email").unwrap();
         assert_eq!(
             result,
-            Node::tuple(vec![Node::string(
-                "user@example.com",
-                Some(StringVariant::Email),
-            )]),
+            NodeJsonFactory::tuple(vec![NodeJsonFactory::string("user@example.com", Some(StringVariant::Email))]),
         );
     }
 
@@ -221,14 +200,14 @@ mod tests {
     fn query_returns_integer_from_arithmetic() {
         // Val::Int branch: integer arithmetic produces Val::Int
         let result = query_json("{}", "1 + 2").unwrap();
-        assert_eq!(result, Node::tuple(vec![Node::number("3")]));
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::number("3")]));
     }
 
     #[test]
     fn query_returns_float_literal() {
         // Val::Float branch: float literal in filter produces Val::Float
         let result = query_json("{}", "1.5").unwrap();
-        assert_eq!(result, Node::tuple(vec![Node::number("1.5")]));
+        assert_eq!(result, NodeJsonFactory::tuple(vec![NodeJsonFactory::number("1.5")]));
     }
 
     #[test]
@@ -236,9 +215,9 @@ mod tests {
         let result = query_json(r#"{"items": [1, 2]}"#, ".items").unwrap();
         assert_eq!(
             result,
-            Node::tuple(vec![Node::array(vec![
-                Node::number("1"),
-                Node::number("2"),
+            NodeJsonFactory::tuple(vec![NodeJsonFactory::array(vec![
+                NodeJsonFactory::number("1"),
+                NodeJsonFactory::number("2"),
             ])]),
         );
     }
@@ -248,10 +227,9 @@ mod tests {
         let result = query_json(r#"{"nested": {"x": 1}}"#, ".nested").unwrap();
         assert_eq!(
             result,
-            Node::tuple(vec![Node::object(vec![Node::property(
-                "x",
-                Node::number("1"),
-            )])]),
+            NodeJsonFactory::tuple(vec![NodeJsonFactory::object(vec![
+                NodeJsonFactory::property("x", NodeJsonFactory::number("1")),
+            ])]),
         );
     }
 
@@ -260,10 +238,10 @@ mod tests {
         let result = query_json(r#"[1, 2, 3]"#, ".[]").unwrap();
         assert_eq!(
             result,
-            Node::tuple(vec![
-                Node::number("1"),
-                Node::number("2"),
-                Node::number("3"),
+            NodeJsonFactory::tuple(vec![
+                NodeJsonFactory::number("1"),
+                NodeJsonFactory::number("2"),
+                NodeJsonFactory::number("3"),
             ]),
         );
     }

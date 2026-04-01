@@ -1,26 +1,24 @@
-use crate::node::{Node, Property};
+use crate::node::Node;
+use crate::node_json_factory::NodeJsonFactory;
 use crate::utils::determinate_variant;
 use jaq_json::Val;
 
 pub(crate) fn val_to_node(val: Val) -> Node {
     match val {
-        Val::Null => Node::Null,
-        Val::Bool(b) => Node::bool(b),
-        Val::Num(n) => Node::number(&n.to_string()),
+        Val::Null => NodeJsonFactory::null(),
+        Val::Bool(b) => NodeJsonFactory::bool(b),
+        Val::Num(n) => NodeJsonFactory::number(&n.to_string()),
         Val::TStr(b) | Val::BStr(b) => {
             let s = String::from_utf8_lossy(&b);
-            Node::string(s.as_ref(), determinate_variant(s.trim()))
+            NodeJsonFactory::string(&s, determinate_variant(s.trim()))
         }
-        Val::Arr(items) => Node::array(
+        Val::Arr(items) => NodeJsonFactory::array(
             items.iter().map(|i| val_to_node(i.clone())).collect(),
         ),
-        Val::Obj(entries) => Node::object(
+        Val::Obj(entries) => NodeJsonFactory::object(
             entries
                 .iter()
-                .map(|(k, v)| Property {
-                    key: val_key_to_str(k),
-                    value: val_to_node(v.clone()),
-                })
+                .map(|(k, v)| NodeJsonFactory::property(&val_key_to_str(k), val_to_node(v.clone())))
                 .collect(),
         ),
     }

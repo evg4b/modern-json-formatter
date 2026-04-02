@@ -1,11 +1,10 @@
-use json5::from_str;
-use serde_json::Value;
-use serde_json::to_string;
 use std::error::Error;
+use crate::jaq_json_factory::JaqJsonFactory;
+use crate::parser::parse_json;
 
 pub fn minify_json(input: &str) -> Result<String, Box<dyn Error>> {
-    let value = from_str::<Value>(input)?;
-    Ok(to_string(&value)?)
+    let val = parse_json(input.as_bytes(), JaqJsonFactory)?;
+    Ok(val.to_string())
 }
 
 #[cfg(test)]
@@ -68,15 +67,6 @@ mod tests {
     }
 
     #[test]
-    fn minifies_empty_json() {
-        let input = "{}";
-
-        let actual = minify_json(input).unwrap();
-
-        assert_eq!(actual, "{}");
-    }
-
-    #[test]
     fn fails_on_invalid_json() {
         let input = r#"
         {
@@ -85,8 +75,16 @@ mod tests {
         }
         "#;
 
-        let err = minify_json(input).unwrap_err();
-        assert_eq!(err.to_string(), "expected value at line 5 column 9");
+        assert!(minify_json(input).is_err());
+    }
+
+    #[test]
+    fn minifies_empty_json() {
+        let input = "{}";
+
+        let actual = minify_json(input).unwrap();
+
+        assert_eq!(actual, "{}");
     }
 
     #[test]
@@ -123,5 +121,18 @@ mod tests {
     #[test]
     fn minifies_float_number() {
         assert_eq!(minify_json("3.14").unwrap(), "3.14");
+    }
+
+    #[test]
+    fn minifies_string_escapes_special_chars() {
+        assert_eq!(minify_json(r#""a\nb\tc""#).unwrap(), r#""a\nb\tc""#);
+    }
+
+    #[test]
+    fn minifies_nested() {
+        assert_eq!(
+            minify_json(r#"{"x": [1, {"y": true}]}"#).unwrap(),
+            r#"{"x":[1,{"y":true}]}"#,
+        );
     }
 }

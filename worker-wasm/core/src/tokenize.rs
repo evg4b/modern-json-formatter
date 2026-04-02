@@ -1,5 +1,5 @@
 use crate::node::Node;
-use crate::parser::{parse_json};
+use crate::parser::parse_json;
 use std::error::Error;
 use crate::node_json_factory::NodeJsonFactory;
 
@@ -11,7 +11,6 @@ pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
 mod tests {
     use super::*;
     use crate::node::{Node, StringVariant};
-    use crate::node_json_factory::NodeJsonFactory;
     use crate::parser::Factory;
 
     #[test]

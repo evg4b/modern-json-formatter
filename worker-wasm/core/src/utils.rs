@@ -14,23 +14,25 @@ pub fn is_url(value: &str) -> bool {
 }
 
 fn is_email(value: &str) -> bool {
-    let at_pos = match value.find('@') {
-        Some(pos) => pos,
-        None => return false,
+    let Some((local, domain)) = value.split_once('@') else {
+        return false;
     };
-    if value[at_pos + 1..].contains('@') {
+    if local.is_empty() || domain.is_empty() || domain.contains('@') {
         return false;
     }
-    let local = &value[..at_pos];
-    let domain = &value[at_pos + 1..];
-    if local.is_empty() || domain.is_empty() {
-        return false;
+    domain
+        .rfind('.')
+        .is_some_and(|dot| dot > 0 && dot < domain.len() - 1)
+}
+
+pub fn determine_variant(string: &str) -> Option<StringVariant> {
+    if is_url(string) {
+        return Some(StringVariant::Url);
     }
-    if let Some(dot_pos) = domain.rfind('.') {
-        dot_pos > 0 && dot_pos < domain.len() - 1
-    } else {
-        false
+    if is_email(string) {
+        return Some(StringVariant::Email);
     }
+    None
 }
 
 #[cfg(test)]
@@ -83,49 +85,32 @@ mod tests_is_url {
     }
 }
 
-
-pub fn determinate_variant(string: &str) -> Option<StringVariant> {
-    if is_url(string) {
-        return Some(StringVariant::Url);
-    }
-
-    if is_email(string) {
-        return Some(StringVariant::Email);
-    }
-
-    None
-}
-
 #[cfg(test)]
-mod tests_determinate_variant {
+mod tests_determine_variant {
     use super::*;
 
     #[test]
     fn returns_url_variant_for_url() {
-        let actual = determinate_variant("https://example.com").unwrap();
-        assert_eq!(actual, StringVariant::Url);
+        assert_eq!(determine_variant("https://example.com"), Some(StringVariant::Url));
     }
 
     #[test]
     fn returns_email_variant_for_valid_email() {
-        let actual = determinate_variant("user@example.com").unwrap();
-        assert_eq!(actual, StringVariant::Email);
+        assert_eq!(determine_variant("user@example.com"), Some(StringVariant::Email));
     }
 
     #[test]
     fn returns_none_for_invalid_string() {
-        let actual = determinate_variant("not_a_url_or_email");
-        assert!(actual.is_none());
+        assert!(determine_variant("not_a_url_or_email").is_none());
     }
 
     #[test]
     fn returns_url_for_mailto_link() {
-        let actual = determinate_variant("mailto:user@example.com").unwrap();
-        assert_eq!(actual, StringVariant::Url);
+        assert_eq!(determine_variant("mailto:user@example.com"), Some(StringVariant::Url));
     }
 
     #[test]
     fn returns_none_for_empty_string() {
-        assert!(determinate_variant("").is_none());
+        assert!(determine_variant("").is_none());
     }
 }

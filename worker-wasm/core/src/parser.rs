@@ -23,6 +23,7 @@ pub trait Factory<T> {
     fn string(&self, s: Vec<u8>) -> T;
     fn array(&self, arr: Vec<T>) -> T;
     fn object(&self, obj: Vec<(String, T)>) -> T;
+    fn tuple(&self, items: Vec<T>) -> T;
 }
 
 pub fn parse_json<T, U: Factory<T>>(
@@ -190,9 +191,9 @@ fn parse_inner<L: LexAlloc, T, U: Factory<T>>(
 
 #[cfg(test)]
 mod tests {
-    use jaq_json::Val;
     use super::*;
     use crate::jaq_json_factory::JaqJsonFactory;
+    use jaq_json::Val;
 
     // ── helpers ───────────────────────────────────────────────────────────────
 

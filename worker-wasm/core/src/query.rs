@@ -1,10 +1,10 @@
 use crate::convert::val_to_node;
 use crate::node::Node;
-use crate::node_json_factory::{NodeFactory, NodeJsonFactory};
+use crate::node_json_factory::NodeJsonFactory;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
 use jaq_json::Val;
 use load::{Arena, File, Loader};
-use crate::parser::{parse_json};
+use crate::parser::{parse_json, Factory};
 use std::error::Error;
 use crate::jaq_json_factory::JaqJsonFactory;
 
@@ -74,7 +74,7 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
     let ctx = Ctx::<data::JustLut<Val>>::new(&filter.lut, Vars::new([]));
     let collection = filter.id.run((ctx, input));
 
-    let mut items: Vec<Node> = vec![];
+    let mut items: Vec<Node> = Vec::new();
 
     for item in collection {
         match unwrap_valr(item) {
@@ -91,7 +91,6 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::node_json_factory::NodeFactory;
     use crate::parser::Factory;
 
     const JSON: &str = r#"

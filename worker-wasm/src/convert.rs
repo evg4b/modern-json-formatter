@@ -2,7 +2,7 @@ use core::{Node, Property, StringVariant};
 use js_sys::{Array, Object, Reflect};
 use wasm_bindgen::{JsError, JsValue};
 
-pub fn node_to_jsvalue(node: Node) -> Result<JsValue, JsError> {
+pub fn node_to_js_value(node: Node) -> Result<JsValue, JsError> {
     let obj = Object::new();
     match node {
         Node::Null => {
@@ -49,7 +49,7 @@ fn variant_str(v: StringVariant) -> &'static str {
 fn nodes_to_jsarray(items: Vec<Node>) -> Result<JsValue, JsError> {
     let arr = Array::new();
     for item in items {
-        arr.push(&node_to_jsvalue(item)?);
+        arr.push(&node_to_js_value(item)?);
     }
     Ok(arr.into())
 }
@@ -59,7 +59,7 @@ fn properties_to_jsarray(properties: Vec<Property>) -> Result<JsValue, JsError> 
     for prop in properties {
         let obj = Object::new();
         set_str(&obj, "key", &prop.key)?;
-        set_val(&obj, "value", node_to_jsvalue(prop.value)?)?;
+        set_val(&obj, "value", node_to_js_value(prop.value)?)?;
         arr.push(&obj);
     }
     Ok(arr.into())

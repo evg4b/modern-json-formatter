@@ -1,19 +1,9 @@
 use jaq_json::Num;
 use crate::{Node, Property};
 use crate::parser::Factory;
-use crate::utils::determinate_variant;
+use crate::utils::determine_variant;
 
 pub struct NodeJsonFactory;
-
-pub trait NodeFactory: Factory<Node> {
-    fn tuple(&self, items: Vec<Node>) -> Node;
-}
-
-impl NodeFactory for NodeJsonFactory {
-    fn tuple(&self, items: Vec<Node>) -> Node {
-        Node::Tuple { items }
-    }
-}
 
 impl Factory<Node> for NodeJsonFactory {
     fn null(&self) -> Node {
@@ -32,7 +22,7 @@ impl Factory<Node> for NodeJsonFactory {
         let string = String::from_utf8_lossy(&s);
         Node::String {
             value: string.to_string(),
-            variant: determinate_variant(string.trim()),
+            variant: determine_variant(string.trim()),
         }
     }
 
@@ -46,5 +36,9 @@ impl Factory<Node> for NodeJsonFactory {
                 .map(|(k, v)| Property { key: k, value: v })
                 .collect(),
         }
+    }
+
+    fn tuple(&self, items: Vec<Node>) -> Node {
+        Node::Tuple { items }
     }
 }

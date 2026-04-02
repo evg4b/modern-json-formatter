@@ -1,17 +1,18 @@
 use jaq_json::write::{write as jaq_write, Pp};
 use std::error::Error;
 use crate::jaq_json_factory::JaqJsonFactory;
+use crate::parser::parse_json;
 
 pub fn format_json(input: &str) -> Result<String, Box<dyn Error>> {
-    let val = crate::parser::parse_json(input.as_bytes(), JaqJsonFactory)?;
+    let val = parse_json(input.as_bytes(), JaqJsonFactory)?;
     let pp = Pp {
         indent: Some("  ".to_string()),
         sep_space: true,
         ..Pp::default()
     };
-    let mut buf = Vec::<u8>::new();
+    let mut buf: Vec<u8> = Vec::new();
     jaq_write(&mut buf, &pp, 0, &val)?;
-    Ok(String::from_utf8_lossy(&buf).into_owned())
+    Ok(String::from_utf8(buf)?)
 }
 
 #[cfg(test)]

@@ -90,6 +90,7 @@ export default [
     ignores: [
       'dist/',
       'worker-wasm/pkg/',
+      'worker-wasm/core/target/',
     ],
   },
 ];

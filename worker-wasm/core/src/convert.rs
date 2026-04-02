@@ -1,24 +1,20 @@
 use crate::node::Node;
-use crate::node_json_factory::NodeJsonFactory;
-use crate::utils::determinate_variant;
+use crate::parser::Factory;
 use jaq_json::Val;
 
-pub(crate) fn val_to_node(val: Val) -> Node {
+pub(crate) fn val_to_node(val: Val, factory: &impl Factory<Node>) -> Node {
     match val {
-        Val::Null => NodeJsonFactory::null(),
-        Val::Bool(b) => NodeJsonFactory::bool(b),
-        Val::Num(n) => NodeJsonFactory::number(&n.to_string()),
-        Val::TStr(b) | Val::BStr(b) => {
-            let s = String::from_utf8_lossy(&b);
-            NodeJsonFactory::string(&s, determinate_variant(s.trim()))
-        }
-        Val::Arr(items) => NodeJsonFactory::array(
-            items.iter().map(|i| val_to_node(i.clone())).collect(),
+        Val::Null => factory.null(),
+        Val::Bool(b) => factory.bool(b),
+        Val::Num(n) => factory.number(n),
+        Val::TStr(b) | Val::BStr(b) => factory.string(b.to_vec()),
+        Val::Arr(items) => factory.array(
+            items.iter().map(|i| val_to_node(i.clone(), factory)).collect(),
         ),
-        Val::Obj(entries) => NodeJsonFactory::object(
+        Val::Obj(entries) => factory.object(
             entries
                 .iter()
-                .map(|(k, v)| NodeJsonFactory::property(&val_key_to_str(k), val_to_node(v.clone())))
+                .map(|(k, v)| (val_key_to_str(k), val_to_node(v.clone(), factory)))
                 .collect(),
         ),
     }

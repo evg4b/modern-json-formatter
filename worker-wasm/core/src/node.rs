@@ -38,19 +38,20 @@ pub enum Node {
 mod tests {
     use super::*;
     use crate::node_json_factory::NodeJsonFactory;
+    use crate::parser::{parse_json, Factory};
 
     #[test]
     fn node_implements_clone() {
-        let original = NodeJsonFactory::object(vec![
-            NodeJsonFactory::property("x", NodeJsonFactory::number("1")),
+        let original = NodeJsonFactory.object(vec![
+            ("x".to_string(), parse_json(b"1", NodeJsonFactory).unwrap()),
         ]);
         assert_eq!(original.clone(), original);
     }
 
     #[test]
     fn property_implements_clone() {
-        let prop = NodeJsonFactory::property("key", NodeJsonFactory::bool(true));
-        assert_eq!(prop.clone(), prop);
+        let obj = NodeJsonFactory.object(vec![("key".to_string(), NodeJsonFactory.bool(true))]);
+        assert_eq!(obj.clone(), obj);
     }
 
     #[test]

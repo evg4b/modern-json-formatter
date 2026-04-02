@@ -1,0 +1,1323 @@
+{
+  "basic_filters": [
+    {
+      "section": "Identity: `.`",
+      "query": ".",
+      "input": "\"Hello, world!\"",
+      "outputs": ["\"Hello, world!\""]
+    },
+    {
+      "section": "Identity: `.`",
+      "query": ".",
+      "input": "0.12345678901234567890123456789",
+      "outputs": ["0.12345678901234567890123456789"]
+    },
+    {
+      "section": "Identity: `.`",
+      "query": "[., tojson]",
+      "input": "12345678909876543212345",
+      "outputs": ["[12345678909876543212345,\"12345678909876543212345\"]"]
+    },
+    {
+      "section": "Identity: `.`",
+      "query": ". < 0.12345678901234567890123456788",
+      "input": "0.12345678901234567890123456789",
+      "outputs": ["false"]
+    },
+    {
+      "section": "Identity: `.`",
+      "query": "map([., . == 1]) | tojson",
+      "input": "[1, 1.000, 1.0, 100e-2]",
+      "outputs": ["\"[[1,true],[1.000,true],[1.0,true],[1.00,true]]\""]
+    },
+    {
+      "section": "Identity: `.`",
+      "query": ". as $big | [$big, $big + 1] | map(. > 10000000000000000000000000000000)",
+      "input": "10000000000000000000000000000001",
+      "outputs": ["[true, false]"]
+    }
+  ],
+  "types_and_values": [
+    {
+      "section": "Array construction: `[]`",
+      "query": "[.user, .projects[]]",
+      "input": "{\"user\":\"stedolan\", \"projects\": [\"jq\", \"wikiflow\"]}",
+      "outputs": ["[\"stedolan\", \"jq\", \"wikiflow\"]"]
+    },
+    {
+      "section": "Array construction: `[]`",
+      "query": "[ .[] | . * 2]",
+      "input": "[1, 2, 3]",
+      "outputs": ["[2, 4, 6]"]
+    },
+    {
+      "section": "Object construction: `{}`",
+      "query": "{user, title: .titles[]}",
+      "input": "{\"user\":\"stedolan\",\"titles\":[\"JQ Primer\", \"More JQ\"]}",
+      "outputs": [
+        "{\"user\":\"stedolan\", \"title\": \"JQ Primer\"}",
+        "{\"user\":\"stedolan\", \"title\": \"More JQ\"}"
+      ]
+    },
+    {
+      "section": "Object construction: `{}`",
+      "query": "{(.user): .titles}",
+      "input": "{\"user\":\"stedolan\",\"titles\":[\"JQ Primer\", \"More JQ\"]}",
+      "outputs": ["{\"stedolan\": [\"JQ Primer\", \"More JQ\"]}"]
+    },
+    {
+      "section": "Recursive Descent: `..`",
+      "query": ".. | .a?",
+      "input": "[[{\"a\":1}]]",
+      "outputs": ["1"]
+    }
+  ],
+  "assignment": [
+    {
+      "section": "Update-assignment: `|=`",
+      "query": "(..|select(type==\"boolean\")) |= if . then 1 else 0 end",
+      "input": "[true,false,[5,true,[true,[false]],false]]",
+      "outputs": ["[1,0,[5,1,[1,[0]],0]]"]
+    },
+    {
+      "section": "Arithmetic update-assignment: `+=`, `-=`, `*=`, `/=`, `%=`, `//=`",
+      "query": ".foo += 1",
+      "input": "{\"foo\": 42}",
+      "outputs": ["{\"foo\": 43}"]
+    },
+    {
+      "section": "Plain assignment: `=`",
+      "query": ".a = .b",
+      "input": "{\"a\": {\"b\": 10}, \"b\": 20}",
+      "outputs": ["{\"a\":20,\"b\":20}"]
+    },
+    {
+      "section": "Plain assignment: `=`",
+      "query": ".a |= .b",
+      "input": "{\"a\": {\"b\": 10}, \"b\": 20}",
+      "outputs": ["{\"a\":10,\"b\":20}"]
+    },
+    {
+      "section": "Plain assignment: `=`",
+      "query": "(.a, .b) = range(3)",
+      "input": "null",
+      "outputs": [
+        "{\"a\":0,\"b\":0}",
+        "{\"a\":1,\"b\":1}",
+        "{\"a\":2,\"b\":2}"
+      ]
+    },
+    {
+      "section": "Plain assignment: `=`",
+      "query": "(.a, .b) |= range(3)",
+      "input": "null",
+      "outputs": ["{\"a\":0,\"b\":0}"]
+    }
+  ],
+  "advanced_features": [
+    {
+      "section": "Variable / Symbolic Binding Operator",
+      "query": ".bar as $x | .foo | . + $x",
+      "input": "{\"foo\":10, \"bar\":200}",
+      "outputs": ["210"]
+    },
+    {
+      "section": "Variable / Symbolic Binding Operator",
+      "query": ". as $i|[(.*2|. as $i| $i), $i]",
+      "input": "5",
+      "outputs": ["[10,5]"]
+    },
+    {
+      "section": "Variable / Symbolic Binding Operator",
+      "query": ". as [$a, $b, {c: $c}] | $a + $b + $c",
+      "input": "[2, 3, {\"c\": 4, \"d\": 5}]",
+      "outputs": ["9"]
+    },
+    {
+      "section": "Variable / Symbolic Binding Operator",
+      "query": ".[] as [$a, $b] | {a: $a, b: $b}",
+      "input": "[[0], [0, 1], [2, 1, 0]]",
+      "outputs": [
+        "{\"a\":0,\"b\":null}",
+        "{\"a\":0,\"b\":1}",
+        "{\"a\":2,\"b\":1}"
+      ]
+    },
+    {
+      "section": "Destructuring Alternative Operator: `?//`",
+      "query": ".[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} | {$a, $b, $d, $e}",
+      "input": "[{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]",
+      "outputs": [
+        "{\"a\":1,\"b\":2,\"d\":3,\"e\":4}",
+        "{\"a\":1,\"b\":2,\"d\":3,\"e\":4}"
+      ]
+    },
+    {
+      "section": "Destructuring Alternative Operator: `?//`",
+      "query": ".[] as {$a, $b, c: {$d}} ?// {$a, $b, c: [{$e}]} | {$a, $b, $d, $e}",
+      "input": "[{\"a\": 1, \"b\": 2, \"c\": {\"d\": 3, \"e\": 4}}, {\"a\": 1, \"b\": 2, \"c\": [{\"d\": 3, \"e\": 4}]}]",
+      "outputs": [
+        "{\"a\":1,\"b\":2,\"d\":3,\"e\":null}",
+        "{\"a\":1,\"b\":2,\"d\":null,\"e\":4}"
+      ]
+    },
+    {
+      "section": "Destructuring Alternative Operator: `?//`",
+      "query": ".[] as [$a] ?// [$b] | if $a != null then error(\"err: \\($a)\") else {$a,$b} end",
+      "input": "[[3]]",
+      "outputs": ["{\"a\":null,\"b\":3}"]
+    },
+    {
+      "section": "Defining Functions",
+      "query": "def addvalue(f): . + [f]; map(addvalue(.[0]))",
+      "input": "[[1,2],[10,20]]",
+      "outputs": ["[[1,2,1], [10,20,10]]"]
+    },
+    {
+      "section": "Defining Functions",
+      "query": "def addvalue(f): f as $x | map(. + $x); addvalue(.[0])",
+      "input": "[[1,2],[10,20]]",
+      "outputs": ["[[1,2,1,2], [10,20,1,2]]"]
+    },
+    {
+      "section": "`isempty(exp)`",
+      "query": "isempty(empty)",
+      "input": "null",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`isempty(exp)`",
+      "query": "isempty(.[])",
+      "input": "[]",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`isempty(exp)`",
+      "query": "isempty(.[])",
+      "input": "[1,2,3]",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`limit(n; exp)`",
+      "query": "[limit(3;.[])]",
+      "input": "[0,1,2,3,4,5,6,7,8,9]",
+      "outputs": ["[0,1,2]"]
+    },
+    {
+      "section": "`first(expr)`, `last(expr)`, `nth(n; expr)`",
+      "query": "[first(range(.)), last(range(.)), nth(./2; range(.))]",
+      "input": "10",
+      "outputs": ["[0,9,5]"]
+    },
+    {
+      "section": "`first`, `last`, `nth(n)`",
+      "query": "[range(.)]|[first, last, nth(5)]",
+      "input": "10",
+      "outputs": ["[0,9,5]"]
+    },
+    {
+      "section": "`reduce`",
+      "query": "reduce .[] as $item (0; . + $item)",
+      "input": "[1,2,3,4,5]",
+      "outputs": ["15"]
+    },
+    {
+      "section": "`reduce`",
+      "query": "reduce .[] as [$i,$j] (0; . + $i * $j)",
+      "input": "[[1,2],[3,4],[5,6]]",
+      "outputs": ["44"]
+    },
+    {
+      "section": "`reduce`",
+      "query": "reduce .[] as {$x,$y} (null; .x += $x | .y += [$y])",
+      "input": "[{\"x\":\"a\",\"y\":1},{\"x\":\"b\",\"y\":2},{\"x\":\"c\",\"y\":3}]",
+      "outputs": ["{\"x\":\"abc\",\"y\":[1,2,3]}"]
+    },
+    {
+      "section": "`foreach`",
+      "query": "foreach .[] as $item (0; . + $item)",
+      "input": "[1,2,3,4,5]",
+      "outputs": ["1", "3", "6", "10", "15"]
+    },
+    {
+      "section": "`foreach`",
+      "query": "foreach .[] as $item (0; . + $item; [$item, . * 2])",
+      "input": "[1,2,3,4,5]",
+      "outputs": ["[1,2]", "[2,6]", "[3,12]", "[4,20]", "[5,30]"]
+    },
+    {
+      "section": "`foreach`",
+      "query": "foreach .[] as $item (0; . + 1; {index: ., $item})",
+      "input": "[\"foo\", \"bar\", \"baz\"]",
+      "outputs": [
+        "{\"index\":1,\"item\":\"foo\"}",
+        "{\"index\":2,\"item\":\"bar\"}",
+        "{\"index\":3,\"item\":\"baz\"}"
+      ]
+    },
+    {
+      "section": "Generators and iterators",
+      "query": "def range(init; upto; by): def _range: if (by > 0 and . < upto) or (by < 0 and . > upto) then ., ((.+by)|_range) else . end; if by == 0 then init else init|_range end | select((by > 0 and . < upto) or (by < 0 and . > upto)); range(0; 10; 3)",
+      "input": "null",
+      "outputs": ["0", "3", "6", "9"]
+    },
+    {
+      "section": "Generators and iterators",
+      "query": "def while(cond; update): def _while: if cond then ., (update | _while) else empty end; _while; [while(.<100; .*2)]",
+      "input": "1",
+      "outputs": ["[1,2,4,8,16,32,64]"]
+    }
+  ],
+  "builtin_operators_and_functions": [
+    {
+      "section": "Addition: `+`",
+      "query": ".a + 1",
+      "input": "{\"a\": 7}",
+      "outputs": ["8"]
+    },
+    {
+      "section": "Addition: `+`",
+      "query": ".a + .b",
+      "input": "{\"a\": [1,2], \"b\": [3,4]}",
+      "outputs": ["[1,2,3,4]"]
+    },
+    {
+      "section": "Addition: `+`",
+      "query": ".a + null",
+      "input": "{\"a\": 1}",
+      "outputs": ["1"]
+    },
+    {
+      "section": "Addition: `+`",
+      "query": ".a + 1",
+      "input": "{}",
+      "outputs": ["1"]
+    },
+    {
+      "section": "Addition: `+`",
+      "query": "{a: 1} + {b: 2} + {c: 3} + {a: 42}",
+      "input": "null",
+      "outputs": ["{\"a\": 42, \"b\": 2, \"c\": 3}"]
+    },
+    {
+      "section": "Subtraction: `-`",
+      "query": "4 - .a",
+      "input": "{\"a\":3}",
+      "outputs": ["1"]
+    },
+    {
+      "section": "Subtraction: `-`",
+      "query": ". - [\"xml\", \"yaml\"]",
+      "input": "[\"xml\", \"yaml\", \"json\"]",
+      "outputs": ["[\"json\"]"]
+    },
+    {
+      "section": "Multiplication, division, modulo: `*`, `/`, `%`",
+      "query": "10 / . * 3",
+      "input": "5",
+      "outputs": ["6"]
+    },
+    {
+      "section": "Multiplication, division, modulo: `*`, `/`, `%`",
+      "query": ". / \", \"",
+      "input": "\"a, b,c,d, e\"",
+      "outputs": ["[\"a\",\"b,c,d\",\"e\"]"]
+    },
+    {
+      "section": "Multiplication, division, modulo: `*`, `/`, `%`",
+      "query": "{\"k\": {\"a\": 1, \"b\": 2}} * {\"k\": {\"a\": 0,\"c\": 3}}",
+      "input": "null",
+      "outputs": ["{\"k\": {\"a\": 0, \"b\": 2, \"c\": 3}}"]
+    },
+    {
+      "section": "Multiplication, division, modulo: `*`, `/`, `%`",
+      "query": ".[] | (1 / .)?",
+      "input": "[1,0,-1]",
+      "outputs": ["1", "-1"]
+    },
+    {
+      "section": "`abs`",
+      "query": "map(abs)",
+      "input": "[-10, -1.1, -1e-1]",
+      "outputs": ["[10,1.1,1e-1]"]
+    },
+    {
+      "section": "`length`",
+      "query": ".[] | length",
+      "input": "[[1,2], \"string\", {\"a\":2}, null, -5]",
+      "outputs": ["2", "6", "1", "0", "5"]
+    },
+    {
+      "section": "`utf8bytelength`",
+      "query": "utf8bytelength",
+      "input": "\"\\u03bc\"",
+      "outputs": ["2"]
+    },
+    {
+      "section": "`keys`, `keys_unsorted`",
+      "query": "keys",
+      "input": "{\"abc\": 1, \"abcd\": 2, \"Foo\": 3}",
+      "outputs": ["[\"Foo\", \"abc\", \"abcd\"]"]
+    },
+    {
+      "section": "`keys`, `keys_unsorted`",
+      "query": "keys",
+      "input": "[42,3,35]",
+      "outputs": ["[0,1,2]"]
+    },
+    {
+      "section": "`has(key)`",
+      "query": "map(has(\"foo\"))",
+      "input": "[{\"foo\": 42}, {}]",
+      "outputs": ["[true, false]"]
+    },
+    {
+      "section": "`has(key)`",
+      "query": "map(has(2))",
+      "input": "[[0,1], [\"a\",\"b\",\"c\"]]",
+      "outputs": ["[false, true]"]
+    },
+    {
+      "section": "`in`",
+      "query": ".[] | in({\"foo\": 42})",
+      "input": "[\"foo\", \"bar\"]",
+      "outputs": ["true", "false"]
+    },
+    {
+      "section": "`in`",
+      "query": "map(in([0,1]))",
+      "input": "[2, 0]",
+      "outputs": ["[false, true]"]
+    },
+    {
+      "section": "`map(f)`, `map_values(f)`",
+      "query": "map(.+1)",
+      "input": "[1,2,3]",
+      "outputs": ["[2,3,4]"]
+    },
+    {
+      "section": "`map(f)`, `map_values(f)`",
+      "query": "map_values(.+1)",
+      "input": "{\"a\": 1, \"b\": 2, \"c\": 3}",
+      "outputs": ["{\"a\": 2, \"b\": 3, \"c\": 4}"]
+    },
+    {
+      "section": "`map(f)`, `map_values(f)`",
+      "query": "map(., .)",
+      "input": "[1,2]",
+      "outputs": ["[1,1,2,2]"]
+    },
+    {
+      "section": "`map(f)`, `map_values(f)`",
+      "query": "map_values(. // empty)",
+      "input": "{\"a\": null, \"b\": true, \"c\": false}",
+      "outputs": ["{\"b\":true}"]
+    },
+    {
+      "section": "`pick(pathexps)`",
+      "query": "pick(.a, .b.c, .x)",
+      "input": "{\"a\": 1, \"b\": {\"c\": 2, \"d\": 3}, \"e\": 4}",
+      "outputs": ["{\"a\":1,\"b\":{\"c\":2},\"x\":null}"]
+    },
+    {
+      "section": "`pick(pathexps)`",
+      "query": "pick(.[2], .[0], .[0])",
+      "input": "[1,2,3,4]",
+      "outputs": ["[1,null,3]"]
+    },
+    {
+      "section": "`path(path_expression)`",
+      "query": "path(.a[0].b)",
+      "input": "null",
+      "outputs": ["[\"a\",0,\"b\"]"]
+    },
+    {
+      "section": "`path(path_expression)`",
+      "query": "[path(..)]",
+      "input": "{\"a\":[{\"b\":1}]}",
+      "outputs": ["[[],[\"a\"],[\"a\",0],[\"a\",0,\"b\"]]"]
+    },
+    {
+      "section": "`del(path_expression)`",
+      "query": "del(.foo)",
+      "input": "{\"foo\": 42, \"bar\": 9001, \"baz\": 42}",
+      "outputs": ["{\"bar\": 9001, \"baz\": 42}"]
+    },
+    {
+      "section": "`del(path_expression)`",
+      "query": "del(.[1, 2])",
+      "input": "[\"foo\", \"bar\", \"baz\"]",
+      "outputs": ["[\"foo\"]"]
+    },
+    {
+      "section": "`getpath(PATHS)`",
+      "query": "getpath([\"a\",\"b\"])",
+      "input": "null",
+      "outputs": ["null"]
+    },
+    {
+      "section": "`getpath(PATHS)`",
+      "query": "[getpath([\"a\",\"b\"], [\"a\",\"c\"])]",
+      "input": "{\"a\":{\"b\":0, \"c\":1}}",
+      "outputs": ["[0, 1]"]
+    },
+    {
+      "section": "`setpath(PATHS; VALUE)`",
+      "query": "setpath([\"a\",\"b\"]; 1)",
+      "input": "null",
+      "outputs": ["{\"a\": {\"b\": 1}}"]
+    },
+    {
+      "section": "`setpath(PATHS; VALUE)`",
+      "query": "setpath([\"a\",\"b\"]; 1)",
+      "input": "{\"a\":{\"b\":0}}",
+      "outputs": ["{\"a\": {\"b\": 1}}"]
+    },
+    {
+      "section": "`setpath(PATHS; VALUE)`",
+      "query": "setpath([0,\"a\"]; 1)",
+      "input": "null",
+      "outputs": ["[{\"a\":1}]"]
+    },
+    {
+      "section": "`delpaths(PATHS)`",
+      "query": "delpaths([[\"a\",\"b\"]])",
+      "input": "{\"a\":{\"b\":1},\"x\":{\"y\":2}}",
+      "outputs": ["{\"a\":{},\"x\":{\"y\":2}}"]
+    },
+    {
+      "section": "`to_entries`, `from_entries`, `with_entries(f)`",
+      "query": "to_entries",
+      "input": "{\"a\": 1, \"b\": 2}",
+      "outputs": ["[{\"key\":\"a\", \"value\":1}, {\"key\":\"b\", \"value\":2}]"]
+    },
+    {
+      "section": "`to_entries`, `from_entries`, `with_entries(f)`",
+      "query": "from_entries",
+      "input": "[{\"key\":\"a\", \"value\":1}, {\"key\":\"b\", \"value\":2}]",
+      "outputs": ["{\"a\": 1, \"b\": 2}"]
+    },
+    {
+      "section": "`to_entries`, `from_entries`, `with_entries(f)`",
+      "query": "with_entries(.key |= \"KEY_\" + .)",
+      "input": "{\"a\": 1, \"b\": 2}",
+      "outputs": ["{\"KEY_a\": 1, \"KEY_b\": 2}"]
+    },
+    {
+      "section": "`select(boolean_expression)`",
+      "query": "map(select(. >= 2))",
+      "input": "[1,5,3,0,7]",
+      "outputs": ["[5,3,7]"]
+    },
+    {
+      "section": "`select(boolean_expression)`",
+      "query": ".[] | select(.id == \"second\")",
+      "input": "[{\"id\": \"first\", \"val\": 1}, {\"id\": \"second\", \"val\": 2}]",
+      "outputs": ["{\"id\": \"second\", \"val\": 2}"]
+    },
+    {
+      "section": "`arrays`, `objects`, `iterables`, `booleans`, `numbers`, `normals`, `finites`, `strings`, `nulls`, `values`, `scalars`",
+      "query": ".[]|numbers",
+      "input": "[[],{},1,\"foo\",null,true,false]",
+      "outputs": ["1"]
+    },
+    {
+      "section": "`empty`",
+      "query": "1, empty, 2",
+      "input": "null",
+      "outputs": ["1", "2"]
+    },
+    {
+      "section": "`empty`",
+      "query": "[1,2,empty,3]",
+      "input": "null",
+      "outputs": ["[1,2,3]"]
+    },
+    {
+      "section": "`error`, `error(message)`",
+      "query": "try error catch .",
+      "input": "\"error message\"",
+      "outputs": ["\"error message\""]
+    },
+    {
+      "section": "`error`, `error(message)`",
+      "query": "try error(\"invalid value: \\(.)\") catch .",
+      "input": "42",
+      "outputs": ["\"invalid value: 42\""]
+    },
+    {
+      "section": "`paths`, `paths(node_filter)`",
+      "query": "[paths]",
+      "input": "[1,[[],{\"a\":2}]]",
+      "outputs": ["[[0],[1],[1,0],[1,1],[1,1,\"a\"]]"]
+    },
+    {
+      "section": "`paths`, `paths(node_filter)`",
+      "query": "[paths(type == \"number\")]",
+      "input": "[1,[[],{\"a\":2}]]",
+      "outputs": ["[[0],[1,1,\"a\"]]"]
+    },
+    {
+      "section": "`add`",
+      "query": "add",
+      "input": "[\"a\",\"b\",\"c\"]",
+      "outputs": ["\"abc\""]
+    },
+    {
+      "section": "`add`",
+      "query": "add",
+      "input": "[1, 2, 3]",
+      "outputs": ["6"]
+    },
+    {
+      "section": "`add`",
+      "query": "add",
+      "input": "[]",
+      "outputs": ["null"]
+    },
+    {
+      "section": "`any`, `any(condition)`, `any(generator; condition)`",
+      "query": "any",
+      "input": "[true, false]",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`any`, `any(condition)`, `any(generator; condition)`",
+      "query": "any",
+      "input": "[false, false]",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`any`, `any(condition)`, `any(generator; condition)`",
+      "query": "any",
+      "input": "[]",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`all`, `all(condition)`, `all(generator; condition)`",
+      "query": "all",
+      "input": "[true, false]",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`all`, `all(condition)`, `all(generator; condition)`",
+      "query": "all",
+      "input": "[true, true]",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`all`, `all(condition)`, `all(generator; condition)`",
+      "query": "all",
+      "input": "[]",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`flatten`, `flatten(depth)`",
+      "query": "flatten",
+      "input": "[1, [2], [[3]]]",
+      "outputs": ["[1, 2, 3]"]
+    },
+    {
+      "section": "`flatten`, `flatten(depth)`",
+      "query": "flatten(1)",
+      "input": "[1, [2], [[3]]]",
+      "outputs": ["[1, 2, [3]]"]
+    },
+    {
+      "section": "`flatten`, `flatten(depth)`",
+      "query": "flatten",
+      "input": "[[]]",
+      "outputs": ["[]"]
+    },
+    {
+      "section": "`flatten`, `flatten(depth)`",
+      "query": "flatten",
+      "input": "[{\"foo\": \"bar\"}, [{\"foo\": \"baz\"}]]",
+      "outputs": ["[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}]"]
+    },
+    {
+      "section": "`range(upto)`, `range(from; upto)`, `range(from; upto; by)`",
+      "query": "range(2; 4)",
+      "input": "null",
+      "outputs": ["2", "3"]
+    },
+    {
+      "section": "`range(upto)`, `range(from; upto)`, `range(from; upto; by)`",
+      "query": "[range(2; 4)]",
+      "input": "null",
+      "outputs": ["[2,3]"]
+    },
+    {
+      "section": "`range(upto)`, `range(from; upto)`, `range(from; upto; by)`",
+      "query": "[range(4)]",
+      "input": "null",
+      "outputs": ["[0,1,2,3]"]
+    },
+    {
+      "section": "`range(upto)`, `range(from; upto)`, `range(from; upto; by)`",
+      "query": "[range(0; 10; 3)]",
+      "input": "null",
+      "outputs": ["[0,3,6,9]"]
+    },
+    {
+      "section": "`range(upto)`, `range(from; upto)`, `range(from; upto; by)`",
+      "query": "[range(0; 10; -1)]",
+      "input": "null",
+      "outputs": ["[]"]
+    },
+    {
+      "section": "`range(upto)`, `range(from; upto)`, `range(from; upto; by)`",
+      "query": "[range(0; -5; -1)]",
+      "input": "null",
+      "outputs": ["[0,-1,-2,-3,-4]"]
+    },
+    {
+      "section": "`floor`",
+      "query": "floor",
+      "input": "3.14159",
+      "outputs": ["3"]
+    },
+    {
+      "section": "`sqrt`",
+      "query": "sqrt",
+      "input": "9",
+      "outputs": ["3"]
+    },
+    {
+      "section": "`tonumber`",
+      "query": ".[] | tonumber",
+      "input": "[1, \"1\"]",
+      "outputs": ["1", "1"]
+    },
+    {
+      "section": "`tostring`",
+      "query": ".[] | tostring",
+      "input": "[1, \"1\", [1]]",
+      "outputs": ["\"1\"", "\"1\"", "\"[1]\""]
+    },
+    {
+      "section": "`type`",
+      "query": "map(type)",
+      "input": "[0, false, [], {}, null, \"hello\"]",
+      "outputs": ["[\"number\", \"boolean\", \"array\", \"object\", \"null\", \"string\"]"]
+    },
+    {
+      "section": "`infinite`, `nan`, `isinfinite`, `isnan`, `isfinite`, `isnormal`",
+      "query": ".[] | (infinite * .) < 0",
+      "input": "[-1, 1]",
+      "outputs": ["true", "false"]
+    },
+    {
+      "section": "`infinite`, `nan`, `isinfinite`, `isnan`, `isfinite`, `isnormal`",
+      "query": "infinite, nan | type",
+      "input": "null",
+      "outputs": ["\"number\"", "\"number\""]
+    },
+    {
+      "section": "`sort`, `sort_by(path_expression)`",
+      "query": "sort",
+      "input": "[8,3,null,6]",
+      "outputs": ["[null,3,6,8]"]
+    },
+    {
+      "section": "`sort`, `sort_by(path_expression)`",
+      "query": "sort_by(.foo)",
+      "input": "[{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":10}, {\"foo\":2, \"bar\":1}]",
+      "outputs": ["[{\"foo\":2, \"bar\":1}, {\"foo\":3, \"bar\":10}, {\"foo\":4, \"bar\":10}]"]
+    },
+    {
+      "section": "`sort`, `sort_by(path_expression)`",
+      "query": "sort_by(.foo, .bar)",
+      "input": "[{\"foo\":4, \"bar\":10}, {\"foo\":3, \"bar\":20}, {\"foo\":2, \"bar\":1}, {\"foo\":3, \"bar\":10}]",
+      "outputs": ["[{\"foo\":2, \"bar\":1}, {\"foo\":3, \"bar\":10}, {\"foo\":3, \"bar\":20}, {\"foo\":4, \"bar\":10}]"]
+    },
+    {
+      "section": "`group_by(path_expression)`",
+      "query": "group_by(.foo)",
+      "input": "[{\"foo\":1, \"bar\":10}, {\"foo\":3, \"bar\":100}, {\"foo\":1, \"bar\":1}]",
+      "outputs": ["[[{\"foo\":1, \"bar\":10}, {\"foo\":1, \"bar\":1}], [{\"foo\":3, \"bar\":100}]]"]
+    },
+    {
+      "section": "`min`, `max`, `min_by(path_exp)`, `max_by(path_exp)`",
+      "query": "min",
+      "input": "[5,4,2,7]",
+      "outputs": ["2"]
+    },
+    {
+      "section": "`min`, `max`, `min_by(path_exp)`, `max_by(path_exp)`",
+      "query": "max_by(.foo)",
+      "input": "[{\"foo\":1, \"bar\":14}, {\"foo\":2, \"bar\":3}]",
+      "outputs": ["{\"foo\":2, \"bar\":3}"]
+    },
+    {
+      "section": "`unique`, `unique_by(path_exp)`",
+      "query": "unique",
+      "input": "[1,2,5,3,5,3,1,3]",
+      "outputs": ["[1,2,3,5]"]
+    },
+    {
+      "section": "`unique`, `unique_by(path_exp)`",
+      "query": "unique_by(.foo)",
+      "input": "[{\"foo\": 1, \"bar\": 2}, {\"foo\": 1, \"bar\": 3}, {\"foo\": 4, \"bar\": 5}]",
+      "outputs": ["[{\"foo\": 1, \"bar\": 2}, {\"foo\": 4, \"bar\": 5}]"]
+    },
+    {
+      "section": "`unique`, `unique_by(path_exp)`",
+      "query": "unique_by(length)",
+      "input": "[\"chunky\", \"bacon\", \"kitten\", \"cicada\", \"asparagus\"]",
+      "outputs": ["[\"bacon\", \"chunky\", \"asparagus\"]"]
+    },
+    {
+      "section": "`reverse`",
+      "query": "reverse",
+      "input": "[1,2,3,4]",
+      "outputs": ["[4,3,2,1]"]
+    },
+    {
+      "section": "`contains(element)`",
+      "query": "contains(\"bar\")",
+      "input": "\"foobar\"",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`contains(element)`",
+      "query": "contains([\"baz\", \"bar\"])",
+      "input": "[\"foobar\", \"foobaz\", \"blarp\"]",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`contains(element)`",
+      "query": "contains([\"bazzzzz\", \"bar\"])",
+      "input": "[\"foobar\", \"foobaz\", \"blarp\"]",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`contains(element)`",
+      "query": "contains({foo: 12, bar: [{barp: 12}]})",
+      "input": "{\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]}",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`contains(element)`",
+      "query": "contains({foo: 12, bar: [{barp: 15}]})",
+      "input": "{\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]}",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`indices(s)`",
+      "query": "indices(\", \")",
+      "input": "\"a,b, cd, efg, hijk\"",
+      "outputs": ["[3,7,12]"]
+    },
+    {
+      "section": "`indices(s)`",
+      "query": "indices(1)",
+      "input": "[0,1,2,1,3,1,4]",
+      "outputs": ["[1,3,5]"]
+    },
+    {
+      "section": "`indices(s)`",
+      "query": "indices([1,2])",
+      "input": "[0,1,2,3,1,4,2,5,1,2,6,7]",
+      "outputs": ["[1,8]"]
+    },
+    {
+      "section": "`index(s)`, `rindex(s)`",
+      "query": "index(\", \")",
+      "input": "\"a,b, cd, efg, hijk\"",
+      "outputs": ["3"]
+    },
+    {
+      "section": "`index(s)`, `rindex(s)`",
+      "query": "index(1)",
+      "input": "[0,1,2,1,3,1,4]",
+      "outputs": ["1"]
+    },
+    {
+      "section": "`index(s)`, `rindex(s)`",
+      "query": "index([1,2])",
+      "input": "[0,1,2,3,1,4,2,5,1,2,6,7]",
+      "outputs": ["1"]
+    },
+    {
+      "section": "`index(s)`, `rindex(s)`",
+      "query": "rindex(\", \")",
+      "input": "\"a,b, cd, efg, hijk\"",
+      "outputs": ["12"]
+    },
+    {
+      "section": "`index(s)`, `rindex(s)`",
+      "query": "rindex(1)",
+      "input": "[0,1,2,1,3,1,4]",
+      "outputs": ["5"]
+    },
+    {
+      "section": "`index(s)`, `rindex(s)`",
+      "query": "rindex([1,2])",
+      "input": "[0,1,2,3,1,4,2,5,1,2,6,7]",
+      "outputs": ["8"]
+    },
+    {
+      "section": "`inside`",
+      "query": "inside(\"foobar\")",
+      "input": "\"bar\"",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`inside`",
+      "query": "inside([\"foobar\", \"foobaz\", \"blarp\"])",
+      "input": "[\"baz\", \"bar\"]",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`inside`",
+      "query": "inside([\"foobar\", \"foobaz\", \"blarp\"])",
+      "input": "[\"bazzzzz\", \"bar\"]",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`inside`",
+      "query": "inside({\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]})",
+      "input": "{\"foo\": 12, \"bar\": [{\"barp\": 12}]}",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`inside`",
+      "query": "inside({\"foo\": 12, \"bar\":[1,2,{\"barp\":12, \"blip\":13}]})",
+      "input": "{\"foo\": 12, \"bar\": [{\"barp\": 15}]}",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`startswith(str)`",
+      "query": "[.[]|startswith(\"foo\")]",
+      "input": "[\"fo\", \"foo\", \"barfoo\", \"foobar\", \"barfoob\"]",
+      "outputs": ["[false, true, false, true, false]"]
+    },
+    {
+      "section": "`endswith(str)`",
+      "query": "[.[]|endswith(\"foo\")]",
+      "input": "[\"foobar\", \"barfoo\"]",
+      "outputs": ["[false, true]"]
+    },
+    {
+      "section": "`combinations`, `combinations(n)`",
+      "query": "combinations",
+      "input": "[[1,2], [3, 4]]",
+      "outputs": ["[1, 3]", "[1, 4]", "[2, 3]", "[2, 4]"]
+    },
+    {
+      "section": "`combinations`, `combinations(n)`",
+      "query": "combinations(2)",
+      "input": "[0, 1]",
+      "outputs": ["[0, 0]", "[0, 1]", "[1, 0]", "[1, 1]"]
+    },
+    {
+      "section": "`ltrimstr(str)`",
+      "query": "[.[]|ltrimstr(\"foo\")]",
+      "input": "[\"fo\", \"foo\", \"barfoo\", \"foobar\", \"afoo\"]",
+      "outputs": ["[\"fo\",\"\",\"barfoo\",\"bar\",\"afoo\"]"]
+    },
+    {
+      "section": "`rtrimstr(str)`",
+      "query": "[.[]|rtrimstr(\"foo\")]",
+      "input": "[\"fo\", \"foo\", \"barfoo\", \"foobar\", \"foob\"]",
+      "outputs": ["[\"fo\",\"\",\"bar\",\"foobar\",\"foob\"]"]
+    },
+    {
+      "section": "`explode`",
+      "query": "explode",
+      "input": "\"foobar\"",
+      "outputs": ["[102,111,111,98,97,114]"]
+    },
+    {
+      "section": "`implode`",
+      "query": "implode",
+      "input": "[65, 66, 67]",
+      "outputs": ["\"ABC\""]
+    },
+    {
+      "section": "`split(str)`",
+      "query": "split(\", \")",
+      "input": "\"a, b,c,d, e, \"",
+      "outputs": ["[\"a\",\"b,c,d\",\"e\",\"\"]"]
+    },
+    {
+      "section": "`join(str)`",
+      "query": "join(\", \")",
+      "input": "[\"a\",\"b,c,d\",\"e\"]",
+      "outputs": ["\"a, b,c,d, e\""]
+    },
+    {
+      "section": "`join(str)`",
+      "query": "join(\" \")",
+      "input": "[\"a\",1,2.3,true,null,false]",
+      "outputs": ["\"a 1 2.3 true false\""]
+    },
+    {
+      "section": "`ascii_downcase`, `ascii_upcase`",
+      "query": "ascii_upcase",
+      "input": "\"useful but not for é\"",
+      "outputs": ["\"USEFUL BUT NOT FOR é\""]
+    },
+    {
+      "section": "`while(cond; update)`",
+      "query": "[while(.<100; .*2)]",
+      "input": "1",
+      "outputs": ["[1,2,4,8,16,32,64]"]
+    },
+    {
+      "section": "`repeat(exp)`",
+      "query": "[repeat(.*2, error)?]",
+      "input": "1",
+      "outputs": ["[2]"]
+    },
+    {
+      "section": "`until(cond; next)`",
+      "query": "[.,1]|until(.[0] < 1; [.[0] - 1, .[1] * .[0]])|.[1]",
+      "input": "4",
+      "outputs": ["24"]
+    },
+    {
+      "section": "`recurse(f)`, `recurse`, `recurse(f; condition)`",
+      "query": "recurse(.foo[])",
+      "input": "{\"foo\":[{\"foo\": []}, {\"foo\":[{\"foo\":[]}]}]}",
+      "outputs": [
+        "{\"foo\":[{\"foo\":[]},{\"foo\":[{\"foo\":[]}]}]}",
+        "{\"foo\":[]}",
+        "{\"foo\":[{\"foo\":[]}]}",
+        "{\"foo\":[]}"
+      ]
+    },
+    {
+      "section": "`recurse(f)`, `recurse`, `recurse(f; condition)`",
+      "query": "recurse",
+      "input": "{\"a\":0,\"b\":[1]}",
+      "outputs": ["{\"a\":0,\"b\":[1]}", "0", "[1]", "1"]
+    },
+    {
+      "section": "`recurse(f)`, `recurse`, `recurse(f; condition)`",
+      "query": "recurse(. * .; . < 20)",
+      "input": "2",
+      "outputs": ["2", "4", "16"]
+    },
+    {
+      "section": "`walk(f)`",
+      "query": "walk(if type == \"array\" then sort else . end)",
+      "input": "[[4, 1, 7], [8, 5, 2], [3, 6, 9]]",
+      "outputs": ["[[1,4,7],[2,5,8],[3,6,9]]"]
+    },
+    {
+      "section": "`walk(f)`",
+      "query": "walk( if type == \"object\" then with_entries( .key |= sub( \"^_+\"; \"\") ) else . end )",
+      "input": "[ { \"_a\": { \"__b\": 2 } } ]",
+      "outputs": ["[{\"a\":{\"b\":2}}]"]
+    },
+    {
+      "section": "`transpose`",
+      "query": "transpose",
+      "input": "[[1], [2,3]]",
+      "outputs": ["[[1,2],[null,3]]"]
+    },
+    {
+      "section": "`bsearch(x)`",
+      "query": "bsearch(0)",
+      "input": "[0,1]",
+      "outputs": ["0"]
+    },
+    {
+      "section": "`bsearch(x)`",
+      "query": "bsearch(0)",
+      "input": "[1,2,3]",
+      "outputs": ["-1"]
+    },
+    {
+      "section": "`bsearch(x)`",
+      "query": "bsearch(4) as $ix | if $ix < 0 then .[-(1+$ix)] = 4 else . end",
+      "input": "[1,2,3]",
+      "outputs": ["[1,2,3,4]"]
+    },
+    {
+      "section": "String interpolation: `\\(exp)`",
+      "query": "\"The input was \\(.), which is one less than \\(.+1)\"",
+      "input": "42",
+      "outputs": ["\"The input was 42, which is one less than 43\""]
+    },
+    {
+      "section": "Convert to/from JSON",
+      "query": "[.[]|tostring]",
+      "input": "[1, \"foo\", [\"foo\"]]",
+      "outputs": ["[\"1\",\"foo\",\"[\\\"foo\\\"]\"]"]
+    },
+    {
+      "section": "Convert to/from JSON",
+      "query": "[.[]|tojson]",
+      "input": "[1, \"foo\", [\"foo\"]]",
+      "outputs": ["[\"1\",\"\\\"foo\\\"\",\"[\\\"foo\\\"]\"]"]
+    },
+    {
+      "section": "Convert to/from JSON",
+      "query": "[.[]|tojson|fromjson]",
+      "input": "[1, \"foo\", [\"foo\"]]",
+      "outputs": ["[1,\"foo\",[\"foo\"]]"]
+    },
+    {
+      "section": "Format strings and escaping",
+      "query": "@html",
+      "input": "\"This works if x < y\"",
+      "outputs": ["\"This works if x &lt; y\""]
+    },
+    {
+      "section": "Format strings and escaping",
+      "query": "@sh \"echo \\(.)\"",
+      "input": "\"O'Hara's Ale\"",
+      "outputs": ["\"echo 'O'\\\\''Hara'\\\\''s Ale'\""]
+    },
+    {
+      "section": "Format strings and escaping",
+      "query": "@base64",
+      "input": "\"This is a message\"",
+      "outputs": ["\"VGhpcyBpcyBhIG1lc3NhZ2U=\""]
+    },
+    {
+      "section": "Format strings and escaping",
+      "query": "@base64d",
+      "input": "\"VGhpcyBpcyBhIG1lc3NhZ2U=\"",
+      "outputs": ["\"This is a message\""]
+    },
+    {
+      "section": "Dates",
+      "query": "fromdate",
+      "input": "\"2015-03-05T23:51:47Z\"",
+      "outputs": ["1425599507"]
+    },
+    {
+      "section": "Dates",
+      "query": "strptime(\"%Y-%m-%dT%H:%M:%SZ\")",
+      "input": "\"2015-03-05T23:51:47Z\"",
+      "outputs": ["[2015,2,5,23,51,47,4,63]"]
+    },
+    {
+      "section": "Dates",
+      "query": "strptime(\"%Y-%m-%dT%H:%M:%SZ\")|mktime",
+      "input": "\"2015-03-05T23:51:47Z\"",
+      "outputs": ["1425599507"]
+    }
+  ],
+  "conditionals_and_comparisons": [
+    {
+      "section": "`==`, `!=`",
+      "query": ". == false",
+      "input": "null",
+      "outputs": ["false"]
+    },
+    {
+      "section": "`==`, `!=`",
+      "query": ". == {\"b\": {\"d\": (4 + 1e-20), \"c\": 3}, \"a\":1}",
+      "input": "{\"a\":1, \"b\": {\"c\": 3, \"d\": 4}}",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`==`, `!=`",
+      "query": ".[] == 1",
+      "input": "[1, 1.0, \"1\", \"banana\"]",
+      "outputs": ["true", "true", "false", "false"]
+    },
+    {
+      "section": "if-then-else-end",
+      "query": "if . == 0 then \"zero\" elif . == 1 then \"one\" else \"many\" end",
+      "input": "2",
+      "outputs": ["\"many\""]
+    },
+    {
+      "section": "`>`, `>=`, `<=`, `<`",
+      "query": ". < 5",
+      "input": "2",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`and`, `or`, `not`",
+      "query": "42 and \"a string\"",
+      "input": "null",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`and`, `or`, `not`",
+      "query": "(true, false) or false",
+      "input": "null",
+      "outputs": ["true", "false"]
+    },
+    {
+      "section": "`and`, `or`, `not`",
+      "query": "(true, true) and (true, false)",
+      "input": "null",
+      "outputs": ["true", "false", "true", "false"]
+    },
+    {
+      "section": "`and`, `or`, `not`",
+      "query": "[true, false | not]",
+      "input": "null",
+      "outputs": ["[false, true]"]
+    },
+    {
+      "section": "Alternative operator: `//`",
+      "query": "empty // 42",
+      "input": "null",
+      "outputs": ["42"]
+    },
+    {
+      "section": "Alternative operator: `//`",
+      "query": ".foo // 42",
+      "input": "{\"foo\": 19}",
+      "outputs": ["19"]
+    },
+    {
+      "section": "Alternative operator: `//`",
+      "query": ".foo // 42",
+      "input": "{}",
+      "outputs": ["42"]
+    },
+    {
+      "section": "Alternative operator: `//`",
+      "query": "(false, null, 1) // 42",
+      "input": "null",
+      "outputs": ["1"]
+    },
+    {
+      "section": "Alternative operator: `//`",
+      "query": "(false, null, 1) | . // 42",
+      "input": "null",
+      "outputs": ["42", "42", "1"]
+    },
+    {
+      "section": "try-catch",
+      "query": "try .a catch \". is not an object\"",
+      "input": "true",
+      "outputs": ["\". is not an object\""]
+    },
+    {
+      "section": "try-catch",
+      "query": "[.[]|try .a]",
+      "input": "[{}, true, {\"a\":1}]",
+      "outputs": ["[null, 1]"]
+    },
+    {
+      "section": "try-catch",
+      "query": "try error(\"some exception\") catch .",
+      "input": "true",
+      "outputs": ["\"some exception\""]
+    },
+    {
+      "section": "Error Suppression / Optional Operator: `?`",
+      "query": "[.[] | .a?]",
+      "input": "[{}, true, {\"a\":1}]",
+      "outputs": ["[null, 1]"]
+    },
+    {
+      "section": "Error Suppression / Optional Operator: `?`",
+      "query": "[.[] | tonumber?]",
+      "input": "[\"1\", \"invalid\", \"3\", 4]",
+      "outputs": ["[1, 3, 4]"]
+    }
+  ],
+  "regular_expressions": [
+    {
+      "section": "`test(val)`, `test(regex; flags)`",
+      "query": "test(\"foo\")",
+      "input": "\"foo\"",
+      "outputs": ["true"]
+    },
+    {
+      "section": "`test(val)`, `test(regex; flags)`",
+      "query": ".[] | test(\"a b c # spaces are ignored\"; \"ix\")",
+      "input": "[\"xabcd\", \"ABC\"]",
+      "outputs": ["true", "true"]
+    },
+    {
+      "section": "`match(val)`, `match(regex; flags)`",
+      "query": "match(\"(abc)+\"; \"g\")",
+      "input": "\"abc abc\"",
+      "outputs": [
+        "{\"offset\": 0, \"length\": 3, \"string\": \"abc\", \"captures\": [{\"offset\": 0, \"length\": 3, \"string\": \"abc\", \"name\": null}]}",
+        "{\"offset\": 4, \"length\": 3, \"string\": \"abc\", \"captures\": [{\"offset\": 4, \"length\": 3, \"string\": \"abc\", \"name\": null}]}"
+      ]
+    },
+    {
+      "section": "`match(val)`, `match(regex; flags)`",
+      "query": "match(\"foo\")",
+      "input": "\"foo bar foo\"",
+      "outputs": ["{\"offset\": 0, \"length\": 3, \"string\": \"foo\", \"captures\": []}"]
+    },
+    {
+      "section": "`match(val)`, `match(regex; flags)`",
+      "query": "match([\"foo\", \"ig\"])",
+      "input": "\"foo bar FOO\"",
+      "outputs": [
+        "{\"offset\": 0, \"length\": 3, \"string\": \"foo\", \"captures\": []}",
+        "{\"offset\": 8, \"length\": 3, \"string\": \"FOO\", \"captures\": []}"
+      ]
+    },
+    {
+      "section": "`match(val)`, `match(regex; flags)`",
+      "query": "match(\"foo (?<bar123>bar)? foo\"; \"ig\")",
+      "input": "\"foo bar foo foo foo\"",
+      "outputs": [
+        "{\"offset\": 0, \"length\": 11, \"string\": \"foo bar foo\", \"captures\": [{\"offset\": 4, \"length\": 3, \"string\": \"bar\", \"name\": \"bar123\"}]}",
+        "{\"offset\": 12, \"length\": 8, \"string\": \"foo foo\", \"captures\": [{\"offset\": -1, \"length\": 0, \"string\": null, \"name\": \"bar123\"}]}"
+      ]
+    },
+    {
+      "section": "`match(val)`, `match(regex; flags)`",
+      "query": "[ match(\".\"; \"g\")] | length",
+      "input": "\"abc\"",
+      "outputs": ["3"]
+    },
+    {
+      "section": "`capture(val)`, `capture(regex; flags)`",
+      "query": "capture(\"(?<a>[a-z]+)-(?<n>[0-9]+)\")",
+      "input": "\"xyzzy-14\"",
+      "outputs": ["{ \"a\": \"xyzzy\", \"n\": \"14\" }"]
+    },
+    {
+      "section": "`scan(regex)`, `scan(regex; flags)`",
+      "query": "scan(\"c\")",
+      "input": "\"abcdefabc\"",
+      "outputs": ["\"c\"", "\"c\""]
+    },
+    {
+      "section": "`split(regex; flags)`",
+      "query": "split(\", *\"; null)",
+      "input": "\"ab,cd, ef\"",
+      "outputs": ["[\"ab\",\"cd\",\"ef\"]"]
+    },
+    {
+      "section": "`splits(regex)`, `splits(regex; flags)`",
+      "query": "splits(\", *\")",
+      "input": "\"ab,cd, ef, gh\"",
+      "outputs": ["\"ab\"", "\"cd\"", "\"ef\"", "\"gh\""]
+    },
+    {
+      "section": "`sub(regex; tostring)`, `sub(regex; tostring; flags)`",
+      "query": "sub(\"[^a-z]*(?<x>[a-z]+)\"; \"Z\\(.x)\"; \"g\")",
+      "input": "\"123abc456def\"",
+      "outputs": ["\"ZabcZdef\""]
+    },
+    {
+      "section": "`sub(regex; tostring)`, `sub(regex; tostring; flags)`",
+      "query": "[sub(\"(?<a>.)\"; \"\\(.a|ascii_upcase)\", \"\\(.a|ascii_downcase)\")]",
+      "input": "\"aB\"",
+      "outputs": ["[\"AB\",\"aB\"]"]
+    },
+    {
+      "section": "`gsub(regex; tostring)`, `gsub(regex; tostring; flags)`",
+      "query": "gsub(\"(?<x>.)[^a]*\"; \"+\\(.x)-\")",
+      "input": "\"Abcabc\"",
+      "outputs": ["\"+A-+a-\""]
+    },
+    {
+      "section": "`gsub(regex; tostring)`, `gsub(regex; tostring; flags)`",
+      "query": "[gsub(\"p\"; \"a\", \"b\")]",
+      "input": "\"p\"",
+      "outputs": ["[\"a\",\"b\"]"]
+    }
+  ]
+}

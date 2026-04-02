@@ -157,46 +157,6 @@ The former will set the `a` field of the input to the `b` field of the input, an
       </tr>
       </tbody>
     </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(.a, .b) = range(3)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":0,"b":0}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"a":1,"b":1}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"a":2,"b":2}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(.a, .b) |= range(3)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a":0,"b":0}</td>
-      </tr>
-      </tbody>
-    </table>
   </div>
 </div>
 

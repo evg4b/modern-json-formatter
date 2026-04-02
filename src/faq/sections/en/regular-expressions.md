@@ -130,16 +130,14 @@ Capturing groups that did not match anything return an offset of -1
         <th>Output</th>
         <td class="font-monospace">
           {"offset": 0, "length": 3, "string": "abc", "captures": [{"offset": 0, "length": 3,
-          "string":
-          "abc", "name": null}]}
+          "string": "abc"}]}
         </td>
       </tr>
       <tr>
         <th></th>
         <td class="font-monospace">
           {"offset": 4, "length": 3, "string": "abc", "captures": [{"offset": 4, "length": 3,
-          "string":
-          "abc", "name": null}]}
+          "string": "abc"}]}
         </td>
       </tr>
       </tbody>
@@ -164,27 +162,7 @@ Capturing groups that did not match anything return an offset of -1
       <tbody>
       <tr>
         <th class="pe-3">Query</th>
-        <td class="font-monospace">match(["foo", "ig"])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"foo bar FOO"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"offset": 0, "length": 3, "string": "foo", "captures": []}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"offset": 8, "length": 3, "string": "FOO", "captures": []}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">match("foo (?&lt;bar123&gt;bar)? foo"; "ig")</td>
+        <td class="font-monospace">match("foo (?&lt;bar123&gt;bar)? foo"; "i")</td>
       </tr>
       <tr>
         <th>Input</th>
@@ -196,14 +174,6 @@ Capturing groups that did not match anything return an offset of -1
           {"offset": 0, "length": 11, "string": "foo bar foo", "captures": [{"offset": 4,
           "length": 3,
           "string": "bar", "name": "bar123"}]}
-        </td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">
-          {"offset": 12, "length": 8, "string": "foo foo", "captures": [{"offset": -1, "length":
-          0,
-          "string": null, "name": "bar123"}]}
         </td>
       </tr>
       </tbody>
@@ -275,10 +245,6 @@ the idiom `[ expr ]`, e.g. `[ scan(regex) ]`.
       </tr>
       <tr>
         <th>Output</th>
-        <td class="font-monospace">"c"</td>
-      </tr>
-      <tr>
-        <th></th>
         <td class="font-monospace">"c"</td>
       </tr>
       </tbody>

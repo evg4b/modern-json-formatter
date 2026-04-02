@@ -175,22 +175,6 @@ the same key, and the values are objects, the two are merged with the same strat
       <tbody>
       <tr>
         <th class="pe-3">Query</th>
-        <td class="font-monospace">10 / . * 3</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">5</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">6</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
         <td class="font-monospace">. / ", "</td>
       </tr>
       <tr>
@@ -216,26 +200,6 @@ the same key, and the values are objects, the two are merged with the same strat
       <tr>
         <th>Output</th>
         <td class="font-monospace">{"k": {"a": 0, "b": 2, "c": 3}}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] | (1 / .)?</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,0,-1]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">-1</td>
       </tr>
       </tbody>
     </table>
@@ -622,22 +586,6 @@ arrays, negative indices and `.[m:n]` specifications should not be used.
       </tr>
       </tbody>
     </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">pick(.[2], .[0], .[0])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3,4]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,null,3]</td>
-      </tr>
-      </tbody>
-    </table>
   </div>
 </div>
 
@@ -714,23 +662,7 @@ The builtin function `del` removes a key and its corresponding value from an obj
       </tr>
       <tr>
         <th>Output</th>
-        <td class="font-monospace">{"bar": 9001, "baz": 42}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">del(.[1, 2])</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["foo", "bar", "baz"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["foo"]</td>
+        <td class="font-monospace">{"baz": 42, "bar": 9001}</td>
       </tr>
       </tbody>
     </table>
@@ -794,43 +726,11 @@ The builtin function `setpath` sets the `PATHS` in `.` to `VALUE`.
       </tr>
       <tr>
         <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"a": {"b": 1}}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">setpath(["a","b"]; 1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
         <td class="font-monospace">{"a":{"b":0}}</td>
       </tr>
       <tr>
         <th>Output</th>
         <td class="font-monospace">{"a": {"b": 1}}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">setpath([0,"a"]; 1)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[{"a":1}]</td>
       </tr>
       </tbody>
     </table>
@@ -1583,7 +1483,7 @@ The `sqrt` function returns the square root of its numeric input.
       </tr>
       <tr>
         <th>Output</th>
-        <td class="font-monospace">3</td>
+        <td class="font-monospace">3.0</td>
       </tr>
       </tbody>
     </table>
@@ -2625,7 +2525,7 @@ in the input are not supported.
       </tr>
       <tr>
         <th>Output</th>
-        <td class="font-monospace">"a 1 2.3 true false"</td>
+        <td class="font-monospace">"a 1 2.3 true null false"</td>
       </tr>
       </tbody>
     </table>
@@ -3069,24 +2969,6 @@ will return an integer that is probably of no interest.
       <tr>
         <th>Output</th>
         <td class="font-monospace">-1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">bsearch(4) as $ix | if $ix &lt; 0 then .[-(1+$ix)] = 4 else .
-          end
-        </td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1,2,3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1,2,3,4]</td>
       </tr>
       </tbody>
     </table>

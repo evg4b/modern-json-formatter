@@ -104,39 +104,5 @@ interpreted as being prescriptive:
       </tr>
       </tbody>
     </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">map([., . == 1]) | tojson</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, 1.000, 1.0, 100e-2]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"[[1,true],[1.000,true],[1.0,true],[1.00,true]]"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">
-          . as $big | [$big, $big + 1] | map(. &gt; 10000000000000000000000000000000)
-        </td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">10000000000000000000000000000001</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[true, false]</td>
-      </tr>
-      </tbody>
-    </table>
   </div>
 </div>

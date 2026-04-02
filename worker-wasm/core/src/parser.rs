@@ -1,6 +1,7 @@
 use hifijson::token::Lex;
 use hifijson::{Expect, LexAlloc, SliceLexer};
 use jaq_json::Num;
+use std::error::Error;
 use std::fmt;
 use std::fmt::{Display, Formatter};
 
@@ -14,7 +15,7 @@ impl Display for ParseError {
     }
 }
 
-impl std::error::Error for ParseError {}
+impl Error for ParseError {}
 
 pub trait Factory<T> {
     fn null(&self) -> T;
@@ -29,13 +30,13 @@ pub trait Factory<T> {
 pub fn parse_json<T, U: Factory<T>>(
     slice: &[u8],
     factory: U,
-) -> Result<T, Box<dyn std::error::Error>> {
+) -> Result<T, Box<dyn Error>> {
     let offset = |rest: &[u8]| rest.as_ptr() as usize - slice.as_ptr() as usize;
     let mut lexer = SliceLexer::new(slice);
     lexer
         .exactly_one(ws_tk, move |next, lexer| parse_inner(next, lexer, &factory))
         .map_err(|e| {
-            Box::new(ParseError(offset(lexer.as_slice()), e)) as Box<dyn std::error::Error>
+            Box::new(ParseError(offset(lexer.as_slice()), e)) as Box<dyn Error>
         })
 }
 
@@ -197,7 +198,7 @@ mod tests {
 
     // ── helpers ───────────────────────────────────────────────────────────────
 
-    fn parse(input: &str) -> Result<Val, Box<dyn std::error::Error>> {
+    fn parse(input: &str) -> Result<Val, Box<dyn Error>> {
         parse_json(input.as_bytes(), JaqJsonFactory)
     }
 

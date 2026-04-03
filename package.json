@@ -1,7 +1,7 @@
 {
   "name": "modern-json-formatter",
   "description": "Format JSON in a modern way. With guaranteed order of keys, big numbers, jq queries, expandable/collapsable properties and more.",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "type": "module",
   "author": {
     "name": "Evgeny Abramovich",

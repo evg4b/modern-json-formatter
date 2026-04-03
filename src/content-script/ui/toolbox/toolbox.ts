@@ -36,6 +36,12 @@ declare global {
   }
 }
 
+interface VisibleTab {
+  tab: TabType;
+  label: string;
+  key: keyof ToolbarButtonsSettings;
+}
+
 @customElement('mjf-toolbox')
 export class ToolboxElement extends LitElement {
   public static override readonly styles = [
@@ -82,7 +88,7 @@ export class ToolboxElement extends LitElement {
   @property({ type: String, attribute: 'download-mode' })
   public downloadMode: DownloadMode = 'dropdown';
 
-  private readonly allTabs: { tab: TabType; label: string; key: keyof ToolbarButtonsSettings }[] = [
+  private readonly allTabs: VisibleTab[] = [
     { tab: 'query', label: 'Query', key: 'query' },
     { tab: 'formatted', label: 'Formatted', key: 'formatted' },
     { tab: 'raw', label: 'Raw', key: 'raw' },
@@ -98,20 +104,14 @@ export class ToolboxElement extends LitElement {
     const visibleTabs = this.allTabs.filter(({ key }) => this.buttons[key]);
 
     const input = this.tab === 'query'
-      ? html`<mjf-query-input .error=${this.error}></mjf-query-input>`
+      ? html`
+              <mjf-query-input .error=${this.error}></mjf-query-input>`
       : '';
 
     return html`
       ${input}
       <div class="button-container">
-        ${map(visibleTabs, ({ tab, label }) => html`
-          <button class=${classMap({ active: this.tab === tab })}
-                  title=${label}
-                  @click=${this.clickHandler}
-                  data-type=${tab}>
-            ${label}
-          </button>
-        `)}
+        ${this.renderButtons(visibleTabs)}
         ${this.buttons.download ? this.renderDownloadButton() : ''}
       </div>
     `;
@@ -134,6 +134,21 @@ export class ToolboxElement extends LitElement {
         ${unsafeSVG(downloadSvg)}
       </button>
     `;
+  }
+
+  private renderButtons(visibleTabs: VisibleTab[]) {
+    if (visibleTabs.length < 2) {
+      return undefined;
+    }
+
+    return map(visibleTabs, ({ tab, label }) => html`
+      <button class=${classMap({ active: this.tab === tab })}
+              title=${label}
+              @click=${this.clickHandler}
+              data-type=${tab}>
+        ${label}
+      </button>
+    `);
   }
 
   private directDownloadTitle(): string {

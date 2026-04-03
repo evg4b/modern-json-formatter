@@ -18,6 +18,7 @@ describe('mjf-toolbar-buttons-section', () => {
   });
 
   describe('checkboxes', () => {
+    const visibleKeys = ['query', 'raw', 'download'] as const;
     let checkboxes: HTMLInputElement[];
 
     beforeEach(() => {
@@ -26,18 +27,18 @@ describe('mjf-toolbar-buttons-section', () => {
       );
     });
 
-    test('renders four checkboxes', () => {
-      expect(checkboxes).toHaveLength(4);
+    test('renders three checkboxes', () => {
+      expect(checkboxes).toHaveLength(visibleKeys.length);
     });
 
-    test.each(['query', 'formatted', 'raw', 'download'])(
+    test.each(visibleKeys)(
       '"%s" checkbox exists',
       key => {
         expect(checkboxes.find(cb => cb.dataset.key === key)).toBeDefined();
       },
     );
 
-    test.each(['query', 'formatted', 'raw', 'download'])(
+    test.each(visibleKeys)(
       '"%s" checkbox is checked when buttons property is all-true (default)',
       key => {
         const cb = checkboxes.find(c => c.dataset.key === key);
@@ -56,7 +57,6 @@ describe('mjf-toolbar-buttons-section', () => {
 
       test.each([
         { key: 'query', expected: false },
-        { key: 'formatted', expected: true },
         { key: 'raw', expected: false },
         { key: 'download', expected: true },
       ])('"%key" checkbox reflects the property value', ({ key, expected }) => {
@@ -64,7 +64,7 @@ describe('mjf-toolbar-buttons-section', () => {
       });
     });
 
-    describe.each(['query', 'formatted', 'raw', 'download'] as const)(
+    describe.each(visibleKeys)(
       'toggling the "%s" checkbox',
       key => {
         let handler: Mock<(e: ButtonsChangeEvent) => void>;
@@ -89,7 +89,7 @@ describe('mjf-toolbar-buttons-section', () => {
 
         test('event detail preserves the other keys as true', () => {
           const detail = (handler.mock.calls[0][0] as ButtonsChangeEvent).detail;
-          const others = (['query', 'formatted', 'raw', 'download'] as const).filter(k => k !== key);
+          const others = visibleKeys.filter(k => k !== key);
           for (const other of others) {
             expect(detail[other]).toBe(true);
           }
@@ -105,7 +105,6 @@ describe('mjf-toolbar-buttons-section', () => {
   describe('each option has a hint text', () => {
     const options: { key: keyof ToolbarButtonsSettings; label: string }[] = [
       { key: 'query', label: 'Query' },
-      { key: 'formatted', label: 'Formatted' },
       { key: 'raw', label: 'Raw' },
       { key: 'download', label: 'Download' },
     ];

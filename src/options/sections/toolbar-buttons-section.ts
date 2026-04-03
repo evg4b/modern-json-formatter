@@ -68,16 +68,16 @@ export class ToolbarButtonsSectionElement extends LitElement {
             <span class="option-hint">Opens the JQ query panel to filter and transform the JSON using jq expressions.</span>
           </div>
         </label>
-        <label>
+        <!--label>
           <input type="checkbox"
                  data-key="formatted"
-                 .checked=${this.buttons.formatted}
-                 @change=${this.onCheckboxChange}>
+                 .checked=\${this.buttons.formatted}
+                 @change=\${this.onCheckboxChange}>
           <div class="option-text">
             <span>Formatted</span>
             <span class="option-hint">Shows the JSON with syntax highlighting, collapsible nodes, and indentation.</span>
           </div>
-        </label>
+        </label -->
         <label>
           <input type="checkbox"
                  data-key="raw"

@@ -102,7 +102,7 @@ describe('mjf-query-input', () => {
 
       await queryInputElement.updateComplete;
 
-      expect(queryInputElement.shadowRoot?.querySelector('.error-message'))
+      expect(queryInputElement.shadowRoot?.querySelector('mjf-error-message'))
         .toBeNull();
     });
   });

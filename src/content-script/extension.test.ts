@@ -252,6 +252,16 @@ describe('runExtension', () => {
       expect(consoleSpy).not.toHaveBeenCalled();
     });
 
+    test('jq-query error: non-jq scope without stack trace', async () => {
+      rstest.spyOn(console, 'error').mockImplementation(() => undefined);
+      wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'worker', error: 'worker error' });
+
+      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(containerElement.children.length).toBeGreaterThan(0);
+    });
+
     test('jq-query error: non-ErrorNode logs to console', async () => {
       const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
       wrapMock(jq).mockRejectedValue('unexpected error');
@@ -260,6 +270,22 @@ describe('runExtension', () => {
       await new Promise(resolve => setTimeout(resolve, 10));
 
       expect(consoleSpy).toHaveBeenCalledWith('unexpected error');
+    });
+
+    test('download error: falls back to error.message when error.error is absent', async () => {
+      wrapMock(download).mockRejectedValue({ message: 'network failure' });
+      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(containerElement.querySelector('mjf-floating-message')).not.toBeNull();
+    });
+
+    test('download error: falls back to raw error when both error and message are absent', async () => {
+      wrapMock(download).mockRejectedValue('raw string error');
+      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(containerElement.querySelector('mjf-floating-message')).not.toBeNull();
     });
   });
 });

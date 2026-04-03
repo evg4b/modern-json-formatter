@@ -26,11 +26,6 @@ export class SectionElement extends LitElement {
         box-sizing: border-box;
       }
 
-      //display: flex;
-      //flex-direction: column;
-      //padding: var(--v-padding) var(--h-padding) var(--v-padding) calc(var(--sidebar-width) + var(--h-padding));
-      //gap: 25px;
-
       h3 {
         margin: 50px 0 20px 0;
       }

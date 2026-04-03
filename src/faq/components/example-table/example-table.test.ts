@@ -37,7 +37,6 @@ describe('ExampleTableElement', () => {
       expect(inputs[0].value).toBe('.foo');
       expect(inputs[1].value).toBe('{"foo": 1}');
 
-      // Output div should contain the default output
       const outputDiv = element.shadowRoot!.querySelector<HTMLDivElement>('.code')!;
       expect(outputDiv.textContent?.trim()).toContain('1');
     });
@@ -64,7 +63,6 @@ describe('ExampleTableElement', () => {
       mockJq.mockResolvedValue(tString('hello'));
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
-      // wait for the async exec
       await Promise.resolve();
       await element.updateComplete;
     });
@@ -79,7 +77,7 @@ describe('ExampleTableElement', () => {
     });
 
     test('does not show error message', () => {
-      expect(element.shadowRoot!.querySelector('mjf-example-error')).toBeNull();
+      expect(element.shadowRoot!.querySelector('mjf-error-message')).toBeNull();
     });
   });
 
@@ -138,13 +136,11 @@ describe('ExampleTableElement', () => {
     });
 
     test('shows fallback message for unknown error type', async () => {
-      // Reset state
       element.query = '.';
       element.input = 'null';
       element.output = 'null';
       await element.updateComplete;
 
-      // Reject with non-Error object
       mockJq.mockRejectedValue('string error');
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
@@ -178,7 +174,6 @@ describe('ExampleTableElement', () => {
       const button = element.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
       expect(button.disabled).toBe(true);
 
-      // clean up
       resolve(tNull());
       await Promise.resolve();
     });
@@ -224,7 +219,6 @@ describe('ExampleTableElement', () => {
       expect(inputs[0].disabled).toBe(true);
       expect(inputs[1].disabled).toBe(true);
 
-      // clean up
       resolve(tNull());
       await Promise.resolve();
     });

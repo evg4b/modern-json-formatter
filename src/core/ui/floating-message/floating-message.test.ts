@@ -1,6 +1,6 @@
 rstest.useFakeTimers({ toFake: ['setTimeout'] });
 
-import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
+import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { FloatingMessageElement } from './floating-message';
 
@@ -78,6 +78,30 @@ describe('FloatingMessageElement', () => {
       await floatingMessage.updateComplete;
 
       expect(wrapper?.classList).not.toContain('visible');
+    });
+  });
+
+  describe('error message type', () => {
+    let errorMessage: FloatingMessageElement;
+
+    beforeEach(async () => {
+      errorMessage = document.createElement('mjf-floating-message') as FloatingMessageElement;
+      errorMessage.type = 'error-message';
+      errorMessage.header = 'Error Header';
+      document.body.appendChild(errorMessage);
+      await errorMessage.updateComplete;
+    });
+
+    afterEach(() => {
+      document.body.removeChild(errorMessage);
+    });
+
+    test('should have error-message type', () => {
+      expect(errorMessage.type).toBe('error-message');
+    });
+
+    test('should render with error type attribute', () => {
+      expect(errorMessage.getAttribute('type')).toBe('error-message');
     });
   });
 });

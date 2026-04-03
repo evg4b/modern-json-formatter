@@ -109,7 +109,7 @@ describe('mjf-query-input', () => {
 
   describe('errors', () => {
     const errorMessageQuery = () => queryInputElement.shadowRoot
-      ?.querySelector('.error-message');
+      ?.querySelector('mjf-error-message');
 
     test('should have no error message by defaults', () => {
       expect(errorMessageQuery()).toBeNull();

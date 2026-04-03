@@ -6,8 +6,16 @@ import { jq } from '@core/background';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import type { TokenNode, TupleNode } from '@wasm/types';
-import '../example-error/example-error';
 import { isErrorNode } from '../../../content-script/helpers.ts';
+import '@core/ui/error-message';
+
+// ============ Types ============
+
+type ExecutionState
+  = | { type: 'idle' }
+    | { type: 'loading' }
+    | { type: 'success'; result: string }
+    | { type: 'error'; error: string };
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -15,12 +23,28 @@ declare global {
   }
 }
 
+// ============ Constants ============
+
 const PLAY_ICON = `
   <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
     <path d="M3 2l10 6-10 6z"/>
   </svg>
 `;
 
+const ENTER_KEY = 'Enter';
+const LOADING_MESSAGE = 'Running...';
+const UNEXPECTED_ERROR_MESSAGE = 'Unexpected error';
+const RUN_QUERY_TITLE = 'Run query';
+
+// ============ Utilities ============
+
+/**
+ * Converts a TokenNode or TupleNode into a JSON-like string representation.
+ * Recursively traverses the token tree, handling:
+ * - Primitives (null, boolean, number, string)
+ * - Collections (object, array)
+ * - Special tuple type (joins items with newlines for JQ multi-value results)
+ */
 export const tokenNodeToString = (node: TokenNode | TupleNode): string => {
   switch (node.type) {
     case 'tuple':
@@ -127,7 +151,6 @@ export class ExampleTableElement extends LitElement {
         width: 100%;
         padding: 0;
         display: block;
-        border: none;
       }
       
       .row {
@@ -156,74 +179,101 @@ export class ExampleTableElement extends LitElement {
   public output = '';
 
   @state()
-  private loading = false;
-
-  @state()
-  private result: string | null = null;
-
-  @state()
-  private error: string | null = null;
+  private executionState: ExecutionState = { type: 'idle' };
 
   private readonly queryRef = createRef<HTMLInputElement>();
   private readonly inputRef = createRef<HTMLInputElement>();
 
-  public override render() {
-    const outputLines = this.result?.split('\n') ?? this.output.split('\n');
+  // Convenience getters
+  private get isLoading(): boolean {
+    return this.executionState.type === 'loading';
+  }
 
+  private get currentError(): string | null {
+    return this.executionState.type === 'error' ? this.executionState.error : null;
+  }
+
+  private get currentResult(): string | null {
+    return this.executionState.type === 'success' ? this.executionState.result : null;
+  }
+
+  public override render() {
     return html`
       <div class="label">Query</div>
       <div class="row">
-        <input ${ref(this.queryRef)} .value=${this.query} type="text" @keydown=${this.onKeyDown} />
-        <button @click=${this.onExec} .disabled=${this.loading} title="Run query">
+        <input
+          ${ref(this.queryRef)}
+          .value=${this.query}
+          type="text"
+          @keydown=${this.onKeyDown}
+          ?disabled=${this.isLoading}
+        />
+        <button
+          @click=${this.onExec}
+          ?disabled=${this.isLoading}
+          title=${RUN_QUERY_TITLE}
+        >
           ${unsafeSVG(PLAY_ICON)}
         </button>
       </div>
       <div class="label">Input</div>
       <div>
-        <input ${ref(this.inputRef)} .value=${this.input} type="text" @keydown=${this.onKeyDown} />
+        <input
+          ${ref(this.inputRef)}
+          .value=${this.input}
+          type="text"
+          @keydown=${this.onKeyDown}
+          ?disabled=${this.isLoading}
+        />
       </div>
       <div class="label">Output</div>
       <div class="code">
-        ${this.error ? this.renderErrorRow() : this.renderOutputRows(outputLines)}
+        ${this.renderContent()}
       </div>
     `;
   }
 
-  private renderOutputRows(lines: string[]) {
-    if (this.loading) {
-      return 'Running...';
+  private renderContent() {
+    if (this.isLoading) {
+      return LOADING_MESSAGE;
     }
+    if (this.currentError) {
+      return html`<mjf-error-message>${this.currentError}</mjf-error-message>`;
+    }
+    return this.renderOutputRows();
+  }
 
+  private renderOutputRows() {
+    const lines = this.currentResult?.split('\n') ?? this.output.split('\n');
     return map(lines, line => html`
       <div>${line}</div>
     `);
   }
 
-  private renderErrorRow() {
-    return html`
-      <mjf-example-error message=${this.error!}></mjf-example-error>
-    `;
-  }
-
   private onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' && !this.loading) {
+    if (event.key === ENTER_KEY && !this.isLoading) {
       void this.onExec();
     }
   }
 
   private async onExec() {
-    this.loading = true;
-    this.error = null;
-    this.result = null;
     const query = this.queryRef.value?.value ?? this.query;
     const input = this.inputRef.value?.value ?? this.input;
+
+    this.executionState = { type: 'loading' };
+
     try {
       const response = await jq(input, query);
-      this.result = tokenNodeToString(response as TokenNode | TupleNode);
+      const result = tokenNodeToString(response as TokenNode | TupleNode);
+      this.executionState = { type: 'success', result };
     } catch (err: unknown) {
-      this.error = isErrorNode(err) ? err.error : 'Unexpected error';
-    } finally {
-      this.loading = false;
+      const errorMessage = isErrorNode(err)
+        ? err.error
+        : err instanceof Error
+          ? err.message
+          : UNEXPECTED_ERROR_MESSAGE;
+
+      this.executionState = { type: 'error', error: errorMessage };
     }
   }
 }

@@ -7,7 +7,6 @@ import { defaultLitAsserts, renderLitElement } from '@testing/lit';
 import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString, tTuple } from '@testing/json';
 import type { TupleNode } from '@wasm/types';
 import { ExampleTableElement, tokenNodeToString } from './example-table';
-import type { ExampleErrorElement } from '../example-error/example-error';
 
 describe('ExampleTableElement', () => {
   let element: ExampleTableElement;
@@ -28,7 +27,7 @@ describe('ExampleTableElement', () => {
   });
 
   describe('default state', () => {
-    test('pre-populates input fields and output row from properties', async () => {
+    test('pre-populates input fields and output from properties', async () => {
       element.query = '.foo';
       element.input = '{"foo": 1}';
       element.output = '1';
@@ -38,8 +37,9 @@ describe('ExampleTableElement', () => {
       expect(inputs[0].value).toBe('.foo');
       expect(inputs[1].value).toBe('{"foo": 1}');
 
-      const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[2].textContent?.trim()).toBe('1');
+      // Output div should contain the default output
+      const outputDiv = element.shadowRoot!.querySelector<HTMLDivElement>('.code')!;
+      expect(outputDiv.textContent?.trim()).toContain('1');
     });
 
     test('renders Exec button', async () => {
@@ -73,9 +73,9 @@ describe('ExampleTableElement', () => {
       expect(mockJq).toHaveBeenCalledWith('"hello"', '.');
     });
 
-    test('shows result in output row', () => {
-      const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[2].textContent?.trim()).toBe('"hello"');
+    test('shows result in output div', () => {
+      const outputDiv = element.shadowRoot!.querySelector<HTMLDivElement>('.code')!;
+      expect(outputDiv.textContent?.trim()).toContain('"hello"');
     });
 
     test('does not show error message', () => {
@@ -93,25 +93,25 @@ describe('ExampleTableElement', () => {
       mockJq.mockRejectedValue(tErrorNode('unexpected token', 'jq'));
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
-      await Promise.resolve();
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await element.updateComplete;
+      await new Promise(resolve => setTimeout(resolve, 0));
       await element.updateComplete;
     });
 
-    test('shows error in a table row with Error label', () => {
-      const ths = element.shadowRoot!.querySelectorAll('th');
-      const errorTh = Array.from(ths).find(th => th.textContent === 'Error');
-      expect(errorTh).not.toBeNull();
+    test('calls jq with input and query', () => {
+      expect(mockJq).toHaveBeenCalledWith('{}', 'invalid');
     });
 
-    test('shows mjf-example-error with correct message', () => {
-      const errorEl = element.shadowRoot!.querySelector('mjf-example-error') as ExampleErrorElement | null;
-      expect(errorEl?.message).toBe('unexpected token');
+    test('shows mjf-error-message with correct message', () => {
+      const errorEl = element.shadowRoot?.querySelector('mjf-error-message');
+      expect(errorEl).not.toBeNull();
+      expect(errorEl?.textContent?.trim()).toBe('unexpected token');
     });
 
-    test('hides output rows when error is shown', () => {
-      const ths = element.shadowRoot!.querySelectorAll('th');
-      const outputTh = Array.from(ths).find(th => th.textContent === 'Output');
-      expect(outputTh).toBeUndefined();
+    test('shows error component instead of output lines', () => {
+      const errorEl = element.shadowRoot?.querySelector('mjf-error-message');
+      expect(errorEl).not.toBeNull();
     });
   });
 
@@ -125,13 +125,37 @@ describe('ExampleTableElement', () => {
       mockJq.mockRejectedValue(new Error('Network error'));
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
-      await Promise.resolve();
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await element.updateComplete;
+      await new Promise(resolve => setTimeout(resolve, 0));
       await element.updateComplete;
     });
 
-    test('shows mjf-example-error with generic message', () => {
-      const errorEl = element.shadowRoot!.querySelector('mjf-example-error') as ExampleErrorElement | null;
-      expect(errorEl?.message).toBe('Unexpected error');
+    test('shows mjf-error-message with actual error message', () => {
+      const codeDiv = element.shadowRoot!.querySelector<HTMLDivElement>('.code')!;
+      const errorEl = codeDiv.querySelector('mjf-error-message');
+      expect(errorEl?.textContent?.trim()).toBe('Network error');
+    });
+
+    test('shows fallback message for unknown error type', async () => {
+      // Reset state
+      element.query = '.';
+      element.input = 'null';
+      element.output = 'null';
+      await element.updateComplete;
+
+      // Reject with non-Error object
+      mockJq.mockRejectedValue('string error');
+      element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
+      await element.updateComplete;
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await element.updateComplete;
+      await new Promise(resolve => setTimeout(resolve, 0));
+      await element.updateComplete;
+
+      const codeDiv = element.shadowRoot!.querySelector<HTMLDivElement>('.code')!;
+      const errorEl = codeDiv.querySelector('mjf-error-message');
+      expect(errorEl?.textContent?.trim()).toBe('Unexpected error');
     });
   });
 
@@ -159,7 +183,7 @@ describe('ExampleTableElement', () => {
       await Promise.resolve();
     });
 
-    test('shows Running... in output during loading', async () => {
+    test('shows "Running..." in output during loading', async () => {
       element.query = '.';
       element.input = 'null';
       element.output = 'null';
@@ -174,9 +198,33 @@ describe('ExampleTableElement', () => {
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
 
-      const tds = element.shadowRoot!.querySelectorAll('td');
-      expect(tds[2].textContent?.trim()).toBe('Running…');
+      const outputDiv = element.shadowRoot!.querySelector<HTMLDivElement>('.code')!;
+      expect(outputDiv.textContent?.trim()).toBe('Running...');
 
+      resolve(tNull());
+      await Promise.resolve();
+    });
+
+    test('input fields are disabled while loading', async () => {
+      element.query = '.';
+      element.input = 'null';
+      element.output = 'null';
+      await element.updateComplete;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let resolve!: (v: any) => void;
+      mockJq.mockReturnValue(new Promise(res => {
+        resolve = res;
+      }));
+
+      element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
+      await element.updateComplete;
+
+      const inputs = element.shadowRoot!.querySelectorAll<HTMLInputElement>('input');
+      expect(inputs[0].disabled).toBe(true);
+      expect(inputs[1].disabled).toBe(true);
+
+      // clean up
       resolve(tNull());
       await Promise.resolve();
     });

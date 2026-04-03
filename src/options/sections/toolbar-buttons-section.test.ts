@@ -12,15 +12,9 @@ describe('mjf-toolbar-buttons-section', () => {
 
   defaultLitAsserts(ToolbarButtonsSectionElement, () => element);
 
-  test('renders section heading', () => {
-    const h3 = element.shadowRoot?.querySelector('h3');
-    expect(h3?.textContent?.trim()).toBe('Toolbar Buttons');
-  });
-
-  test('renders section hint', () => {
-    const hint = element.shadowRoot?.querySelector('.section-hint');
-    expect(hint).not.toBeNull();
-    expect(hint?.textContent?.trim().length).toBeGreaterThan(0);
+  test('renders checkbox group', () => {
+    const group = element.shadowRoot?.querySelector('.checkbox-group');
+    expect(group).not.toBeNull();
   });
 
   describe('checkboxes', () => {

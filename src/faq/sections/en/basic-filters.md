@@ -37,72 +37,10 @@ interpreted as being prescriptive:
 4. Comparisons are carried out using the untruncated big decimal representation of numbers if available, as illustrated
    in one of the following examples.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example1" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">"Hello, world!"</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"Hello, world!"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">0.12345678901234567890123456789</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">0.12345678901234567890123456789</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[., tojson]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">12345678909876543212345</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[12345678909876543212345,"12345678909876543212345"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. &lt; 0.12345678901234567890123456788</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">0.12345678901234567890123456789</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="." input='"Hello, world!"' output="&quot;Hello, world!&quot;"></mjf-example-table>
+<mjf-example-table query="." input='0.12345678901234567890123456789' output="0.12345678901234567890123456789"></mjf-example-table>
+<mjf-example-table query="[., tojson]" input='12345678909876543212345' output="[12345678909876543212345,&quot;12345678909876543212345&quot;]"></mjf-example-table>
+<mjf-example-table query=". &lt; 0.12345678901234567890123456788" input='0.12345678901234567890123456789' output="false"></mjf-example-table>
+<mjf-example-table query="map([., . == 1]) | tojson" input='[1, 1.000, 1.0, 100e-2]' output="&quot;[[1,true],[1.000,true],[1.0,true],[1.00,true]]&quot;"></mjf-example-table>
+<mjf-example-table query=". as $big | [$big, $big + 1] | map(. &gt; 10000000000000000000000000000000)" input='10000000000000000000000000000001' output="[true, false]"></mjf-example-table>

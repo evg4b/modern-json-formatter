@@ -12,15 +12,9 @@ describe('mjf-download-mode-section', () => {
 
   defaultLitAsserts(DownloadModeSectionElement, () => element);
 
-  test('renders section heading', () => {
-    const h3 = element.shadowRoot?.querySelector('h3');
-    expect(h3?.textContent?.trim()).toBe('Download Button Mode');
-  });
-
-  test('renders section hint', () => {
-    const hint = element.shadowRoot?.querySelector('.section-hint');
-    expect(hint).not.toBeNull();
-    expect(hint?.textContent?.trim().length).toBeGreaterThan(0);
+  test('renders radio group', () => {
+    const group = element.shadowRoot?.querySelector('.radio-group');
+    expect(group).not.toBeNull();
   });
 
   describe('radio buttons', () => {

@@ -9,71 +9,10 @@ jq's `==` is like JavaScript's `===`, the "strict equality" operator.
 
 != is "not equal", and 'a != b' returns the opposite value of 'a == b'
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example78" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. == false</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. == {"b": {"d": (4 + 1e-20), "c": 3}, "a":1}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"a":1, "b": {"c": 3, "d": 4}}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.[] == 1</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, 1.0, "1", "banana"]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=". == false" input='null' output="false"></mjf-example-table>
+<mjf-example-table query=". == {&quot;b&quot;: {&quot;d&quot;: (4 + 1e-20), &quot;c&quot;: 3}, &quot;a&quot;:1}" input='{"a":1, "b": {"c": 3, "d": 4}}' output="true"></mjf-example-table>
+<mjf-example-table query=".[] == 1" input='[1, 1.0, "1", "banana"]' output="true&#10;true&#10;false&#10;false"></mjf-example-table>
 
 ### if-then-else-end
 
@@ -92,27 +31,8 @@ and `C` is evaluated once for each false or null.
 
 More cases can be added to an if using `elif A then B` syntax.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example79" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">if . == 0 then "zero" elif . == 1 then "one" else "many" end</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"many"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="if . == 0 then &quot;zero&quot; elif . == 1 then &quot;one&quot; else &quot;many&quot; end" input='2' output="&quot;many&quot;"></mjf-example-table>
 
 ### `>`, `>=`, `<=`, `<`
 
@@ -121,27 +41,8 @@ to, less than or equal to or less than their right argument (respectively).
 
 The ordering is the same as that described for `sort`, above.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example80" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">. &lt; 5</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">2</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=". &lt; 5" input='2' output="true"></mjf-example-table>
 
 ### `and`, `or`, `not`
 
@@ -158,91 +59,11 @@ These three only produce the values `true` and `false`, and so are only useful f
 than the common Perl/Python/Ruby idiom of "value_that_may_be_null or default". If you want to use this form of "or",
 picking between two values rather than evaluating a condition, see the `//` operator below.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example81" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">42 and "a string"</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(true, false) or false</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(true, true) and (true, false)</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">false</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[true, false | not]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[false, true]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="42 and &quot;a string&quot;" input='null' output="true"></mjf-example-table>
+<mjf-example-table query="(true, false) or false" input='null' output="true&#10;false"></mjf-example-table>
+<mjf-example-table query="(true, true) and (true, false)" input='null' output="true&#10;false&#10;true&#10;false"></mjf-example-table>
+<mjf-example-table query="[true, false | not]" input='null' output="[false, true]"></mjf-example-table>
 
 ### Alternative operator: `//`
 
@@ -263,99 +84,12 @@ Precedence rules can make this confusing. For example, in `false, 1 // 2` the le
 side of `//` is `.`, which always produces just one value, while in `(false, null, 1) // 42` the left-hand side is a
 generator of three values, and since it produces a value other `false` and `null`, the default `42` is not produced.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example82" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">empty // 42</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">42</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.foo // 42</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"foo": 19}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">19</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.foo // 42</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">42</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(false, null, 1) // 42</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">(false, null, 1) | . // 42</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">null</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">42</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">42</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="empty // 42" input='null' output="42"></mjf-example-table>
+<mjf-example-table query=".foo // 42" input='{"foo": 19}' output="19"></mjf-example-table>
+<mjf-example-table query=".foo // 42" input='{}' output="42"></mjf-example-table>
+<mjf-example-table query="(false, null, 1) // 42" input='null' output="1"></mjf-example-table>
+<mjf-example-table query="(false, null, 1) | . // 42" input='null' output="42&#10;42&#10;1"></mjf-example-table>
 
 ### try-catch
 
@@ -365,59 +99,10 @@ expression to try.
 
 The `try EXP` form uses `empty` as the exception handler.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example83" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">try .a catch ". is not an object"</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">". is not an object"</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[]|try .a]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{}, true, {"a":1}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[null, 1]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">try error("some exception") catch .</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">true</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">"some exception"</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="try .a catch &quot;. is not an object&quot;" input='true' output="&quot;. is not an object&quot;"></mjf-example-table>
+<mjf-example-table query="[.[]|try .a]" input='[{}, true, {"a":1}]' output="[null, 1]"></mjf-example-table>
+<mjf-example-table query="try error(&quot;some exception&quot;) catch ." input='true' output="&quot;some exception&quot;"></mjf-example-table>
 
 ### Breaking out of control structures
 
@@ -459,40 +144,6 @@ because no label `$out` is visible.
 
 The `?` operator, used as `EXP?`, is shorthand for `try EXP`.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example84" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[] | .a?]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[{}, true, {"a":1}]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[null, 1]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.[] | tonumber?]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">["1", "invalid", "3", 4]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[1, 3, 4]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[.[] | .a?]" input='[{}, true, {"a":1}]' output="[null, 1]"></mjf-example-table>
+<mjf-example-table query="[.[] | tonumber?]" input='["1", "invalid", "3", 4]' output="[1, 3, 4]"></mjf-example-table>

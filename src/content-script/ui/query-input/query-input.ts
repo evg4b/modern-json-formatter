@@ -9,6 +9,7 @@ import { AutocompleteController } from './autocomplete.controller';
 import { map } from 'lit/directives/map.js';
 import { boxingFixCss } from '@core/styles/lit';
 import { isNotNil } from 'es-toolkit';
+import '@core/ui/error-message';
 
 interface HistoryItem {
   query: string;
@@ -87,17 +88,10 @@ export class QueryInputElement extends LitElement {
           border-color: var(--input-focus-border-color);
         }
       }
-      
-      .error-message {
+
+      mjf-error-message {
         position: absolute;
         top: calc(100% + 5px);
-        color: var(--error-color);
-        background: var(--error-background);
-        font-size: 10px;
-        user-select: none;
-        padding: 2px 5px;
-        border-radius: 5px;
-        box-sizing: border-box;
         width: 100%;
       }
     `,
@@ -149,9 +143,9 @@ export class QueryInputElement extends LitElement {
     }
 
     return html`
-      <div class="error-message">
+      <mjf-error-message small="true">
         ${this.error}
-      </div>
+      </mjf-error-message>
     `;
   }
 

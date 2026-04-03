@@ -28,43 +28,9 @@ to the expression 1,2,3 (which produces three different results).
 If you have a filter `X` that produces four results, then the expression `[X]` will produce a single result, an array of
 four elements.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example10" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[.user, .projects[]]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"user":"stedolan", "projects": ["jq", "wikiflow"]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">["stedolan", "jq", "wikiflow"]</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">[ .[] | . * 2]</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[1, 2, 3]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">[2, 4, 6]</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="[.user, .projects[]]" input='{"user":"stedolan", "projects": ["jq", "wikiflow"]}' output='["stedolan", "jq", "wikiflow"]'></mjf-example-table>
+<mjf-example-table query="[ .[] | . * 2]" input='[1, 2, 3]' output="[2, 4, 6]"></mjf-example-table>
 
 ### Object construction: `{}`
 
@@ -135,47 +101,9 @@ produces
 {"foo":"f o o","b a r":"f o o"}
 ```
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example11" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">{user, title: .titles[]}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"user":"stedolan","titles":["JQ Primer", "More JQ"]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"user":"stedolan", "title": "JQ Primer"}</td>
-      </tr>
-      <tr>
-        <th></th>
-        <td class="font-monospace">{"user":"stedolan", "title": "More JQ"}</td>
-      </tr>
-      </tbody>
-    </table>
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">{(.user): .titles}</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">{"user":"stedolan","titles":["JQ Primer", "More JQ"]}</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">{"stedolan": ["JQ Primer", "More JQ"]}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query="{user, title: .titles[]}" input='{"user":"stedolan","titles":["JQ Primer", "More JQ"]}' output="{&quot;user&quot;:&quot;stedolan&quot;, &quot;title&quot;: &quot;JQ Primer&quot;}&#10;{&quot;user&quot;:&quot;stedolan&quot;, &quot;title&quot;: &quot;More JQ&quot;}"></mjf-example-table>
+<mjf-example-table query="{(.user): .titles}" input='{"user":"stedolan","titles":["JQ Primer", "More JQ"]}' output="{&quot;stedolan&quot;: [&quot;JQ Primer&quot;, &quot;More JQ&quot;]}"></mjf-example-table>
 
 ### Recursive Descent: `..`
 
@@ -185,24 +113,5 @@ example below we use `.. | .a?` to find all the values of object keys "a" in any
 
 This is particularly useful in conjunction with `path(EXP)` (also see below) and the `?` operator.
 
-<div class="pb-3">
-  <h4 class="examples">Examples:</h4>
-  <div id="example12" class="collapse mx-3 small d-print-block">
-    <table class="table table-borderless table-sm w-auto">
-      <tbody>
-      <tr>
-        <th class="pe-3">Query</th>
-        <td class="font-monospace">.. | .a?</td>
-      </tr>
-      <tr>
-        <th>Input</th>
-        <td class="font-monospace">[[{"a":1}]]</td>
-      </tr>
-      <tr>
-        <th>Output</th>
-        <td class="font-monospace">1</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+#### Examples:
+<mjf-example-table query=".. | .a?" input='[[{"a":1}]]' output="1"></mjf-example-table>

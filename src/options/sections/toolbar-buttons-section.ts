@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { boxingFixCss } from '@core/styles/lit';
+import { optionsSectionStyles } from '../section';
 import type { ToolbarButtonsSettings } from '@core/settings';
 
 export class ButtonsChangeEvent extends CustomEvent<ToolbarButtonsSettings> {
@@ -23,24 +24,8 @@ declare global {
 export class ToolbarButtonsSectionElement extends LitElement {
   public static override readonly styles = [
     boxingFixCss,
+    optionsSectionStyles,
     css`
-      :host {
-        display: block;
-        width: 100%;
-      }
-
-      h3 {
-        margin: 0 0 4px 0;
-        font-size: 1rem;
-      }
-
-      .section-hint {
-        margin: 0 0 14px 0;
-        font-size: 0.82rem;
-        color: var(--meta-info-color);
-        line-height: 1.4;
-      }
-
       .checkbox-group {
         display: flex;
         flex-direction: column;
@@ -59,18 +44,6 @@ export class ToolbarButtonsSectionElement extends LitElement {
         margin-top: 2px;
         flex-shrink: 0;
       }
-
-      .option-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .option-hint {
-        font-size: 0.78rem;
-        color: var(--meta-info-color);
-        line-height: 1.4;
-      }
     `,
   ];
 
@@ -84,8 +57,6 @@ export class ToolbarButtonsSectionElement extends LitElement {
 
   public override render() {
     return html`
-      <h3>Toolbar Buttons</h3>
-      <p class="section-hint">Choose which buttons appear in the toolbar when viewing a JSON page.</p>
       <div class="checkbox-group">
         <label>
           <input type="checkbox"

@@ -7,6 +7,7 @@ import { boxingFixCss } from '@core/styles/lit';
 import '@core/ui';
 
 import './options.scss';
+import './section';
 import './sections/toolbar-buttons-section';
 import './sections/download-mode-section';
 import {
@@ -109,18 +110,26 @@ export class OptionsPageElement extends LitElement {
         </div>
         <div class="separator"></div>
 
-        <mjf-toolbar-buttons-section
-          .buttons=${this.settings.buttons}
-          @buttons-change=${this.onButtonsChange}>
-        </mjf-toolbar-buttons-section>
+        <mjf-options-section>
+          <span slot="title">Toolbar Buttons</span>
+          <span slot="hint">Choose which buttons appear in the toolbar when viewing a JSON page.</span>
+          <mjf-toolbar-buttons-section
+            .buttons=${this.settings.buttons}
+            @buttons-change=${this.onButtonsChange}>
+          </mjf-toolbar-buttons-section>
+        </mjf-options-section>
 
         <div class="separator"></div>
 
-        <mjf-download-mode-section
-          .mode=${this.settings.downloadMode}
-          ?disabled=${!this.settings.buttons.download}
-          @mode-change=${this.onModeChange}>
-        </mjf-download-mode-section>
+        <mjf-options-section>
+          <span slot="title">Download Button Mode</span>
+          <span slot="hint">Controls what happens when you click the download button.</span>
+          <mjf-download-mode-section
+            .mode=${this.settings.downloadMode}
+            ?disabled=${!this.settings.buttons.download}
+            @mode-change=${this.onModeChange}>
+          </mjf-download-mode-section>
+        </mjf-options-section>
 
         <div class="separator"></div>
 

@@ -10,6 +10,7 @@ import type { ToolbarButtonsSettings } from '@core/settings';
 
 import type { ToolbarButtonsSectionElement } from './sections/toolbar-buttons-section';
 import type { DownloadModeSectionElement } from './sections/download-mode-section';
+import type { QueryHistorySectionElement } from './sections/query-history-section';
 
 import '@core/ui';
 
@@ -31,6 +32,11 @@ describe('mjf-options-page', () => {
   defaultLitAsserts(OptionsPageElement, () => optionsPageElement);
 
   describe('section components', () => {
+    test('renders mjf-options-section wrappers', () => {
+      const sections = optionsPageElement.shadowRoot?.querySelectorAll('mjf-options-section');
+      expect(sections?.length).toBe(3);
+    });
+
     test('renders mjf-toolbar-buttons-section', () => {
       const section = optionsPageElement.shadowRoot?.querySelector('mjf-toolbar-buttons-section');
       expect(section).not.toBeNull();
@@ -125,11 +131,17 @@ describe('mjf-options-page', () => {
   });
 
   describe('query history', () => {
+    test('renders mjf-query-history-section', () => {
+      const section = optionsPageElement.shadowRoot?.querySelector('mjf-query-history-section');
+      expect(section).not.toBeNull();
+    });
+
     test('calls clearHistory and refreshes content on clear button click', async () => {
       (clearHistory as Mock<typeof clearHistory>).mockResolvedValue(undefined);
       (getDomains as Mock<typeof getDomains>).mockReturnValue(Promise.resolve<DomainCountResponse>([]));
 
-      const clearButton = optionsPageElement.shadowRoot?.querySelector('mjf-rounded-button');
+      const historySection = optionsPageElement.shadowRoot?.querySelector<QueryHistorySectionElement>('mjf-query-history-section');
+      const clearButton = historySection?.shadowRoot?.querySelector('mjf-rounded-button');
       expect(clearButton).not.toBeNull();
 
       (getDomains as Mock<typeof getDomains>).mockClear();

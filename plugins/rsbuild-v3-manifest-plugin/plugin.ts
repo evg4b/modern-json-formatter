@@ -75,6 +75,8 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
 
       logger.info(`Generating manifest for ${baseManifest.name ?? 'unknown'} extension`);
 
+      const assert = stats.assets?.find(asset => asset.name === 'options.html');
+
       await writeFile(outputPath, JSON.stringify(<ManifestV3>{
         $schema: 'https://json.schemastore.org/chrome-manifest.json',
         ...await mapPackageJsonToManifestV3(api),
@@ -92,12 +94,12 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
           service_worker: backgroundScript,
           type: 'module',
         },
+        options_page: assert?.name,
         icons,
         web_accessible_resources: [
           ...baseManifest.web_accessible_resources ?? [],
           {
             resources: [
-              ...chunks['options'] ?? [],
               ...Object.entries(options?.pages ?? {})
                 .reduce((accumulator: string[], [name]) => [
                   ...accumulator,

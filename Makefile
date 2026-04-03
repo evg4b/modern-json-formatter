@@ -56,7 +56,6 @@ screen-shot:
 	@echo "Taking screen shot..."
 	open -n -a "Google Chrome" --args \
 		--user-data-dir="$(TEMP_DIR)" \
-		--disable-extensions-except="$(EXT_DIR)" \
 		--load-extension="$(EXT_DIR)" \
 		--no-first-run \
 		--no-default-browser-check \

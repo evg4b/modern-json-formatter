@@ -2,6 +2,7 @@ import { LitElement, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import styles from './container.scss?inline';
 import { createElement } from '@core/dom';
+import '@core/ui/floating-message';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -66,7 +67,7 @@ export class ContainerElement extends LitElement {
       content: content,
     });
 
-    this.appendChild(created);
+    this.renderRoot.appendChild(created);
   }
 
   private get container(): HTMLElement {

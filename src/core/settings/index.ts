@@ -10,7 +10,12 @@ export interface ToolbarButtonsSettings {
 export interface ExtensionSettings {
   buttons: ToolbarButtonsSettings;
   downloadMode: DownloadMode;
+  maxFileSize: number;
 }
+
+export const MIN_FILE_SIZE_MB = 1;
+export const MAX_FILE_SIZE_MB = 20;
+export const DEFAULT_MAX_FILE_SIZE_MB = 3;
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   buttons: {
@@ -20,6 +25,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
     download: true,
   },
   downloadMode: 'dropdown',
+  maxFileSize: DEFAULT_MAX_FILE_SIZE_MB,
 };
 
 const STORAGE_KEY = 'mjf_settings';

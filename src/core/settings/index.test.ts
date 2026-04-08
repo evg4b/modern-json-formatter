@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, rstest, test } from '@rstest/core';
-import { DEFAULT_SETTINGS, getSettings, saveSettings } from './index';
+import { DEFAULT_MAX_FILE_SIZE_MB, DEFAULT_SETTINGS, getSettings, saveSettings } from './index';
 
 const STORAGE_KEY = 'mjf_settings';
 
@@ -42,6 +42,10 @@ describe('settings', () => {
 
     test('has downloadMode set to dropdown', () => {
       expect(DEFAULT_SETTINGS.downloadMode).toBe('dropdown');
+    });
+
+    test('has maxFileSize set to DEFAULT_MAX_FILE_SIZE_MB', () => {
+      expect(DEFAULT_SETTINGS.maxFileSize).toBe(DEFAULT_MAX_FILE_SIZE_MB);
     });
   });
 

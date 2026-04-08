@@ -9,6 +9,7 @@ const defaultSettings: ExtensionSettings = {
     download: true,
   },
   downloadMode: 'dropdown',
+  maxFileSize: 3,
 };
 
 rstest.mock('@core/settings', () => ({

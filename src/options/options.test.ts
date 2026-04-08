@@ -9,6 +9,7 @@ import type { ToolbarButtonsSettings } from '@core/settings';
 import { DEFAULT_SETTINGS, type ExtensionSettings, getSettings, saveSettings } from '@core/settings';
 import type { ToolbarButtonsSectionElement } from './sections/toolbar-buttons-section';
 import type { DownloadModeSectionElement } from './sections/download-mode-section';
+import type { FileSizeSectionElement } from './sections/file-size-section';
 import '@core/ui';
 
 describe('mjf-options-page', () => {
@@ -31,7 +32,7 @@ describe('mjf-options-page', () => {
   describe('section components', () => {
     test('renders mjf-options-section wrappers', () => {
       const sections = optionsPageElement.shadowRoot?.querySelectorAll('mjf-options-section');
-      expect(sections?.length).toBe(2);
+      expect(sections?.length).toBe(3);
     });
 
     test('renders mjf-toolbar-buttons-section', () => {
@@ -41,6 +42,11 @@ describe('mjf-options-page', () => {
 
     test('renders mjf-download-mode-section', () => {
       const section = optionsPageElement.shadowRoot?.querySelector('mjf-download-mode-section');
+      expect(section).not.toBeNull();
+    });
+
+    test('renders mjf-file-size-section', () => {
+      const section = optionsPageElement.shadowRoot?.querySelector('mjf-file-size-section');
       expect(section).not.toBeNull();
     });
 
@@ -54,6 +60,12 @@ describe('mjf-options-page', () => {
       const section = optionsPageElement.shadowRoot
         ?.querySelector<DownloadModeSectionElement>('mjf-download-mode-section');
       expect(section?.mode).toBe(DEFAULT_SETTINGS.downloadMode);
+    });
+
+    test('passes maxFileSize to mjf-file-size-section', () => {
+      const section = optionsPageElement.shadowRoot
+        ?.querySelector<FileSizeSectionElement>('mjf-file-size-section');
+      expect(section?.maxFileSize).toBe(DEFAULT_SETTINGS.maxFileSize);
     });
 
     test('mjf-download-mode-section is not disabled when download button is on', () => {
@@ -104,6 +116,25 @@ describe('mjf-options-page', () => {
       test('saveSettings receives updated buttons', () => {
         const saved = (saveSettings as Mock<typeof saveSettings>).mock.calls[0][0] as ExtensionSettings;
         expect(saved.buttons).toEqual(updatedButtons);
+      });
+    });
+
+    describe('when file-size-change fires', () => {
+      beforeEach(async () => {
+        const section = optionsPageElement.shadowRoot?.querySelector('mjf-file-size-section');
+        section?.dispatchEvent(
+          new CustomEvent<number>('file-size-change', { detail: 8, bubbles: true }),
+        );
+        await new Promise(resolve => setTimeout(resolve, 0));
+      });
+
+      test('calls saveSettings once', () => {
+        expect(saveSettings).toHaveBeenCalledTimes(1);
+      });
+
+      test('saveSettings receives updated maxFileSize', () => {
+        const saved = (saveSettings as Mock<typeof saveSettings>).mock.calls[0][0] as ExtensionSettings;
+        expect(saved.maxFileSize).toBe(8);
       });
     });
 

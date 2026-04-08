@@ -3,12 +3,13 @@ import '@testing/browser.mock';
 import '@testing/background.mock';
 import '@testing/settings.mock';
 import { download, format, jq, pushHistory, tokenize } from '@core/background';
+import { getSettings } from '@core/settings';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { tNull, tObject, tProperty, tString } from '@testing/json';
 import { wrapMock } from '@testing/helpers';
-import { LIMIT, runExtension } from './extension';
+import { LIMIT, ONE_MEGABYTE_LENGTH, runExtension } from './extension';
 import { ToolboxElement } from './ui/toolbox/toolbox';
 import { findNodeWithCode } from './json-detector';
 import type { ContainerElement } from './ui/container/container';
@@ -58,6 +59,11 @@ describe('runExtension', () => {
       content: 'X'.repeat(LIMIT + 10),
     });
 
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 3,
+    });
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(sendMessage).mockResolvedValue(tNull());
     wrapMock(format).mockResolvedValue('formatted');
@@ -77,6 +83,11 @@ describe('runExtension', () => {
       content: 'X'.repeat(LIMIT + 10),
     });
 
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 3,
+    });
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
 
@@ -94,6 +105,11 @@ describe('runExtension', () => {
       content: 'X'.repeat(LIMIT + 10),
     });
 
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 3,
+    });
     const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
@@ -103,6 +119,28 @@ describe('runExtension', () => {
     expect(format).toHaveBeenCalled();
     expect(consoleSpy).toHaveBeenCalled();
     expect(tokenize).not.toHaveBeenCalled();
+  });
+
+  test('when content is within a custom maxFileSize setting, tokenizes normally', async () => {
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 5,
+    });
+
+    const preNode = createElement({
+      element: 'pre',
+      // 4 MB — above default 3 MB limit but below the custom 5 MB limit
+      content: 'X'.repeat(ONE_MEGABYTE_LENGTH * 4),
+    });
+
+    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+    wrapMock(tokenize).mockResolvedValue(tObject(tProperty('key', tString('value'))));
+
+    await runExtension();
+
+    expect(tokenize).toHaveBeenCalled();
+    expect(format).not.toHaveBeenCalled();
   });
 
   test('when content is base', async () => {

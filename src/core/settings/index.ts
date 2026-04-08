@@ -15,7 +15,7 @@ export interface ExtensionSettings {
 
 export const MIN_FILE_SIZE_MB = 1;
 export const MAX_FILE_SIZE_MB = 150;
-export const DEFAULT_MAX_FILE_SIZE_MB = 5;
+export const DEFAULT_MAX_FILE_SIZE_MB = 10;
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   buttons: {

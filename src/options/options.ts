@@ -19,6 +19,7 @@ import {
   type ExtensionSettings,
   type ToolbarButtonsSettings,
 } from '@core/settings';
+import { FileSizeChangeEvent } from './sections/file-size-section.ts';
 
 const columns: TableColumn[] = [
   { title: 'Domain', path: 'domain' },
@@ -175,9 +176,8 @@ export class OptionsPageElement extends LitElement {
     await saveSettings(this.settings);
   }
 
-  private async onFileSizeChange(event: Event) {
-    const maxFileSize = (event as CustomEvent<number>).detail;
-    this.settings = { ...this.settings, maxFileSize };
+  private async onFileSizeChange({ detail }: FileSizeChangeEvent) {
+    this.settings = { ...this.settings, maxFileSize: detail };
     await saveSettings(this.settings);
   }
 

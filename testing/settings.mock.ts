@@ -1,5 +1,5 @@
 import { rstest } from '@rstest/core';
-import type { ExtensionSettings } from '@core/settings';
+import { type ExtensionSettings } from '@core/settings';
 
 const defaultSettings: ExtensionSettings = {
   buttons: {
@@ -9,7 +9,7 @@ const defaultSettings: ExtensionSettings = {
     download: true,
   },
   downloadMode: 'dropdown',
-  maxFileSize: 3,
+  maxFileSize: 10,
 };
 
 rstest.mock('@core/settings', () => ({

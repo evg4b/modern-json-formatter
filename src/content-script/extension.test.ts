@@ -59,6 +59,11 @@ describe('runExtension', () => {
       content: 'X'.repeat(LIMIT + 10),
     });
 
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 3,
+    });
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(sendMessage).mockResolvedValue(tNull());
     wrapMock(format).mockResolvedValue('formatted');
@@ -78,6 +83,11 @@ describe('runExtension', () => {
       content: 'X'.repeat(LIMIT + 10),
     });
 
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 3,
+    });
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
 
@@ -95,6 +105,11 @@ describe('runExtension', () => {
       content: 'X'.repeat(LIMIT + 10),
     });
 
+    wrapMock(getSettings).mockResolvedValue({
+      buttons: { query: true, formatted: true, raw: true, download: true },
+      downloadMode: 'dropdown',
+      maxFileSize: 3,
+    });
     const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });

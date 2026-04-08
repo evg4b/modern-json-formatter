@@ -69,8 +69,8 @@ describe('ContainerElement', () => {
     container.setQueryContent(child);
   });
 
-  test('message appends mjf-floating-message to light DOM', () => {
+  test('message appends mjf-floating-message to shadow DOM', () => {
     container.message('Header', 'Body text');
-    expect(container.querySelector('mjf-floating-message')).not.toBeNull();
+    expect((container as ContainerElement & { renderRoot: ShadowRoot }).renderRoot.querySelector('mjf-floating-message')).not.toBeNull();
   });
 });

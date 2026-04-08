@@ -44,12 +44,13 @@ export const runExtension = async () => {
 
   if (content.length > limit) {
     preNode.remove();
+    container.type = 'raw';
 
     try {
       const formatted = await format(content);
       if (typeof formatted === 'object') {
-        container.type = 'raw';
         container.setRawContent(createErrorNode('Invalid JSON file.', formatted.error));
+        container.stopLoading();
         return;
       }
 
@@ -58,12 +59,15 @@ export const runExtension = async () => {
         content: formatted,
       }));
     } catch (error: unknown) {
-      container.setError(error);
-      return;
-    } finally {
+      container.setRawContent(createErrorNode(
+        'Failed to process file',
+        error instanceof Error ? error.message : String(error),
+      ));
       container.stopLoading();
+      return;
     }
 
+    container.stopLoading();
     container.message(
       'File is too large',
       `File is too large to be processed (More than ${settings.maxFileSize}MB). It has been formatted instead.`,

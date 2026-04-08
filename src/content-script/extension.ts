@@ -39,7 +39,10 @@ export const runExtension = async () => {
 
   shadowRoot.appendChild(container);
 
-  if (content.length > LIMIT) {
+  const settings = await getSettings();
+  const limit = settings.maxFileSize * ONE_MEGABYTE_LENGTH;
+
+  if (content.length > limit) {
     preNode.remove();
 
     try {
@@ -63,7 +66,7 @@ export const runExtension = async () => {
 
     container.message(
       'File is too large',
-      'File is too large to be processed (More than 3MB). It has been formatted instead.',
+      `File is too large to be processed (More than ${settings.maxFileSize}MB). It has been formatted instead.`,
     );
 
     return;
@@ -79,8 +82,6 @@ export const runExtension = async () => {
       container.stopLoading();
     }
   };
-
-  const settings = await getSettings();
 
   setTimeout(() => {
     const toolbox = document.createElement('mjf-toolbox');

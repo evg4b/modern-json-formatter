@@ -96,6 +96,7 @@ describe('settings', () => {
       const settings = {
         buttons: { query: false, formatted: true, raw: true, download: false },
         downloadMode: 'formatted' as const,
+        maxFileSize: 5,
       };
 
       await saveSettings(settings);

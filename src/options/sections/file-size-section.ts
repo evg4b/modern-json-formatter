@@ -58,7 +58,7 @@ export class FileSizeSectionElement extends LitElement {
     `,
   ];
 
-  @property({ type: Number })
+  @property({ type: Number, attribute: 'max-file-size' })
   public maxFileSize = 3;
 
   public override render() {

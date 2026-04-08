@@ -10,6 +10,7 @@ import './options.scss';
 import './section';
 import './sections/toolbar-buttons-section';
 import './sections/download-mode-section';
+import './sections/file-size-section';
 import {
   DEFAULT_SETTINGS,
   getSettings,
@@ -133,6 +134,17 @@ export class OptionsPageElement extends LitElement {
 
         <div class="separator"></div>
 
+        <mjf-options-section>
+          <span slot="title">Maximum File Size</span>
+          <span slot="hint">Files larger than this limit will be formatted but not fully processed. Increase this value for large JSON files at the cost of higher memory usage.</span>
+          <mjf-file-size-section
+            .maxFileSize=${this.settings.maxFileSize}
+            @file-size-change=${this.onFileSizeChange}>
+          </mjf-file-size-section>
+        </mjf-options-section>
+
+        <div class="separator"></div>
+
         <div class="section">
           <h2>Query history data</h2>
           <mjf-rounded-button @click=${this.onClearClick}>
@@ -160,6 +172,12 @@ export class OptionsPageElement extends LitElement {
   private async onModeChange(event: Event) {
     const downloadMode = (event as CustomEvent<DownloadMode>).detail;
     this.settings = { ...this.settings, downloadMode };
+    await saveSettings(this.settings);
+  }
+
+  private async onFileSizeChange(event: Event) {
+    const maxFileSize = (event as CustomEvent<number>).detail;
+    this.settings = { ...this.settings, maxFileSize };
     await saveSettings(this.settings);
   }
 

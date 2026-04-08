@@ -75,7 +75,9 @@ describe('mjf-file-size-section', () => {
     beforeEach(async () => {
       handler = rstest.fn();
       element.addEventListener('file-size-change', handler as unknown as EventListener);
-      input = element.shadowRoot?.querySelector<HTMLInputElement>('input[type="range"]')!;
+      const found = element.shadowRoot?.querySelector<HTMLInputElement>('input[type="range"]');
+      if (!found) throw new Error('range input not found');
+      input = found;
       input.value = '7';
       input.dispatchEvent(new Event('input', { bubbles: true }));
       await element.updateComplete;

@@ -32,7 +32,7 @@ describe('mjf-file-size-section', () => {
     expect(Number(input?.step)).toBe(1);
   });
 
-  test('default maxFileSize is 3', () => {
+  test('default maxFileSize equals DEFAULT_MAX_FILE_SIZE_MB', () => {
     expect(element.maxFileSize).toBe(DEFAULT_MAX_FILE_SIZE_MB);
   });
 
@@ -68,18 +68,38 @@ describe('mjf-file-size-section', () => {
     });
   });
 
-  describe('when the range input changes', () => {
+  describe('while dragging (input event)', () => {
     let handler: Mock<(e: FileSizeChangeEvent) => void>;
-    let input: HTMLInputElement;
 
     beforeEach(async () => {
       handler = rstest.fn();
       element.addEventListener('file-size-change', handler as unknown as EventListener);
       const found = element.shadowRoot?.querySelector<HTMLInputElement>('input[type="range"]');
       if (!found) throw new Error('range input not found');
-      input = found;
-      input.value = '7';
-      input.dispatchEvent(new Event('input', { bubbles: true }));
+      found.value = '7';
+      found.dispatchEvent(new Event('input', { bubbles: true }));
+      await element.updateComplete;
+    });
+
+    test('updates the maxFileSize property for live label', () => {
+      expect(element.maxFileSize).toBe(7);
+    });
+
+    test('does not dispatch a file-size-change event', () => {
+      expect(handler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when the range input is committed (change event)', () => {
+    let handler: Mock<(e: FileSizeChangeEvent) => void>;
+
+    beforeEach(async () => {
+      handler = rstest.fn();
+      element.addEventListener('file-size-change', handler as unknown as EventListener);
+      const found = element.shadowRoot?.querySelector<HTMLInputElement>('input[type="range"]');
+      if (!found) throw new Error('range input not found');
+      found.value = '7';
+      found.dispatchEvent(new Event('change', { bubbles: true }));
       await element.updateComplete;
     });
 

@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { boxingFixCss } from '@core/styles/lit';
 import { optionsSectionStyles } from '../section';
-import { MAX_FILE_SIZE_MB, MIN_FILE_SIZE_MB } from '@core/settings';
+import { DEFAULT_MAX_FILE_SIZE_MB, MAX_FILE_SIZE_MB, MIN_FILE_SIZE_MB } from '@core/settings';
 
 export class FileSizeChangeEvent extends CustomEvent<number> {
   constructor(value: number) {
@@ -59,7 +59,7 @@ export class FileSizeSectionElement extends LitElement {
   ];
 
   @property({ type: Number, attribute: 'max-file-size' })
-  public maxFileSize = 3;
+  public maxFileSize = DEFAULT_MAX_FILE_SIZE_MB;
 
   public override render() {
     return html`
@@ -71,7 +71,8 @@ export class FileSizeSectionElement extends LitElement {
             max=${MAX_FILE_SIZE_MB}
             step="1"
             .value=${String(this.maxFileSize)}
-            @input=${this.onRangeInput}
+            @input=${this.onRangeLiveUpdate}
+            @change=${this.onRangeCommit}
           />
           <span class="value-label">${this.maxFileSize} MB</span>
         </div>
@@ -83,7 +84,12 @@ export class FileSizeSectionElement extends LitElement {
     `;
   }
 
-  private onRangeInput(event: Event) {
+  private onRangeLiveUpdate(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.maxFileSize = Number(target.value);
+  }
+
+  private onRangeCommit(event: Event) {
     const target = event.target as HTMLInputElement;
     const value = Number(target.value);
     this.maxFileSize = value;

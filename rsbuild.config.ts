@@ -24,6 +24,7 @@ export default defineConfig({
         host_permissions: [
           '*://*/*',
           '<all_urls>',
+          'file://*/*',
         ],
         content_security_policy: {
           extension_pages: 'script-src \'self\' \'wasm-unsafe-eval\'; object-src \'self\';',

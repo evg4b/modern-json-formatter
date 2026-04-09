@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 
 import { fn } from 'storybook/test';
 
@@ -9,7 +9,7 @@ import { Button } from './Button';
 const meta = {
   title: 'Example/Button',
   tags: ['autodocs'],
-  render: (args) => Button(args),
+  render: args => Button(args),
   argTypes: {
     backgroundColor: { control: 'color' },
     size: {

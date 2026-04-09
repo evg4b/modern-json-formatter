@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 
 import { fn } from 'storybook/test';
 

@@ -21,6 +21,7 @@ declare module '*.scss?inline' {
 }
 
 declare module '*.scss';
+declare module '*.css';
 
 type TabType = 'raw' | 'formatted' | 'query';
 

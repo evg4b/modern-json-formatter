@@ -3,7 +3,7 @@ import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
-import { extractFileName, isErrorNode } from './helpers';
+import { extractDomainKey, extractFileName, isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { type TabChangedEvent } from './ui/toolbox/toolbox';
 import { type ErrorNodeElement } from './ui/error-node';
@@ -99,7 +99,7 @@ export const runExtension = async () => {
       try {
         const info = await jq(preNode.innerText, query);
         container.setQueryContent(prepareResponse(info));
-        await pushHistory(globalThis.location.hostname, query);
+        await pushHistory(extractDomainKey(globalThis.location.href), query);
       } catch (error: unknown) {
         if (isErrorNode(error)) {
           if (error.scope === 'jq') {

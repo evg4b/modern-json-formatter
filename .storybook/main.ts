@@ -16,13 +16,18 @@ const config: StorybookConfig = {
     const browserMock = join(__dirname, 'browser.mock.ts');
     const browserSrc = join(__dirname, '../src/core/browser');
 
+    const backgroundMock = join(__dirname, 'background.mock.ts');
+    const backgroundSrc = join(__dirname, '../src/core/background');
+
     config.resolve ??= {};
     config.resolve.alias = {
       ...config.resolve.alias as Record<string, string>,
-      // alias both the tsconfig path alias key and the resolved file path
       '@core/browser': browserMock,
       [browserSrc]: browserMock,
       [`${browserSrc}/index.ts`]: browserMock,
+      '@core/background': backgroundMock,
+      [backgroundSrc]: backgroundMock,
+      [`${backgroundSrc}/index.ts`]: backgroundMock,
     };
 
     return config;

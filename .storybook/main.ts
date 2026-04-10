@@ -1,12 +1,9 @@
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { join } from 'node:path';
 import type { StorybookConfig } from 'storybook-web-components-rsbuild';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const root = join(__dirname, '..');
+const root = join(import.meta.dirname, '..');
 
-const config: StorybookConfig = {
+export default {
   stories: [
     '../src/**/*.mdx',
     '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
@@ -15,6 +12,14 @@ const config: StorybookConfig = {
   framework: 'storybook-web-components-rsbuild',
   staticDirs: [{ from: '../assets/production', to: '/' }],
   rsbuildFinal: config => {
+    const filteredPlugins = (config.plugins ?? [])
+      .filter(plugin => {
+        return plugin && 'name' in plugin
+          ? plugin.name != 'manifest-generator-plugin'
+          : !!plugin;
+      });
+
+    config.plugins = filteredPlugins;
     config.resolve ??= {};
     config.resolve.alias = {
       ...config.resolve.alias as Record<string, string>,
@@ -26,5 +31,4 @@ const config: StorybookConfig = {
 
     return config;
   },
-};
-export default config;
+} satisfies StorybookConfig;

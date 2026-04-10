@@ -1,7 +1,7 @@
 import type { Preview } from 'storybook-web-components-rsbuild';
 import './preview.scss';
 
-const preview: Preview = {
+export default {
   parameters: {
     controls: {
       matchers: {
@@ -10,6 +10,4 @@ const preview: Preview = {
       },
     },
   },
-};
-
-export default preview;
+} satisfies Preview;

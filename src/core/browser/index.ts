@@ -1,6 +1,4 @@
-const { getURL } = chrome.runtime;
-
-export const resource = getURL;
+export const resource = (path: string): string => chrome?.runtime?.getURL?.(path) ?? path;
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 100;

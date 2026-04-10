@@ -17,10 +17,12 @@ describe('Chrome Browser', () => {
     Reflect.deleteProperty(global, 'chrome');
   });
 
-  test('should export resource as getURL', async () => {
+  test('should call getURL with the given path', async () => {
     const { resource } = await import('./index');
+    (chrome.runtime.getURL as ReturnType<typeof rstest.fn>).mockReturnValue('chrome-extension://abc/icon.png');
 
-    expect(resource).toBe(chrome.runtime.getURL);
+    expect(resource('icon.png')).toBe('chrome-extension://abc/icon.png');
+    expect(chrome.runtime.getURL).toHaveBeenCalledWith('icon.png');
   });
 
   describe('sendMessage', () => {

@@ -267,11 +267,12 @@ export class ExampleTableElement extends LitElement {
       const result = tokenNodeToString(response as TokenNode | TupleNode);
       this.executionState = { type: 'success', result };
     } catch (err: unknown) {
-      const errorMessage = isErrorNode(err)
-        ? err.error
-        : err instanceof Error
-          ? err.message
-          : UNEXPECTED_ERROR_MESSAGE;
+      let errorMessage = UNEXPECTED_ERROR_MESSAGE;
+      if (isErrorNode(err)) {
+        errorMessage = err.error;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
 
       this.executionState = { type: 'error', error: errorMessage };
     }

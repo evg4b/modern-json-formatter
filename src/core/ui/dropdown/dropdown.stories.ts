@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { fn } from 'storybook/test';
+import { action } from 'storybook/actions';
 import { html } from 'lit';
 import './dropdown';
 import type { DropdownOption } from './dropdown';
@@ -25,9 +25,9 @@ const meta = {
   },
   args: {
     options: [
-      { label: 'Copy JSON', onClick: fn() },
-      { label: 'Download file', onClick: fn() },
-      { label: 'Open raw', onClick: fn() },
+      { label: 'Copy JSON', onClick: action('copy-json') },
+      { label: 'Download file', onClick: action('download-file') },
+      { label: 'Open raw', onClick: action('open-raw') },
     ],
     triggerLabel: 'Open menu',
   },
@@ -41,8 +41,8 @@ export const Default: Story = {};
 export const FewOptions: Story = {
   args: {
     options: [
-      { label: 'Format', onClick: fn() },
-      { label: 'Minify', onClick: fn() },
+      { label: 'Format', onClick: action('format') },
+      { label: 'Minify', onClick: action('minify') },
     ],
     triggerLabel: 'Actions',
   },
@@ -51,11 +51,11 @@ export const FewOptions: Story = {
 export const ManyOptions: Story = {
   args: {
     options: [
-      { label: 'Option 1', onClick: fn() },
-      { label: 'Option 2', onClick: fn() },
-      { label: 'Option 3', onClick: fn() },
-      { label: 'Option 4', onClick: fn() },
-      { label: 'Option 5', onClick: fn() },
+      { label: 'Option 1', onClick: action('option-1') },
+      { label: 'Option 2', onClick: action('option-2') },
+      { label: 'Option 3', onClick: action('option-3') },
+      { label: 'Option 4', onClick: action('option-4') },
+      { label: 'Option 5', onClick: action('option-5') },
     ],
     triggerLabel: 'More',
   },

@@ -9,7 +9,7 @@ interface SidebarLinkArgs {
 }
 
 const makeItem = (label: string): NavigationItem => ({
-  id: label.toLowerCase().replace(/\s+/g, '-'),
+  id: label.toLowerCase().replaceAll(/\s+/g, '-'),
   title: label,
   titleHtml: label,
   ref: document.createElement('section'),

@@ -36,7 +36,7 @@ type Story = StoryObj<FloatingMessageArgs>;
 
 export const Info: Story = {};
 
-export const Error: Story = {
+export const ErrorMessage: Story = {
   args: {
     type: 'error-message',
     header: 'Error',

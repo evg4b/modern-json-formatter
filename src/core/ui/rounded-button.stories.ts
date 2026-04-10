@@ -8,7 +8,6 @@ interface RoundedButtonArgs {
 
 const meta = {
   title: 'Core/RoundedButton',
-  tags: ['autodocs'],
   render: ({ label }) => html`
     <mjf-rounded-button>${label}</mjf-rounded-button>
   `,

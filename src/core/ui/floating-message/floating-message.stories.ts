@@ -11,7 +11,6 @@ interface FloatingMessageArgs {
 
 const meta = {
   title: 'Core/FloatingMessage',
-  tags: ['autodocs'],
   render: ({ type, header, message }) => html`
     <div style="position: relative; height: 120px;">
       <mjf-floating-message type=${type} header=${header}>

@@ -10,7 +10,6 @@ interface TableArgs {
 
 const meta = {
   title: 'Core/Table',
-  tags: ['autodocs'],
   render: ({ columns, data }) => html`
     <mjf-table-element
       .columns=${columns}

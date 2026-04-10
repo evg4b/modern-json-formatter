@@ -9,7 +9,6 @@ interface ErrorMessageArgs {
 
 const meta = {
   title: 'Core/ErrorMessage',
-  tags: ['autodocs'],
   render: ({ message, small }) => html`
     <mjf-error-message ?small=${small}>${message}</mjf-error-message>
   `,

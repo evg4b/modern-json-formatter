@@ -10,7 +10,6 @@ interface LogoArgs {
 
 const meta = {
   title: 'Core/Logo',
-  tags: ['autodocs'],
   render: ({ size, alt }) => html`<mjf-logo size=${size} alt=${alt}></mjf-logo>`,
   argTypes: {
     size: {

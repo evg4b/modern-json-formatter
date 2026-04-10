@@ -9,7 +9,6 @@ interface StickyPanelArgs {
 
 const meta = {
   title: 'Core/StickyPanel',
-  tags: ['autodocs'],
   render: ({ position }) => html`
     <div style="position: relative; height: 200px; border: 1px dashed #666;">
       <mjf-sticky-panel position=${position}>

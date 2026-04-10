@@ -16,7 +16,6 @@ const defaultOptions: DropdownOption[] = [
 
 const meta = {
   title: 'Core/Dropdown',
-  tags: ['autodocs'],
   render: ({ options, triggerLabel }) => {
     const id = 'story-dropdown';
 

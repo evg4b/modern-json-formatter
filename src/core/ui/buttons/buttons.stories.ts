@@ -6,7 +6,6 @@ import './ko-fi-button';
 
 const meta = {
   title: 'Core/Buttons',
-  tags: ['autodocs'],
 } satisfies Meta;
 
 export default meta;

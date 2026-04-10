@@ -1,9 +1,6 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
 import './sidebar';
-import '../../core/ui/buttons/github-button';
-import '../../core/ui/buttons/ko-fi-button';
-import '../../core/ui/buttons/chrome-web-store-button';
 import type { NavigationItem } from './models';
 
 interface SidebarArgs {

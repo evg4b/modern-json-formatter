@@ -32,10 +32,6 @@ export const Small: Story = {
   args: { size: '32' },
 };
 
-export const Medium: Story = {
-  args: { size: '128' },
-};
-
 export const Large: Story = {
   args: { size: '512' },
 };

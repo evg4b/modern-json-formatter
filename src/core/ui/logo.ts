@@ -1,6 +1,7 @@
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { resource } from '@core/browser';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+import logo from './logo.svg?raw';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -10,28 +11,31 @@ declare global {
 
 export type LogoSize = '512' | '256' | '128' | '48' | '32';
 
-const imagesMap: Record<LogoSize, string> = {
-  512: resource('icon512.png'),
-  256: resource('icon256.png'),
-  128: resource('icon128.png'),
-  48: resource('icon48.png'),
-  32: resource('icon32.png'),
-};
-
 @customElement('mjf-logo')
 export class LogoElement extends LitElement {
+  static override styles = css`
+    :host {
+      display: inline-flex;
+    }
+    
+    svg {
+      display: block;
+      width: var(--mjf-logo-size, 32px);
+      height: var(--mjf-logo-size, 32px);
+    }
+  `;
+
   @property()
-  public size: keyof typeof imagesMap = '32';
+  public size: LogoSize = '32';
 
   @property()
   public alt?: string;
 
+  public override updated() {
+    this.style.setProperty('--mjf-logo-size', `${this.size}px`);
+  }
+
   public override render() {
-    return html`
-      <img src=${imagesMap[this.size]}
-           alt=${this.alt}
-           title=${this.title}
-      />
-    `;
+    return html`${unsafeSVG(logo)}`;
   }
 }

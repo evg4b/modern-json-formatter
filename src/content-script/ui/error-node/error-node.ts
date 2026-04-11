@@ -1,7 +1,8 @@
 import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { resource } from '@core/browser';
 import styles from './error-node.scss?inline';
+import invalid from './invalid.svg?raw';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -26,7 +27,7 @@ export class ErrorNodeElement extends LitElement {
   public override render() {
     return html`
       <div class="error">
-        <img src=${resource('invalid.svg')} alt="Error">
+        ${unsafeSVG(invalid)}
         <div class="message">
           <span>${this.header}</span>
           ${this.lineTemplates}

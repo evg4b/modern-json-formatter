@@ -1,4 +1,3 @@
-import '@testing/browser.mock';
 import { describe, expect, test } from '@rstest/core';
 import { LogoElement, type LogoSize } from '@core/ui';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
@@ -13,15 +12,14 @@ describe('mjf-logo', () => {
 
   defaultLitAsserts(LogoElement, () => logo);
 
-  test('should have correct markup', () => {
-    expect(logo.shadowRoot?.children).toMatchSnapshot();
+  test('should render an svg element', () => {
+    expect(logo.shadowRoot?.querySelector('svg')).not.toBeNull();
   });
 
-  test.each<LogoSize>(['512', '256', '128', '48', '32'])('should have correct size', async size => {
+  test.each<LogoSize>(['512', '256', '128', '48', '32'])('should set css variable for size %s', async size => {
     logo.size = size;
     await logo.updateComplete;
 
-    expect(logo.shadowRoot?.innerHTML)
-      .toContain(`icon${size}.png`);
+    expect(logo.style.getPropertyValue('--mjf-logo-size')).toBe(`${size}px`);
   });
 });

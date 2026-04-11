@@ -25,9 +25,8 @@ describe('ErrorNodeElement', () => {
   });
 
   test('should render the error image', () => {
-    const img = el.shadowRoot?.querySelector('img');
+    const img = el.shadowRoot?.querySelector('svg');
     expect(img).not.toBeNull();
-    expect(img?.getAttribute('alt')).toBe('Error');
   });
 
   test('should render header when set', async () => {

@@ -8,3 +8,5 @@ jaq-json = { version = "2.0.0" }
 jaq-core = "3.0.0"
 jaq-std = "3.0.0"
 hifijson = "0.5.0"
+md5 = "0.7"
+sha2 = "0.10"

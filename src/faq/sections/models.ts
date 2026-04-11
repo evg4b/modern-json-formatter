@@ -8,4 +8,5 @@ export interface FaqSection {
   advancedFeatures: MarkdownFile;
   math: MarkdownFile;
   assignment: MarkdownFile;
+  hashing: MarkdownFile;
 }

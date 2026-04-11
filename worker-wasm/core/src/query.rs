@@ -1,4 +1,5 @@
 use crate::convert::val_to_node;
+use crate::hash::hash_funs;
 use crate::node::Node;
 use crate::node_json_factory::NodeJsonFactory;
 use jaq_core::{data, load, unwrap_valr, Compiler, Ctx, Vars};
@@ -48,18 +49,27 @@ pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
         path: (),
     };
 
-    let loader = Loader::new(jaq_core::defs().chain(jaq_std::defs()).chain(jaq_json::defs()));
-    let arena = Arena::default();
+    let defs = jaq_core::defs()
+        .chain(jaq_std::defs())
+        .chain(jaq_json::defs());
 
-    let modules = loader
-        .load(&arena, program)
+    let funs = jaq_core::funs::<data::JustLut<Val>>()
+        .chain(jaq_std::funs::<data::JustLut<Val>>())
+        .chain(jaq_json::funs::<data::JustLut<Val>>())
+        .chain(hash_funs::<data::JustLut<Val>>());
+
+    let arena = &Arena::default();
+
+    let modules = Loader::new(defs)
+        .load(arena, program)
         .map_err(|errors| {
             let messages: Vec<String> = errors.iter().map(|(_, e)| format_load_error(e)).collect();
             Box::<dyn Error>::from(messages.join("; "))
         })?;
 
+
     let filter: jaq_core::Filter<data::JustLut<Val>> = Compiler::default()
-        .with_funs(jaq_core::funs::<data::JustLut<Val>>().chain(jaq_std::funs::<data::JustLut<Val>>()).chain(jaq_json::funs::<data::JustLut<Val>>()))
+        .with_funs(funs)
         .compile(modules)
         .map_err(|errors| {
             let messages: Vec<String> = errors

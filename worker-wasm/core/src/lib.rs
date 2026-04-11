@@ -1,5 +1,6 @@
 mod convert;
 mod format;
+mod hash;
 mod jaq_json_factory;
 mod minify;
 mod node;

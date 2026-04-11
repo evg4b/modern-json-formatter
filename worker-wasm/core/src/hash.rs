@@ -1,7 +1,8 @@
 use jaq_core::native::{bome, run, Filter, Fun, v};
 use jaq_core::{Cv, DataT, RunPtr};
 use jaq_std::ValT;
-use sha2::Digest as _;
+use sha2::Digest;
+use std::fmt::Write;
 
 pub fn hash_funs<D: DataT>() -> impl Iterator<Item = Fun<D>>
 where
@@ -34,10 +35,9 @@ where
 }
 
 fn encode_hex(bytes: &[u8]) -> String {
-    bytes.iter().fold(String::with_capacity(bytes.len() * 2), |mut s, b| {
-        use std::fmt::Write as _;
-        write!(s, "{b:02x}").unwrap();
-        s
+    bytes.iter().fold(String::with_capacity(bytes.len() * 2), |mut string, b| {
+        write!(string, "{b:02x}").unwrap();
+        string
     })
 }
 

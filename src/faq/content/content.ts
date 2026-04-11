@@ -34,6 +34,7 @@ export class ContentElement extends LitElement {
       <mjf-section .content=${lang.en.builtinOperatorsAndFunctions}></mjf-section>
       <mjf-section .content=${lang.en.conditionalsAndComparisons}></mjf-section>
       <mjf-section .content=${lang.en.regularExpressions}></mjf-section>
+      <mjf-section .content=${lang.en.hashing}></mjf-section>
       <mjf-section .content=${lang.en.advancedFeatures}></mjf-section>
       <mjf-section .content=${lang.en.math}></mjf-section>
       <mjf-section .content=${lang.en.assignment}></mjf-section>

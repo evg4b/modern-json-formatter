@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::rc::Rc;
 use jaq_json::{Map, Num, Val};
 use crate::parser::Factory;
@@ -17,8 +18,8 @@ impl Factory<Val> for JaqJsonFactory {
         Val::Num(n)
     }
 
-    fn string(&self, s: Vec<u8>) -> Val {
-        Val::utf8_str(s)
+    fn string(&self, s: Cow<'_, str>) -> Val {
+        Val::utf8_str(s.into_owned().into_bytes())
     }
 
     fn array(&self, arr: Vec<Val>) -> Val {

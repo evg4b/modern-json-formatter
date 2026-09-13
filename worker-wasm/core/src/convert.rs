@@ -7,7 +7,7 @@ pub(crate) fn val_to_node(val: Val, factory: &impl Factory<Node>) -> Node {
         Val::Null => factory.null(),
         Val::Bool(b) => factory.bool(b),
         Val::Num(n) => factory.number(n),
-        Val::TStr(b) | Val::BStr(b) => factory.string(b.to_vec()),
+        Val::TStr(b) | Val::BStr(b) => factory.string(String::from_utf8_lossy(&b)),
         Val::Arr(items) => factory.array(
             items.iter().map(|i| val_to_node(i.clone(), factory)).collect(),
         ),

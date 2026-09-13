@@ -109,11 +109,11 @@ mod tests {
                 ("users".to_string(), NodeJsonFactory.array(vec![
                     NodeJsonFactory.object(vec![
                         ("id".to_string(), parse_json("1", NodeJsonFactory).unwrap()),
-                        ("email".to_string(), NodeJsonFactory.string(b"user@example.com".to_vec())),
+                        ("email".to_string(), NodeJsonFactory.string("user@example.com".into())),
                     ]),
                     NodeJsonFactory.object(vec![
                         ("id".to_string(), parse_json("2", NodeJsonFactory).unwrap()),
-                        ("url".to_string(), NodeJsonFactory.string(b"https://example.com".to_vec())),
+                        ("url".to_string(), NodeJsonFactory.string("https://example.com".into())),
                     ]),
                 ])),
                 ("active".to_string(), NodeJsonFactory.bool(true)),
@@ -152,7 +152,7 @@ mod tests {
 
     #[test]
     fn parses_empty_string_value() {
-        assert_eq!(tokenize_json(r#""""#).unwrap(), NodeJsonFactory.string(b"".to_vec()));
+        assert_eq!(tokenize_json(r#""""#).unwrap(), NodeJsonFactory.string("".into()));
     }
 
     #[test]

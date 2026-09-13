@@ -1,0 +1,20 @@
+/*
+ * Raw text rather than JSON.stringify: the extension is fed the exact bytes a
+ * server would send, including numbers JavaScript cannot hold.
+ */
+export const sample = `{
+  "id": 9007199254740993,
+  "name": "Modern JSON Formatter",
+  "active": true,
+  "archived": false,
+  "description": null,
+  "score": 4.85,
+  "tags": ["json", "jq", "wasm"],
+  "versions": [
+    { "number": "2.1.0", "downloads": 12045 },
+    { "number": "2.0.0", "downloads": 8310 }
+  ],
+  "meta": { "empty": {}, "none": [] }
+}`;
+
+export const invalid = '{ "broken": ';

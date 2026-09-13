@@ -48,6 +48,22 @@ test.describe('formatted view', () => {
     expect(text).not.toContain('"wasm"');
   });
 
+  test('stays valid JSON when the page is selected and copied', async ({ copyAll }) => {
+    const copied = await copyAll(ui.tree);
+
+    expect(JSON.parse(copied)).toEqual(JSON.parse(sample));
+    expect(copied).toContain('9007199254740993');
+  });
+
+  test('keeps the markers of a collapsed node out of the copy', async ({ copyAll, shadow }) => {
+    await (await shadow.find(ui.propertyToggle(TAGS))).click();
+
+    const copied = await copyAll(ui.tree);
+
+    expect(JSON.parse(copied)).toMatchObject({ tags: [] });
+    expect(copied).not.toContain('// 3 items');
+  });
+
   test('matches the formatted view', async ({ page, shadow }) => {
     await shadow.find(ui.tree);
     await shadow.find(ui.toolbar);

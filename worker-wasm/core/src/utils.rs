@@ -1,13 +1,12 @@
 use crate::StringVariant;
 
-pub fn is_url(value: &str) -> bool {
-    let s = value.trim();
+fn is_url(value: &str) -> bool {
     for scheme in ["https://", "http://", "ftp://"] {
-        if let Some(rest) = s.strip_prefix(scheme) {
+        if let Some(rest) = value.strip_prefix(scheme) {
             return !rest.is_empty() && !rest.starts_with('/');
         }
     }
-    if let Some(rest) = s.strip_prefix("mailto:") {
+    if let Some(rest) = value.strip_prefix("mailto:") {
         return !rest.is_empty();
     }
     false
@@ -25,11 +24,12 @@ fn is_email(value: &str) -> bool {
         .is_some_and(|dot| dot > 0 && dot < domain.len() - 1)
 }
 
-pub fn determine_variant(string: &str) -> Option<StringVariant> {
-    if is_url(string) {
+pub fn determine_variant(value: &str) -> Option<StringVariant> {
+    let value = value.trim();
+    if is_url(value) {
         return Some(StringVariant::Url);
     }
-    if is_email(string) {
+    if is_email(value) {
         return Some(StringVariant::Email);
     }
     None
@@ -75,11 +75,6 @@ mod tests_is_url {
     }
 
     #[test]
-    fn return_true_for_url_with_leading_and_trailing_whitespace() {
-        assert!(is_url("  https://example.com  "));
-    }
-
-    #[test]
     fn return_true_for_url_with_path_query_and_fragment() {
         assert!(is_url("https://example.com/path?query=value&other=2#section"));
     }
@@ -107,6 +102,11 @@ mod tests_determine_variant {
     #[test]
     fn returns_url_for_mailto_link() {
         assert_eq!(determine_variant("mailto:user@example.com"), Some(StringVariant::Url));
+    }
+
+    #[test]
+    fn ignores_surrounding_whitespace() {
+        assert_eq!(determine_variant("  https://example.com  "), Some(StringVariant::Url));
     }
 
     #[test]

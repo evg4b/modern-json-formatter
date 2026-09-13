@@ -33,8 +33,4 @@ impl Factory<Val> for JaqJsonFactory {
                 .collect::<Map<Val, Val>>(),
         ))
     }
-
-    fn tuple(&self, _: Vec<Val>) -> Val {
-        unreachable!("tuple is a Node-only concept and must not be called on JaqJsonFactory")
-    }
 }

@@ -29,7 +29,6 @@ pub trait Factory<T> {
     fn string(&self, s: Cow<'_, str>) -> T;
     fn array(&self, arr: Vec<T>) -> T;
     fn object(&self, obj: Vec<(String, T)>) -> T;
-    fn tuple(&self, items: Vec<T>) -> T;
 }
 
 /// Parse JSON, accepting the JSON5 extensions that editors and config files use:

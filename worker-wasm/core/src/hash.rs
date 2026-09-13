@@ -45,7 +45,7 @@ fn encode_hex(bytes: &[u8]) -> String {
 mod tests {
     use crate::node::Node;
     use crate::node_json_factory::NodeJsonFactory;
-    use crate::parser::{parse_json, Factory};
+    use crate::parser::parse_json;
     use crate::query::query_json;
 
     fn node(json: &str) -> Node {
@@ -53,7 +53,7 @@ mod tests {
     }
 
     fn expect(output: &str) -> Node {
-        NodeJsonFactory.tuple(vec![node(output)])
+        Node::tuple(vec![node(output)])
     }
 
     #[test]

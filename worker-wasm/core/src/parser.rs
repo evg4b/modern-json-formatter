@@ -1,11 +1,11 @@
-use hifijson::num;
+use hifijson::escape::Lex as _;
+use hifijson::num::{self, LexWrite as _};
 use hifijson::str::{LexAlloc as _, LexWrite as _};
 use hifijson::token::Lex as _;
-use hifijson::{escape::Lex as _, num::LexWrite as _, Expect, Read as _, SliceLexer};
+use hifijson::{Expect, Read as _, SliceLexer};
 use std::borrow::Cow;
 use std::error::Error;
-use std::fmt;
-use std::fmt::{Display, Formatter};
+use std::fmt::{self, Display, Formatter};
 
 /// Parse error.
 #[derive(Debug)]
@@ -51,12 +51,12 @@ pub trait Factory<T> {
     type Members: Default;
 
     fn null(&self) -> T;
-    fn bool(&self, val: bool) -> T;
-    fn number(&self, n: Number<'_>) -> T;
+    fn bool(&self, value: bool) -> T;
+    fn number(&self, number: Number<'_>) -> T;
     /// The contents of a string, borrowed from the input unless it had to be
     /// unescaped.
-    fn string(&self, s: Cow<'_, str>) -> T;
-    fn array(&self, arr: Vec<T>) -> T;
+    fn string(&self, value: Cow<'_, str>) -> T;
+    fn array(&self, items: Vec<T>) -> T;
     /// Add a member to an object. How duplicate keys are handled is up to the
     /// factory.
     fn insert(&self, members: &mut Self::Members, key: Cow<'_, str>, value: T);

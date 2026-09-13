@@ -11,20 +11,20 @@ impl Factory<Node> for NodeJsonFactory {
         Node::Null
     }
 
-    fn bool(&self, val: bool) -> Node {
-        Node::Boolean { value: val }
+    fn bool(&self, value: bool) -> Node {
+        Node::Boolean { value }
     }
 
-    fn number(&self, n: Number<'_>) -> Node {
-        Node::Number { value: n.text().to_owned() }
+    fn number(&self, number: Number<'_>) -> Node {
+        Node::Number { value: number.text().to_owned() }
     }
 
-    fn string(&self, s: Cow<'_, str>) -> Node {
-        Node::string(s)
+    fn string(&self, value: Cow<'_, str>) -> Node {
+        Node::string(value)
     }
 
-    fn array(&self, arr: Vec<Node>) -> Node {
-        Node::Array { items: arr }
+    fn array(&self, items: Vec<Node>) -> Node {
+        Node::Array { items }
     }
 
     fn insert(&self, members: &mut Vec<Property>, key: Cow<'_, str>, value: Node) {

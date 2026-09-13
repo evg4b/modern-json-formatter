@@ -1618,19 +1618,19 @@ mod tests {
     #[test]
     fn query_returns_plain_string() {
         let result = query_json(r#"{"name": "alice"}"#, ".name").unwrap();
-        assert_eq!(result, NodeJsonFactory.tuple(vec![NodeJsonFactory.string(b"alice".to_vec())]));
+        assert_eq!(result, NodeJsonFactory.tuple(vec![NodeJsonFactory.string("alice".into())]));
     }
 
     #[test]
     fn query_returns_string_with_url_variant() {
         let result = query_json(r#"{"link": "https://example.com"}"#, ".link").unwrap();
-        assert_eq!(result, NodeJsonFactory.tuple(vec![NodeJsonFactory.string(b"https://example.com".to_vec())]));
+        assert_eq!(result, NodeJsonFactory.tuple(vec![NodeJsonFactory.string("https://example.com".into())]));
     }
 
     #[test]
     fn query_returns_string_with_email_variant() {
         let result = query_json(r#"{"email": "user@example.com"}"#, ".email").unwrap();
-        assert_eq!(result, NodeJsonFactory.tuple(vec![NodeJsonFactory.string(b"user@example.com".to_vec())]));
+        assert_eq!(result, NodeJsonFactory.tuple(vec![NodeJsonFactory.string("user@example.com".into())]));
     }
 
     #[test]

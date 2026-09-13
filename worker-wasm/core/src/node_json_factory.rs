@@ -1,4 +1,5 @@
 use jaq_json::Num;
+use std::borrow::Cow;
 use crate::{Node, Property};
 use crate::parser::Factory;
 use crate::utils::determine_variant;
@@ -18,11 +19,10 @@ impl Factory<Node> for NodeJsonFactory {
         Node::Number { value: n.to_string() }
     }
 
-    fn string(&self, s: Vec<u8>) -> Node {
-        let string = String::from_utf8_lossy(&s);
+    fn string(&self, s: Cow<'_, str>) -> Node {
         Node::String {
-            value: string.to_string(),
-            variant: determine_variant(string.trim()),
+            variant: determine_variant(s.trim()),
+            value: s.into_owned(),
         }
     }
 

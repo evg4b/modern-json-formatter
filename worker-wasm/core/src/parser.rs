@@ -1,8 +1,9 @@
 use hifijson::num;
-use hifijson::str::LexWrite as _;
+use hifijson::str::{LexAlloc as _, LexWrite as _};
 use hifijson::token::Lex as _;
 use hifijson::{escape::Lex as _, num::LexWrite as _, Expect, Read as _, SliceLexer};
 use jaq_json::Num;
+use std::borrow::Cow;
 use std::error::Error;
 use std::fmt;
 use std::fmt::{Display, Formatter};
@@ -23,7 +24,9 @@ pub trait Factory<T> {
     fn null(&self) -> T;
     fn bool(&self, val: bool) -> T;
     fn number(&self, n: Num) -> T;
-    fn string(&self, s: Vec<u8>) -> T;
+    /// The contents of a string, borrowed from the input unless it had to be
+    /// unescaped.
+    fn string(&self, s: Cow<'_, str>) -> T;
     fn array(&self, arr: Vec<T>) -> T;
     fn object(&self, obj: Vec<(String, T)>) -> T;
     fn tuple(&self, items: Vec<T>) -> T;
@@ -130,7 +133,7 @@ fn parse_object<'a, T, F: Factory<T>>(
         if next != b'"' {
             return Err(Expect::Value.into());
         }
-        let key = String::from_utf8(parse_string(lexer)?).map_err(|_| Expect::Value)?;
+        let key = parse_string(lexer)?.into_owned();
         lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
         let value = parse_value(ws_tk(lexer).ok_or(Expect::Value)?, lexer, factory)?;
         members.push((key, value));
@@ -139,31 +142,35 @@ fn parse_object<'a, T, F: Factory<T>>(
     Ok(members)
 }
 
-fn parse_string(lexer: &mut SliceLexer) -> Result<Vec<u8>, hifijson::Error> {
-    fold_string(lexer.discarded(), false)
+/// Read a string, borrowing it from the input when it contains no escapes.
+fn parse_string<'a>(lexer: &mut SliceLexer<'a>) -> Result<Cow<'a, str>, hifijson::Error> {
+    lexer.discarded().str_string().map_err(hifijson::Error::Str)
 }
 
-/// Parse a `b"..."` string, which allows `\x` but no `\u` escapes.
-fn parse_byte_string(lexer: &mut SliceLexer) -> Result<Vec<u8>, hifijson::Error> {
-    fold_string(lexer, true)
-}
-
-fn fold_string(lexer: &mut SliceLexer, bytes: bool) -> Result<Vec<u8>, hifijson::Error> {
+/// Read a `b"..."` string, which allows `\x` but no `\u` escapes.
+///
+/// Such a string may hold arbitrary bytes, so invalid UTF-8 is replaced rather
+/// than rejected.
+fn parse_byte_string<'a>(lexer: &mut SliceLexer<'a>) -> Result<Cow<'a, str>, hifijson::Error> {
     let on_string = |read: &mut &[u8], out: &mut Vec<u8>| {
         out.extend_from_slice(read);
         Ok(())
     };
-    lexer
+    let bytes = lexer
         .str_fold(Vec::new(), on_string, |lexer, out| {
             use hifijson::escape::Error;
             match lexer.take_next().ok_or(Error::Eof)? {
-                b'u' if bytes => Err(Error::InvalidKind(b'u'))?,
-                b'x' if bytes => out.push(lexer.hex()?),
+                b'u' => Err(Error::InvalidKind(b'u'))?,
+                b'x' => out.push(lexer.hex()?),
                 c => out.extend(lexer.escape(c)?.encode_utf8(&mut [0; 4]).as_bytes()),
             }
             Ok(())
         })
-        .map_err(hifijson::Error::Str)
+        .map_err(hifijson::Error::Str)?;
+    Ok(Cow::Owned(match String::from_utf8(bytes) {
+        Ok(string) => string,
+        Err(e) => String::from_utf8_lossy(e.as_bytes()).into_owned(),
+    }))
 }
 
 fn parse_num(lexer: &mut SliceLexer) -> Result<Num, hifijson::Error> {

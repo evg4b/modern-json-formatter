@@ -1,78 +1,122 @@
 use core::{Node, Property, StringVariant};
 use js_sys::{Array, Object, Reflect};
-use wasm_bindgen::{JsError, JsValue};
+use wasm_bindgen::JsValue;
 
-pub fn node_to_js_value(node: Node) -> Result<JsValue, JsError> {
+/// The property keys and type tags of the node format, as JS strings.
+///
+/// Every node writes the same handful of them and each `JsValue::from_str` hands
+/// a fresh string to JS, so they are created once and reused for the whole tree.
+struct Names {
+    r#type: JsValue,
+    value: JsValue,
+    variant: JsValue,
+    items: JsValue,
+    properties: JsValue,
+    key: JsValue,
+    null: JsValue,
+    boolean: JsValue,
+    number: JsValue,
+    string: JsValue,
+    array: JsValue,
+    object: JsValue,
+    tuple: JsValue,
+    url: JsValue,
+    email: JsValue,
+}
+
+impl Names {
+    fn new() -> Self {
+        Self {
+            r#type: "type".into(),
+            value: "value".into(),
+            variant: "variant".into(),
+            items: "items".into(),
+            properties: "properties".into(),
+            key: "key".into(),
+            null: "null".into(),
+            boolean: "boolean".into(),
+            number: "number".into(),
+            string: "string".into(),
+            array: "array".into(),
+            object: "object".into(),
+            tuple: "tuple".into(),
+            url: "url".into(),
+            email: "email".into(),
+        }
+    }
+}
+
+thread_local! {
+    static NAMES: Names = Names::new();
+}
+
+pub fn node_to_js_value(node: Node) -> JsValue {
+    NAMES.with(|names| node_to_js(node, names))
+}
+
+fn node_to_js(node: Node, names: &Names) -> JsValue {
     let obj = Object::new();
     match node {
-        Node::Null => {
-            set_str(&obj, "type", "null")?;
-        }
+        Node::Null => set(&obj, &names.r#type, &names.null),
         Node::Boolean { value } => {
-            set_str(&obj, "type", "boolean")?;
-            set_val(&obj, "value", JsValue::from_bool(value))?;
+            set(&obj, &names.r#type, &names.boolean);
+            set(&obj, &names.value, &JsValue::from_bool(value));
         }
         Node::Number { value } => {
-            set_str(&obj, "type", "number")?;
-            set_str(&obj, "value", &value)?;
+            set(&obj, &names.r#type, &names.number);
+            set(&obj, &names.value, &JsValue::from_str(&value));
         }
         Node::String { value, variant } => {
-            set_str(&obj, "type", "string")?;
-            set_str(&obj, "value", &value)?;
-            if let Some(v) = variant {
-                set_str(&obj, "variant", variant_str(v))?;
+            set(&obj, &names.r#type, &names.string);
+            set(&obj, &names.value, &JsValue::from_str(&value));
+            if let Some(variant) = variant {
+                set(&obj, &names.variant, variant_name(variant, names));
             }
         }
         Node::Array { items } => {
-            set_str(&obj, "type", "array")?;
-            set_val(&obj, "items", nodes_to_jsarray(items)?)?;
-        }
-        Node::Object { properties } => {
-            set_str(&obj, "type", "object")?;
-            set_val(&obj, "properties", properties_to_jsarray(properties)?)?;
+            set(&obj, &names.r#type, &names.array);
+            set(&obj, &names.items, &items_to_js(items, names));
         }
         Node::Tuple { items } => {
-            set_str(&obj, "type", "tuple")?;
-            set_val(&obj, "items", nodes_to_jsarray(items)?)?;
+            set(&obj, &names.r#type, &names.tuple);
+            set(&obj, &names.items, &items_to_js(items, names));
+        }
+        Node::Object { properties } => {
+            set(&obj, &names.r#type, &names.object);
+            set(&obj, &names.properties, &properties_to_js(properties, names));
         }
     }
-    Ok(obj.into())
+    obj.into()
 }
 
-fn variant_str(v: StringVariant) -> &'static str {
-    match v {
-        StringVariant::Url => "url",
-        StringVariant::Email => "email",
+fn variant_name(variant: StringVariant, names: &Names) -> &JsValue {
+    match variant {
+        StringVariant::Url => &names.url,
+        StringVariant::Email => &names.email,
     }
 }
 
-fn nodes_to_jsarray(items: Vec<Node>) -> Result<JsValue, JsError> {
-    let arr = Array::new();
-    for item in items {
-        arr.push(&node_to_js_value(item)?);
+fn items_to_js(items: Vec<Node>, names: &Names) -> JsValue {
+    let arr = Array::new_with_length(items.len() as u32);
+    for (index, item) in items.into_iter().enumerate() {
+        arr.set(index as u32, node_to_js(item, names));
     }
-    Ok(arr.into())
+    arr.into()
 }
 
-fn properties_to_jsarray(properties: Vec<Property>) -> Result<JsValue, JsError> {
-    let arr = Array::new();
-    for prop in properties {
+fn properties_to_js(properties: Vec<Property>, names: &Names) -> JsValue {
+    let arr = Array::new_with_length(properties.len() as u32);
+    for (index, property) in properties.into_iter().enumerate() {
         let obj = Object::new();
-        set_str(&obj, "key", &prop.key)?;
-        set_val(&obj, "value", node_to_js_value(prop.value)?)?;
-        arr.push(&obj);
+        set(&obj, &names.key, &JsValue::from_str(&property.key));
+        set(&obj, &names.value, &node_to_js(property.value, names));
+        arr.set(index as u32, obj.into());
     }
-    Ok(arr.into())
+    arr.into()
 }
 
-fn set_str(obj: &Object, key: &str, value: &str) -> Result<(), JsError> {
-    Reflect::set(obj, &JsValue::from_str(key), &JsValue::from_str(value))
-        .map(|_| ())
-        .map_err(|_| JsError::new("failed to set property on object"))
-}
-
-fn set_val(obj: &Object, key: &str, value: JsValue) -> Result<(), JsError> {
-    Reflect::set(obj, &JsValue::from_str(key), &value)
-        .map(|_| ())
-        .map_err(|_| JsError::new("failed to set property on object"))
+/// Writing to an object we have just created cannot fail: there is no setter,
+/// proxy or frozen target that could refuse the write.
+fn set(obj: &Object, key: &JsValue, value: &JsValue) {
+    let _ = Reflect::set(obj, key, value);
 }

@@ -1,6 +1,5 @@
-use crate::parser::Factory;
+use crate::parser::{Factory, Number};
 use crate::{Node, Property};
-use jaq_json::Num;
 use std::borrow::Cow;
 
 pub struct NodeJsonFactory;
@@ -14,8 +13,8 @@ impl Factory<Node> for NodeJsonFactory {
         Node::Boolean { value: val }
     }
 
-    fn number(&self, n: Num) -> Node {
-        Node::Number { value: n.to_string() }
+    fn number(&self, n: Number<'_>) -> Node {
+        Node::Number { value: n.text().to_owned() }
     }
 
     fn string(&self, s: Cow<'_, str>) -> Node {

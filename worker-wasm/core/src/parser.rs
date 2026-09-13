@@ -44,6 +44,12 @@ impl<'a> Number<'a> {
 }
 
 pub trait Factory<T> {
+    /// Collection that object members are accumulated in.
+    ///
+    /// The factory owns it so that the parser fills the representation the
+    /// factory actually wants, instead of an intermediate list of pairs.
+    type Members: Default;
+
     fn null(&self) -> T;
     fn bool(&self, val: bool) -> T;
     fn number(&self, n: Number<'_>) -> T;
@@ -51,7 +57,10 @@ pub trait Factory<T> {
     /// unescaped.
     fn string(&self, s: Cow<'_, str>) -> T;
     fn array(&self, arr: Vec<T>) -> T;
-    fn object(&self, obj: Vec<(String, T)>) -> T;
+    /// Add a member to an object. How duplicate keys are handled is up to the
+    /// factory.
+    fn insert(&self, members: &mut Self::Members, key: Cow<'_, str>, value: T);
+    fn object(&self, members: Self::Members) -> T;
 }
 
 /// Parse JSON, accepting the JSON5 extensions that editors and config files use:
@@ -131,7 +140,7 @@ fn parse_value<'a, T, F: Factory<T>>(
         b'0'..=b'9' | b'+' | b'-' => factory.number(parse_number(lexer)?),
         b'"' => factory.string(parse_string(lexer)?),
         b'[' => factory.array(parse_array(lexer, factory)?),
-        b'{' => factory.object(parse_object(lexer, factory)?),
+        b'{' => parse_object(lexer, factory)?,
         _ => Err(Expect::Value)?,
     })
 }
@@ -151,19 +160,19 @@ fn parse_array<'a, T, F: Factory<T>>(
 fn parse_object<'a, T, F: Factory<T>>(
     lexer: &mut SliceLexer<'a>,
     factory: &F,
-) -> Result<Vec<(String, T)>, hifijson::Error> {
-    let mut members = Vec::new();
+) -> Result<T, hifijson::Error> {
+    let mut members = F::Members::default();
     seq(lexer, b'}', |next, lexer| {
         if next != b'"' {
             return Err(Expect::Value.into());
         }
-        let key = parse_string(lexer)?.into_owned();
+        let key = parse_string(lexer)?;
         lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
         let value = parse_value(ws_tk(lexer).ok_or(Expect::Value)?, lexer, factory)?;
-        members.push((key, value));
+        factory.insert(&mut members, key, value);
         Ok(())
     })?;
-    Ok(members)
+    Ok(factory.object(members))
 }
 
 /// Read a string, borrowing it from the input when it contains no escapes.

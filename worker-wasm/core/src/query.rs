@@ -1525,6 +1525,7 @@ mod faq_regular_expressions {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::node::Property;
     use crate::node_json_factory::NodeJsonFactory;
     use crate::parser::Factory;
 
@@ -1661,9 +1662,9 @@ mod tests {
         let result = query_json(r#"{"nested": {"x": 1}}"#, ".nested").unwrap();
         assert_eq!(
             result,
-            Node::tuple(vec![NodeJsonFactory.object(vec![
-                ("x".to_string(), node("1")),
-            ])]),
+            Node::tuple(vec![Node::Object {
+                properties: vec![Property { key: "x".to_string(), value: node("1") }],
+            }]),
         );
     }
 

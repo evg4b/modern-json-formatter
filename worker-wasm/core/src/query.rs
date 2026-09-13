@@ -43,7 +43,7 @@ fn format_load_error(e: &load::Error<&str>) -> String {
 }
 
 pub fn query_json(json: &str, query: &str) -> Result<Node, Box<dyn Error>> {
-    let input = parse_json(json.as_bytes(), JaqJsonFactory)?;
+    let input = parse_json(json, JaqJsonFactory)?;
     let program = File {
         code: query,
         path: (),
@@ -105,7 +105,7 @@ mod faq_basic_filters {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     fn expect(input: &str, query: &str, outputs: &[&str]) -> Node {
@@ -159,7 +159,7 @@ mod faq_types_and_values {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]
@@ -203,7 +203,7 @@ mod faq_assignment {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]
@@ -256,7 +256,7 @@ mod faq_advanced_features {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]
@@ -435,7 +435,7 @@ mod faq_builtin_operators_and_functions {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]
@@ -1285,7 +1285,7 @@ mod faq_conditionals_and_comparisons {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]
@@ -1414,7 +1414,7 @@ mod faq_regular_expressions {
     use crate::parser::{parse_json, Factory};
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]
@@ -1540,7 +1540,7 @@ mod tests {
     "#;
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     #[test]

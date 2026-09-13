@@ -3,7 +3,7 @@ use crate::jaq_json_factory::JaqJsonFactory;
 use crate::parser::parse_json;
 
 pub fn minify_json(input: &str) -> Result<String, Box<dyn Error>> {
-    let val = parse_json(input.as_bytes(), JaqJsonFactory)?;
+    let val = parse_json(input, JaqJsonFactory)?;
     Ok(val.to_string())
 }
 

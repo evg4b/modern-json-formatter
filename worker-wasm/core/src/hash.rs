@@ -49,7 +49,7 @@ mod tests {
     use crate::query::query_json;
 
     fn node(json: &str) -> Node {
-        parse_json(json.as_bytes(), NodeJsonFactory).unwrap()
+        parse_json(json, NodeJsonFactory).unwrap()
     }
 
     fn expect(output: &str) -> Node {

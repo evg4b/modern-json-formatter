@@ -1,3 +1,5 @@
+PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright:v1.63.0-noble
+
 default: build-worker-wasm build-extension pack-extension
 
 check:
@@ -11,6 +13,21 @@ build-extension:
 build-worker-wasm:
 	@echo "Building WASM..."
 	@cd worker-wasm && $(MAKE)
+
+e2e: build-extension
+	@echo "Running end-to-end tests..."
+	@yarn e2e
+
+# Visual baselines are committed per platform, and CI compares against the Linux
+# ones. Regenerating them has to happen in the image CI uses, otherwise the
+# screenshots pick up the host fonts and never match.
+e2e-update: build-extension
+	@echo "Regenerating visual baselines in $(PLAYWRIGHT_IMAGE)..."
+	@docker run --rm \
+		-v "$(shell pwd)":/work -v /work/node_modules -w /work \
+		-e CI=1 -e PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
+		$(PLAYWRIGHT_IMAGE) \
+		sh -c "yarn install --immutable && yarn e2e --update-snapshots"
 
 pack-extension:
 	@echo "Generating per-file checksums from dist/..."

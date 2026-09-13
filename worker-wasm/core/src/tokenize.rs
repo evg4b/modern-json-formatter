@@ -10,8 +10,21 @@ pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::node::{Node, StringVariant};
+    use crate::node::{Node, Property, StringVariant};
     use crate::parser::Factory;
+
+    fn object(members: Vec<(&str, Node)>) -> Node {
+        Node::Object {
+            properties: members
+                .into_iter()
+                .map(|(key, value)| Property { key: key.to_string(), value })
+                .collect(),
+        }
+    }
+
+    fn number(value: &str) -> Node {
+        Node::Number { value: value.to_string() }
+    }
 
     #[test]
     fn parses_string_with_url_variant() {
@@ -105,18 +118,18 @@ mod tests {
 
         assert_eq!(
             node,
-            NodeJsonFactory.object(vec![
-                ("users".to_string(), NodeJsonFactory.array(vec![
-                    NodeJsonFactory.object(vec![
-                        ("id".to_string(), parse_json("1", NodeJsonFactory).unwrap()),
-                        ("email".to_string(), NodeJsonFactory.string("user@example.com".into())),
+            object(vec![
+                ("users", NodeJsonFactory.array(vec![
+                    object(vec![
+                        ("id", number("1")),
+                        ("email", Node::string("user@example.com".into())),
                     ]),
-                    NodeJsonFactory.object(vec![
-                        ("id".to_string(), parse_json("2", NodeJsonFactory).unwrap()),
-                        ("url".to_string(), NodeJsonFactory.string("https://example.com".into())),
+                    object(vec![
+                        ("id", number("2")),
+                        ("url", Node::string("https://example.com".into())),
                     ]),
                 ])),
-                ("active".to_string(), NodeJsonFactory.bool(true)),
+                ("active", NodeJsonFactory.bool(true)),
             ])
         )
     }
@@ -127,7 +140,7 @@ mod tests {
 
         let node = tokenize_json(json).unwrap();
 
-        assert_eq!(node, NodeJsonFactory.array(vec![NodeJsonFactory.object(vec![])]))
+        assert_eq!(node, NodeJsonFactory.array(vec![object(vec![])]))
     }
 
     #[test]
@@ -137,12 +150,12 @@ mod tests {
 
     #[test]
     fn parses_float_number() {
-        assert_eq!(tokenize_json("3.14").unwrap(), parse_json("3.14", NodeJsonFactory).unwrap());
+        assert_eq!(tokenize_json("3.14").unwrap(), number("3.14"));
     }
 
     #[test]
     fn parses_negative_number() {
-        assert_eq!(tokenize_json("-42").unwrap(), parse_json("-42", NodeJsonFactory).unwrap());
+        assert_eq!(tokenize_json("-42").unwrap(), number("-42"));
     }
 
     #[test]
@@ -150,7 +163,7 @@ mod tests {
         for json in ["12345678909876543212345", "0.30000000000000004", "1e3", "007"] {
             assert_eq!(
                 tokenize_json(json).unwrap(),
-                Node::Number { value: json.to_string() },
+                number(json),
             );
         }
     }
@@ -160,7 +173,7 @@ mod tests {
         for json in ["NaN", "Infinity", "-Infinity"] {
             assert_eq!(
                 tokenize_json(json).unwrap(),
-                Node::Number { value: json.to_string() },
+                number(json),
             );
         }
     }

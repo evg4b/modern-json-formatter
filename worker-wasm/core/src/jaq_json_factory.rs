@@ -6,6 +6,8 @@ use crate::parser::{Factory, Number};
 pub struct JaqJsonFactory;
 
 impl Factory<Val> for JaqJsonFactory {
+    type Members = Map<Val, Val>;
+
     fn null(&self) -> Val {
         Val::Null
     }
@@ -33,12 +35,12 @@ impl Factory<Val> for JaqJsonFactory {
         Val::Arr(Rc::from(arr))
     }
 
-    fn object(&self, obj: Vec<(String, Val)>) -> Val {
-        Val::Obj(Rc::from(
-            obj.into_iter()
-                .map(|(k, v)| (Val::utf8_str(k.into_bytes()), v))
-                .collect::<Map<Val, Val>>(),
-        ))
+    fn insert(&self, members: &mut Map<Val, Val>, key: Cow<'_, str>, value: Val) {
+        members.insert(self.string(key), value);
+    }
+
+    fn object(&self, members: Map<Val, Val>) -> Val {
+        Val::Obj(Rc::new(members))
     }
 }
 

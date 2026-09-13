@@ -5,6 +5,8 @@ use std::borrow::Cow;
 pub struct NodeJsonFactory;
 
 impl Factory<Node> for NodeJsonFactory {
+    type Members = Vec<Property>;
+
     fn null(&self) -> Node {
         Node::Null
     }
@@ -25,11 +27,11 @@ impl Factory<Node> for NodeJsonFactory {
         Node::Array { items: arr }
     }
 
-    fn object(&self, obj: Vec<(String, Node)>) -> Node {
-        Node::Object {
-            properties: obj.into_iter()
-                .map(|(k, v)| Property { key: k, value: v })
-                .collect(),
-        }
+    fn insert(&self, members: &mut Vec<Property>, key: Cow<'_, str>, value: Node) {
+        members.push(Property { key: key.into_owned(), value });
+    }
+
+    fn object(&self, members: Vec<Property>) -> Node {
+        Node::Object { properties: members }
     }
 }

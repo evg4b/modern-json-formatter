@@ -1,5 +1,6 @@
-import { type BrowserContext, chromium, test as base } from '@playwright/test';
+import { type BrowserContext, type CDPSession, chromium, test as base } from '@playwright/test';
 import { join } from 'node:path';
+import { type CopyAll, selectAllAndCopy } from './clipboard';
 import { shadowDom, type ShadowDom } from './shadow';
 
 const extensionPath = join(import.meta.dirname, '..', '..', 'dist');
@@ -11,7 +12,9 @@ export type OpenPage = (body: string, contentType?: string) => Promise<void>;
 export interface ExtensionFixtures {
   context: BrowserContext;
   extensionId: string;
+  cdp: CDPSession;
   shadow: ShadowDom;
+  copyAll: CopyAll;
   open: OpenPage;
 }
 
@@ -29,6 +32,7 @@ export const test = base.extend<ExtensionFixtures>({
       ],
     });
 
+    await context.grantPermissions(['clipboard-read'], { origin: new URL(pageUrl).origin });
     await use(context);
     await context.close();
   },
@@ -38,11 +42,27 @@ export const test = base.extend<ExtensionFixtures>({
     await use(new URL(worker.url()).host);
   },
 
-  shadow: async ({ context, page }, use) => {
-    const cdp = await context.newCDPSession(page);
-    await cdp.send('DOM.enable');
+  cdp: async ({ context, page }, use) => {
+    const session = await context.newCDPSession(page);
+    await session.send('DOM.enable');
+    await use(session);
+    await session.detach();
+  },
+
+  shadow: async ({ cdp, page }, use) => {
     await use(shadowDom(page, cdp, queryTimeout));
-    await cdp.detach();
+  },
+
+  /*
+   * Selecting everything only reaches a closed shadow root once the selection
+   * sits inside it, so `anchor` is clicked first to put it there.
+   */
+  copyAll: async ({ cdp, page, shadow }, use) => {
+    await use(async anchor => {
+      await (await shadow.find(anchor)).click();
+
+      return selectAllAndCopy(page, cdp);
+    });
   },
 
   open: async ({ page }, use) => {

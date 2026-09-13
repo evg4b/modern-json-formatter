@@ -43,7 +43,7 @@ mod tests {
     #[test]
     fn node_implements_clone() {
         let original = NodeJsonFactory.object(vec![
-            ("x".to_string(), parse_json(b"1", NodeJsonFactory).unwrap()),
+            ("x".to_string(), parse_json("1", NodeJsonFactory).unwrap()),
         ]);
         assert_eq!(original.clone(), original);
     }

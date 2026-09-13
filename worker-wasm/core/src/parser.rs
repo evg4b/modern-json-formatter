@@ -1,5 +1,7 @@
-use hifijson::token::Lex;
-use hifijson::{Expect, LexAlloc, SliceLexer};
+use hifijson::num;
+use hifijson::str::LexWrite as _;
+use hifijson::token::Lex as _;
+use hifijson::{escape::Lex as _, num::LexWrite as _, Expect, Read as _, SliceLexer};
 use jaq_json::Num;
 use std::error::Error;
 use std::fmt;
@@ -27,166 +29,156 @@ pub trait Factory<T> {
     fn tuple(&self, items: Vec<T>) -> T;
 }
 
-pub fn parse_json<T, U: Factory<T>>(
-    slice: &[u8],
-    factory: U,
-) -> Result<T, Box<dyn Error>> {
-    let offset = |rest: &[u8]| rest.as_ptr() as usize - slice.as_ptr() as usize;
-    let mut lexer = SliceLexer::new(slice);
+/// Parse JSON, accepting the JSON5 extensions that editors and config files use:
+/// comments, trailing commas and non-finite numbers.
+pub fn parse_json<T, F: Factory<T>>(input: &str, factory: F) -> Result<T, ParseError> {
+    let mut lexer = SliceLexer::new(input.as_bytes());
+    let offset = |rest: &[u8]| rest.as_ptr() as usize - input.as_ptr() as usize;
     lexer
-        .exactly_one(ws_tk, move |next, lexer| parse_inner(next, lexer, &factory))
-        .map_err(|e| {
-            Box::new(ParseError(offset(lexer.as_slice()), e)) as Box<dyn Error>
-        })
+        .exactly_one(ws_tk, |next, lexer| parse_value(next, lexer, &factory))
+        .map_err(|e| ParseError(offset(lexer.as_slice()), e))
 }
 
-fn parse_string<L: LexAlloc>(lexer: &mut L, bytes: bool) -> Result<Vec<u8>, hifijson::Error> {
-    let on_string = |bytes: &mut L::Bytes, out: &mut Vec<u8>| {
-        out.extend(bytes.as_ref());
-        Ok(())
-    };
-    let s = lexer.str_fold(Vec::new(), on_string, |lexer, out| {
-        use hifijson::escape::Error;
-        match lexer.take_next().ok_or(Error::Eof)? {
-            b'u' if bytes => Err(Error::InvalidKind(b'u'))?,
-            b'x' if bytes => out.push(lexer.hex()?),
-            c => out.extend(lexer.escape(c)?.encode_utf8(&mut [0; 4]).as_bytes()),
-        }
-        Ok(())
-    });
-    s.map_err(hifijson::Error::Str)
-}
-
-fn parse_num<L: LexAlloc>(lexer: &mut L) -> Result<Num, hifijson::Error> {
-    let num = hifijson::num::Num::signed_digits();
-    let (num, parts) = lexer.num_string_with(num).unvalidated();
-    let num = num.as_ref();
-    Ok(match num {
-        "+" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::INFINITY),
-        "-" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::NEG_INFINITY),
-        _ if num.ends_with(|c: char| c.is_ascii_digit()) => {
-            if parts.is_int() {
-                Num::from_str_radix(num, 10).ok_or(hifijson::num::Error::ExpectedDigit)?
-            } else {
-                Num::Dec(num.to_string().into())
-            }
-        }
-        _ => Err(hifijson::num::Error::ExpectedDigit)?,
-    })
-}
-
-// ── Parsing ───────────────────────────────────────────────────────────────────
-
-fn ws_tk<L: LexAlloc>(lexer: &mut L) -> Option<u8> {
+/// Eat whitespace and comments, then peek at the next character.
+fn ws_tk(lexer: &mut SliceLexer) -> Option<u8> {
     loop {
         lexer.eat_whitespace();
         match lexer.peek_next() {
             Some(b'/') if lexer.strip_prefix(b"//") => lexer.skip_until(|c| c == b'\n'),
-            Some(b'/') if lexer.strip_prefix(b"/*") => {
-                loop {
-                    lexer.skip_until(|c| c == b'*');
-                    if lexer.peek_next().is_none() {
-                        break;
-                    }
-                    lexer.take_next(); // consume '*'
-                    if lexer.peek_next() == Some(b'/') {
-                        lexer.take_next(); // consume '/'
-                        break;
-                    }
-                }
-            }
+            Some(b'/') if lexer.strip_prefix(b"/*") => skip_block_comment(lexer),
             Some(b'#') => lexer.skip_until(|c| c == b'\n'),
             next => return next,
         }
     }
 }
 
-fn parse_array<L: LexAlloc, T, U: Factory<T>>(
-    lexer: &mut L,
-    factory: &U,
-) -> Result<Vec<T>, hifijson::Error> {
-    let mut arr = Vec::new();
-    lexer.take_next(); // consume '['
-    let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-    if next == b']' {
-        lexer.take_next(); // consume ']'
-        return Ok(arr);
-    }
+fn skip_block_comment(lexer: &mut SliceLexer) {
     loop {
-        arr.push(parse_inner(next, lexer, factory)?);
-        next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
-        if next == b']' {
+        lexer.skip_until(|c| c == b'*');
+        if lexer.take_next().is_none() {
+            return;
+        }
+        if lexer.peek_next() == Some(b'/') {
             lexer.take_next();
-            break;
-        }
-        if next != b',' {
-            return Err(Expect::CommaOrEnd.into());
-        }
-        lexer.take_next(); // consume ','
-        next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-        if next == b']' {
-            lexer.take_next(); // trailing comma — accept
-            break;
+            return;
         }
     }
-    Ok(arr)
 }
 
-fn parse_object<L: LexAlloc, T, U: Factory<T>>(
-    lexer: &mut L,
-    factory: &U,
-) -> Result<Vec<(String, T)>, hifijson::Error> {
-    let mut obj: Vec<(String, T)> = Vec::new();
-    lexer.take_next(); // consume '{'
+/// Run `f` for every item of a comma-separated sequence terminated by `end`,
+/// accepting a trailing comma.
+fn seq<'a>(
+    lexer: &mut SliceLexer<'a>,
+    end: u8,
+    mut f: impl FnMut(u8, &mut SliceLexer<'a>) -> Result<(), hifijson::Error>,
+) -> Result<(), hifijson::Error> {
+    lexer.take_next(); // consume the opening bracket
     let mut next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-    if next == b'}' {
-        lexer.take_next(); // consume '}'
-        return Ok(obj);
-    }
-    loop {
-        if next != b'"' {
-            return Err(Expect::Value.into());
-        }
-        let key_bytes = parse_string(lexer.discarded(), false)?;
-        let key = String::from_utf8(key_bytes).map_err(|_| Expect::Value)?;
-        lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
-        let value = parse_inner(ws_tk(lexer).ok_or(Expect::Value)?, lexer, factory)?;
-        obj.push((key, value));
+    while next != end {
+        f(next, lexer)?;
         next = ws_tk(lexer).ok_or(Expect::CommaOrEnd)?;
-        if next == b'}' {
-            lexer.take_next();
-            break;
-        }
-        if next != b',' {
-            return Err(Expect::CommaOrEnd.into());
-        }
-        lexer.take_next(); // consume ','
-        next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
-        if next == b'}' {
-            lexer.take_next(); // trailing comma — accept
-            break;
+        if next != end {
+            if next != b',' {
+                return Err(Expect::CommaOrEnd.into());
+            }
+            lexer.take_next(); // consume ','
+            next = ws_tk(lexer).ok_or(Expect::ValueOrEnd)?;
         }
     }
-    Ok(obj)
+    lexer.take_next(); // consume the closing bracket
+    Ok(())
 }
 
-fn parse_inner<L: LexAlloc, T, U: Factory<T>>(
+fn parse_value<'a, T, F: Factory<T>>(
     next: u8,
-    lexer: &mut L,
-    factory: &U,
+    lexer: &mut SliceLexer<'a>,
+    factory: &F,
 ) -> Result<T, hifijson::Error> {
     Ok(match next {
         b'n' if lexer.strip_prefix(b"null") => factory.null(),
         b't' if lexer.strip_prefix(b"true") => factory.bool(true),
         b'f' if lexer.strip_prefix(b"false") => factory.bool(false),
-        b'b' if lexer.strip_prefix(b"b\"") => factory.string(parse_string(lexer, true)?),
+        b'b' if lexer.strip_prefix(b"b\"") => factory.string(parse_byte_string(lexer)?),
         b'N' if lexer.strip_prefix(b"NaN") => factory.number(Num::Float(f64::NAN)),
         b'I' if lexer.strip_prefix(b"Infinity") => factory.number(Num::Float(f64::INFINITY)),
         b'0'..=b'9' | b'+' | b'-' => factory.number(parse_num(lexer)?),
-        b'"' => factory.string(parse_string(lexer.discarded(), false)?),
+        b'"' => factory.string(parse_string(lexer)?),
         b'[' => factory.array(parse_array(lexer, factory)?),
         b'{' => factory.object(parse_object(lexer, factory)?),
         _ => Err(Expect::Value)?,
+    })
+}
+
+fn parse_array<'a, T, F: Factory<T>>(
+    lexer: &mut SliceLexer<'a>,
+    factory: &F,
+) -> Result<Vec<T>, hifijson::Error> {
+    let mut items = Vec::new();
+    seq(lexer, b']', |next, lexer| {
+        items.push(parse_value(next, lexer, factory)?);
+        Ok(())
+    })?;
+    Ok(items)
+}
+
+fn parse_object<'a, T, F: Factory<T>>(
+    lexer: &mut SliceLexer<'a>,
+    factory: &F,
+) -> Result<Vec<(String, T)>, hifijson::Error> {
+    let mut members = Vec::new();
+    seq(lexer, b'}', |next, lexer| {
+        if next != b'"' {
+            return Err(Expect::Value.into());
+        }
+        let key = String::from_utf8(parse_string(lexer)?).map_err(|_| Expect::Value)?;
+        lexer.expect(ws_tk, b':').ok_or(Expect::Colon)?;
+        let value = parse_value(ws_tk(lexer).ok_or(Expect::Value)?, lexer, factory)?;
+        members.push((key, value));
+        Ok(())
+    })?;
+    Ok(members)
+}
+
+fn parse_string(lexer: &mut SliceLexer) -> Result<Vec<u8>, hifijson::Error> {
+    fold_string(lexer.discarded(), false)
+}
+
+/// Parse a `b"..."` string, which allows `\x` but no `\u` escapes.
+fn parse_byte_string(lexer: &mut SliceLexer) -> Result<Vec<u8>, hifijson::Error> {
+    fold_string(lexer, true)
+}
+
+fn fold_string(lexer: &mut SliceLexer, bytes: bool) -> Result<Vec<u8>, hifijson::Error> {
+    let on_string = |read: &mut &[u8], out: &mut Vec<u8>| {
+        out.extend_from_slice(read);
+        Ok(())
+    };
+    lexer
+        .str_fold(Vec::new(), on_string, |lexer, out| {
+            use hifijson::escape::Error;
+            match lexer.take_next().ok_or(Error::Eof)? {
+                b'u' if bytes => Err(Error::InvalidKind(b'u'))?,
+                b'x' if bytes => out.push(lexer.hex()?),
+                c => out.extend(lexer.escape(c)?.encode_utf8(&mut [0; 4]).as_bytes()),
+            }
+            Ok(())
+        })
+        .map_err(hifijson::Error::Str)
+}
+
+fn parse_num(lexer: &mut SliceLexer) -> Result<Num, hifijson::Error> {
+    let (text, parts) = lexer.num_string_with(num::Num::signed_digits()).unvalidated();
+    Ok(match text {
+        "+" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::INFINITY),
+        "-" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::NEG_INFINITY),
+        _ if text.as_bytes().last().is_some_and(u8::is_ascii_digit) => {
+            if parts.is_int() {
+                Num::from_str_radix(text, 10).ok_or(num::Error::ExpectedDigit)?
+            } else {
+                Num::Dec(text.to_owned().into())
+            }
+        }
+        _ => Err(num::Error::ExpectedDigit)?,
     })
 }
 
@@ -198,8 +190,8 @@ mod tests {
 
     // ── helpers ───────────────────────────────────────────────────────────────
 
-    fn parse(input: &str) -> Result<Val, Box<dyn Error>> {
-        parse_json(input.as_bytes(), JaqJsonFactory)
+    fn parse(input: &str) -> Result<Val, ParseError> {
+        parse_json(input, JaqJsonFactory)
     }
 
     fn ok(input: &str) -> Val {

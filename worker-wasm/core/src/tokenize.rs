@@ -4,7 +4,7 @@ use std::error::Error;
 use crate::node_json_factory::NodeJsonFactory;
 
 pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
-    parse_json(json.as_bytes(), NodeJsonFactory)
+    Ok(parse_json(json, NodeJsonFactory)?)
 }
 
 #[cfg(test)]
@@ -108,11 +108,11 @@ mod tests {
             NodeJsonFactory.object(vec![
                 ("users".to_string(), NodeJsonFactory.array(vec![
                     NodeJsonFactory.object(vec![
-                        ("id".to_string(), parse_json(b"1", NodeJsonFactory).unwrap()),
+                        ("id".to_string(), parse_json("1", NodeJsonFactory).unwrap()),
                         ("email".to_string(), NodeJsonFactory.string(b"user@example.com".to_vec())),
                     ]),
                     NodeJsonFactory.object(vec![
-                        ("id".to_string(), parse_json(b"2", NodeJsonFactory).unwrap()),
+                        ("id".to_string(), parse_json("2", NodeJsonFactory).unwrap()),
                         ("url".to_string(), NodeJsonFactory.string(b"https://example.com".to_vec())),
                     ]),
                 ])),
@@ -137,12 +137,12 @@ mod tests {
 
     #[test]
     fn parses_float_number() {
-        assert_eq!(tokenize_json("3.14").unwrap(), parse_json(b"3.14", NodeJsonFactory).unwrap());
+        assert_eq!(tokenize_json("3.14").unwrap(), parse_json("3.14", NodeJsonFactory).unwrap());
     }
 
     #[test]
     fn parses_negative_number() {
-        assert_eq!(tokenize_json("-42").unwrap(), parse_json(b"-42", NodeJsonFactory).unwrap());
+        assert_eq!(tokenize_json("-42").unwrap(), parse_json("-42", NodeJsonFactory).unwrap());
     }
 
     #[test]

@@ -1,8 +1,7 @@
+use crate::parser::Factory;
+use crate::{Node, Property};
 use jaq_json::Num;
 use std::borrow::Cow;
-use crate::{Node, Property};
-use crate::parser::Factory;
-use crate::utils::determine_variant;
 
 pub struct NodeJsonFactory;
 
@@ -20,10 +19,7 @@ impl Factory<Node> for NodeJsonFactory {
     }
 
     fn string(&self, s: Cow<'_, str>) -> Node {
-        Node::String {
-            variant: determine_variant(s.trim()),
-            value: s.into_owned(),
-        }
+        Node::string(s)
     }
 
     fn array(&self, arr: Vec<Node>) -> Node {
@@ -36,9 +32,5 @@ impl Factory<Node> for NodeJsonFactory {
                 .map(|(k, v)| Property { key: k, value: v })
                 .collect(),
         }
-    }
-
-    fn tuple(&self, items: Vec<Node>) -> Node {
-        Node::Tuple { items }
     }
 }

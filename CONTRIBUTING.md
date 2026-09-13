@@ -16,6 +16,7 @@ Thank you for your interest in contributing! This guide covers everything you ne
 - [Development Workflow](#development-workflow)
 - [Verifying Your Build](#verifying-your-build)
 - [Writing Tests](#writing-tests)
+- [End-to-End Tests](#end-to-end-tests)
 - [Best Practices](#best-practices)
 
 ---
@@ -429,6 +430,56 @@ describe('MyComponent', () => {
   });
 });
 ```
+
+---
+
+## End-to-End Tests
+
+End-to-end tests live in `e2e/` and run the packed extension in a real Chromium
+through **Playwright**. They need a production build first, which `make e2e`
+takes care of:
+
+```bash
+make e2e                       # build the extension, then run the whole suite
+yarn e2e e2e/query.spec.ts     # a single spec against the current dist/
+yarn e2e --ui                  # interactive mode
+```
+
+Pages are served by fulfilling the request in Playwright, so no fixture server
+is involved — `open(body, contentType)` navigates to a URL answered with the
+body you pass.
+
+### Reaching the UI
+
+The extension renders everything inside **closed** shadow roots, which
+Playwright locators cannot enter. The `shadow` fixture resolves those paths over
+CDP instead: segments separated by `>>>`, each one queried inside the shadow
+root of the previous match.
+
+```typescript
+await (await shadow.find('body >>> mjf-toolbox >>> button[data-type="raw"]')).click();
+```
+
+Known paths are collected in `e2e/support/ui.ts` — add new ones there rather
+than spelling them out in specs. The options and FAQ pages use open shadow
+roots, so ordinary Playwright locators work on them.
+
+### Screenshots
+
+Visual assertions compare against the PNGs committed under
+`e2e/*.spec.ts-snapshots/`. CI runs inside the same Playwright container the
+baselines were generated in, so any change that alters rendering fails the
+`E2E Tests` job with a diff attached to the run.
+
+Only the Linux baselines are committed; screenshots taken on macOS or Windows
+are ignored. After an intentional UI change, regenerate them:
+
+```bash
+make e2e-update    # requires Docker
+```
+
+Review the resulting diff before committing it — that image is what every later
+change is checked against.
 
 ---
 

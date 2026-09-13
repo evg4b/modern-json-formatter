@@ -146,6 +146,26 @@ mod tests {
     }
 
     #[test]
+    fn keeps_numbers_exactly_as_written() {
+        for json in ["12345678909876543212345", "0.30000000000000004", "1e3", "007"] {
+            assert_eq!(
+                tokenize_json(json).unwrap(),
+                Node::Number { value: json.to_string() },
+            );
+        }
+    }
+
+    #[test]
+    fn spells_out_non_finite_numbers() {
+        for json in ["NaN", "Infinity", "-Infinity"] {
+            assert_eq!(
+                tokenize_json(json).unwrap(),
+                Node::Number { value: json.to_string() },
+            );
+        }
+    }
+
+    #[test]
     fn parses_empty_array() {
         assert_eq!(tokenize_json("[]").unwrap(), NodeJsonFactory.array(vec![]));
     }

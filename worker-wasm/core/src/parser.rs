@@ -2,7 +2,6 @@ use hifijson::num;
 use hifijson::str::{LexAlloc as _, LexWrite as _};
 use hifijson::token::Lex as _;
 use hifijson::{escape::Lex as _, num::LexWrite as _, Expect, Read as _, SliceLexer};
-use jaq_json::Num;
 use std::borrow::Cow;
 use std::error::Error;
 use std::fmt;
@@ -20,10 +19,34 @@ impl Display for ParseError {
 
 impl Error for ParseError {}
 
+/// A number literal, kept as the text it was written as so that
+/// no precision is lost and nothing has to be formatted back.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Number<'a> {
+    /// Digits without a fraction or an exponent, such as `-1`.
+    Int(&'a str),
+    /// A number with a fraction or an exponent, such as `1.5` or `1e3`.
+    Dec(&'a str),
+    /// `NaN`, `Infinity` or `-Infinity`.
+    NonFinite(f64),
+}
+
+impl<'a> Number<'a> {
+    /// The number as it is spelled in JSON.
+    pub fn text(&self) -> &'a str {
+        match *self {
+            Self::Int(text) | Self::Dec(text) => text,
+            Self::NonFinite(n) if n.is_nan() => "NaN",
+            Self::NonFinite(n) if n.is_sign_positive() => "Infinity",
+            Self::NonFinite(_) => "-Infinity",
+        }
+    }
+}
+
 pub trait Factory<T> {
     fn null(&self) -> T;
     fn bool(&self, val: bool) -> T;
-    fn number(&self, n: Num) -> T;
+    fn number(&self, n: Number<'_>) -> T;
     /// The contents of a string, borrowed from the input unless it had to be
     /// unescaped.
     fn string(&self, s: Cow<'_, str>) -> T;
@@ -101,9 +124,11 @@ fn parse_value<'a, T, F: Factory<T>>(
         b't' if lexer.strip_prefix(b"true") => factory.bool(true),
         b'f' if lexer.strip_prefix(b"false") => factory.bool(false),
         b'b' if lexer.strip_prefix(b"b\"") => factory.string(parse_byte_string(lexer)?),
-        b'N' if lexer.strip_prefix(b"NaN") => factory.number(Num::Float(f64::NAN)),
-        b'I' if lexer.strip_prefix(b"Infinity") => factory.number(Num::Float(f64::INFINITY)),
-        b'0'..=b'9' | b'+' | b'-' => factory.number(parse_num(lexer)?),
+        b'N' if lexer.strip_prefix(b"NaN") => factory.number(Number::NonFinite(f64::NAN)),
+        b'I' if lexer.strip_prefix(b"Infinity") => {
+            factory.number(Number::NonFinite(f64::INFINITY))
+        }
+        b'0'..=b'9' | b'+' | b'-' => factory.number(parse_number(lexer)?),
         b'"' => factory.string(parse_string(lexer)?),
         b'[' => factory.array(parse_array(lexer, factory)?),
         b'{' => factory.object(parse_object(lexer, factory)?),
@@ -172,16 +197,16 @@ fn parse_byte_string<'a>(lexer: &mut SliceLexer<'a>) -> Result<Cow<'a, str>, hif
     }))
 }
 
-fn parse_num(lexer: &mut SliceLexer) -> Result<Num, hifijson::Error> {
+fn parse_number<'a>(lexer: &mut SliceLexer<'a>) -> Result<Number<'a>, hifijson::Error> {
     let (text, parts) = lexer.num_string_with(num::Num::signed_digits()).unvalidated();
     Ok(match text {
-        "+" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::INFINITY),
-        "-" if lexer.strip_prefix(b"Infinity") => Num::Float(f64::NEG_INFINITY),
+        "+" if lexer.strip_prefix(b"Infinity") => Number::NonFinite(f64::INFINITY),
+        "-" if lexer.strip_prefix(b"Infinity") => Number::NonFinite(f64::NEG_INFINITY),
         _ if text.as_bytes().last().is_some_and(u8::is_ascii_digit) => {
             if parts.is_int() {
-                Num::from_str_radix(text, 10).ok_or(num::Error::ExpectedDigit)?
+                Number::Int(text)
             } else {
-                Num::Dec(text.to_owned().into())
+                Number::Dec(text)
             }
         }
         _ => Err(num::Error::ExpectedDigit)?,

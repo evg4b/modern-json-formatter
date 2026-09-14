@@ -1,6 +1,6 @@
 import { type BrowserContext, type CDPSession, chromium, test as base } from '@playwright/test';
 import { join } from 'node:path';
-import { type CopyAll, selectAllAndCopy } from './clipboard';
+import { type CopyAll, type CopySelection, copySelection, selectAllAndCopy } from './selection';
 import { shadowDom, type ShadowDom } from './shadow';
 
 const extensionPath = join(import.meta.dirname, '..', '..', 'dist');
@@ -15,6 +15,7 @@ export interface ExtensionFixtures {
   cdp: CDPSession;
   shadow: ShadowDom;
   copyAll: CopyAll;
+  copySelection: CopySelection;
   open: OpenPage;
 }
 
@@ -63,6 +64,10 @@ export const test = base.extend<ExtensionFixtures>({
 
       return selectAllAndCopy(page, cdp, queryTimeout);
     });
+  },
+
+  copySelection: async ({ cdp, page }, use) => {
+    await use(() => copySelection(page, cdp, queryTimeout));
   },
 
   open: async ({ page }, use) => {

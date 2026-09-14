@@ -18,3 +18,9 @@ export const sample = `{
 }`;
 
 export const invalid = '{ "broken": ';
+
+export const links = `{
+  "site": "https://example.com/docs",
+  "mail": "hello@example.com",
+  "plain": "not a link"
+}`;

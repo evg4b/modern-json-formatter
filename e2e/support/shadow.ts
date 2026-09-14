@@ -2,6 +2,7 @@ import type { CDPSession, Page } from '@playwright/test';
 
 const PIERCE = '>>>';
 const POLL_INTERVAL = 100;
+const STABLE_ATTEMPTS = 30;
 
 export interface Box {
   x: number;
@@ -9,6 +10,10 @@ export interface Box {
   width: number;
   height: number;
 }
+
+const settled = (a: Box, b: Box): boolean => {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+};
 
 export class ShadowElement {
   public constructor(
@@ -37,7 +42,29 @@ export class ShadowElement {
     await this.page.mouse.click(x + width / 2, y + height / 2);
   }
 
+  /*
+   * Playwright waits for a locator's box to settle before clicking it, and none
+   * of that applies to an element resolved by hand. Layout moves after the tree
+   * first renders — the bundled font finishing loading reflows all of it — so a
+   * box measured once can be stale by the time the mouse gets there.
+   */
   public async box(): Promise<Box> {
+    let previous = await this.measure();
+
+    for (let attempt = 0; attempt < STABLE_ATTEMPTS; attempt++) {
+      await this.page.evaluate(() => new Promise(requestAnimationFrame));
+      const current = await this.measure();
+      if (settled(previous, current)) {
+        return current;
+      }
+
+      previous = current;
+    }
+
+    throw new Error('Element never stopped moving');
+  }
+
+  private async measure(): Promise<Box> {
     await this.cdp.send('DOM.scrollIntoViewIfNeeded', { objectId: this.objectId });
     const { model } = await this.cdp.send('DOM.getBoxModel', { objectId: this.objectId });
     const [x, y, right, , , bottom] = model.border;

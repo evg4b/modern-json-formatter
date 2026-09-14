@@ -1,10 +1,12 @@
 import { expect, test } from './support/fixtures';
+import { dragSelect } from './support/selection';
 import { type ShadowDom } from './support/shadow';
 import { sample } from './support/samples';
 import { ui } from './support/ui';
 
-// "tags" is the seventh property of the sample document.
+// Positions of "tags" and "versions" in the sample document.
 const TAGS = 7;
+const VERSIONS = 8;
 
 /*
  * Collapsing is a class the browser then has to lay out, and both the rendered
@@ -63,6 +65,36 @@ test.describe('formatted view', () => {
 
     expect(JSON.parse(copied)).toEqual(JSON.parse(sample));
     expect(copied).toContain('9007199254740993');
+  });
+
+  test('expands a collapsed node again', async ({ shadow }) => {
+    const tree = await collapseTags(shadow);
+
+    await (await shadow.find(ui.propertyToggle(TAGS))).click();
+
+    await expect.poll(() => tree.text()).toContain('"wasm"');
+  });
+
+  test('collapses one array item without touching the rest', async ({ shadow }) => {
+    const tree = await shadow.find(ui.tree);
+
+    await (await shadow.find(ui.arrayItemToggle(VERSIONS, 1))).click();
+
+    await expect.poll(() => tree.text()).toContain('// 2 properties');
+    const text = await tree.text();
+    expect(text).not.toContain('"2.1.0"');
+    expect(text).toContain('"2.0.0"');
+  });
+
+  test('copies only the part that is selected', async ({ copySelection, page, shadow }) => {
+    const version = ui.arrayItem(VERSIONS, 1);
+    await dragSelect(
+      page,
+      await shadow.find(`${version} > .object > .bracket-open`),
+      await shadow.find(`${version} > .object > .bracket-close`),
+    );
+
+    expect(JSON.parse(await copySelection())).toEqual({ number: '2.1.0', downloads: 12045 });
   });
 
   test('keeps the markers of a collapsed node out of the copy', async ({ copyAll, shadow }) => {

@@ -34,6 +34,16 @@ test('renders the result of a jq expression', async ({ page, shadow }) => {
   expect(text).not.toContain('"downloads"');
 });
 
+test('renders every result when the expression produces several', async ({ page, shadow }) => {
+  await runQuery(page, shadow, '.versions[]');
+
+  const tuple = await shadow.find(ui.tuple);
+  const text = await tuple.text();
+  expect(text).toContain('"2.1.0"');
+  expect(text).toContain('"2.0.0"');
+  expect(await shadow.exists(`${ui.tuple} > .root:nth-child(2)`)).toBe(true);
+});
+
 test('matches the query view', async ({ page, shadow }) => {
   await runQuery(page, shadow, '.tags');
   await shadow.find(ui.tree);

@@ -4,6 +4,16 @@ import { type ShadowDom } from './support/shadow';
 import { sample } from './support/samples';
 import { ui } from './support/ui';
 
+/*
+ * Playwright hides the text caret before a screenshot by injecting CSS into the
+ * document, which never reaches the input inside the closed shadow root. Left
+ * alone it blinks between captures and shows up as a diff.
+ */
+const hideCaret = async (shadow: ShadowDom) => {
+  const input = await shadow.find(ui.queryInput);
+  await input.evaluate('function () { this.style.caretColor = "transparent"; }');
+};
+
 const runQuery = async (page: Page, shadow: ShadowDom, query: string) => {
   await (await shadow.find(ui.tab('query'))).click();
   await (await shadow.find(ui.queryInput)).click();
@@ -27,6 +37,7 @@ test('renders the result of a jq expression', async ({ page, shadow }) => {
 test('matches the query view', async ({ page, shadow }) => {
   await runQuery(page, shadow, '.tags');
   await shadow.find(ui.tree);
+  await hideCaret(shadow);
 
   await expect(page).toHaveScreenshot('query.png');
 });
@@ -36,5 +47,6 @@ test('reports an invalid jq expression', async ({ page, shadow }) => {
 
   const error = await shadow.find(ui.queryError);
   expect(await error.text()).toContain('nosuchfunction');
+  await hideCaret(shadow);
   await expect(page).toHaveScreenshot('query-error.png');
 });

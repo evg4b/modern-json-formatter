@@ -18,13 +18,18 @@ export class ShadowElement {
   ) {}
 
   public async text(): Promise<string> {
+    return this.evaluate<string>('function () { return this.innerText; }');
+  }
+
+  // `declaration` is the source of a function called with the element as `this`.
+  public async evaluate<T>(declaration: string): Promise<T> {
     const { result } = await this.cdp.send('Runtime.callFunctionOn', {
       objectId: this.objectId,
-      functionDeclaration: 'function () { return this.innerText; }',
+      functionDeclaration: declaration,
       returnByValue: true,
     });
 
-    return result.value as string;
+    return result.value as T;
   }
 
   public async click(): Promise<void> {

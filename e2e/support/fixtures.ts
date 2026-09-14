@@ -32,7 +32,7 @@ export const test = base.extend<ExtensionFixtures>({
       ],
     });
 
-    await context.grantPermissions(['clipboard-read'], { origin: new URL(pageUrl).origin });
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: new URL(pageUrl).origin });
     await use(context);
     await context.close();
   },
@@ -61,7 +61,7 @@ export const test = base.extend<ExtensionFixtures>({
     await use(async anchor => {
       await (await shadow.find(anchor)).click();
 
-      return selectAllAndCopy(page, cdp);
+      return selectAllAndCopy(page, cdp, queryTimeout);
     });
   },
 

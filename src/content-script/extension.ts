@@ -14,6 +14,8 @@ import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
 import { getSettings } from '@core/settings';
 
+import { monacoFontFace } from './styles/font';
+
 import contentStyles from './content-script.scss?inline';
 import rootStyles from './root-styles.scss?inline';
 
@@ -26,6 +28,7 @@ export const runExtension = async () => {
     return;
   }
 
+  registerStyle(document.head, monacoFontFace());
   registerStyle(document.head, rootStyles);
 
   // eslint-disable-next-line wc/no-closed-shadow-root

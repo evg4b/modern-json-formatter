@@ -445,6 +445,9 @@ yarn e2e e2e/query.spec.ts     # a single spec against the current dist/
 yarn e2e --ui                  # interactive mode
 ```
 
+`make e2e` runs inside the Playwright container; `yarn e2e` runs on your machine,
+which is quicker to iterate with but cannot match the screenshots (see below).
+
 Pages are served by fulfilling the request in Playwright, so no fixture server
 is involved — `open(body, contentType)` navigates to a URL answered with the
 body you pass.
@@ -466,13 +469,13 @@ roots, so ordinary Playwright locators work on them.
 
 ### Screenshots
 
-Visual assertions compare against the PNGs committed under
-`e2e/*.spec.ts-snapshots/`. CI runs inside the same Playwright container the
-baselines were generated in, so any change that alters rendering fails the
-`E2E Tests` job with a diff attached to the run.
+Visual assertions compare against the PNGs committed under `e2e/__screenshots__/`
+— one image per screenshot, not one per platform. Text rendering depends on the
+fonts installed on the machine, so the comparison only holds in one place:
+`mcr.microsoft.com/playwright:v1.63.0-noble`. Both CI and `make e2e` run there,
+which is why running the suite with plain `yarn e2e` on macOS reports diffs.
 
-Only the Linux baselines are committed; screenshots taken on macOS or Windows
-are ignored. After an intentional UI change, regenerate them:
+After an intentional UI change, regenerate the images:
 
 ```bash
 make e2e-update    # requires Docker

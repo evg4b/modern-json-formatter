@@ -20,9 +20,4 @@ export default defineConfig({
     colorScheme: 'dark',
     trace: 'on-first-retry',
   },
-  expect: {
-    toHaveScreenshot: {
-      maxDiffPixelRatio: 0.005,
-    },
-  },
 });

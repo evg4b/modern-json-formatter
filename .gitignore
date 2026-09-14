@@ -144,7 +144,3 @@ test-results
 playwright-report
 blob-report
 playwright/.cache
-
-# Visual baselines are generated on Linux, where CI compares them
-e2e/**/*-darwin.png
-e2e/**/*-win32.png

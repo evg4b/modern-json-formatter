@@ -4,6 +4,12 @@ const isCi = !!process.env.CI;
 
 export default defineConfig({
   testDir: './e2e',
+
+  /*
+   * One image per screenshot rather than one per platform: comparisons always
+   * happen in the Playwright container, so the platform never varies.
+   */
+  snapshotPathTemplate: '{testDir}/__screenshots__/{testFileName}/{arg}{ext}',
   fullyParallel: true,
   forbidOnly: isCi,
   retries: isCi ? 1 : 0,

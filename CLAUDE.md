@@ -19,12 +19,12 @@ yarn lint             # ESLint
 yarn lint --fix       # ESLint with auto-fix
 yarn test             # Run all tests
 yarn test:cover       # Run tests with coverage
-yarn e2e              # Playwright end-to-end tests (needs a built dist/)
+yarn e2e              # Playwright end-to-end tests (see `make e2e` for screenshots)
 
 # Full release workflow (via Makefile)
 make check            # lint + test
-make e2e              # Build the extension, then run the end-to-end suite
-make e2e-update       # Regenerate the committed screenshots (Docker)
+make e2e              # Build the extension, then run the end-to-end suite (Docker)
+make e2e-update       # Same, regenerating the committed screenshots (Docker)
 make build-worker-wasm # Build Rust/WASM core
 make build-extension  # Production build
 make pack-extension   # Generate per-file checksums and zip for Chrome + Edge stores
@@ -136,9 +136,11 @@ production build in `dist/`.
   CDP, since Playwright locators stop at them; segments are separated by `>>>`
 - `e2e/support/ui.ts` — the known element paths, kept out of the specs
 
-Screenshots are compared against the Linux PNGs in `e2e/*.spec.ts-snapshots/`.
-CI runs in the same Playwright container the baselines came from; regenerate them
-with `make e2e-update` after an intentional UI change.
+Screenshots are compared against a single committed image each, under
+`e2e/__screenshots__/`. Rendering depends on the host's fonts, so `make e2e` runs
+the suite in the same Playwright container CI uses — `yarn e2e` on the host runs
+the same tests but its screenshots will not match. Regenerate the images with
+`make e2e-update` after an intentional UI change.
 
 ### Build System
 

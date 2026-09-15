@@ -1,7 +1,3 @@
-/*
- * Raw text rather than JSON.stringify: the extension is fed the exact bytes a
- * server would send, including numbers JavaScript cannot hold.
- */
 export const sample = `{
   "id": 9007199254740993,
   "name": "Modern JSON Formatter",

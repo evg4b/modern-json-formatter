@@ -6,11 +6,6 @@ import { ui } from './support/ui';
 const sectionLinks = 'mjf-sidebar > .menu > mjf-sidebar-link';
 const subSectionLinks = 'mjf-sidebar .section > mjf-sidebar-link';
 
-/*
- * The link marking the reader's place. Its `active` class sits in the shadow
- * root, while the title it shows is slotted light DOM, so the host is matched
- * through the class and read for its text.
- */
 const activeLink = (page: Page) => page
   .locator('mjf-sidebar-link')
   .filter({ has: page.locator('a.active') });

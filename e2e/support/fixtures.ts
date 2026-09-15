@@ -54,10 +54,6 @@ export const test = base.extend<ExtensionFixtures>({
     await use(shadowDom(page, cdp, queryTimeout));
   },
 
-  /*
-   * Selecting everything only reaches a closed shadow root once the selection
-   * sits inside it, so `anchor` is clicked first to put it there.
-   */
   copyAll: async ({ cdp, page, shadow }, use) => {
     await use(async anchor => {
       await (await shadow.find(anchor)).click();

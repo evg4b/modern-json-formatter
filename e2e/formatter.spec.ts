@@ -4,15 +4,9 @@ import { type ShadowDom } from './support/shadow';
 import { sample } from './support/samples';
 import { ui } from './support/ui';
 
-// Positions of "tags" and "versions" in the sample document.
 const TAGS = 7;
 const VERSIONS = 8;
 
-/*
- * Collapsing is a class the browser then has to lay out, and both the rendered
- * text and a copy of it read that layout rather than the class. So wait for the
- * collapse to reach the page instead of assuming the click already applied it.
- */
 const collapseTags = async (shadow: ShadowDom) => {
   const tree = await shadow.find(ui.tree);
   await (await shadow.find(ui.propertyToggle(TAGS))).click();

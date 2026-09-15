@@ -469,11 +469,18 @@ roots, so ordinary Playwright locators work on them.
 
 ### Screenshots
 
-Visual assertions compare against the PNGs committed under `e2e/__screenshots__/`
-— one image per screenshot, not one per platform. Text rendering depends on the
-fonts installed on the machine, so the comparison only holds in one place:
-`mcr.microsoft.com/playwright:v1.63.0-noble`. Both CI and `make e2e` run there,
-which is why running the suite with plain `yarn e2e` on macOS reports diffs.
+Visual assertions compare against the PNGs committed under `e2e/__screenshots__/`.
+A test tagged `@screenshot` runs in both the `dark` and `light` projects, so each
+view is committed once per theme and neither can regress unnoticed:
+
+```typescript
+test('matches the raw view', { tag: '@screenshot' }, async ({ page, shadow }) => {
+```
+
+Text rendering depends on the fonts installed on the machine, so the comparison
+only holds in one place: `mcr.microsoft.com/playwright:v1.63.0-noble`. Both CI
+and `make e2e` run there, which is why running the suite with plain `yarn e2e` on
+macOS reports diffs.
 
 After an intentional UI change, regenerate the images:
 

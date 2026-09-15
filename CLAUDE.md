@@ -136,11 +136,13 @@ production build in `dist/`.
   CDP, since Playwright locators stop at them; segments are separated by `>>>`
 - `e2e/support/ui.ts` — the known element paths, kept out of the specs
 
-Screenshots are compared against a single committed image each, under
-`e2e/__screenshots__/`. Rendering depends on the host's fonts, so `make e2e` runs
-the suite in the same Playwright container CI uses — `yarn e2e` on the host runs
-the same tests but its screenshots will not match. Regenerate the images with
-`make e2e-update` after an intentional UI change.
+Screenshots live under `e2e/__screenshots__/`, one per theme. Tests tagged
+`@screenshot` run in both the `dark` and `light` projects, which is where the
+suffix on each image comes from; everything else runs in `dark` only. Rendering
+depends on the host's fonts, so `make e2e` runs the suite in the same Playwright
+container CI uses — `yarn e2e` on the host runs the same tests but its
+screenshots will not match. Regenerate the images with `make e2e-update` after an
+intentional UI change.
 
 ### Build System
 

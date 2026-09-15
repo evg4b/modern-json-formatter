@@ -26,7 +26,6 @@ export class ShadowElement {
     return this.evaluate<string>('function () { return this.innerText; }');
   }
 
-  // `declaration` is the source of a function called with the element as `this`.
   public async evaluate<T>(declaration: string): Promise<T> {
     const { result } = await this.cdp.send('Runtime.callFunctionOn', {
       objectId: this.objectId,
@@ -42,12 +41,6 @@ export class ShadowElement {
     await this.page.mouse.click(x + width / 2, y + height / 2);
   }
 
-  /*
-   * Playwright waits for a locator's box to settle before clicking it, and none
-   * of that applies to an element resolved by hand. Layout moves after the tree
-   * first renders — the bundled font finishing loading reflows all of it — so a
-   * box measured once can be stale by the time the mouse gets there.
-   */
   public async box(): Promise<Box> {
     let previous = await this.measure();
 
@@ -87,10 +80,6 @@ const shadowRootOf = async (cdp: CDPSession, nodeId: number, selector: string): 
   return nodeIds[0];
 };
 
-/*
- * Node ids are discarded every time the document is re-read, so the match is
- * turned into a remote object handle that stays valid for the whole page.
- */
 const resolve = async (cdp: CDPSession, path: string): Promise<string> => {
   const selectors = path.split(PIERCE).map(selector => selector.trim());
   const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
@@ -117,12 +106,6 @@ export interface ShadowDom {
   exists(path: string): Promise<boolean>;
 }
 
-/*
- * Playwright locators stop at closed shadow roots, and the extension builds its
- * whole UI inside them. CDP still walks through, so paths are resolved by hand:
- * segments separated by `>>>`, each queried inside the shadow root of the
- * previous match.
- */
 export const shadowDom = (page: Page, cdp: CDPSession, timeout: number): ShadowDom => ({
   async find(path) {
     const deadline = Date.now() + timeout;

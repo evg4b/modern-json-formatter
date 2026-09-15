@@ -4,11 +4,6 @@ import { type ShadowDom } from './support/shadow';
 import { sample } from './support/samples';
 import { ui } from './support/ui';
 
-/*
- * Playwright hides the text caret before a screenshot by injecting CSS into the
- * document, which never reaches the input inside the closed shadow root. Left
- * alone it blinks between captures and shows up as a diff.
- */
 const hideCaret = async (shadow: ShadowDom) => {
   const input = await shadow.find(ui.queryInput);
   await input.evaluate('function () { this.style.caretColor = "transparent"; }');

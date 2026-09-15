@@ -30,10 +30,6 @@ export default defineConfig({
           extension_pages: 'script-src \'self\' \'wasm-unsafe-eval\'; object-src \'self\';',
         },
 
-        /*
-         * The content script resolves this URL at runtime and loads the face
-         * into pages it formats, so it has to be reachable from every origin.
-         */
         web_accessible_resources: [{ resources: ['Monaco.woff'], matches: ['<all_urls>'] }],
       },
       background: './src/background/background.ts',

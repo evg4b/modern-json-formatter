@@ -1,9 +1,6 @@
 PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright:v1.63.0-noble
 PLAYWRIGHT_MODULES := modern-json-formatter-e2e-modules
 
-# Screenshots are compared against a single committed image, so both running and
-# regenerating them happen in the image CI uses. A run on the host picks up the
-# host's fonts and never matches.
 PLAYWRIGHT_RUN := docker run --rm \
 	-v "$(shell pwd)":/work -v $(PLAYWRIGHT_MODULES):/work/node_modules -w /work \
 	-e CI=1 -e PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \

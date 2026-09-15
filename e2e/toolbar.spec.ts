@@ -19,14 +19,14 @@ test('switches back to the formatted tab', async ({ shadow }) => {
   expect(await (await shadow.find(ui.tree)).text()).toContain('"score":4.85');
 });
 
-test('matches the raw view', async ({ page, shadow }) => {
+test('matches the raw view', { tag: '@screenshot' }, async ({ page, shadow }) => {
   await (await shadow.find(ui.tab('raw'))).click();
   await shadow.find(ui.rawText);
 
   await expect(page).toHaveScreenshot('raw.png');
 });
 
-test('opens the download menu', async ({ page, shadow }) => {
+test('opens the download menu', { tag: '@screenshot' }, async ({ page, shadow }) => {
   await (await shadow.find(ui.download)).click();
 
   await expect(page).toHaveScreenshot('download-menu.png');

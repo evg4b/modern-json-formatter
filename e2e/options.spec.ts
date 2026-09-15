@@ -15,7 +15,7 @@ test('renders every settings section', async ({ page }) => {
   await expect(page.getByText('Query history data')).toBeVisible();
 });
 
-test('matches the options page', async ({ page }) => {
+test('matches the options page', { tag: '@screenshot' }, async ({ page }) => {
   await expect(page.getByText('Query history data')).toBeVisible();
 
   await expect(page).toHaveScreenshot('options.png', { fullPage: true });

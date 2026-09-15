@@ -66,7 +66,7 @@ test.describe('the manual', () => {
     await expect(activeLink(page)).not.toHaveText('Basic filters');
   });
 
-  test('matches the manual page', async ({ page }) => {
+  test('matches the manual page', { tag: '@screenshot' }, async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'JQ Queries Manual' })).toBeVisible();
 
     await expect(page).toHaveScreenshot('faq.png');

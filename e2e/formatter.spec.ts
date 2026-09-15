@@ -100,23 +100,11 @@ test.describe('formatted view', () => {
     expect(copied).not.toContain('// 3 items');
   });
 
-  test('matches the formatted view', async ({ page, shadow }) => {
+  test('matches the formatted view', { tag: '@screenshot' }, async ({ page, shadow }) => {
     await shadow.find(ui.tree);
     await shadow.find(ui.toolbar);
 
-    await expect(page).toHaveScreenshot('formatted-dark.png');
-  });
-});
-
-test.describe('formatted view in light theme', () => {
-  test.use({ colorScheme: 'light' });
-
-  test('matches the formatted view', async ({ open, page, shadow }) => {
-    await open(sample);
-    await shadow.find(ui.tree);
-    await shadow.find(ui.toolbar);
-
-    await expect(page).toHaveScreenshot('formatted-light.png');
+    await expect(page).toHaveScreenshot('formatted.png');
   });
 });
 

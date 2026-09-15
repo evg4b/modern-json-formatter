@@ -39,7 +39,7 @@ test('renders every result when the expression produces several', async ({ page,
   expect(await shadow.exists(`${ui.tuple} > .root:nth-child(2)`)).toBe(true);
 });
 
-test('matches the query view', async ({ page, shadow }) => {
+test('matches the query view', { tag: '@screenshot' }, async ({ page, shadow }) => {
   await runQuery(page, shadow, '.tags');
   await shadow.find(ui.tree);
   await hideCaret(shadow);
@@ -47,7 +47,7 @@ test('matches the query view', async ({ page, shadow }) => {
   await expect(page).toHaveScreenshot('query.png');
 });
 
-test('reports an invalid jq expression', async ({ page, shadow }) => {
+test('reports an invalid jq expression', { tag: '@screenshot' }, async ({ page, shadow }) => {
   await runQuery(page, shadow, '.tags | nosuchfunction');
 
   const error = await shadow.find(ui.queryError);

@@ -11,6 +11,7 @@ export type ManifestGeneratorParams = {
   assets?: AssetType[];
   background?: string;
   contentScripts?: string;
+  contentStyles?: string[];
   options?: string;
   baseManifest?: BaseManifestV3;
 };

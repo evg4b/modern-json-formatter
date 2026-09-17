@@ -4,14 +4,27 @@ use std::error::Error;
 use crate::node_json_factory::NodeJsonFactory;
 
 pub fn tokenize_json(json: &str) -> Result<Node, Box<dyn Error>> {
-    parse_json(json.as_bytes(), NodeJsonFactory)
+    Ok(parse_json(json, NodeJsonFactory)?)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::node::{Node, StringVariant};
+    use crate::node::{Node, Property, StringVariant};
     use crate::parser::Factory;
+
+    fn object(members: Vec<(&str, Node)>) -> Node {
+        Node::Object {
+            properties: members
+                .into_iter()
+                .map(|(key, value)| Property { key: key.to_string(), value })
+                .collect(),
+        }
+    }
+
+    fn number(value: &str) -> Node {
+        Node::Number { value: value.to_string() }
+    }
 
     #[test]
     fn parses_string_with_url_variant() {
@@ -105,18 +118,18 @@ mod tests {
 
         assert_eq!(
             node,
-            NodeJsonFactory.object(vec![
-                ("users".to_string(), NodeJsonFactory.array(vec![
-                    NodeJsonFactory.object(vec![
-                        ("id".to_string(), parse_json(b"1", NodeJsonFactory).unwrap()),
-                        ("email".to_string(), NodeJsonFactory.string(b"user@example.com".to_vec())),
+            object(vec![
+                ("users", NodeJsonFactory.array(vec![
+                    object(vec![
+                        ("id", number("1")),
+                        ("email", Node::string("user@example.com".into())),
                     ]),
-                    NodeJsonFactory.object(vec![
-                        ("id".to_string(), parse_json(b"2", NodeJsonFactory).unwrap()),
-                        ("url".to_string(), NodeJsonFactory.string(b"https://example.com".to_vec())),
+                    object(vec![
+                        ("id", number("2")),
+                        ("url", Node::string("https://example.com".into())),
                     ]),
                 ])),
-                ("active".to_string(), NodeJsonFactory.bool(true)),
+                ("active", NodeJsonFactory.bool(true)),
             ])
         )
     }
@@ -127,7 +140,7 @@ mod tests {
 
         let node = tokenize_json(json).unwrap();
 
-        assert_eq!(node, NodeJsonFactory.array(vec![NodeJsonFactory.object(vec![])]))
+        assert_eq!(node, NodeJsonFactory.array(vec![object(vec![])]))
     }
 
     #[test]
@@ -137,12 +150,32 @@ mod tests {
 
     #[test]
     fn parses_float_number() {
-        assert_eq!(tokenize_json("3.14").unwrap(), parse_json(b"3.14", NodeJsonFactory).unwrap());
+        assert_eq!(tokenize_json("3.14").unwrap(), number("3.14"));
     }
 
     #[test]
     fn parses_negative_number() {
-        assert_eq!(tokenize_json("-42").unwrap(), parse_json(b"-42", NodeJsonFactory).unwrap());
+        assert_eq!(tokenize_json("-42").unwrap(), number("-42"));
+    }
+
+    #[test]
+    fn keeps_numbers_exactly_as_written() {
+        for json in ["12345678909876543212345", "0.30000000000000004", "1e3", "007"] {
+            assert_eq!(
+                tokenize_json(json).unwrap(),
+                number(json),
+            );
+        }
+    }
+
+    #[test]
+    fn spells_out_non_finite_numbers() {
+        for json in ["NaN", "Infinity", "-Infinity"] {
+            assert_eq!(
+                tokenize_json(json).unwrap(),
+                number(json),
+            );
+        }
     }
 
     #[test]
@@ -152,7 +185,7 @@ mod tests {
 
     #[test]
     fn parses_empty_string_value() {
-        assert_eq!(tokenize_json(r#""""#).unwrap(), NodeJsonFactory.string(b"".to_vec()));
+        assert_eq!(tokenize_json(r#""""#).unwrap(), NodeJsonFactory.string("".into()));
     }
 
     #[test]

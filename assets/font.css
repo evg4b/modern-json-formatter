@@ -5,4 +5,3 @@
   src: local('Monaco'),
   url('chrome-extension://__MSG_@@extension_id__/Monaco.woff') format('woff');
 }
-

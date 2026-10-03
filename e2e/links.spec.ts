@@ -10,21 +10,19 @@ test.beforeEach(async ({ open, shadow }) => {
 });
 
 test('marks urls and emails inside strings', async ({ shadow }) => {
-  expect(await shadow.exists(`${ui.tree} .string.url[href="https://example.com/docs"]`)).toBe(true);
+  expect(await shadow.exists(`${ui.tree} .string.url[href="${DOCS}"]`)).toBe(true);
   expect(await shadow.exists(`${ui.tree} .string.email[href="mailto:hello@example.com"]`)).toBe(true);
 });
 
 test('leaves ordinary strings unlinked', async ({ shadow }) => {
-
   expect(await shadow.exists(`${ui.tree} .property:nth-child(3) > .string`)).toBe(true);
   expect(await shadow.exists(`${ui.tree} .property:nth-child(3) > .string[href]`)).toBe(false);
 });
 
 test('opens a url in a new tab when the modifier is held', async ({ context, page, shadow }) => {
-
   await context.route(DOCS, route => route.fulfill({ contentType: 'text/html', body: '<h1>Docs</h1>' }));
 
-  const opened = context.waitForEvent('page', { timeout: 10_000 });
+  const opened = context.waitForEvent('page');
   await page.keyboard.down('ControlOrMeta');
   await (await shadow.find(`${ui.tree} .string.url`)).click();
   await page.keyboard.up('ControlOrMeta');

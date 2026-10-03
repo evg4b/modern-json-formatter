@@ -1,0 +1,13 @@
+{
+  "name": "modern-json-formatter-promo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs all",
+    "video": "node build.mjs video",
+    "screens": "node build.mjs screens"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

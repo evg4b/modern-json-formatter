@@ -22,7 +22,7 @@ impl Error for ParseError {}
 
 /// A number literal, kept as the text it was written as so that
 /// no precision is lost and nothing has to be formatted back.
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug)]
 pub enum Number<'a> {
     /// Digits without a fraction or an exponent, such as `-1`.
     Int(&'a str),

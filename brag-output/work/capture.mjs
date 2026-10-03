@@ -17,7 +17,7 @@ if (mode === 'stills') {
   }
 } else {
   mkdirSync('frames', { recursive: true });
-  const FPS = 30, N = 20 * FPS;
+  const FPS = 30, N = 27 * FPS;
   for (let f = 0; f < N; f++) {
     await page.evaluate(t => window.render(t), f / FPS);
     await page.screenshot({ path: `frames/f${String(f).padStart(4, '0')}.png` });

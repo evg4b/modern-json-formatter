@@ -52,8 +52,10 @@ body { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-seri
 #omni .u i { color: #9aa0a6; font-style: normal; }
 .sep { width: 1px; height: 22px; background: #5f5f5f; margin: 0 6px; }
 .avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #9f84ff, #5dd9ff); }
-#dlicon { width: 0; overflow: hidden; opacity: 0; }
-#dlring { position: absolute; inset: 3px; }
+#dlslot { width: 0; flex: none; overflow: visible; display: flex; justify-content: center; }
+#dlicon { opacity: 0; }
+#dlicon > svg:first-child { width: 20px; height: 20px; }
+#dlicon #dlring { position: absolute; left: 1px; top: 1px; width: 34px; height: 34px; }
 #dlbubble { position: absolute; right: 110px; top: 92px; width: 420px; background: #2b2b2b; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
   padding: 18px 22px; color: #e3e3e3; font-size: 20px; opacity: 0; z-index: 10; }
 #dlbubble .h { font-weight: 600; margin-bottom: 12px; }
@@ -161,8 +163,8 @@ body { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-seri
         <div class="u">api.example.dev<i>/v1/stats</i></div>
         <div class="ib"><svg viewBox="0 0 24 24" fill="none" stroke="#c7c7c7" stroke-width="1.8"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></div>
       </div>
-      <div class="ib" id="dlicon"><svg viewBox="0 0 24 24" fill="none" stroke="#a8c7fa" stroke-width="2"><path d="M12 5v10m-4.5-4.5L12 15l4.5-4.5M6 19h12"/></svg>
-        <svg id="dlring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="none" stroke="#a8c7fa" stroke-width="2" stroke-dasharray="100.5" stroke-dashoffset="100.5" transform="rotate(-90 18 18)"/></svg></div>
+      <div id="dlslot"><div class="ib" id="dlicon"><svg viewBox="0 0 24 24" fill="none" stroke="#a8c7fa" stroke-width="2"><path d="M12 5v10m-4.5-4.5L12 15l4.5-4.5M6 19h12"/></svg>
+        <svg id="dlring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="none" stroke="#a8c7fa" stroke-width="2" stroke-dasharray="100.5" stroke-dashoffset="100.5" transform="rotate(-90 18 18)"/></svg></div></div>
       <div class="ib"><svg viewBox="0 0 24 24" fill="none" stroke="#c7c7c7" stroke-width="1.8"><path d="M10 4h4v3a2 2 0 1 0 0 0h3v4a2 2 0 1 1 0 4v4h-4a2 2 0 1 0-4 0H5v-4a2 2 0 1 0 0-4V7h5z"/></svg></div>
       <div class="sep"></div>
       <div class="ib"><div class="avatar"></div></div>
@@ -415,9 +417,11 @@ window.render = function (t) {
   $('menu').style.opacity = mk; $('menu').style.transform = `scale(${0.94 + 0.06 * mk})`;
   $('m-min').classList.toggle('hover', t > 22.9);
   const di = out(lin(t, 23.45, 23.7));
-  $('dlicon').style.width = `${di * 36}px`; $('dlicon').style.opacity = di;
+  $('dlslot').style.width = `${ease(lin(t, 23.4, 23.6)) * 36}px`; $('dlicon').style.opacity = di; $('dlicon').style.transform = `scale(${0.6 + 0.4 * di})`;
   document.querySelector('#dlring circle').style.strokeDashoffset = 100.5 * (1 - ease(lin(t, 23.5, 23.85)));
   const bk = out(lin(t, 23.8, 24.05)) * (1 - ease(lin(t, 24.3, 24.45)));
+  if (bk > 0) { const ir = $('dlicon').getBoundingClientRect(), wr = $('win').getBoundingClientRect();
+    $('dlbubble').style.right = 'auto'; $('dlbubble').style.left = `${ir.right - wr.left - $('dlbubble').offsetWidth + 14}px`; $('dlbubble').style.top = `${ir.bottom - wr.top + 10}px`; }
   $('dlbubble').style.opacity = bk; $('dlbubble').style.transform = `translateY(${(1 - bk) * -10}px)`;
 
   // cursor

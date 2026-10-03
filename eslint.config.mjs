@@ -93,6 +93,7 @@ export default [
       'dist/',
       'worker-wasm/pkg/',
       'worker-wasm/core/target/',
+      'brag-output/',
     ],
   },
 ];

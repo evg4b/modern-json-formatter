@@ -1,3 +1,4 @@
+use crate::utils::into_utf8_lossy;
 use hifijson::escape::Lex as _;
 use hifijson::num::{self, LexWrite as _};
 use hifijson::str::{LexAlloc as _, LexWrite as _};
@@ -200,10 +201,7 @@ fn parse_byte_string<'a>(lexer: &mut SliceLexer<'a>) -> Result<Cow<'a, str>, hif
             Ok(())
         })
         .map_err(hifijson::Error::Str)?;
-    Ok(Cow::Owned(match String::from_utf8(bytes) {
-        Ok(string) => string,
-        Err(e) => String::from_utf8_lossy(e.as_bytes()).into_owned(),
-    }))
+    Ok(Cow::Owned(into_utf8_lossy(bytes)))
 }
 
 fn parse_number<'a>(lexer: &mut SliceLexer<'a>) -> Result<Number<'a>, hifijson::Error> {

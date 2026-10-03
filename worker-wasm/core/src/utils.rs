@@ -24,6 +24,11 @@ fn is_email(value: &str) -> bool {
         .is_some_and(|dot| dot > 0 && dot < domain.len() - 1)
 }
 
+/// Bytes as text, reusing their buffer unless invalid UTF-8 has to be replaced.
+pub fn into_utf8_lossy(bytes: Vec<u8>) -> String {
+    String::from_utf8(bytes).unwrap_or_else(|e| String::from_utf8_lossy(e.as_bytes()).into_owned())
+}
+
 pub fn determine_variant(value: &str) -> Option<StringVariant> {
     let value = value.trim();
     if is_url(value) {
@@ -77,6 +82,21 @@ mod tests_is_url {
     #[test]
     fn return_true_for_url_with_path_query_and_fragment() {
         assert!(is_url("https://example.com/path?query=value&other=2#section"));
+    }
+}
+
+#[cfg(test)]
+mod tests_into_utf8_lossy {
+    use super::*;
+
+    #[test]
+    fn keeps_valid_utf8() {
+        assert_eq!(into_utf8_lossy("héllo".into()), "héllo");
+    }
+
+    #[test]
+    fn replaces_invalid_utf8() {
+        assert_eq!(into_utf8_lossy(vec![b'a', 0xff, b'b']), "a\u{FFFD}b");
     }
 }
 

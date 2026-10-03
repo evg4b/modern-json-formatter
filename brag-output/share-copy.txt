@@ -1,0 +1,1 @@
+Your browser's JSON.parse turns 18446744073709551615 into 18446744073709552000. Modern JSON Formatter keeps every digit, keeps your keys in order, and puts jq right in the toolbar. Free for Chrome and Edge: https://github.com/evg4b/modern-json-formatter

@@ -1,0 +1,354 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: 'Monaco'; src: url('Monaco.woff') format('woff'); }
+:root {
+  --background: #282828; --background-hover: #3c3c3c; --base-text-color: #f8f8f2;
+  --meta-info-color: #717171; --guideline-color: #3b3b3b;
+  --string-literal-color: #5dd9ff; --boolean-literal-color: #9f84ff; --number-literal-color: #9f84ff;
+  --null-literal-color: #717171; --object-key-color: #7dadf9; --bracket-color: #eeeeee;
+  --toggle-color: #575757;
+  --button-background: #262626; --button-color: #cccccc; --button-border-color: #717171;
+  --button-active-background: #1c466e; --button-active-color: #a3c6dd;
+  --input-background: #262626; --input-color: #dadada; --input-focus-border-color: #a5b6d7;
+  --error-icon-color: #cc6b63;
+  --lilac: #cdb3ff;
+  --indentation: 40px; --toggle-size: 24px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #161618; }
+body { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif; }
+#stage { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(1200px 700px at 50% 0%, #2a2438 0%, #161618 60%); }
+#glow { position: absolute; inset: 0; background: radial-gradient(900px 500px at 80% 110%, rgba(159,132,255,0.18), transparent 70%); }
+
+#caption { position: absolute; left: 0; right: 0; top: 64px; height: 120px; text-align: center; color: #fff;
+  font-size: 68px; font-weight: 700; letter-spacing: -1.5px; }
+#caption .cap { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+#caption em { font-style: normal; color: var(--lilac); }
+
+#win { position: absolute; left: 160px; top: 200px; width: 1600px; height: 820px; border-radius: 18px; overflow: hidden;
+  background: #1f1f1f; box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08); transform-origin: 50% 50%; }
+#chrome { height: 104px; background: #1b1b1c; border-bottom: 1px solid #000; position: relative; }
+.dots { position: absolute; left: 24px; top: 22px; display: flex; gap: 12px; }
+.dots i { width: 16px; height: 16px; border-radius: 50%; display: block; }
+.tab { position: absolute; left: 120px; top: 10px; width: 340px; height: 40px; border-radius: 10px 10px 0 0; background: #2d2d2f;
+  color: #ddd; font-size: 17px; display: flex; align-items: center; gap: 10px; padding: 0 14px; }
+.tab img { width: 20px; height: 20px; background: #fff; border-radius: 4px; }
+.url { position: absolute; left: 120px; right: 24px; top: 56px; height: 38px; border-radius: 19px; background: #2d2d2f;
+  color: #bbb; font-size: 18px; display: flex; align-items: center; padding-left: 22px; }
+.url b { color: #eee; font-weight: 400; }
+
+#page { position: absolute; left: 0; right: 0; top: 104px; bottom: 0; overflow: hidden; }
+#rawpage { position: absolute; inset: 0; background: #fff; padding: 18px 22px; font-family: Monaco, monospace; font-size: 15px;
+  line-height: 1.35; color: #111; word-break: break-all; transform-origin: 30% 20%; }
+#fmtpage { position: absolute; inset: 0; background: var(--background); opacity: 0; }
+#toolbar { position: absolute; right: 30px; top: 22px; display: flex; gap: 8px; align-items: center; font-size: 19px; z-index: 5; }
+.btn { background: var(--button-background); color: var(--button-color); border: 1px solid var(--button-border-color);
+  border-radius: 6px; padding: 5px 12px; }
+.btn.active { background: var(--button-active-background); color: var(--button-active-color); border-color: var(--button-active-background); }
+.btn.dl { padding: 5px 8px; }
+#qwrap { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+#qinput { letter-spacing: 1.5px; font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'calt' 0; width: 520px; height: 36px; background: var(--input-background); color: var(--input-color); border: 1px solid var(--input-focus-border-color);
+  border-radius: 6px; font-family: Monaco, monospace; font-size: 18px; display: flex; align-items: center; padding: 0 10px; white-space: pre; }
+#qinput .caret { display: inline-block; width: 2px; height: 22px; background: #dadada; margin-left: 1px; }
+.info { width: 24px; height: 24px; border: 2px solid #ccc; border-radius: 50%; color: #ccc; font-size: 14px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+.code { position: absolute; left: 0; top: 0; padding: 26px 30px 26px 60px; font-family: Monaco, monospace; font-size: 23px; line-height: 1.5;
+  color: var(--base-text-color); white-space: pre-wrap; width: 1600px; transform-origin: 0 0; }
+.code > .root { display: block; margin-bottom: 4px; }
+.root .inner { display: block; padding-left: var(--indentation); border-left: 1px dotted #4a4a4a; }
+.toggle { display: inline-block; width: var(--toggle-size); height: 20px; margin-left: calc(-1 * var(--toggle-size)); position: relative; }
+.toggle:before { content: ''; position: absolute; left: 4px; top: 6px; border-style: solid; border-width: 7px 0 7px 11px;
+  border-color: transparent transparent transparent var(--toggle-color); transform: rotate(var(--rot, 90deg)); }
+.array, .object { display: inline; }
+.item, .property { display: block; margin: 2px 0; }
+.key { color: var(--object-key-color); }
+.string { color: var(--string-literal-color); }
+.number { color: var(--number-literal-color); }
+.boolean { color: var(--boolean-literal-color); }
+.null { color: var(--null-literal-color); }
+.bracket { color: var(--bracket-color); }
+.bracket + .bracket { margin-left: 5px; }
+.colon { color: var(--bracket-color); padding-right: 9px; }
+.comma { color: var(--bracket-color); }
+.ellipsis { display: none; }
+.ellipsis:before { content: '...'; color: var(--meta-info-color); padding: 0 6px; }
+.items-count, .properties-count { color: var(--meta-info-color); padding-left: 18px; display: none; }
+.collapsed > .object > .inner, .collapsed > .array > .inner { display: none; }
+.collapsed > .object > .ellipsis, .collapsed > .array > .ellipsis, .collapsed > .ellipsis { display: inline; }
+.collapsed > .properties-count, .collapsed > .items-count { display: inline; }
+.hl { background: rgba(159,132,255,0.16); box-shadow: -14px 0 0 rgba(159,132,255,0.16), 14px 0 0 rgba(159,132,255,0.16); border-radius: 4px; }
+
+#ghost { position: absolute; left: 0; top: 0; font-family: Monaco, monospace; font-size: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.45); z-index: 4; color: #e9d5d3; background: #483434;
+  border-radius: 8px; padding: 6px 14px; opacity: 0; white-space: nowrap; }
+#ghost s { text-decoration-color: var(--error-icon-color); text-decoration-thickness: 3px; }
+#ghost small { font-family: -apple-system, sans-serif; font-size: 22px; color: #cc9e99; margin-right: 10px; }
+
+#cursor { position: absolute; width: 30px; height: 30px; z-index: 20; opacity: 0; pointer-events: none; }
+#click { position: absolute; width: 50px; height: 50px; margin: -25px 0 0 -25px; border-radius: 50%; border: 3px solid rgba(205,179,255,0.9); opacity: 0; z-index: 19; }
+
+#outro { position: absolute; inset: 0; background: #fff; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#outro img { width: 330px; }
+#outro h1 { margin: 26px 0 0; font-size: 88px; letter-spacing: -2.5px; color: #1f1f1f; font-weight: 800; }
+#outro p { margin: 14px 0 0; font-size: 38px; color: #555; font-weight: 500; }
+#outro p b { color: #2553c0; font-weight: 600; }
+#outro .chips { display: flex; gap: 16px; margin-top: 34px; }
+#outro .chip { font-family: Monaco, monospace; font-size: 22px; padding: 8px 18px; border-radius: 30px; background: #dce4f5; color: #1556b8; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow"></div>
+  <div id="caption">
+    <div class="cap" id="c1">Your API just answered.</div>
+    <div class="cap" id="c2">Now it's <em>readable</em>.</div>
+    <div class="cap" id="c3">Big numbers stay <em>exact</em>.</div>
+    <div class="cap" id="c4">Query it with <em>jq</em>.</div>
+    <div class="cap" id="c5">Fold anything.</div>
+  </div>
+  <div id="win">
+    <div id="chrome">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="tab"><img id="favicon" src="icon512.png">api.example.dev/v1/stats</div>
+      <div class="url"><span>https://</span><b>api.example.dev</b><span>/v1/stats</span></div>
+    </div>
+    <div id="page">
+      <div id="rawpage"></div>
+      <div id="fmtpage">
+        <div id="toolbar">
+          <div id="qwrap"><div class="info">i</div><div id="qinput"><span id="qtext"></span><span class="caret"></span></div></div>
+          <div class="btn" id="bq">Query</div><div class="btn active" id="bf">Formatted</div><div class="btn" id="br">Raw</div>
+          <div class="btn dl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg></div>
+        </div>
+        <div class="code" id="fmt"></div>
+        <div class="code" id="qres" style="opacity:0"></div>
+        <div id="ghost"><small>JSON.parse →</small><s>18446744073709552000</s></div>
+      </div>
+    </div>
+  </div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-7.9L21 10.5z" fill="#fff" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  <div id="click"></div>
+  <div id="outro">
+    <img id="ologo" src="readme-logo.png">
+    <h1 id="otitle">Modern JSON Formatter</h1>
+    <p id="osub">Free for <b>Chrome</b> &amp; <b>Edge</b></p>
+    <div class="chips" id="ochips"><span class="chip">big numbers</span><span class="chip">jq</span><span class="chip">key order</span><span class="chip">fold</span></div>
+  </div>
+</div>
+<script>
+// ---- data (raw text so big numbers keep every digit) ----
+const NUMBERS = `"max int32":2147483647,"min int32":-2147483648,"max int64":9223372036854775807,"min int64":-9223372036854775808,"max uint32":4294967295,"max uint64":18446744073709551615,"max float64":1.79769313486231570814527423731704356798070e+308,"just a big number":797693134862315708145274237317043567980706432481707092372958324176568`;
+const TITLES = ["delectus aut autem","quis ut nam facilis et officia qui","fugiat veniam minus","et porro tempora","laboriosam mollitia et enim quasi adipisci quia provident illum","qui ullam ratione quibusdam voluptatem quia omnis","illo expedita consequatur quia in","quo adipisci enim quam ut ab","molestiae perspiciatis ipsa","illo est ratione doloremque quia maiores aut"];
+const TODOS = TITLES.map((t,i)=>`{"userId":1,"id":${i+1},"title":"${t}","completed":${[false,false,false,true,false,true,false,true,false,true][i]}}`);
+const RAW = `{${NUMBERS},"todos":[${TODOS.join(',')}]}`;
+
+// tiny parser keeping number literals as text (like the WASM tokenizer)
+function parse(s) {
+  let i = 0;
+  const ws = () => { while (/\s/.test(s[i])) i++; };
+  function val() {
+    ws();
+    const c = s[i];
+    if (c === '{') { i++; const props = []; ws(); if (s[i] === '}') { i++; return {type:'object', props}; }
+      for (;;) { ws(); const k = str(); ws(); i++; const v = val(); props.push([k.v, v]); ws(); if (s[i++] === '}') break; }
+      return {type:'object', props}; }
+    if (c === '[') { i++; const items = []; ws(); if (s[i] === ']') { i++; return {type:'array', items}; }
+      for (;;) { items.push(val()); ws(); if (s[i++] === ']') break; } return {type:'array', items}; }
+    if (c === '"') return str();
+    const m = /^(true|false|null|-?[0-9.eE+-]+)/.exec(s.slice(i)); i += m[0].length;
+    return m[0] === 'true' || m[0] === 'false' ? {type:'boolean', v:m[0]} : m[0] === 'null' ? {type:'null', v:'null'} : {type:'number', v:m[0]};
+  }
+  function str() { const st = i; i++; while (s[i] !== '"') { if (s[i] === '\\') i++; i++; } i++; return {type:'string', v: JSON.parse(s.slice(st, i))}; }
+  return val();
+}
+
+// mirrors src/content-script/dom/build-*.ts
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const expandable = n => (n.type === 'object' && n.props.length) || (n.type === 'array' && n.items.length);
+function info(n) { if (!expandable(n)) return null; return n.type === 'array'
+  ? el('span', 'items-count', `// ${n.items.length} item${n.items.length === 1 ? '' : 's'}`)
+  : el('span', 'properties-count', `// ${n.props.length} propert${n.props.length === 1 ? 'y' : 'ies'}`); }
+function build(n) {
+  if (n.type === 'object' || n.type === 'array') {
+    const isObj = n.type === 'object';
+    const wrap = el('span', n.type);
+    wrap.append(el('span', 'bracket', isObj ? '{' : '['));
+    const list = isObj ? n.props : n.items;
+    if (list.length) {
+      const inner = el('span', 'inner'); wrap.append(inner, el('span', 'ellipsis'));
+      list.forEach((entry, idx) => {
+        const v = isObj ? entry[1] : entry;
+        const row = el('span', isObj ? 'property' : 'item');
+        if (expandable(v)) row.append(el('span', 'toggle'));
+        if (isObj) row.append(el('span', 'key', JSON.stringify(entry[0])), el('span', 'colon', ':'));
+        row.append(build(v));
+        if (idx !== list.length - 1) row.append(el('span', 'comma', ','));
+        const inf = info(v); if (inf) row.append(inf);
+        inner.append(row);
+      });
+    }
+    wrap.append(el('span', 'bracket', isObj ? '}' : ']'));
+    return wrap;
+  }
+  if (n.type === 'string') return el('span', 'string', JSON.stringify(n.v));
+  return el('span', n.type, n.v);
+}
+function buildRoot(n) {
+  const root = el('span', 'root');
+  if (expandable(n)) root.append(el('span', 'toggle'));
+  root.append(build(n));
+  const inf = info(n); if (inf) root.append(inf);
+  return root;
+}
+
+const tree = parse(RAW);
+document.getElementById('rawpage').textContent = (RAW + RAW + RAW).slice(0, 6600);
+const fmt = document.getElementById('fmt');
+fmt.append(buildRoot(tree));
+// .[] | {id, title} on .todos
+const qres = document.getElementById('qres');
+const outs = tree.props.find(p => p[0] === 'todos')[1].items.map(o => ({type:'object', props: o.props.filter(p => p[0] === 'id' || p[0] === 'title')}));
+outs.forEach(o => qres.append(buildRoot(o)));
+const QUERY = '.todos[] | {id, title}';
+
+// line index for leaf spans → cascade reveal
+function indexLines(container) {
+  const leaves = [...container.querySelectorAll('.toggle,.key,.colon,.string,.number,.boolean,.null,.bracket,.comma,.properties-count,.items-count')];
+  const base = container.getBoundingClientRect().top;
+  leaves.forEach(l => { l.style.position = 'relative'; l._line = Math.round((l.getBoundingClientRect().top - base) / 35); });
+  return leaves;
+}
+
+const $ = id => document.getElementById(id);
+const clamp = (x, a=0, b=1) => Math.max(a, Math.min(b, x));
+const lin = (t, a, b) => clamp((t - a) / (b - a));
+const ease = x => x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2;
+const out = x => 1 - Math.pow(1 - x, 3);
+const back = x => { const c = 1.9; return 1 + (c+1)*Math.pow(x-1,3) + c*Math.pow(x-1,2); };
+const fade = (t, a, b, c, d, dur=0.35) => Math.min(out(lin(t, a, a+dur)), 1 - lin(t, c, c+dur)) * (t < d ? 1 : 0);
+function cap(id, t, a, b) { // in at a, out at b
+  const k = out(lin(t, a, a + 0.35)) * (1 - ease(lin(t, b, b + 0.3)));
+  const e = $(id); e.style.opacity = k; e.style.transform = `translateY(${(1 - out(lin(t, a, a + 0.35))) * 26 - ease(lin(t, b, b + 0.3)) * 20}px)`;
+  e.style.filter = `blur(${(1 - k) * 6}px)`;
+}
+
+let fmtLeaves, qLeaves, roots, uintRow, hlRow;
+function setup() {
+  fmtLeaves = indexLines(fmt);
+  qres.style.opacity = 1; qLeaves = indexLines(qres); qres.style.opacity = 0;
+  roots = [...qres.children];
+  uintRow = [...fmt.querySelectorAll('.property')].find(p => p.firstChild.textContent === '"max uint64"');
+  uintRow.querySelector('.number').classList.add('target');
+}
+
+function cascade(leaves, t, start, per = 0.045, dur = 0.3) {
+  for (const l of leaves) {
+    const k = out(lin(t, start + l._line * per, start + l._line * per + dur));
+    l.style.opacity = k; l.style.left = `${(1 - k) * -24}px`;
+  }
+}
+
+// cursor path keyframes [t, x, y]
+const CUR = [[9.9, 1500, 1100], [10.4, 1268, 345], [10.9, 1268, 345], [11.3, 1100, 600], [13.9, 1100, 600],
+  [14.2, 205, 345], [14.35, 205, 345]];
+function cursorAt(t) {
+  if (t < CUR[0][0]) return CUR[0];
+  for (let i = 0; i < CUR.length - 1; i++) { const [a, x1, y1] = CUR[i], [b, x2, y2] = CUR[i+1];
+    if (t <= b) { const k = ease(lin(t, a, b)); return [t, x1 + (x2 - x1) * k, y1 + (y2 - y1) * k]; } }
+  return CUR[CUR.length - 1];
+}
+
+window.render = function (t) {
+  // captions
+  cap('c1', t, 0.25, 2.75);
+  cap('c2', t, 3.35, 5.75);
+  cap('c3', t, 6.15, 9.7);
+  cap('c4', t, 10.15, 13.75);
+  cap('c5', t, 14.05, 16.55);
+
+  // hook: raw wall, slow push-in, then melts
+  const raw = $('rawpage');
+  const melt = ease(lin(t, 2.85, 3.15));
+  raw.style.transform = `scale(${1 + t * 0.012 + melt * 0.08})`;
+  raw.style.opacity = 1 - melt;
+  raw.style.filter = `blur(${melt * 10}px)`;
+  $('fmtpage').style.opacity = ease(lin(t, 3.0, 3.25));
+  $('toolbar').style.opacity = out(lin(t, 3.6, 4.0));
+  $('toolbar').style.transform = `translateY(${(1 - out(lin(t, 3.6, 4.0))) * -16}px)`;
+
+  // formatted cascade
+  cascade(fmtLeaves, t, 3.25, 0.05, 0.3);
+
+  // big number zoom (6.0–10.0)
+  const zin = ease(lin(t, 6.0, 6.7)), zout = ease(lin(t, 9.55, 10.15));
+  const z = zin * (1 - zout);
+  const ry = uintRow.offsetTop + uintRow.offsetHeight / 2;
+  fmt.style.transform = `translate(${z * 40}px, ${z * (300 - ry * 1.7)}px) scale(${1 + z * 0.7})`;
+  uintRow.classList.toggle('hl', t > 6.4 && t < 9.9);
+  const g = $('ghost');
+  const gk = out(lin(t, 6.9, 7.3)) * (1 - ease(lin(t, 9.45, 9.75)));
+  g.style.opacity = gk;
+  if (gk > 0) { const pr = $('page').getBoundingClientRect(), cr = uintRow.querySelector('.comma').getBoundingClientRect();
+    g.style.left = `${cr.right - pr.left + 40 + (1 - gk) * 30}px`; g.style.top = `${cr.top - pr.top + (cr.height - g.offsetHeight) / 2}px`; }
+  const fmtOther = 1 - z * 0.55;
+  for (const l of fmtLeaves) if (!uintRow.contains(l)) l.style.opacity = Math.min(+l.style.opacity, fmtOther);
+
+  // jq: click Query at 10.5, type 10.75–12.1, results 12.3
+  const qOpen = out(lin(t, 10.5, 10.8));
+  $('qwrap').style.maxWidth = `${qOpen * 580}px`; $('qwrap').style.opacity = qOpen;
+  $('bq').classList.toggle('active', t >= 10.5); $('bf').classList.toggle('active', t < 10.5);
+  const typed = Math.floor(clamp((t - 10.75) / 1.35) * QUERY.length);
+  $('qtext').textContent = QUERY.slice(0, typed);
+  document.querySelector('#qinput .caret').style.opacity = (t > 12.1 && Math.floor(t * 2) % 2) ? 0 : 1;
+  const swap = ease(lin(t, 12.15, 12.35));
+  fmt.style.opacity = 1 - swap;
+  qres.style.opacity = t > 12.3 ? 1 : 0;
+  cascade(qLeaves, t, 12.3, 0.04, 0.28);
+
+  // fold: roots collapse one by one from 14.35
+  roots.forEach((r, i) => {
+    const at = 14.35 + i * 0.16;
+    r.classList.toggle('collapsed', t >= at + 0.08);
+    r.querySelector('.toggle').style.setProperty('--rot', `${90 - 90 * out(lin(t, at, at + 0.12))}deg`);
+  });
+
+  // cursor + click rings
+  const [, cx, cy] = cursorAt(t);
+  const cv = t > 9.9 && t < 16.4 ? 1 - lin(t, 16.1, 16.4) : 0;
+  const cur = $('cursor'); cur.style.opacity = cv; cur.style.left = `${cx}px`; cur.style.top = `${cy}px`;
+  let ring = 0, rx = 0, ry2 = 0;
+  for (const [ct, x, y] of [[10.45, 1278, 357], [14.33, 215, 357]]) { if (t >= ct && t < ct + 0.4) { ring = lin(t, ct, ct + 0.4); rx = x; ry2 = y; } }
+  // fold cursor walks down the toggles
+  if (t >= 14.35) {
+    const i = clamp(Math.floor((t - 14.35) / 0.16), 0, roots.length - 1);
+    const r = roots[i].getBoundingClientRect(), n = roots[Math.min(i + 1, roots.length - 1)].getBoundingClientRect();
+    const k = ease(lin(t, 14.35 + i * 0.16 + 0.06, 14.35 + (i + 1) * 0.16));
+    cur.style.left = `${r.left - 14}px`; cur.style.top = `${r.top + 12 + (n.top - r.top) * k}px`;
+  }
+  const ck = $('click'); ck.style.opacity = ring ? (1 - ring) : 0; ck.style.left = `${rx}px`; ck.style.top = `${ry2}px`;
+  ck.style.transform = `scale(${0.4 + ring})`;
+
+  // outro 16.7+
+  const o = ease(lin(t, 16.7, 17.15));
+  const w = $('win');
+  w.style.transform = `scale(${1 - o * 0.12})`; w.style.opacity = 1 - o;
+  $('outro').style.opacity = o;
+  const lk = lin(t, 16.95, 17.5);
+  $('ologo').style.transform = `scale(${lk ? back(lk) : 0}) rotate(${(1 - out(lk)) * -12}deg)`;
+  const tk = out(lin(t, 17.35, 17.75)); $('otitle').style.opacity = tk; $('otitle').style.transform = `translateY(${(1 - tk) * 30}px)`;
+  const sk = out(lin(t, 17.7, 18.1)); $('osub').style.opacity = sk; $('osub').style.transform = `translateY(${(1 - sk) * 24}px)`;
+  [...$('ochips').children].forEach((c, i) => { const k = out(lin(t, 18.0 + i * 0.1, 18.35 + i * 0.1)); c.style.opacity = k; c.style.transform = `translateY(${(1 - k) * 18}px)`; });
+};
+
+window.ready = (async () => {
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.decode()));
+  setup();
+  render(0);
+  return true;
+})();
+</script>
+</body>
+</html>

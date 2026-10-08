@@ -24,6 +24,7 @@ declare module '*.scss';
 
 type TabType = 'raw' | 'formatted' | 'query';
 
+// Each function throws on invalid input instead of returning an ErrorNode.
 declare module '@wasm' {
   export function format(input: string): string;
 
@@ -31,5 +32,5 @@ declare module '@wasm' {
 
   export function minify(input: string): string;
 
-  export function tokenize(json: string): import('@wasm/types').TokenizerResponse;
+  export function tokenize(json: string): import('@wasm/types').TokenNode;
 }

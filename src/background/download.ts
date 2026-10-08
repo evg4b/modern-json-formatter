@@ -1,4 +1,4 @@
-import type { DownloadType } from '../content-script/ui/toolbox/toolbox';
+import type { DownloadType } from '@core/background/protocol';
 import { format, minify } from '@wasm';
 
 const processContent = (type: DownloadType, content: string): string => {

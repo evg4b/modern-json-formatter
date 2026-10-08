@@ -4,7 +4,7 @@ import '@testing/settings.mock';
 import { beforeEach, describe, expect, type Mock, test } from '@rstest/core';
 import { OptionsPageElement } from './options';
 import { defaultLitAsserts, renderLitElement } from '@testing/lit';
-import { clearHistory, type DomainCountResponse, getDomains } from '@core/background';
+import { clearHistory, type DomainCount, getDomains } from '@core/background';
 import type { ToolbarButtonsSettings } from '@core/settings';
 import { DEFAULT_SETTINGS, type ExtensionSettings, getSettings, saveSettings } from '@core/settings';
 import type { ToolbarButtonsSectionElement } from './sections/toolbar-buttons-section';
@@ -17,7 +17,7 @@ describe('mjf-options-page', () => {
 
   beforeEach(() => {
     (getDomains as Mock<typeof getDomains>).mockReturnValue(
-      Promise.resolve<DomainCountResponse>([
+      Promise.resolve<DomainCount[]>([
         { domain: 'demo.com', count: 1 },
         { domain: 'example.com', count: 2 },
       ]),
@@ -171,7 +171,7 @@ describe('mjf-options-page', () => {
 
     test('calls clearHistory and refreshes content on clear button click', async () => {
       (clearHistory as Mock<typeof clearHistory>).mockResolvedValue(undefined);
-      (getDomains as Mock<typeof getDomains>).mockReturnValue(Promise.resolve<DomainCountResponse>([]));
+      (getDomains as Mock<typeof getDomains>).mockReturnValue(Promise.resolve<DomainCount[]>([]));
 
       const clearButton = optionsPageElement.shadowRoot?.querySelector('.section mjf-rounded-button');
       expect(clearButton).not.toBeNull();

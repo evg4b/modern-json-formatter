@@ -3,10 +3,10 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { map } from 'lit/directives/map.js';
 import { jq } from '@core/background';
+import { isErrorNode } from '@core/background/protocol';
 import { boxingFixCss, buttonStylesCss } from '@core/styles/lit';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import type { TokenNode, TupleNode } from '@wasm/types';
-import { isErrorNode } from '../../../content-script/helpers.ts';
 import '@core/ui/error-message';
 
 // ============ Types ============
@@ -264,7 +264,7 @@ export class ExampleTableElement extends LitElement {
 
     try {
       const response = await jq(input, query);
-      const result = tokenNodeToString(response as TokenNode | TupleNode);
+      const result = tokenNodeToString(response);
       this.executionState = { type: 'success', result };
     } catch (err: unknown) {
       let errorMessage = UNEXPECTED_ERROR_MESSAGE;

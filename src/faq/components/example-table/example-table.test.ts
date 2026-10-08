@@ -60,7 +60,7 @@ describe('ExampleTableElement', () => {
       element.output = '"hello"';
       await element.updateComplete;
 
-      mockJq.mockResolvedValue(tString('hello'));
+      mockJq.mockResolvedValue(tTuple(tString('hello')));
       element.shadowRoot!.querySelector('button')!.dispatchEvent(new MouseEvent('click'));
       await element.updateComplete;
       await Promise.resolve();

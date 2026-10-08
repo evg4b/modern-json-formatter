@@ -1,4 +1,4 @@
-import { type HistoryResponse } from '@core/background';
+import type { DomainCount } from '@core/background/protocol';
 import { take, uniq } from 'es-toolkit';
 import { wait } from './helpers';
 
@@ -30,7 +30,7 @@ const openDB = (): Promise<IDBDatabase> => {
   return wait(request as IDBRequest<IDBDatabase>);
 };
 
-export const getHistory = async ({ domain, prefix }: { domain: string; prefix: string }): Promise<HistoryResponse> => {
+export const getHistory = async ({ domain, prefix }: { domain: string; prefix: string }): Promise<string[]> => {
   const db = await openDB();
   try {
     const results = await wait(
@@ -84,11 +84,6 @@ export const clearHistory = async (): Promise<void> => {
     db.close();
   }
 };
-
-export interface DomainCount {
-  domain: string;
-  count: number;
-}
 
 export const getDomains = async (): Promise<DomainCount[]> => {
   const db = await openDB();

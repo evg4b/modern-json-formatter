@@ -1,8 +1,6 @@
 import { createElement } from '@core/dom';
 import { beforeEach, describe, expect, test } from '@rstest/core';
-import { tArray, tBool, tErrorNode, tNull, tNumber, tObject, tProperty, tString } from '@testing/json';
-import { type ErrorNode } from '@wasm/types';
-import { assetTabType, extractFileName, isErrorNode, query, throws } from './helpers';
+import { assetTabType, extractFileName, query, throws } from './helpers';
 
 describe('helpers', () => {
   test('should work', () => {
@@ -29,52 +27,6 @@ describe('assetTabType', () => {
 
   test('should throw an error for invalid tab type %s', () => {
     expect(() => assetTabType('invalid')).toThrow('Invalid tab type \'invalid\'');
-  });
-});
-
-describe('isErrorNode', () => {
-  test('should return true for ErrorNode', () => {
-    const errorNode: ErrorNode = tErrorNode('error message');
-    expect(isErrorNode(errorNode)).toBe(true);
-  });
-
-  describe('should return false for non-ErrorNode objects', () => {
-    const cases = [
-      { name: 'empty object', value: {} },
-      { name: 'null node', value: tNull() },
-      { name: 'boolean node', value: tBool(true) },
-      { name: 'string node', value: tString('string') },
-      { name: 'number node', value: tNumber('123') },
-      { name: 'empty array node', value: tArray() },
-      {
-        name: 'filed array node',
-        value: tArray(tNumber('1')),
-      },
-      {
-        name: 'object node',
-        value: tObject(
-          tProperty('prop', tNumber('1')),
-        ),
-      },
-    ];
-
-    test.each(cases)('$name', ({ value }) => {
-      expect(isErrorNode(value)).toBe(false);
-    });
-  });
-
-  describe('should return false for non-object values', () => {
-    const cases = [
-      { name: 'null', value: null },
-      { name: 'undefined', value: undefined },
-      { name: 'string', value: 'string' },
-      { name: 'number', value: 123 },
-      { name: 'boolean', value: true },
-    ];
-
-    test.each(cases)('$name', ({ value }) => {
-      expect(isErrorNode(value)).toBe(false);
-    });
   });
 });
 

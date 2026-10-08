@@ -1,9 +1,10 @@
-import { download, format, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
+import { download, format, jq, pushHistory, tokenize } from '@core/background';
+import { isErrorNode } from '@core/background/protocol';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
-import { extractDomainKey, extractFileName, isErrorNode } from './helpers';
+import { extractDomainKey, extractFileName } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { type TabChangedEvent } from './ui/toolbox/toolbox';
 import { type ErrorNodeElement } from './ui/error-node';
@@ -48,12 +49,6 @@ export const runExtension = async () => {
 
     try {
       const formatted = await format(content);
-      if (typeof formatted === 'object') {
-        container.setRawContent(createErrorNode('Invalid JSON file.', formatted.error));
-        container.stopLoading();
-        return;
-      }
-
       container.setRawContent(createElement({
         element: 'pre',
         content: formatted,
@@ -98,7 +93,7 @@ export const runExtension = async () => {
       toolbox.error = null;
       try {
         const info = await jq(preNode.innerText, query);
-        container.setQueryContent(prepareResponse(info));
+        container.setQueryContent(buildDom(info));
         await pushHistory(extractDomainKey(globalThis.location.href), query);
       } catch (error: unknown) {
         if (isErrorNode(error)) {
@@ -146,18 +141,12 @@ export const runExtension = async () => {
 
   try {
     const response = await wrapper(tokenize(preNode.innerText));
-    container.setFormattedContent(prepareResponse(response));
+    container.setFormattedContent(buildDom(response));
   } catch (error: unknown) {
     container.setError(error);
   } finally {
     container.stopLoading();
   }
-};
-
-const prepareResponse = (response: TokenizerResponse): HTMLElement => {
-  return response.type === 'error'
-    ? createErrorNode('Invalid JSON file.', response.error)
-    : buildDom(response);
 };
 
 const createErrorNode = (header: string, ...lines: string[]): ErrorNodeElement => {

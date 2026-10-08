@@ -7,7 +7,7 @@ import { getSettings } from '@core/settings';
 import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
-import { tNull, tObject, tProperty, tString } from '@testing/json';
+import { tNull, tObject, tProperty, tString, tTuple } from '@testing/json';
 import { wrapMock } from '@testing/helpers';
 import { LIMIT, ONE_MEGABYTE_LENGTH, runExtension } from './extension';
 import { ToolboxElement } from './ui/toolbox/toolbox';
@@ -91,7 +91,7 @@ describe('runExtension', () => {
       maxFileSize: 3,
     });
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(format).mockResolvedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
+    wrapMock(format).mockResolvedValue('formatted');
 
     await runExtension();
 
@@ -164,22 +164,6 @@ describe('runExtension', () => {
     expect(tokenize).toHaveBeenCalled();
 
     expect(format).not.toHaveBeenCalled();
-  });
-
-  test('when tokenize resolves with error-type response', async () => {
-    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
-    const preNode = createElement({
-      element: 'pre',
-      content: '{ invalid }',
-    });
-
-    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(tokenize).mockResolvedValue({ type: 'error', error: 'Parse error', scope: 'worker' });
-
-    await runExtension();
-
-    expect(tokenize).toHaveBeenCalled();
-    expect(consoleSpy).not.toHaveBeenCalled();
   });
 
   test('when tokenize returns error response', async () => {
@@ -262,7 +246,7 @@ describe('runExtension', () => {
     });
 
     test('jq-query: success calls jq and pushHistory', async () => {
-      wrapMock(jq).mockResolvedValue(tObject(tProperty('key', tString('value'))));
+      wrapMock(jq).mockResolvedValue(tTuple(tObject(tProperty('key', tString('value')))));
       wrapMock(pushHistory).mockResolvedValue(undefined);
 
       toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));

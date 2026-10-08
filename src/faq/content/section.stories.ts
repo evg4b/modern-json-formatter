@@ -1,6 +1,7 @@
 import type { Decorator, Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { ContextProvider } from '@lit/context';
-import { html, render, type ReactiveControllerHost, type TemplateResult } from 'lit';
+import { provide } from '@lit/context';
+import { html, LitElement, type TemplateResult } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { SidebarController, sidebarControllerContext } from '../sidebar';
 import lang, { type FaqSection } from '../sections';
 import '../components/example-table';
@@ -12,22 +13,25 @@ interface SectionArgs {
 
 const twoResults = ['1', '2'].join('\n');
 
-const controllerHost: ReactiveControllerHost = {
-  addController: () => undefined,
-  removeController: () => undefined,
-  requestUpdate: () => undefined,
-  updateComplete: Promise.resolve(true),
-};
+@customElement('mjf-story-sidebar-context')
+class SidebarContextElement extends LitElement {
+  @provide({ context: sidebarControllerContext })
+  protected readonly sidebarController = new SidebarController(this);
 
-const withSidebarContext: Decorator = story => {
-  const host = document.createElement('div');
-  new ContextProvider(host, {
-    context: sidebarControllerContext,
-    initialValue: new SidebarController(controllerHost),
-  });
-  render(story(), host);
-  return host;
-};
+  public override render() {
+    return html`<slot></slot>`;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'mjf-story-sidebar-context': SidebarContextElement;
+  }
+}
+
+const withSidebarContext: Decorator = story => html`
+  <mjf-story-sidebar-context>${story()}</mjf-story-sidebar-context>
+`;
 
 const renderSection = (content: TemplateResult<1> | null) => {
   const section = document.createElement('mjf-section');

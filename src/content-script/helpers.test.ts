@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@rstest/core';
-import { extractDomainKey, extractFileName, getErrorMessage } from './helpers';
+import { extractDomainKey, extractFileName } from './helpers';
 
 describe('extractFileName', () => {
   const cases = [
@@ -38,16 +38,5 @@ describe('extractDomainKey', () => {
 
   test.each(cases)('$url → $expected', ({ url, expected }) => {
     expect(extractDomainKey(url)).toBe(expected);
-  });
-});
-
-describe('getErrorMessage', () => {
-  test('returns the message of an Error', () => {
-    expect(getErrorMessage(new Error('boom'))).toBe('boom');
-  });
-
-  test('stringifies anything else', () => {
-    expect(getErrorMessage('plain')).toBe('plain');
-    expect(getErrorMessage(42)).toBe('42');
   });
 });

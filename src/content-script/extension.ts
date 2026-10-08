@@ -3,17 +3,16 @@ import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
 import { isNotNull } from 'typed-assert';
 import { buildDom } from './dom';
-import { extractDomainKey, extractFileName, getErrorMessage, isErrorNode } from './helpers';
+import { extractDomainKey, extractFileName, isErrorNode } from './helpers';
 import { findNodeWithCode } from './json-detector';
 import { type TabChangedEvent } from './ui/toolbox/toolbox';
 import { type ErrorNodeElement } from './ui/error-node';
-import { type ContainerElement } from './ui/container/container';
 import './ui/toolbox';
 import './ui/container/container';
 import './ui/error-node';
 import '@core/ui/floating-message';
 import '@core/ui/sticky-panel';
-import { type ExtensionSettings, getSettings } from '@core/settings';
+import { getSettings } from '@core/settings';
 
 import contentStyles from './content-script.scss?inline';
 import rootStyles from './root-styles.scss?inline';
@@ -60,7 +59,10 @@ export const runExtension = async () => {
         content: formatted,
       }));
     } catch (error: unknown) {
-      container.setRawContent(createErrorNode('Failed to process file', getErrorMessage(error)));
+      container.setRawContent(createErrorNode(
+        'Failed to process file',
+        error instanceof Error ? error.message : String(error),
+      ));
       container.stopLoading();
       return;
     }
@@ -76,12 +78,74 @@ export const runExtension = async () => {
 
   container.setRawContent(preNode);
 
+  const wrapper = async <T>(promise: Promise<T>): Promise<T> => {
+    try {
+      container.startLoading();
+      return await promise;
+    } finally {
+      container.stopLoading();
+    }
+  };
+
   setTimeout(() => {
-    shadowRoot.appendChild(createToolbar(container, () => preNode.innerText, settings));
+    const toolbox = document.createElement('mjf-toolbox');
+    toolbox.buttons = settings.buttons;
+    toolbox.downloadMode = settings.downloadMode;
+    const panel = document.createElement('mjf-sticky-panel');
+    panel.appendChild(toolbox);
+
+    const jqQuery = async (query: string) => {
+      toolbox.error = null;
+      try {
+        const info = await jq(preNode.innerText, query);
+        container.setQueryContent(prepareResponse(info));
+        await pushHistory(extractDomainKey(globalThis.location.href), query);
+      } catch (error: unknown) {
+        if (isErrorNode(error)) {
+          if (error.scope === 'jq') {
+            toolbox.error = error.error;
+            return;
+          }
+
+          container.message(
+            `Error ${error.error} in ${error.scope}`,
+            error.stack ? `Stack trace: ${error.stack}` : '',
+          );
+
+          return;
+        }
+
+        console.error(error);
+      }
+    };
+
+    toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
+      container.type = event.detail;
+    });
+
+    toolbox.addEventListener('jq-query', async event => {
+      await wrapper(jqQuery(event.detail));
+    });
+
+    toolbox.addEventListener('download', async event => {
+      const filename = extractFileName(location.toString());
+      const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
+      try {
+        await download(event.detail, preNode.innerText, `${filename}${suffix}.json`);
+      } catch (error: unknown) {
+        container.message(
+          'Unable to download file',
+          // @ts-expect-error incorrect typing
+          error?.error ?? error?.message ?? error,
+        );
+      }
+    });
+
+    shadowRoot.appendChild(panel);
   });
 
   try {
-    const response = await withLoading(container, tokenize(preNode.innerText));
+    const response = await wrapper(tokenize(preNode.innerText));
     container.setFormattedContent(prepareResponse(response));
   } catch (error: unknown) {
     container.setError(error);
@@ -90,83 +154,13 @@ export const runExtension = async () => {
   }
 };
 
-export const withLoading = async <T>(container: ContainerElement, promise: Promise<T>): Promise<T> => {
-  try {
-    container.startLoading();
-    return await promise;
-  } finally {
-    container.stopLoading();
-  }
-};
-
-export const createToolbar = (
-  container: ContainerElement,
-  getContent: () => string,
-  { buttons, downloadMode }: Pick<ExtensionSettings, 'buttons' | 'downloadMode'>,
-): HTMLElement => {
-  const toolbox = document.createElement('mjf-toolbox');
-  toolbox.buttons = buttons;
-  toolbox.downloadMode = downloadMode;
-  const panel = document.createElement('mjf-sticky-panel');
-  panel.appendChild(toolbox);
-
-  const jqQuery = async (query: string) => {
-    toolbox.error = null;
-    try {
-      const info = await jq(getContent(), query);
-      container.setQueryContent(prepareResponse(info));
-      await pushHistory(extractDomainKey(globalThis.location.href), query);
-    } catch (error: unknown) {
-      if (isErrorNode(error)) {
-        if (error.scope === 'jq') {
-          toolbox.error = error.error;
-          return;
-        }
-
-        container.message(
-          `Error ${error.error} in ${error.scope}`,
-          error.stack ? `Stack trace: ${error.stack}` : '',
-        );
-
-        return;
-      }
-
-      console.error(error);
-    }
-  };
-
-  toolbox.addEventListener('tab-changed', (event: TabChangedEvent) => {
-    container.type = event.detail;
-  });
-
-  toolbox.addEventListener('jq-query', async event => {
-    await withLoading(container, jqQuery(event.detail));
-  });
-
-  toolbox.addEventListener('download', async event => {
-    const filename = extractFileName(location.toString());
-    const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
-    try {
-      await download(event.detail, getContent(), `${filename}${suffix}.json`);
-    } catch (error: unknown) {
-      container.message(
-        'Unable to download file',
-        // @ts-expect-error incorrect typing
-        error?.error ?? error?.message ?? error,
-      );
-    }
-  });
-
-  return panel;
-};
-
-export const prepareResponse = (response: TokenizerResponse): HTMLElement => {
+const prepareResponse = (response: TokenizerResponse): HTMLElement => {
   return response.type === 'error'
     ? createErrorNode('Invalid JSON file.', response.error)
     : buildDom(response);
 };
 
-export const createErrorNode = (header: string, ...lines: string[]): ErrorNodeElement => {
+const createErrorNode = (header: string, ...lines: string[]): ErrorNodeElement => {
   const el = document.createElement('mjf-error-node') as ErrorNodeElement;
   el.header = header;
   el.lines = lines;

@@ -22,10 +22,6 @@ export const isErrorNode = (node: unknown): node is ErrorNode => {
   return !!node && typeof node === 'object' && 'type' in node && node.type === 'error';
 };
 
-export const getErrorMessage = (error: unknown): string => {
-  return error instanceof Error ? error.message : String(error);
-};
-
 export const extractFileName = (url: string | undefined | null): string => {
   if (!url) {
     return 'data';

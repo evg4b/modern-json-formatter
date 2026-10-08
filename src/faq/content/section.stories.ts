@@ -22,10 +22,36 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: 'Renders one markdown chapter of the jq manual. Registers its headings with the sidebar controller from context.',
+        component: 'One chapter of the jq manual. Registers its headings with the sidebar controller from context.',
       },
     },
   },
+  render: () => renderSection(html`
+    <h2 id="custom-section">Custom section</h2>
+    <p>Sections accept any template: paragraphs, <code>inline code</code> and examples.</p>
+    <h3 id="custom-example">Example</h3>
+    <pre><code>jq '.items[] | .name'</code></pre>
+  `),
+} satisfies Meta<SectionArgs>;
+
+export default meta;
+type Story = StoryObj<SectionArgs>;
+
+export const Default: Story = {};
+
+export const WithExamples: Story = {
+  render: () => renderSection(html`
+    <h2 id="examples-section">Examples</h2>
+    <mjf-example-table query=".name" input='{"name":"Alice"}' output='"Alice"'></mjf-example-table>
+    <mjf-example-table query=".[]" input="[1,2]" .output=${twoResults}></mjf-example-table>
+  `),
+};
+
+export const Empty: Story = {
+  render: () => createSidebarContextHost(document.createElement('mjf-section')),
+};
+
+export const ManualChapter: Story = {
   render: ({ section }) => renderSection(lang.en[section]),
   argTypes: {
     section: {
@@ -34,63 +60,6 @@ const meta = {
     },
   },
   args: {
-    section: 'intro',
+    section: 'basicFilters',
   },
-} satisfies Meta<SectionArgs>;
-
-export default meta;
-type Story = StoryObj<SectionArgs>;
-
-export const Intro: Story = {};
-
-export const BasicFilters: Story = {
-  args: { section: 'basicFilters' },
-};
-
-export const TypesAndValues: Story = {
-  args: { section: 'typesAndValues' },
-};
-
-export const BuiltinOperatorsAndFunctions: Story = {
-  args: { section: 'builtinOperatorsAndFunctions' },
-};
-
-export const ConditionalsAndComparisons: Story = {
-  args: { section: 'conditionalsAndComparisons' },
-};
-
-export const RegularExpressions: Story = {
-  args: { section: 'regularExpressions' },
-};
-
-export const AdvancedFeatures: Story = {
-  args: { section: 'advancedFeatures' },
-};
-
-export const MathFunctions: Story = {
-  name: 'Math',
-  args: { section: 'math' },
-};
-
-export const Assignment: Story = {
-  args: { section: 'assignment' },
-};
-
-export const Hashing: Story = {
-  args: { section: 'hashing' },
-};
-
-export const CustomContent: Story = {
-  render: () => renderSection(html`
-    <h2 id="custom-section">Custom section</h2>
-    <p>Sections accept any template: paragraphs, <code>inline code</code> and examples.</p>
-    <h3 id="custom-example">Example</h3>
-    <pre><code>jq '.items[] | .name'</code></pre>
-    <mjf-example-table query=".name" input='{"name":"Alice"}' output='"Alice"'></mjf-example-table>
-    <mjf-example-table query=".[]" input="[1,2]" .output=${twoResults}></mjf-example-table>
-  `),
-};
-
-export const Empty: Story = {
-  render: () => createSidebarContextHost(document.createElement('mjf-section')),
 };

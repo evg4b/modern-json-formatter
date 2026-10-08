@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
+import { action } from 'storybook/actions';
 import { html } from 'lit';
 import './toolbar-buttons-section';
 import type { ToolbarButtonsSettings } from '@core/settings';
@@ -10,7 +11,10 @@ interface ToolbarButtonsSectionArgs {
 const meta = {
   title: 'Options/ToolbarButtonsSection',
   render: ({ buttons }) => html`
-    <mjf-toolbar-buttons-section .buttons=${buttons}></mjf-toolbar-buttons-section>
+    <mjf-toolbar-buttons-section
+      .buttons=${buttons}
+      @buttons-change=${action('buttons-change')}
+    ></mjf-toolbar-buttons-section>
   `,
   args: {
     buttons: {
@@ -45,6 +49,28 @@ export const NoneEnabled: Story = {
       formatted: false,
       raw: false,
       download: false,
+    },
+  },
+};
+
+export const ViewTabsOnly: Story = {
+  args: {
+    buttons: {
+      query: false,
+      formatted: true,
+      raw: true,
+      download: false,
+    },
+  },
+};
+
+export const QueryAndDownload: Story = {
+  args: {
+    buttons: {
+      query: true,
+      formatted: false,
+      raw: false,
+      download: true,
     },
   },
 };

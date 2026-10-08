@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
 import './options-section';
+import '../sections/download-mode-section';
 
 const meta = {
   title: 'Options/OptionsSection',
@@ -28,6 +29,25 @@ export const WithLongHint: Story = {
         in the format of your choice.
       </span>
       <p>Content here.</p>
+    </mjf-options-section>
+  `,
+};
+
+export const WithoutHint: Story = {
+  render: () => html`
+    <mjf-options-section>
+      <span slot="title">Section Title</span>
+      <p>Section content goes here.</p>
+    </mjf-options-section>
+  `,
+};
+
+export const WithControl: Story = {
+  render: () => html`
+    <mjf-options-section>
+      <span slot="title">Download Button Mode</span>
+      <span slot="hint">Controls what happens when you click the download button.</span>
+      <mjf-download-mode-section mode="dropdown"></mjf-download-mode-section>
     </mjf-options-section>
   `,
 };

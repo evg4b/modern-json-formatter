@@ -60,3 +60,33 @@ export const ManyOptions: Story = {
     triggerLabel: 'More',
   },
 };
+
+export const SingleOption: Story = {
+  args: {
+    options: [{ label: 'Download', onClick: action('download') }],
+    triggerLabel: 'Download',
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    options: [],
+    triggerLabel: 'Nothing here',
+  },
+};
+
+export const LongLabels: Story = {
+  args: {
+    options: [
+      { label: 'Download the original response body', onClick: action('raw') },
+      { label: 'Download pretty-printed with two space indentation', onClick: action('formatted') },
+      { label: 'Download minified', onClick: action('minified') },
+    ],
+  },
+};
+
+export const Open: Story = {
+  play: ({ canvasElement }) => {
+    canvasElement.querySelector('mjf-dropdown')?.showPopover();
+  },
+};

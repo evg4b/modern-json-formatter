@@ -35,3 +35,10 @@ export const LongMessage: Story = {
     message: 'Failed to parse JSON: Unexpected token at position 42',
   },
 };
+
+export const SmallLongMessage: Story = {
+  args: {
+    small: true,
+    message: 'jq: error: syntax error, unexpected INVALID_CHARACTER (Unix shell quoting issues?) at <top-level>, line 1',
+  },
+};

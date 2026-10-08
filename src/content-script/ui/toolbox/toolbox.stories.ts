@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
+import { action } from 'storybook/actions';
 import { html } from 'lit';
+import '@testing/storybook/chrome.mock';
 import './toolbox';
 import type { DownloadMode, ToolbarButtonsSettings } from '@core/settings';
 
@@ -25,6 +27,9 @@ const meta = {
       .error=${error}
       .buttons=${buttons}
       download-mode=${downloadMode}
+      @tab-changed=${action('tab-changed')}
+      @download=${action('download')}
+      @jq-query=${action('jq-query')}
     ></mjf-toolbox>
   `,
   argTypes: {
@@ -75,5 +80,51 @@ export const NoDownload: Story = {
 export const DirectDownload: Story = {
   args: {
     downloadMode: 'formatted',
+  },
+};
+
+export const DirectDownloadRaw: Story = {
+  args: {
+    downloadMode: 'raw',
+  },
+};
+
+export const DirectDownloadMinified: Story = {
+  args: {
+    downloadMode: 'minified',
+  },
+};
+
+export const TwoTabs: Story = {
+  args: {
+    buttons: { ...allButtons, query: false },
+  },
+};
+
+export const SingleTabHidesSwitcher: Story = {
+  args: {
+    tab: 'formatted',
+    buttons: { query: false, formatted: true, raw: false, download: true },
+  },
+};
+
+export const QueryWithoutOtherTabs: Story = {
+  args: {
+    tab: 'query',
+    buttons: { query: true, formatted: false, raw: false, download: false },
+  },
+};
+
+export const NothingEnabled: Story = {
+  args: {
+    buttons: { query: false, formatted: false, raw: false, download: false },
+  },
+};
+
+export const DownloadMenuOpen: Story = {
+  play: async ({ canvasElement }) => {
+    const toolbox = canvasElement.querySelector('mjf-toolbox');
+    await toolbox?.updateComplete;
+    toolbox?.shadowRoot?.querySelector<HTMLButtonElement>('button[title="Download"]')?.click();
   },
 };

@@ -39,3 +39,22 @@ export const NoDetails: Story = {
     lines: [],
   },
 };
+
+export const ManyLines: Story = {
+  args: {
+    header: 'Failed to process file',
+    lines: [
+      'expected value at line 1 column 1',
+      'while parsing the response body',
+      'Content-Type: application/json; charset=utf-8',
+      'Content-Length: 18342',
+    ],
+  },
+};
+
+export const LongLine: Story = {
+  args: {
+    header: 'Invalid JSON file.',
+    lines: [`unexpected character at ${'{"key":"value",'.repeat(20)}`],
+  },
+};

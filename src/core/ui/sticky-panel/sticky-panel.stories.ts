@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
+import '@testing/storybook/chrome.mock';
+import '../../../content-script/ui/toolbox';
 import './sticky-panel';
 import type { StickyPanelPosition } from './sticky-panel';
 
@@ -45,4 +47,14 @@ export const LeftTop: Story = {
 
 export const LeftBottom: Story = {
   args: { position: 'leftBottom' },
+};
+
+export const WithToolbox: Story = {
+  render: ({ position }) => html`
+    <div style="position: relative; height: 200px; border: 1px dashed #666;">
+      <mjf-sticky-panel position=${position}>
+        <mjf-toolbox></mjf-toolbox>
+      </mjf-sticky-panel>
+    </div>
+  `,
 };

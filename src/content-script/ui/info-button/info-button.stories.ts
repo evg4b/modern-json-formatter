@@ -10,7 +10,7 @@ const meta = {
   title: 'Content Script/InfoButton',
   render: ({ url }) => html`<mjf-info-button url=${url}></mjf-info-button>`,
   args: {
-    url: 'https://example.com',
+    url: 'faq.html',
   },
 } satisfies Meta<InfoButtonArgs>;
 
@@ -18,3 +18,7 @@ export default meta;
 type Story = StoryObj<InfoButtonArgs>;
 
 export const Default: Story = {};
+
+export const ExternalLink: Story = {
+  args: { url: 'https://jqlang.org/manual/' },
+};

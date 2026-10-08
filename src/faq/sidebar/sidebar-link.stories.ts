@@ -39,3 +39,7 @@ export const Default: Story = {};
 export const Active: Story = {
   args: { active: true },
 };
+
+export const LongLabel: Story = {
+  args: { label: 'Object Identifier-Index and Optional Object Identifier-Index' },
+};

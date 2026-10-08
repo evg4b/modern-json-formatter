@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { action } from 'storybook/actions';
 import { html } from 'lit';
-import '@testing/storybook/chrome.mock';
+import '@testing/storybook';
+import '@core/ui/sticky-panel';
 import './toolbox';
 import type { DownloadMode, ToolbarButtonsSettings } from '@core/settings';
 
@@ -127,4 +128,19 @@ export const DownloadMenuOpen: Story = {
     await toolbox?.updateComplete;
     toolbox?.shadowRoot?.querySelector<HTMLButtonElement>('button[title="Download"]')?.click();
   },
+};
+
+export const InStickyPanel: Story = {
+  render: ({ tab, error, buttons, downloadMode }) => html`
+    <div style="position: relative; height: 200px; border: 1px dashed #666;">
+      <mjf-sticky-panel position="rightTop">
+        <mjf-toolbox
+          tab=${tab}
+          .error=${error}
+          .buttons=${buttons}
+          download-mode=${downloadMode}
+        ></mjf-toolbox>
+      </mjf-sticky-panel>
+    </div>
+  `,
 };

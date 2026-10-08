@@ -1,5 +1,5 @@
 import type { Preview } from 'storybook-web-components-rsbuild';
-import { resetChromeMock } from '@testing/storybook/chrome.mock';
+import { resetChromeMock } from '@testing/storybook';
 import './preview.scss';
 
 export default {

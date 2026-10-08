@@ -1,6 +1,6 @@
 import { ContextProvider } from '@lit/context';
 import type { ReactiveController, ReactiveControllerHost } from 'lit';
-import { SidebarController, sidebarControllerContext } from '../../src/faq/sidebar/sidebar.controller';
+import { SidebarController, sidebarControllerContext } from '../../src/faq/sidebar';
 
 /**
  * `mjf-section` consumes the sidebar controller that `mjf-faq-page` provides.

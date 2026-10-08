@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { createSidebarContextHost } from '@testing/storybook/sidebar-context';
-import '@testing/storybook/chrome.mock';
+import { createSidebarContextHost } from '@testing/storybook';
 import './content';
 
 const meta = {

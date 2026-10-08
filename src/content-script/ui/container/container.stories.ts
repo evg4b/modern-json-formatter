@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { createElement } from '@core/dom';
 import type { TokenizerResponse } from '@wasm/types';
-import { toTokens, toTuple } from '@testing/storybook/tokens';
+import { toTokens, toTuple } from '@testing/storybook';
 import { buildDom } from '../../dom';
 import '../error-node';
 import './container';

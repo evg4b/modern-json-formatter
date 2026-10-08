@@ -1,11 +1,9 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html, type TemplateResult } from 'lit';
-import { createSidebarContextHost } from '@testing/storybook/sidebar-context';
-import '@testing/storybook/chrome.mock';
-import lang from '../sections';
-import type { FaqSection } from '../sections/models';
+import { createSidebarContextHost } from '@testing/storybook';
+import lang, { type FaqSection } from '../sections';
+import '../components/example-table';
 import './section';
-import '../components/example-table/example-table';
 
 interface SectionArgs {
   section: keyof FaqSection;

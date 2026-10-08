@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { action } from 'storybook/actions';
 import { html } from 'lit';
-import { configureChromeMock } from '@testing/storybook/chrome.mock';
+import { configureChromeMock } from '@testing/storybook';
 import './query-input';
 
 interface QueryInputArgs {

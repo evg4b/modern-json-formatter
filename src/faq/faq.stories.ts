@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
-import { configureChromeMock } from '@testing/storybook/chrome.mock';
+import { configureChromeMock } from '@testing/storybook';
 import './faq';
 
 const meta = {

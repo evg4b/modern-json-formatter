@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
 import './options-section';
-import '../sections/download-mode-section';
+import '../sections';
 
 const meta = {
   title: 'Options/OptionsSection',

@@ -1,30 +1,13 @@
 import type { DomainCountResponse, Message as BackgroundMessage } from '@core/background';
 import type { ExtensionSettings } from '@core/settings';
 
-/**
- * In-memory stand-in for the extension runtime used by Storybook.
- *
- * Components talk to the background service worker through
- * `chrome.runtime.sendMessage` and read settings from `chrome.storage.sync`.
- * Neither exists outside an extension, so this module installs a fake `chrome`
- * global whose behaviour stories can tune with `configureChromeMock`.
- *
- * Parsing, formatting and jq go through the real background handler and WASM
- * core, so results and error messages match the extension exactly. History,
- * settings and downloads are kept in memory.
- */
 export interface ChromeMockState {
-
-  /** Rows returned by the `get-domains` action (options page history table). */
   domains: DomainCountResponse;
 
-  /** Queries offered by the query input autocomplete (`get-history`). */
   history: string[];
 
-  /** Settings stored in `chrome.storage.sync`; `null` means nothing saved yet. */
   settings: Partial<ExtensionSettings> | null;
 
-  /** Artificial delay for every background response, in milliseconds. */
   latency: number;
 }
 
@@ -62,7 +45,6 @@ interface Message {
   payload: unknown;
 }
 
-/** Actions answered by the extension's own background handler, which runs the real WASM core. */
 const WASM_ACTIONS = new Set(['tokenize', 'format', 'jq']);
 
 const handlers: Record<string, (payload: never) => unknown> = {

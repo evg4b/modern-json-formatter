@@ -13,7 +13,6 @@ const meta = {
       },
     },
   },
-  // The default renderer creates a fresh element per story, so each one reads the mocked settings and history.
   component: 'mjf-options-page',
 } satisfies Meta;
 

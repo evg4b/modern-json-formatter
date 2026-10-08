@@ -8,7 +8,6 @@ interface ToolbarButtonsSectionArgs {
 
 const meta = {
   title: 'Options/ToolbarButtonsSection',
-  // There is no Formatted checkbox: the formatted view is always available, so `formatted` stays true.
   component: 'mjf-toolbar-buttons-section',
   parameters: {
     events: ['buttons-change'],

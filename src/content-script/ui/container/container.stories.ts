@@ -10,10 +10,8 @@ import './container';
 interface ContainerArgs {
   type: TabType;
 
-  /** Page body, exactly as the server sent it. */
   json: string;
 
-  /** jq expression whose result fills the query tab; empty until the first query runs. */
   jq: string;
 }
 
@@ -64,7 +62,6 @@ const messageOf = (error: unknown) => {
   return error instanceof Error ? error.message : String(error);
 };
 
-/** Same pipeline as `extension.ts`, calling the WASM core directly instead of through the background worker. */
 const renderContainer = ({ type, json, jq }: ContainerArgs) => {
   const container = createContainer(type);
   container.setRawContent(createElement({ element: 'pre', content: json }));
@@ -72,7 +69,6 @@ const renderContainer = ({ type, json, jq }: ContainerArgs) => {
   try {
     container.setFormattedContent(buildDom(tokenize(json) as TokenNode));
   } catch (error: unknown) {
-    // The extension only logs tokenizer failures; the formatted tab stays empty.
     container.setError(error);
   }
 
@@ -80,7 +76,6 @@ const renderContainer = ({ type, json, jq }: ContainerArgs) => {
     try {
       container.setQueryContent(buildDom(query(json, jq) as TupleNode));
     } catch (error: unknown) {
-      // jq errors are shown under the query input in the toolbox, not in the container.
       container.setError(error);
     }
   }
@@ -217,7 +212,6 @@ export const LargeArray: Story = {
 
 export const CollapsedNodes: Story = {
   play: ({ canvasElement }) => {
-    // The formatted tree lives behind a closed shadow root; reach the content element and use its toggles.
     const container = canvasElement.querySelector('mjf-container');
     const formatted = container && Reflect.get(container, 'formatted') as HTMLElement | undefined;
     formatted?.querySelectorAll<HTMLElement>('.property > .toggle').forEach(toggle => toggle.click());

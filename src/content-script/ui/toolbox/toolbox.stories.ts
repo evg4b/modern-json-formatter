@@ -21,7 +21,6 @@ const allButtons: ToolbarButtonsSettings = {
 
 const meta = {
   title: 'Content Script/Toolbox',
-  // `buttons.formatted` is always on: the options page has no switch for it.
   component: 'mjf-toolbox',
   parameters: {
     events: ['tab-changed', 'download', 'jq-query'],

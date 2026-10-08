@@ -41,11 +41,6 @@ const prepareResponse = (response: TokenizerResponse): HTMLElement => {
     : buildDom(response);
 };
 
-/**
- * The wiring of `runExtension` in `extension.ts`, minus page detection and the
- * body shadow root. Background calls go through the Storybook chrome mock,
- * which runs the real WASM core.
- */
 const renderViewer = ({ json, buttons, downloadMode }: ViewerArgs) => {
   const page = createElement({ element: 'div' });
 
@@ -116,7 +111,6 @@ const renderViewer = ({ json, buttons, downloadMode }: ViewerArgs) => {
   return page;
 };
 
-/** Types a query into the toolbox input and submits it, as a user would. */
 const runQuery = (query: string): Story['play'] => async ({ canvasElement }) => {
   const toolbox = canvasElement.querySelector('mjf-toolbox');
   toolbox?.shadowRoot?.querySelector<HTMLButtonElement>('button[data-type="query"]')?.click();

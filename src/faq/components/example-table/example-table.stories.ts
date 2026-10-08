@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import { configureChromeMock } from '@testing/storybook';
 import './example-table';
 
@@ -11,13 +10,7 @@ interface ExampleTableArgs {
 
 const meta = {
   title: 'FAQ/ExampleTable',
-  render: ({ query, input, output }) => html`
-    <mjf-example-table
-      query=${query}
-      input=${input}
-      output=${output}
-    ></mjf-example-table>
-  `,
+  component: 'mjf-example-table',
   args: {
     query: '.name',
     input: '{"name": "Alice", "age": 30}',

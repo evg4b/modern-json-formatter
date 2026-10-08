@@ -1,33 +1,32 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
+import type { ChildrenArgs } from '@testing/storybook';
 import './side-bar-link';
 import type { NavigationItem } from './models';
 
-interface SidebarLinkArgs {
+interface SidebarLinkArgs extends ChildrenArgs {
+  item: NavigationItem;
   active: boolean;
-  label: string;
 }
 
-const makeItem = (label: string): NavigationItem => ({
-  id: label.toLowerCase().replaceAll(/\s+/g, '-'),
-  title: label,
-  titleHtml: label,
-  ref: document.createElement('section'),
+const link = (label: string): Pick<SidebarLinkArgs, 'item' | 'children'> => ({
+  item: {
+    id: label.toLowerCase().replaceAll(/\s+/g, '-'),
+    title: label,
+    titleHtml: label,
+    ref: document.createElement('section'),
+  },
+  children: label,
 });
 
 const meta = {
   title: 'FAQ/SidebarLink',
-  render: ({ active, label }) => html`
-    <mjf-sidebar-link .item=${makeItem(label)} .active=${active}>
-      <span>${label}</span>
-    </mjf-sidebar-link>
-  `,
+  component: 'mjf-sidebar-link',
   argTypes: {
     active: { control: 'boolean' },
   },
   args: {
     active: false,
-    label: 'Getting Started',
+    ...link('Getting Started'),
   },
 } satisfies Meta<SidebarLinkArgs>;
 
@@ -41,5 +40,5 @@ export const Active: Story = {
 };
 
 export const LongLabel: Story = {
-  args: { label: 'Object Identifier-Index and Optional Object Identifier-Index' },
+  args: link('Object Identifier-Index and Optional Object Identifier-Index'),
 };

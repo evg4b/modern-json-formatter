@@ -1,22 +1,19 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
+import type { ChildrenArgs } from '@testing/storybook';
 import './error-message';
 
-interface ErrorMessageArgs {
-  message: string;
+interface ErrorMessageArgs extends ChildrenArgs {
   small: boolean;
 }
 
 const meta = {
   title: 'Core/ErrorMessage',
-  render: ({ message, small }) => html`
-    <mjf-error-message ?small=${small}>${message}</mjf-error-message>
-  `,
+  component: 'mjf-error-message',
   argTypes: {
     small: { control: 'boolean' },
   },
   args: {
-    message: 'Something went wrong',
+    children: 'Something went wrong',
     small: false,
   },
 } satisfies Meta<ErrorMessageArgs>;
@@ -32,13 +29,13 @@ export const Small: Story = {
 
 export const LongMessage: Story = {
   args: {
-    message: 'Failed to parse JSON: Unexpected token at position 42',
+    children: 'Failed to parse JSON: Unexpected token at position 42',
   },
 };
 
 export const SmallLongMessage: Story = {
   args: {
     small: true,
-    message: 'jq: error: syntax error, unexpected INVALID_CHARACTER (Unix shell quoting issues?) at <top-level>, line 1',
+    children: 'jq: error: syntax error, unexpected INVALID_CHARACTER (Unix shell quoting issues?) at <top-level>, line 1',
   },
 };

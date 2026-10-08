@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import './info-buton';
 
 interface InfoButtonArgs {
@@ -8,7 +7,7 @@ interface InfoButtonArgs {
 
 const meta = {
   title: 'Content Script/InfoButton',
-  render: ({ url }) => html`<mjf-info-button url=${url}></mjf-info-button>`,
+  component: 'mjf-info-button',
   args: {
     url: 'faq.html',
   },

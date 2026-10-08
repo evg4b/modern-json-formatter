@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
+import { withContainer } from '@testing/storybook';
 import './sidebar';
 import type { NavigationItem } from './models';
 
@@ -29,11 +29,8 @@ const items: NavigationItem[] = [
 
 const meta = {
   title: 'FAQ/Sidebar',
-  render: ({ items, active }) => html`
-    <div style="width: 240px; height: 500px; overflow: auto;">
-      <mjf-sidebar .items=${items} .active=${active}></mjf-sidebar>
-    </div>
-  `,
+  component: 'mjf-sidebar',
+  decorators: [withContainer({ width: '240px', height: '500px', overflow: 'auto' })],
   args: {
     items,
     active: null,

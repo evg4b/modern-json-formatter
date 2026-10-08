@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import './table';
 import type { TableColumn } from './table';
 
@@ -10,12 +9,7 @@ interface TableArgs {
 
 const meta = {
   title: 'Core/Table',
-  render: ({ columns, data }) => html`
-    <mjf-table-element
-      .columns=${columns}
-      .data=${data}
-    ></mjf-table-element>
-  `,
+  component: 'mjf-table-element',
   args: {
     columns: [
       { title: 'Name', path: 'name' },

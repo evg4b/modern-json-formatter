@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { action } from 'storybook/actions';
 import { html } from 'lit';
-import '@testing/storybook';
+import { withContainer } from '@testing/storybook';
 import '@core/ui/sticky-panel';
 import './toolbox';
 import type { DownloadMode, ToolbarButtonsSettings } from '@core/settings';
@@ -22,17 +21,10 @@ const allButtons: ToolbarButtonsSettings = {
 
 const meta = {
   title: 'Content Script/Toolbox',
-  render: ({ tab, error, buttons, downloadMode }) => html`
-    <mjf-toolbox
-      tab=${tab}
-      .error=${error}
-      .buttons=${buttons}
-      download-mode=${downloadMode}
-      @tab-changed=${action('tab-changed')}
-      @download=${action('download')}
-      @jq-query=${action('jq-query')}
-    ></mjf-toolbox>
-  `,
+  component: 'mjf-toolbox',
+  parameters: {
+    events: ['tab-changed', 'download', 'jq-query'],
+  },
   argTypes: {
     tab: {
       control: { type: 'select' },
@@ -131,16 +123,8 @@ export const DownloadMenuOpen: Story = {
 };
 
 export const InStickyPanel: Story = {
-  render: ({ tab, error, buttons, downloadMode }) => html`
-    <div style="position: relative; height: 200px; border: 1px dashed #666;">
-      <mjf-sticky-panel position="rightTop">
-        <mjf-toolbox
-          tab=${tab}
-          .error=${error}
-          .buttons=${buttons}
-          download-mode=${downloadMode}
-        ></mjf-toolbox>
-      </mjf-sticky-panel>
-    </div>
-  `,
+  decorators: [
+    story => html`<mjf-sticky-panel position="rightTop">${story()}</mjf-sticky-panel>`,
+    withContainer({ position: 'relative', height: '200px', border: '1px dashed #666' }),
+  ],
 };

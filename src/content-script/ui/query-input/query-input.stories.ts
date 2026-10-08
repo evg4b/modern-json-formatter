@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { action } from 'storybook/actions';
-import { html } from 'lit';
 import { configureChromeMock } from '@testing/storybook';
 import './query-input';
 
@@ -10,10 +8,9 @@ interface QueryInputArgs {
 
 const meta = {
   title: 'Content Script/QueryInput',
-  render: ({ error }) => html`
-    <mjf-query-input .error=${error} @jq-query=${action('jq-query')}></mjf-query-input>
-  `,
+  component: 'mjf-query-input',
   parameters: {
+    events: ['jq-query'],
     docs: {
       description: {
         component: 'jq expression input. Enter submits, selected text is wrapped by typing a bracket or quote, '

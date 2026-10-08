@@ -1,22 +1,17 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
+import { type ChildrenArgs, withContainer } from '@testing/storybook';
 import './sticky-panel';
 import type { StickyPanelPosition } from './sticky-panel';
 
-interface StickyPanelArgs {
+interface StickyPanelArgs extends ChildrenArgs {
   position: StickyPanelPosition;
 }
 
 const meta = {
   title: 'Core/StickyPanel',
-  render: ({ position }) => html`
-    <div style="position: relative; height: 200px; border: 1px dashed #666;">
-      <mjf-sticky-panel position=${position}>
-        <div style="padding: 8px; color: var(--base-text-color, #eee);">Panel content</div>
-        <div style="padding: 4px 8px; color: var(--meta-info-color, #aaa); font-size: 12px;">Secondary item</div>
-      </mjf-sticky-panel>
-    </div>
-  `,
+  component: 'mjf-sticky-panel',
+  decorators: [withContainer({ position: 'relative', height: '200px', border: '1px dashed #666' })],
   argTypes: {
     position: {
       control: { type: 'select' },
@@ -25,6 +20,10 @@ const meta = {
   },
   args: {
     position: 'rightTop',
+    children: html`
+      <div style="padding: 8px; color: var(--base-text-color, #eee);">Panel content</div>
+      <div style="padding: 4px 8px; color: var(--meta-info-color, #aaa); font-size: 12px;">Secondary item</div>
+    `,
   },
 } satisfies Meta<StickyPanelArgs>;
 

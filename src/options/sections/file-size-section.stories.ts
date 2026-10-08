@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { action } from 'storybook/actions';
-import { html } from 'lit';
 import './file-size-section';
 import { DEFAULT_MAX_FILE_SIZE_MB, MAX_FILE_SIZE_MB, MIN_FILE_SIZE_MB } from '@core/settings';
 
@@ -10,12 +8,10 @@ interface FileSizeSectionArgs {
 
 const meta = {
   title: 'Options/FileSizeSection',
-  render: ({ maxFileSize }) => html`
-    <mjf-file-size-section
-      max-file-size=${maxFileSize}
-      @file-size-change=${action('file-size-change')}
-    ></mjf-file-size-section>
-  `,
+  component: 'mjf-file-size-section',
+  parameters: {
+    events: ['file-size-change'],
+  },
   argTypes: {
     maxFileSize: {
       control: { type: 'range', min: MIN_FILE_SIZE_MB, max: MAX_FILE_SIZE_MB, step: 1 },

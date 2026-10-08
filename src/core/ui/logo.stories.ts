@@ -10,7 +10,7 @@ interface LogoArgs {
 
 const meta = {
   title: 'Core/Logo',
-  render: ({ size, alt }) => html`<mjf-logo size=${size} alt=${alt}></mjf-logo>`,
+  component: 'mjf-logo',
   argTypes: {
     size: {
       control: { type: 'select' },

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import { configureChromeMock } from '@testing/storybook';
 import './options';
 
@@ -14,8 +13,8 @@ const meta = {
       },
     },
   },
-  // A fresh element per story: the page reads settings and history once, when it is created.
-  render: () => html`<mjf-options-page></mjf-options-page>`,
+  // The default renderer creates a fresh element per story, so each one reads the mocked settings and history.
+  component: 'mjf-options-page',
 } satisfies Meta;
 
 export default meta;

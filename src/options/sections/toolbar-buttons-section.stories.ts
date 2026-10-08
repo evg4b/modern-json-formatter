@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { action } from 'storybook/actions';
-import { html } from 'lit';
 import './toolbar-buttons-section';
 import type { ToolbarButtonsSettings } from '@core/settings';
 
@@ -10,12 +8,10 @@ interface ToolbarButtonsSectionArgs {
 
 const meta = {
   title: 'Options/ToolbarButtonsSection',
-  render: ({ buttons }) => html`
-    <mjf-toolbar-buttons-section
-      .buttons=${buttons}
-      @buttons-change=${action('buttons-change')}
-    ></mjf-toolbar-buttons-section>
-  `,
+  component: 'mjf-toolbar-buttons-section',
+  parameters: {
+    events: ['buttons-change'],
+  },
   args: {
     buttons: {
       query: true,

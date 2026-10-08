@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import './error-node';
 
 interface ErrorNodeArgs {
@@ -9,12 +8,7 @@ interface ErrorNodeArgs {
 
 const meta = {
   title: 'Content Script/ErrorNode',
-  render: ({ header, lines }) => html`
-    <mjf-error-node
-      header=${header}
-      .lines=${lines}
-    ></mjf-error-node>
-  `,
+  component: 'mjf-error-node',
   args: {
     header: 'Invalid JSON',
     lines: ['Unexpected token at position 42', 'Expected "}" but got ","'],

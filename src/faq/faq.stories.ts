@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import { configureChromeMock } from '@testing/storybook';
 import './faq';
 
@@ -13,7 +12,7 @@ const meta = {
       },
     },
   },
-  render: () => html`<mjf-faq-page></mjf-faq-page>`,
+  component: 'mjf-faq-page',
 } satisfies Meta;
 
 export default meta;

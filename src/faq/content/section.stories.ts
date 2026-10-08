@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html, type TemplateResult } from 'lit';
-import { createSidebarContextHost } from '@testing/storybook';
+import type { Decorator, Meta, StoryObj } from 'storybook-web-components-rsbuild';
+import { ContextProvider } from '@lit/context';
+import { html, render, type ReactiveControllerHost, type TemplateResult } from 'lit';
+import { SidebarController, sidebarControllerContext } from '../sidebar';
 import lang, { type FaqSection } from '../sections';
 import '../components/example-table';
 import './section';
@@ -11,14 +12,32 @@ interface SectionArgs {
 
 const twoResults = ['1', '2'].join('\n');
 
-const renderSection = (content: TemplateResult<1>) => {
+const controllerHost: ReactiveControllerHost = {
+  addController: () => undefined,
+  removeController: () => undefined,
+  requestUpdate: () => undefined,
+  updateComplete: Promise.resolve(true),
+};
+
+const withSidebarContext: Decorator = story => {
+  const host = document.createElement('div');
+  new ContextProvider(host, {
+    context: sidebarControllerContext,
+    initialValue: new SidebarController(controllerHost),
+  });
+  render(story(), host);
+  return host;
+};
+
+const renderSection = (content: TemplateResult<1> | null) => {
   const section = document.createElement('mjf-section');
   section.content = content;
-  return createSidebarContextHost(section);
+  return section;
 };
 
 const meta = {
   title: 'FAQ/Section',
+  decorators: [withSidebarContext],
   parameters: {
     docs: {
       description: {
@@ -48,7 +67,7 @@ export const WithExamples: Story = {
 };
 
 export const Empty: Story = {
-  render: () => createSidebarContextHost(document.createElement('mjf-section')),
+  render: () => renderSection(null),
 };
 
 export const ManualChapter: Story = {

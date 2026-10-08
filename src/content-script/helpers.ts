@@ -1,4 +1,3 @@
-import { type ErrorNode } from '@wasm/types';
 import { last, head } from 'es-toolkit';
 
 export const throws = (value?: string): never => {
@@ -17,10 +16,6 @@ export function assetTabType(s?: string | null): asserts s is TabType {
     throw new Error(`Invalid tab type '${s}'`);
   }
 }
-
-export const isErrorNode = (node: unknown): node is ErrorNode => {
-  return !!node && typeof node === 'object' && 'type' in node && node.type === 'error';
-};
 
 export const extractFileName = (url: string | undefined | null): string => {
   if (!url) {

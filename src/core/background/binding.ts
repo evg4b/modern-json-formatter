@@ -1,56 +1,23 @@
 import { sendMessage } from '@core/browser';
-import type { ErrorNode, TokenizerResponse } from '@wasm/types';
-import { isErrorNode } from '../../content-script/helpers';
-import {
-  type ClearHistoryParams,
-  type DomainCountResponse, type DownloadParams,
-  type FormatParams,
-  type GetDomainsParams,
-  type GetHistoryParams,
-  type HistoryResponse,
-  type JqParams,
-  type PushHistoryParams,
-  type TokenizeParams,
-} from './models';
-import type { DownloadType } from '../../content-script/ui/toolbox/toolbox';
+import { createClient, type DomainCount, type DownloadType } from './protocol';
+import type { TokenNode, TupleNode } from '@wasm/types';
 
-const bridge = async <M, R>(request: M) => {
-  const response = await sendMessage<M, R | ErrorNode>(request);
-  if (isErrorNode(response)) {
-    throw response;
-  }
+const request = createClient(message => sendMessage(message));
 
-  return response as R;
-};
+export const format = (json: string): Promise<string> => request('format', json);
 
-export const format = async (json: string): Promise<ErrorNode | string> => {
-  return bridge<FormatParams, ErrorNode | string>({ action: 'format', payload: json });
-};
+export const jq = (json: string, query: string): Promise<TupleNode> => request('jq', { json, query });
 
-export const jq = async (json: string, query: string): Promise<TokenizerResponse> => {
-  return bridge<JqParams, TokenizerResponse>({ action: 'jq', payload: { json, query } });
-};
+export const tokenize = (json: string): Promise<TokenNode> => request('tokenize', json);
 
-export const tokenize = async (json: string): Promise<TokenizerResponse> => {
-  return bridge<TokenizeParams, TokenizerResponse>({ action: 'tokenize', payload: json });
-};
+export const getHistory = (domain: string, prefix: string): Promise<string[]> => request('get-history', { domain, prefix });
 
-export const getHistory = async (domain: string, prefix: string): Promise<HistoryResponse> => {
-  return bridge<GetHistoryParams, HistoryResponse>({ action: 'get-history', payload: { domain, prefix } });
-};
+export const clearHistory = (): Promise<void> => request('clear-history', undefined);
 
-export const clearHistory = async (): Promise<void> => {
-  return bridge<ClearHistoryParams, void>({ action: 'clear-history', payload: undefined });
-};
+export const pushHistory = (domain: string, query: string): Promise<void> => request('push-history', { domain, query });
 
-export const pushHistory = async (domain: string, query: string): Promise<void> => {
-  return bridge<PushHistoryParams, void>({ action: 'push-history', payload: { domain, query } });
-};
+export const getDomains = (): Promise<DomainCount[]> => request('get-domains', undefined);
 
-export const getDomains = async (): Promise<DomainCountResponse> => {
-  return bridge<GetDomainsParams, DomainCountResponse>({ action: 'get-domains', payload: undefined });
-};
-
-export const download = async (type: DownloadType, content: string, filename: string): Promise<void> => {
-  return bridge<DownloadParams, void>({ action: 'download', payload: { type, content, filename } });
+export const download = (type: DownloadType, content: string, filename: string): Promise<void> => {
+  return request('download', { type, content, filename });
 };

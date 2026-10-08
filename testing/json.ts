@@ -9,6 +9,7 @@ import type {
   StringNode,
   StringNodeType,
   TokenNode,
+  TupleNode,
 } from '@wasm/types';
 
 export const tNull = (): NullNode => ({ type: 'null' });
@@ -42,7 +43,7 @@ export const tErrorNode = (error: string, scope?: ErrorNode['scope']): ErrorNode
   error,
   scope: scope ?? 'worker',
 });
-export const tTuple = (...items: TokenNode[]) => ({
+export const tTuple = (...items: TokenNode[]): TupleNode => ({
   type: 'tuple',
   items,
 });

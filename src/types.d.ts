@@ -31,5 +31,5 @@ declare module '@wasm' {
 
   export function minify(input: string): string;
 
-  export function tokenize(json: string): import('@wasm/types').TokenizerResponse;
+  export function tokenize(json: string): import('@wasm/types').TokenNode;
 }

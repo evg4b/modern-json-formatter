@@ -10,14 +10,13 @@ import { dropdown } from '@core/ui';
 import downloadSvg from './download.svg?raw';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import type { DownloadMode, ToolbarButtonsSettings } from '@core/settings';
+import type { DownloadType } from '@core/background/protocol';
 
 export class TabChangedEvent extends CustomEvent<TabType> {
   constructor(tab: TabType) {
     super('tab-changed', { detail: tab });
   }
 }
-
-export type DownloadType = 'raw' | 'formatted' | 'minified';
 
 export class DownloadEvent extends CustomEvent<DownloadType> {
   constructor(type: DownloadType) {

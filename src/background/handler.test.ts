@@ -1,6 +1,6 @@
 import '@testing/worker-wasm.mock';
-import { type Message } from '@core/background';
-import { type TupleNode, type TokenizerResponse } from '@wasm/types';
+import { type Message } from '@core/background/protocol';
+import { type TokenNode, type TupleNode } from '@wasm/types';
 import { describe, expect, rstest, test } from '@rstest/core';
 import { wrapMock } from '@testing/helpers';
 import { format, query, tokenize } from '@wasm';
@@ -23,7 +23,7 @@ describe('handler', () => {
   describe('worker-core', () => {
     test('should handle tokenize message', async () => {
       const message: Message = { payload: 'json', action: 'tokenize' };
-      const tokenized: TokenizerResponse = { type: 'null' };
+      const tokenized: TokenNode = { type: 'null' };
       wrapMock(tokenize).mockReturnValue(tokenized);
 
       const response = await handler(message);

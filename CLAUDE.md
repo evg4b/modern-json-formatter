@@ -96,7 +96,7 @@ The main container (`mjf-container`) uses a **closed** shadow root and exposes `
 
 `src/core/` contains abstractions shared across entry points:
 - `browser/` — typed wrappers around Chrome extension APIs
-- `background/` — message binding models (`binding.ts`, `models.ts`)
+- `background/` — the content ↔ background message protocol: `protocol.ts` maps each action to its payload and reply and builds the client and handler from that map; `binding.ts` is the typed client the UI calls
 - `helpers/` — utility functions
 - `constants/` — extension-wide constants
 

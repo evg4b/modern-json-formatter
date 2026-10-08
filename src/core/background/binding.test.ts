@@ -1,9 +1,9 @@
 import '@testing/browser.mock';
 import { sendMessage } from '@core/browser';
 import { wrapMock } from '@testing/helpers';
-import type { ErrorNode, TokenizerResponse } from '@wasm/types';
+import type { ErrorNode, TokenNode, TupleNode } from '@wasm/types';
 import { clearHistory, download, format, getDomains, getHistory, jq, pushHistory, tokenize } from './binding';
-import { type DomainCountResponse, type HistoryResponse } from './models';
+import { type DomainCount } from './protocol';
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 
 describe('binding', () => {
@@ -22,8 +22,8 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'format', payload: 'json' });
   });
 
-  test('jq should resolve with TokenizerResponse', async () => {
-    const mockResponse: TokenizerResponse = { type: 'null' };
+  test('jq should resolve with TupleNode', async () => {
+    const mockResponse: TupleNode = { type: 'tuple', items: [] };
     mockSendMessage.mockResolvedValue(mockResponse);
 
     const result = await jq('json', 'query');
@@ -31,8 +31,8 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'jq', payload: { json: 'json', query: 'query' } });
   });
 
-  test('tokenize should resolve with TokenizerResponse', async () => {
-    const mockResponse: TokenizerResponse = { type: 'null' };
+  test('tokenize should resolve with TokenNode', async () => {
+    const mockResponse: TokenNode = { type: 'null' };
     mockSendMessage.mockResolvedValue(mockResponse);
 
     const result = await tokenize('json');
@@ -40,8 +40,8 @@ describe('binding', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'tokenize', payload: 'json' });
   });
 
-  test('getHistory should resolve with HistoryResponse', async () => {
-    const mockResponse: HistoryResponse = [];
+  test('getHistory should resolve with history entries', async () => {
+    const mockResponse: string[] = [];
     mockSendMessage.mockResolvedValue(mockResponse);
 
     const result = await getHistory('domain', 'prefix');
@@ -75,8 +75,8 @@ describe('binding', () => {
     });
   });
 
-  test('getDomains should resolve with DomainCountResponse', async () => {
-    const mockResponse: DomainCountResponse = [{ domain: 'example.com', count: 5 }];
+  test('getDomains should resolve with domain counts', async () => {
+    const mockResponse: DomainCount[] = [{ domain: 'example.com', count: 5 }];
     mockSendMessage.mockResolvedValue(mockResponse);
 
     const result = await getDomains();

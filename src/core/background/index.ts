@@ -1,2 +1,2 @@
 export * from './binding';
-export * from './models';
+export * from './protocol';

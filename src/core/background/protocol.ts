@@ -7,11 +7,6 @@ export interface DomainCount {
   count: number;
 }
 
-/**
- * Every action the background accepts: what it takes and what it answers with.
- * The message type, the client and the handler table are all derived from this map,
- * so adding an action means adding one entry here and one handler.
- */
 export interface Protocol {
   'tokenize': { payload: string; reply: TokenNode };
   'format': { payload: string; reply: string };
@@ -35,7 +30,6 @@ export type Handlers = {
   [A in Action]: (payload: Payload<A>) => Reply<A> | Promise<Reply<A>>;
 };
 
-/** Delivers a message to the background and resolves with whatever it answered. */
 export type Transport = (message: Message) => Promise<unknown>;
 
 const ERROR_SCOPES: Partial<Record<Action, ErrorNode['scope']>> = {
@@ -56,10 +50,6 @@ const toErrorNode = (error: unknown, scope: ErrorNode['scope']): ErrorNode => {
   return { type: 'error', scope, error: `Unknown error: ${String(error)}` };
 };
 
-/**
- * Builds the background side of the protocol. The returned function never rejects:
- * a failing handler is answered with an ErrorNode scoped to the action.
- */
 export const createHandler = (handlers: Handlers) => async (message: Message): Promise<unknown> => {
   const action = (message as Partial<Message> | undefined)?.action;
   if (!action || !Object.hasOwn(handlers, action)) {
@@ -74,10 +64,6 @@ export const createHandler = (handlers: Handlers) => async (message: Message): P
   }
 };
 
-/**
- * Builds the content side of the protocol. An ErrorNode answer is thrown,
- * so callers only ever resolve with the reply type of their action.
- */
 export const createClient = (transport: Transport) => async <A extends Action>(
   action: A,
   payload: Payload<A>,

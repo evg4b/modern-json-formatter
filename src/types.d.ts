@@ -24,7 +24,6 @@ declare module '*.scss';
 
 type TabType = 'raw' | 'formatted' | 'query';
 
-// Each function throws on invalid input instead of returning an ErrorNode.
 declare module '@wasm' {
   export function format(input: string): string;
 

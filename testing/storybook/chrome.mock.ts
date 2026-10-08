@@ -1,17 +1,18 @@
 import type { DomainCountResponse, Message as BackgroundMessage } from '@core/background';
 import type { ExtensionSettings } from '@core/settings';
+import { take } from 'es-toolkit';
+import { extractDomainKey } from '../../src/content-script/helpers';
 
 export interface ChromeMockState {
   domains: DomainCountResponse;
-
   history: string[];
-
   settings: Partial<ExtensionSettings> | null;
-
   latency: number;
 }
 
 const SETTINGS_KEY = 'mjf_settings';
+const HISTORY_LIMIT = 10;
+const pageDomain = extractDomainKey(globalThis.location.href);
 
 const initialState = (): ChromeMockState => ({
   domains: [
@@ -48,8 +49,25 @@ interface Message {
 const WASM_ACTIONS = new Set(['tokenize', 'format', 'jq']);
 
 const handlers: Record<string, (payload: never) => unknown> = {
-  'get-history': ({ prefix }: { prefix: string }) => state.history.filter(query => query.startsWith(prefix)),
-  'push-history': ({ query }: { query: string }) => {
+  'get-history': ({ domain, prefix }: { domain: string; prefix: string }) => {
+    if (domain !== pageDomain) {
+      return [];
+    }
+
+    return take(state.history.filter(query => query.startsWith(prefix)), HISTORY_LIMIT);
+  },
+  'push-history': ({ domain, query }: { domain: string; query: string }) => {
+    if (domain !== pageDomain) {
+      return;
+    }
+
+    if (!state.history.includes(query)) {
+      const entry = state.domains.find(item => item.domain === domain);
+      state.domains = entry
+        ? state.domains.with(state.domains.indexOf(entry), { domain, count: entry.count + 1 })
+        : [...state.domains, { domain, count: 1 }];
+    }
+
     state.history = [query, ...state.history.filter(item => item !== query)];
   },
   'get-domains': () => state.domains,

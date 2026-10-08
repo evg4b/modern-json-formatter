@@ -4,14 +4,13 @@ import { format, query, tokenize } from '@wasm';
 import type { TokenNode, TupleNode } from '@wasm/types';
 import { withContainer } from '@testing/storybook';
 import { buildDom } from '../../dom';
-import '../error-node';
+import { createErrorNode } from '../../extension';
+import { getErrorMessage } from '../../helpers';
 import './container';
 
 interface ContainerArgs {
   type: TabType;
-
   json: string;
-
   jq: string;
 }
 
@@ -45,21 +44,10 @@ const sample = JSON.stringify({
 
 const brokenJson = '{"name": broken}';
 
-const createErrorNode = (header: string, ...lines: string[]) => {
-  const node = document.createElement('mjf-error-node');
-  node.header = header;
-  node.lines = lines;
-  return node;
-};
-
 const createContainer = (type: TabType) => {
   const container = document.createElement('mjf-container');
   container.type = type;
   return container;
-};
-
-const messageOf = (error: unknown) => {
-  return error instanceof Error ? error.message : String(error);
 };
 
 const renderContainer = ({ type, json, jq }: ContainerArgs) => {
@@ -211,10 +199,13 @@ export const LargeArray: Story = {
 };
 
 export const CollapsedNodes: Story = {
-  play: ({ canvasElement }) => {
-    const container = canvasElement.querySelector('mjf-container');
-    const formatted = container && Reflect.get(container, 'formatted') as HTMLElement | undefined;
-    formatted?.querySelectorAll<HTMLElement>('.property > .toggle').forEach(toggle => toggle.click());
+  render: ({ json }) => {
+    const tree = buildDom(tokenize(json) as TokenNode);
+    tree.querySelectorAll<HTMLElement>('.property > .toggle').forEach(toggle => toggle.click());
+
+    const container = createContainer('formatted');
+    container.setFormattedContent(tree);
+    return container;
   },
 };
 
@@ -273,7 +264,7 @@ export const LargeFileInvalidJson: Story = {
     try {
       container.setRawContent(createElement({ element: 'pre', content: format(json) }));
     } catch (error: unknown) {
-      container.setRawContent(createErrorNode('Failed to process file', messageOf(error)));
+      container.setRawContent(createErrorNode('Failed to process file', getErrorMessage(error)));
     }
     return container;
   },

@@ -4,9 +4,6 @@ import './preview.scss';
 
 export default {
   render: renderComponent,
-  argTypes: {
-    children: { control: false },
-  },
   parameters: {
     controls: {
       matchers: {

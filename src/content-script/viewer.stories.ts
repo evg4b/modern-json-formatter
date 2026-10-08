@@ -1,15 +1,11 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { action } from 'storybook/actions';
-import { download, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
+import { tokenize } from '@core/background';
 import { createElement } from '@core/dom';
 import { DEFAULT_SETTINGS, type DownloadMode, type ToolbarButtonsSettings } from '@core/settings';
 import { withContainer } from '@testing/storybook';
-import { buildDom } from './dom';
-import { extractDomainKey, isErrorNode } from './helpers';
+import { createToolbar, prepareResponse, withLoading } from './extension';
 import './ui/container';
-import './ui/error-node';
-import './ui/toolbox';
-import '@core/ui/sticky-panel';
 
 interface ViewerArgs {
   json: string;
@@ -28,85 +24,20 @@ const sample = JSON.stringify({
   contact: { email: 'books@example.com', site: 'https://example.com/books' },
 });
 
-const createErrorNode = (header: string, ...lines: string[]) => {
-  const node = document.createElement('mjf-error-node');
-  node.header = header;
-  node.lines = lines;
-  return node;
-};
-
-const prepareResponse = (response: TokenizerResponse): HTMLElement => {
-  return response.type === 'error'
-    ? createErrorNode('Invalid JSON file.', response.error)
-    : buildDom(response);
-};
-
 const renderViewer = ({ json, buttons, downloadMode }: ViewerArgs) => {
-  const page = createElement({ element: 'div' });
-
   const container = document.createElement('mjf-container');
   container.setRawContent(createElement({ element: 'pre', content: json }));
 
-  const toolbox = document.createElement('mjf-toolbox');
-  toolbox.buttons = buttons;
-  toolbox.downloadMode = downloadMode;
-
-  const panel = document.createElement('mjf-sticky-panel');
-  panel.appendChild(toolbox);
-
-  const wrapper = async <T>(promise: Promise<T>): Promise<T> => {
-    try {
-      container.startLoading();
-      return await promise;
-    } finally {
-      container.stopLoading();
-    }
-  };
-
-  const jqQuery = async (query: string) => {
-    toolbox.error = null;
-    try {
-      container.setQueryContent(prepareResponse(await jq(json, query)));
-      await pushHistory(extractDomainKey(globalThis.location.href), query);
-    } catch (error: unknown) {
-      if (isErrorNode(error)) {
-        if (error.scope === 'jq') {
-          toolbox.error = error.error;
-          return;
-        }
-
-        container.message(`Error ${error.error} in ${error.scope}`, error.stack ? `Stack trace: ${error.stack}` : '');
-        return;
-      }
-
-      console.error(error);
-    }
-  };
-
-  toolbox.addEventListener('tab-changed', event => {
-    action('tab-changed')(event.detail);
-    container.type = event.detail;
+  const panel = createToolbar(container, () => json, { buttons, downloadMode });
+  ['tab-changed', 'jq-query', 'download'].forEach(event => {
+    panel.querySelector('mjf-toolbox')?.addEventListener(event, action(event));
   });
 
-  toolbox.addEventListener('jq-query', async event => {
-    action('jq-query')(event.detail);
-    await wrapper(jqQuery(event.detail));
-  });
-
-  toolbox.addEventListener('download', async event => {
-    action('download')(event.detail);
-    const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
-    try {
-      await download(event.detail, json, `response${suffix}.json`);
-    } catch (error: unknown) {
-      container.message('Unable to download file', isErrorNode(error) ? error.error : String(error));
-    }
-  });
-
-  void wrapper(tokenize(json))
+  void withLoading(container, tokenize(json))
     .then(response => container.setFormattedContent(prepareResponse(response)))
     .catch((error: unknown) => container.setError(error));
 
+  const page = createElement({ element: 'div' });
   page.append(container, panel);
   return page;
 };

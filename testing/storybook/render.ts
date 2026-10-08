@@ -9,6 +9,17 @@ export interface ChildrenArgs {
   children?: Children;
 }
 
+const isWritable = (target: object, key: string): boolean => {
+  for (let proto: object | null = target; proto; proto = Object.getPrototypeOf(proto)) {
+    const descriptor = Object.getOwnPropertyDescriptor(proto, key);
+    if (descriptor) {
+      return descriptor.writable === true || descriptor.set !== undefined;
+    }
+  }
+
+  return true;
+};
+
 export const renderComponent = (args: Args, { component, id, parameters }: StoryContext): HTMLElement => {
   if (typeof component !== 'string') {
     throw new TypeError(`Story ${id} has no "component" tag name and no custom render`);
@@ -19,7 +30,13 @@ export const renderComponent = (args: Args, { component, id, parameters }: Story
 
   Object.entries(properties)
     .filter(([, value]) => value !== undefined)
-    .forEach(([key, value]) => Reflect.set(element, key, value));
+    .forEach(([key, value]) => {
+      if (!isWritable(element, key)) {
+        throw new TypeError(`Story ${id}: arg "${key}" is a read-only property of <${component}>; rename it or use a custom render`);
+      }
+
+      Reflect.set(element, key, value);
+    });
 
   if (children !== undefined) {
     render(children, element);

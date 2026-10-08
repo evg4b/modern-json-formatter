@@ -7,6 +7,9 @@ import '../sections';
 const meta = {
   title: 'Options/OptionsSection',
   component: 'mjf-options-section',
+  argTypes: {
+    children: { control: false },
+  },
   args: {
     children: html`
       <span slot="title">Section Title</span>

@@ -13,6 +13,7 @@ const meta = {
   component: 'mjf-sticky-panel',
   decorators: [withContainer({ height: '200px', border: '1px dashed #666' })],
   argTypes: {
+    children: { control: false },
     position: {
       control: { type: 'select' },
       options: ['rightTop', 'rightBottom', 'leftTop', 'leftBottom'] satisfies StickyPanelPosition[],

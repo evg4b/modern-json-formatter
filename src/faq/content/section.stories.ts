@@ -65,7 +65,8 @@ export const AdvancedFeatures: Story = {
   args: { section: 'advancedFeatures' },
 };
 
-export const Math: Story = {
+export const MathFunctions: Story = {
+  name: 'Math',
   args: { section: 'math' },
 };
 

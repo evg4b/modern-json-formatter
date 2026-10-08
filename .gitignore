@@ -144,3 +144,6 @@ test-results
 playwright-report
 blob-report
 playwright/.cache
+.claude/skills/lit/.skillfish.json
+.claude/skills/lit/README.md
+.claude/skills/lit/SKILL.md

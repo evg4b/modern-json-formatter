@@ -16,6 +16,7 @@ Thank you for your interest in contributing! This guide covers everything you ne
 - [Development Workflow](#development-workflow)
 - [Verifying Your Build](#verifying-your-build)
 - [Writing Tests](#writing-tests)
+- [End-to-End Tests](#end-to-end-tests)
 - [Best Practices](#best-practices)
 
 ---
@@ -429,6 +430,66 @@ describe('MyComponent', () => {
   });
 });
 ```
+
+---
+
+## End-to-End Tests
+
+End-to-end tests live in `e2e/` and run the packed extension in a real Chromium
+through **Playwright**. They need a production build first, which `make e2e`
+takes care of:
+
+```bash
+make e2e                       # build the extension, then run the whole suite
+yarn e2e e2e/query.spec.ts     # a single spec against the current dist/
+yarn e2e --ui                  # interactive mode
+```
+
+`make e2e` runs inside the Playwright container; `yarn e2e` runs on your machine,
+which is quicker to iterate with but cannot match the screenshots (see below).
+
+Pages are served by fulfilling the request in Playwright, so no fixture server
+is involved — `open(body, contentType)` navigates to a URL answered with the
+body you pass.
+
+### Reaching the UI
+
+The extension renders everything inside **closed** shadow roots, which
+Playwright locators cannot enter. The `shadow` fixture resolves those paths over
+CDP instead: segments separated by `>>>`, each one queried inside the shadow
+root of the previous match.
+
+```typescript
+await (await shadow.find('body >>> mjf-toolbox >>> button[data-type="raw"]')).click();
+```
+
+Known paths are collected in `e2e/support/ui.ts` — add new ones there rather
+than spelling them out in specs. The options and FAQ pages use open shadow
+roots, so ordinary Playwright locators work on them.
+
+### Screenshots
+
+Visual assertions compare against the PNGs committed under `e2e/__screenshots__/`.
+A test tagged `@screenshot` runs in both the `dark` and `light` projects, so each
+view is committed once per theme and neither can regress unnoticed:
+
+```typescript
+test('matches the raw view', { tag: '@screenshot' }, async ({ page, shadow }) => {
+```
+
+Text rendering depends on the fonts installed on the machine, so the comparison
+only holds in one place: `mcr.microsoft.com/playwright:v1.63.0-noble`. Both CI
+and `make e2e` run there, which is why running the suite with plain `yarn e2e` on
+macOS reports diffs.
+
+After an intentional UI change, regenerate the images:
+
+```bash
+make e2e-update    # requires Docker
+```
+
+Review the resulting diff before committing it — that image is what every later
+change is checked against.
 
 ---
 

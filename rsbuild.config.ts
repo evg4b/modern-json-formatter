@@ -29,9 +29,11 @@ export default defineConfig({
         content_security_policy: {
           extension_pages: 'script-src \'self\' \'wasm-unsafe-eval\'; object-src \'self\';',
         },
+        web_accessible_resources: [{ resources: ['Monaco.woff'], matches: ['<all_urls>'] }],
       },
       background: './src/background/background.ts',
       contentScripts: './src/content-script/main.ts',
+      contentStyles: ['font.css'],
       options: './src/options/options.ts',
       pages: {
         faq: './src/faq/faq.ts',

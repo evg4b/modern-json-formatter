@@ -19,9 +19,12 @@ yarn lint             # ESLint
 yarn lint --fix       # ESLint with auto-fix
 yarn test             # Run all tests
 yarn test:cover       # Run tests with coverage
+yarn e2e              # Playwright end-to-end tests (see `make e2e` for screenshots)
 
 # Full release workflow (via Makefile)
 make check            # lint + test
+make e2e              # Build the extension, then run the end-to-end suite (Docker)
+make e2e-update       # Same, regenerating the committed screenshots (Docker)
 make build-worker-wasm # Build Rust/WASM core
 make build-extension  # Production build
 make pack-extension   # Generate per-file checksums and zip for Chrome + Edge stores
@@ -121,6 +124,25 @@ Tests use **Rstest** (Rsbuild's test runner, Vitest-compatible) with **happy-dom
 - `json.ts` — `TokenNode` test fixtures (`tObject`, `tArray`, `tString`, `tNull`, etc.)
 
 Import side-effect mocks at the top of test files: `import '@testing/browser.mock'`.
+
+### End-to-End Tests
+
+`e2e/` runs the packed extension in a real Chromium via **Playwright**, against a
+production build in `dist/`.
+
+- `e2e/support/fixtures.ts` — loads `dist/` as an unpacked extension, exposes the
+  extension id, and serves page bodies by fulfilling the request
+- `e2e/support/shadow.ts` — resolves selectors through **closed** shadow roots over
+  CDP, since Playwright locators stop at them; segments are separated by `>>>`
+- `e2e/support/ui.ts` — the known element paths, kept out of the specs
+
+Screenshots live under `e2e/__screenshots__/`, one per theme. Tests tagged
+`@screenshot` run in both the `dark` and `light` projects, which is where the
+suffix on each image comes from; everything else runs in `dark` only. Rendering
+depends on the host's fonts, so `make e2e` runs the suite in the same Playwright
+container CI uses — `yarn e2e` on the host runs the same tests but its
+screenshots will not match. Regenerate the images with `make e2e-update` after an
+intentional UI change.
 
 ### Build System
 

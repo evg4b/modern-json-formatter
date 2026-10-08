@@ -87,6 +87,7 @@ export const manifestGeneratorPlugin = (options?: ManifestGeneratorParams): Rsbu
           {
             matches: ['<all_urls>', 'file://*/*'],
             js: [contentScript],
+            css: options?.contentStyles ?? [],
             run_at: 'document_start',
           },
         ],

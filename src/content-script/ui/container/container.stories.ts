@@ -191,7 +191,7 @@ export const LinksAndEmails: Story = {
 export const UnicodeAndEscapes: Story = {
   args: {
     json: '{"emoji":"🚀 ✨","cyrillic":"Привет, мир","cjk":"你好，世界",'
-      + '"escapes":"line 1\\nline 2\\t\\"quoted\\" \\\\ backslash","unicodeEscape":"\\u00e9\\u00e8",'
+      + String.raw`"escapes":"line 1\nline 2\t\"quoted\" \\ backslash","unicodeEscape":"\u00e9\u00e8",`
       + '"key with spaces":"value","":"empty key"}',
   },
 };

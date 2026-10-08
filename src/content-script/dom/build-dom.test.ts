@@ -281,6 +281,30 @@ describe('buildDom', () => {
 
   describe('event handlers', () => {
     describe('keydown / keyup — active-links class', () => {
+      test('should not add document listeners for every built tree', () => {
+        buildDom(tString('first'));
+        const addSpy = rstest.spyOn(document, 'addEventListener');
+
+        buildDom(tString('second'));
+        buildDom(tString('third'));
+
+        expect(addSpy).not.toHaveBeenCalled();
+        addSpy.mockRestore();
+      });
+
+      test('should toggle active-links on every built tree', () => {
+        const first = buildDom(tString('first'));
+        const second = buildDom(tString('second'));
+
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', bubbles: true }));
+        expect(first.classList.contains('active-links')).toBe(true);
+        expect(second.classList.contains('active-links')).toBe(true);
+
+        document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Meta', bubbles: true }));
+        expect(first.classList.contains('active-links')).toBe(false);
+        expect(second.classList.contains('active-links')).toBe(false);
+      });
+
       test('should add active-links class on Meta keydown', () => {
         const dom = buildDom(tString('test'));
         document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Meta', bubbles: true }));

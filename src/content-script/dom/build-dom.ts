@@ -6,6 +6,33 @@ import { buildBoolNode, buildNullNode, buildNumberNode, buildStringNode } from '
 import { toggle } from './elements';
 import { buildInfoNode, isLinkElement, isToggleElement, isValueExpandable } from './helpers';
 
+const roots = new Set<WeakRef<HTMLElement>>();
+let listening = false;
+
+const setActiveLinks = (event: KeyboardEvent, active: boolean) => {
+  if (event.key !== 'Meta' && event.key !== 'Control') {
+    return;
+  }
+
+  for (const ref of roots) {
+    const root = ref.deref();
+    if (root) {
+      root.classList.toggle('active-links', active);
+    } else {
+      roots.delete(ref);
+    }
+  }
+};
+
+const trackActiveLinks = (root: HTMLElement) => {
+  roots.add(new WeakRef(root));
+  if (!listening) {
+    listening = true;
+    document.addEventListener('keydown', event => setActiveLinks(event, true));
+    document.addEventListener('keyup', event => setActiveLinks(event, false));
+  }
+};
+
 export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
   if (object.type === 'tuple') {
     return createElement({
@@ -28,17 +55,7 @@ export const buildDom = (object: TokenNode | TupleNode): HTMLElement => {
     root.appendChild(infoNode);
   }
 
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Meta' || event.key === 'Control') {
-      root.classList.add('active-links');
-    }
-  });
-
-  document.addEventListener('keyup', event => {
-    if (event.key === 'Meta' || event.key === 'Control') {
-      root.classList.remove('active-links');
-    }
-  });
+  trackActiveLinks(root);
 
   root.addEventListener('click', event => {
     const { target } = event;

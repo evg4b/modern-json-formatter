@@ -29,6 +29,22 @@ export default {
       '@wasm/types': join(root, 'worker-wasm/types'),
     };
 
+    // Storybook loads every .md file as raw text; ours are compiled to Lit templates by litMarkdown.
+    const rspackTools = config.tools?.rspack;
+    config.tools = {
+      ...config.tools,
+      rspack: [
+        ...Array.isArray(rspackTools) ? rspackTools : [rspackTools ?? {}],
+        rspackConfig => {
+          for (const rule of rspackConfig.module?.rules ?? []) {
+            if (rule && typeof rule === 'object' && rule.type === 'asset/source' && String(rule.test) === String(/\.md$/)) {
+              rule.exclude = join(root, 'src');
+            }
+          }
+        },
+      ],
+    };
+
     return config;
   },
 } satisfies StorybookConfig;

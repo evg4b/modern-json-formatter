@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import './download-mode-section';
 import type { DownloadMode } from '@core/settings';
 
@@ -10,12 +9,10 @@ interface DownloadModeSectionArgs {
 
 const meta = {
   title: 'Options/DownloadModeSection',
-  render: ({ mode, disabled }) => html`
-    <mjf-download-mode-section
-      mode=${mode}
-      ?disabled=${disabled}
-    ></mjf-download-mode-section>
-  `,
+  component: 'mjf-download-mode-section',
+  parameters: {
+    events: ['mode-change'],
+  },
   argTypes: {
     mode: {
       control: { type: 'select' },
@@ -44,4 +41,12 @@ export const DirectFormatted: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+export const DirectMinified: Story = {
+  args: { mode: 'minified' },
+};
+
+export const DisabledDirectMode: Story = {
+  args: { mode: 'formatted', disabled: true },
 };

@@ -5,12 +5,11 @@ import type { LogoSize } from './logo';
 
 interface LogoArgs {
   size: LogoSize;
-  alt: string;
 }
 
 const meta = {
   title: 'Core/Logo',
-  render: ({ size, alt }) => html`<mjf-logo size=${size} alt=${alt}></mjf-logo>`,
+  component: 'mjf-logo',
   argTypes: {
     size: {
       control: { type: 'select' },
@@ -19,7 +18,6 @@ const meta = {
   },
   args: {
     size: '128',
-    alt: 'Modern JSON Formatter',
   },
 } satisfies Meta<LogoArgs>;
 
@@ -34,4 +32,25 @@ export const Small: Story = {
 
 export const Large: Story = {
   args: { size: '512' },
+};
+
+export const Medium: Story = {
+  args: { size: '48' },
+};
+
+export const ExtraLarge: Story = {
+  args: { size: '256' },
+};
+
+export const AllSizes: Story = {
+  render: () => {
+    const sizes: LogoSize[] = ['32', '48', '128', '256', '512'];
+    const logos = sizes.map(size => html`<mjf-logo size=${size}></mjf-logo>`);
+
+    return html`
+      <div style="display: flex; gap: 16px; align-items: flex-end;">
+        ${logos}
+      </div>
+    `;
+  },
 };

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { html } from 'lit';
+import { withContainer } from '@testing/storybook';
+import '@core/ui/sticky-panel';
 import './toolbox';
 import type { DownloadMode, ToolbarButtonsSettings } from '@core/settings';
 
@@ -19,14 +21,10 @@ const allButtons: ToolbarButtonsSettings = {
 
 const meta = {
   title: 'Content Script/Toolbox',
-  render: ({ tab, error, buttons, downloadMode }) => html`
-    <mjf-toolbox
-      tab=${tab}
-      .error=${error}
-      .buttons=${buttons}
-      download-mode=${downloadMode}
-    ></mjf-toolbox>
-  `,
+  component: 'mjf-toolbox',
+  parameters: {
+    events: ['tab-changed', 'download', 'jq-query'],
+  },
   argTypes: {
     tab: {
       control: { type: 'select' },
@@ -76,4 +74,64 @@ export const DirectDownload: Story = {
   args: {
     downloadMode: 'formatted',
   },
+};
+
+export const DirectDownloadRaw: Story = {
+  args: {
+    downloadMode: 'raw',
+  },
+};
+
+export const DirectDownloadMinified: Story = {
+  args: {
+    downloadMode: 'minified',
+  },
+};
+
+export const TwoTabs: Story = {
+  args: {
+    buttons: { ...allButtons, query: false },
+  },
+};
+
+export const SingleTabHidesSwitcher: Story = {
+  args: {
+    tab: 'formatted',
+    buttons: { query: false, formatted: true, raw: false, download: true },
+  },
+};
+
+export const QueryAndFormatted: Story = {
+  args: {
+    tab: 'query',
+    buttons: { query: true, formatted: true, raw: false, download: false },
+  },
+};
+
+export const NothingVisible: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Query, Raw and Download turned off: a single tab needs no switcher, so the toolbox is empty.',
+      },
+    },
+  },
+  args: {
+    buttons: { query: false, formatted: true, raw: false, download: false },
+  },
+};
+
+export const DownloadMenuOpen: Story = {
+  play: async ({ canvasElement }) => {
+    const toolbox = canvasElement.querySelector('mjf-toolbox');
+    await toolbox?.updateComplete;
+    toolbox?.shadowRoot?.querySelector<HTMLButtonElement>('button[title="Download"]')?.click();
+  },
+};
+
+export const InStickyPanel: Story = {
+  decorators: [
+    story => html`<mjf-sticky-panel position="rightTop">${story()}</mjf-sticky-panel>`,
+    withContainer({ height: '200px', border: '1px dashed #666' }),
+  ],
 };

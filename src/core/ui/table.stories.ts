@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
-import { html } from 'lit';
 import './table';
 import type { TableColumn } from './table';
 
@@ -10,12 +9,7 @@ interface TableArgs {
 
 const meta = {
   title: 'Core/Table',
-  render: ({ columns, data }) => html`
-    <mjf-table-element
-      .columns=${columns}
-      .data=${data}
-    ></mjf-table-element>
-  `,
+  component: 'mjf-table-element',
   args: {
     columns: [
       { title: 'Name', path: 'name' },
@@ -49,5 +43,46 @@ export const SingleColumn: Story = {
       { name: 'lit' },
       { name: 'typescript' },
     ],
+  },
+};
+
+export const MissingValues: Story = {
+  args: {
+    data: [
+      { name: 'modern-json-formatter', version: '2.0.0' },
+      { name: 'lit', description: 'Fast, lightweight web components' },
+      {},
+    ],
+  },
+};
+
+export const NestedPaths: Story = {
+  args: {
+    columns: [
+      { title: 'Domain', path: 'domain' },
+      { title: 'Queries', path: 'stats.queries' },
+      { title: 'Last query', path: 'stats.last[0]' },
+    ],
+    data: [
+      { domain: 'api.github.com', stats: { queries: 12, last: ['.items[]'] } },
+      { domain: 'localhost:3000', stats: { queries: 3, last: ['keys'] } },
+    ],
+  },
+};
+
+export const ManyRows: Story = {
+  args: {
+    columns: [
+      { title: 'Domain', path: 'domain' },
+      { title: 'Count', path: 'count' },
+    ],
+    data: Array.from({ length: 30 }, (_, index) => ({ domain: `service-${index + 1}.example.com`, count: 90 - index * 3 })),
+  },
+};
+
+export const NoColumns: Story = {
+  args: {
+    columns: [],
+    data: [],
   },
 };

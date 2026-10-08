@@ -1,17 +1,23 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { createElement } from '@core/dom';
-import type { TokenizerResponse } from '@wasm/types';
-import { toTokens, toTuple } from '@testing/storybook';
+import { format, query, tokenize } from '@wasm';
+import type { TokenNode, TupleNode } from '@wasm/types';
+import { withContainer } from '@testing/storybook';
 import { buildDom } from '../../dom';
 import '../error-node';
 import './container';
 
 interface ContainerArgs {
   type: TabType;
-  json: unknown;
+
+  /** Page body, exactly as the server sent it. */
+  json: string;
+
+  /** jq expression whose result fills the query tab; empty until the first query runs. */
+  jq: string;
 }
 
-const sample = {
+const sample = JSON.stringify({
   id: 1024,
   name: 'Modern JSON Formatter',
   active: true,
@@ -37,7 +43,9 @@ const sample = {
     array: [],
     string: '',
   },
-};
+});
+
+const brokenJson = '{"name": broken}';
 
 const createErrorNode = (header: string, ...lines: string[]) => {
   const node = document.createElement('mjf-error-node');
@@ -46,15 +54,37 @@ const createErrorNode = (header: string, ...lines: string[]) => {
   return node;
 };
 
-const buildContent = (response: TokenizerResponse): HTMLElement => {
-  return response.type === 'error'
-    ? createErrorNode('Invalid JSON file.', response.error)
-    : buildDom(response);
-};
-
 const createContainer = (type: TabType) => {
   const container = document.createElement('mjf-container');
   container.type = type;
+  return container;
+};
+
+const messageOf = (error: unknown) => {
+  return error instanceof Error ? error.message : String(error);
+};
+
+/** Same pipeline as `extension.ts`, calling the WASM core directly instead of through the background worker. */
+const renderContainer = ({ type, json, jq }: ContainerArgs) => {
+  const container = createContainer(type);
+  container.setRawContent(createElement({ element: 'pre', content: json }));
+
+  try {
+    container.setFormattedContent(buildDom(tokenize(json) as TokenNode));
+  } catch (error: unknown) {
+    // The extension only logs tokenizer failures; the formatted tab stays empty.
+    container.setError(error);
+  }
+
+  if (jq) {
+    try {
+      container.setQueryContent(buildDom(query(json, jq) as TupleNode));
+    } catch (error: unknown) {
+      // jq errors are shown under the query input in the toolbox, not in the container.
+      container.setError(error);
+    }
+  }
+
   return container;
 };
 
@@ -64,28 +94,25 @@ const meta = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Root view of a formatted page. Holds the formatted, raw and query results and shows one of them depending on `type`.',
+        component: 'Root view of a formatted page. Holds the formatted, raw and query results and shows one of them depending on `type`. '
+          + 'Stories run the real WASM tokenizer and jq engine on the `json` text.',
       },
     },
   },
-  render: ({ type, json }) => {
-    const container = createContainer(type);
-    const raw = JSON.stringify(json);
-    container.setRawContent(createElement({ element: 'pre', content: raw }));
-    container.setFormattedContent(buildContent(toTokens(json)));
-    container.setQueryContent(buildContent(toTokens(json)));
-    return container;
-  },
+  render: renderContainer,
+  decorators: [withContainer({ minHeight: '400px' })],
   argTypes: {
     type: {
       control: { type: 'inline-radio' },
       options: ['formatted', 'raw', 'query'] satisfies TabType[],
     },
-    json: { control: 'object' },
+    json: { control: 'text' },
+    jq: { control: 'text' },
   },
   args: {
     type: 'formatted',
     json: sample,
+    jq: '',
   },
 } satisfies Meta<ContainerArgs>;
 
@@ -98,122 +125,162 @@ export const Raw: Story = {
   args: { type: 'raw' },
 };
 
-export const Query: Story = {
+export const QueryNotRunYet: Story = {
   args: { type: 'query' },
 };
 
-export const PrimitiveRoots: Story = {
-  render: () => {
-    const container = createContainer('formatted');
-    container.setFormattedContent(buildDom(toTuple('plain string', 42, -0.5, true, false, null)));
-    return container;
-  },
+export const QueryResults: Story = {
+  args: { type: 'query', jq: '.releases[] | .version' },
+};
+
+export const QuerySingleResult: Story = {
+  args: { type: 'query', jq: '.owner' },
+};
+
+export const StringRoot: Story = {
+  args: { json: '"Hello, world!"' },
+};
+
+export const NumberRoot: Story = {
+  args: { json: '12345678909876543212345' },
 };
 
 export const EmptyObject: Story = {
-  args: { json: {} },
+  args: { json: '{}' },
 };
 
 export const EmptyArray: Story = {
-  args: { json: [] },
+  args: { json: '[]' },
 };
 
 export const ArrayRoot: Story = {
   args: {
-    json: [
-      { id: 1, title: 'delectus aut autem', completed: false },
-      { id: 2, title: 'quis ut nam facilis', completed: true },
-      { id: 3, title: 'fugiat veniam minus', completed: false },
-    ],
+    json: '[{"id":1,"title":"delectus aut autem","completed":false},'
+      + '{"id":2,"title":"quis ut nam facilis","completed":true},'
+      + '{"id":3,"title":"fugiat veniam minus","completed":false}]',
   },
 };
 
 export const BigNumbers: Story = {
-  render: () => {
-    const container = createContainer('formatted');
-    container.setFormattedContent(buildDom({
-      type: 'object',
-      properties: [
-        { key: 'int64', value: { type: 'number', value: '9223372036854775807' } },
-        { key: 'beyondSafeInteger', value: { type: 'number', value: '12345678901234567890123' } },
-        { key: 'highPrecision', value: { type: 'number', value: '3.141592653589793238462643383279' } },
-        { key: 'exponent', value: { type: 'number', value: '1.7976931348623157e+308' } },
-        { key: 'negative', value: { type: 'number', value: '-0.000000000000000000001' } },
-      ],
-    }));
-    return container;
+  args: {
+    json: '{"int64":9223372036854775807,"beyondSafeInteger":12345678901234567890123,'
+      + '"highPrecision":3.141592653589793238462643383279,"exponent":1.7976931348623157e+308,'
+      + '"trailingZeros":1.000,"negative":-0.000000000000000000001}',
   },
+};
+
+export const KeyOrder: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Keys keep their source order, including integer-like keys that `JSON.parse` would move to the front.',
+      },
+    },
+  },
+  args: { json: '{"zebra":1,"apple":2,"10":3,"2":4,"_id":5}' },
 };
 
 export const LinksAndEmails: Story = {
   args: {
-    json: {
-      website: 'https://example.com',
-      api: 'http://localhost:8080/api/v1/items?page=2',
-      email: 'hello@example.com',
-      notALink: 'example.com',
-    },
+    json: '{"https":"https://example.com","http":"http://localhost:8080/api/v1/items?page=2",'
+      + '"ftp":"ftp://files.example.com/dump.json","mailto":"mailto:hello@example.com",'
+      + '"email":"hello@example.com","noScheme":"example.com","noHost":"https:///path"}',
   },
 };
 
 export const UnicodeAndEscapes: Story = {
   args: {
-    json: {
-      'emoji': '🚀 ✨',
-      'cyrillic': 'Привет, мир',
-      'cjk': '你好，世界',
-      'escapes': 'line 1\nline 2\t"quoted" \\ backslash',
-      'key with spaces': 'value',
-      '': 'empty key',
-    },
+    json: '{"emoji":"🚀 ✨","cyrillic":"Привет, мир","cjk":"你好，世界",'
+      + '"escapes":"line 1\\nline 2\\t\\"quoted\\" \\\\ backslash","unicodeEscape":"\\u00e9\\u00e8",'
+      + '"key with spaces":"value","":"empty key"}',
   },
 };
 
 export const DeeplyNested: Story = {
-  args: {
-    json: { level1: { level2: { level3: { level4: { level5: { level6: ['deep', { value: true }] } } } } } },
-  },
+  args: { json: '{"level1":{"level2":{"level3":{"level4":{"level5":{"level6":["deep",{"value":true}]}}}}}}' },
 };
 
 export const LongValues: Story = {
   args: {
-    json: {
+    json: JSON.stringify({
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(12),
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'.repeat(8),
-    },
+    }),
   },
 };
 
 export const LargeArray: Story = {
   args: {
-    json: Array.from({ length: 200 }, (_, index) => ({ index, even: index % 2 === 0 })),
+    json: JSON.stringify(Array.from({ length: 200 }, (_, index) => ({ index, even: index % 2 === 0 }))),
   },
 };
 
 export const CollapsedNodes: Story = {
   play: ({ canvasElement }) => {
-    // The formatted tree lives behind a closed shadow root; collapse through the public toggles instead.
+    // The formatted tree lives behind a closed shadow root; reach the content element and use its toggles.
     const container = canvasElement.querySelector('mjf-container');
     const formatted = container && Reflect.get(container, 'formatted') as HTMLElement | undefined;
     formatted?.querySelectorAll<HTMLElement>('.property > .toggle').forEach(toggle => toggle.click());
   },
 };
 
-export const QueryTuple: Story = {
-  render: () => {
-    const container = createContainer('query');
-    container.setQueryContent(buildDom(toTuple('2.1.0', '2.0.0', '2.2.0-beta.1')));
+export const TrailingComma: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'The parser tolerates trailing commas, so this page is formatted rather than rejected.',
+      },
+    },
+  },
+  args: { json: '{"name": "lenient", "tags": ["a", "b",], }' },
+};
+
+export const InvalidJson: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Text that looks like JSON but does not parse: the extension logs the tokenizer error and the formatted tab stays empty.',
+      },
+    },
+  },
+  args: { json: brokenJson },
+};
+
+export const LargeFile: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Above the size limit the page is only pretty-printed into the raw tab and a notice is shown.',
+      },
+    },
+  },
+  render: ({ json }) => {
+    const container = createContainer('raw');
+    container.setRawContent(createElement({ element: 'pre', content: format(json) }));
+    queueMicrotask(() => container.message(
+      'File is too large',
+      'File is too large to be processed (More than 10MB). It has been formatted instead.',
+    ));
     return container;
   },
 };
 
-export const InvalidJson: Story = {
-  render: () => {
-    const container = createContainer('formatted');
-    container.setFormattedContent(createErrorNode(
-      'Invalid JSON file.',
-      'expected `,` or `}` at line 3 column 5',
-    ));
+export const LargeFileInvalidJson: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Above the size limit, a file that fails to parse shows the formatter error in the raw tab.',
+      },
+    },
+  },
+  args: { json: brokenJson },
+  render: ({ json }) => {
+    const container = createContainer('raw');
+    try {
+      container.setRawContent(createElement({ element: 'pre', content: format(json) }));
+    } catch (error: unknown) {
+      container.setRawContent(createErrorNode('Failed to process file', messageOf(error)));
+    }
     return container;
   },
 };
@@ -222,18 +289,6 @@ export const Loading: Story = {
   render: () => {
     const container = createContainer('formatted');
     container.startLoading();
-    return container;
-  },
-};
-
-export const InfoMessage: Story = {
-  render: () => {
-    const container = createContainer('raw');
-    container.setRawContent(createElement({ element: 'pre', content: JSON.stringify(sample, null, 2) }));
-    queueMicrotask(() => container.message(
-      'File is too large',
-      'File is too large to be processed (More than 10MB). It has been formatted instead.',
-    ));
     return container;
   },
 };

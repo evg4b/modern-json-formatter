@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from 'storybook-web-components-rsbuild';
 import { action } from 'storybook/actions';
+import { download, jq, pushHistory, tokenize, type TokenizerResponse } from '@core/background';
 import { createElement } from '@core/dom';
 import { DEFAULT_SETTINGS, type DownloadMode, type ToolbarButtonsSettings } from '@core/settings';
-import { fakeJq, toTokens } from '@testing/storybook';
+import { withContainer } from '@testing/storybook';
 import { buildDom } from './dom';
-import { isErrorNode } from './helpers';
+import { extractDomainKey, isErrorNode } from './helpers';
 import './ui/container';
 import './ui/error-node';
 import './ui/toolbox';
 import '@core/ui/sticky-panel';
 
 interface ViewerArgs {
-  json: unknown;
-  initialQuery: string;
+  json: string;
   buttons: ToolbarButtonsSettings;
   downloadMode: DownloadMode;
 }
 
-const sample = {
+const sample = JSON.stringify({
   store: 'Example Books',
   open: true,
   items: [
@@ -26,7 +26,7 @@ const sample = {
     { name: 'Hyperion', author: 'Dan Simmons', price: 8.25, tags: [] },
   ],
   contact: { email: 'books@example.com', site: 'https://example.com/books' },
-};
+});
 
 const createErrorNode = (header: string, ...lines: string[]) => {
   const node = document.createElement('mjf-error-node');
@@ -35,19 +35,22 @@ const createErrorNode = (header: string, ...lines: string[]) => {
   return node;
 };
 
+const prepareResponse = (response: TokenizerResponse): HTMLElement => {
+  return response.type === 'error'
+    ? createErrorNode('Invalid JSON file.', response.error)
+    : buildDom(response);
+};
+
 /**
- * Mirrors the wiring in `extension.ts` without the background worker:
- * the toolbox switches tabs, runs queries through a small jq subset and logs downloads.
+ * The wiring of `runExtension` in `extension.ts`, minus page detection and the
+ * body shadow root. Background calls go through the Storybook chrome mock,
+ * which runs the real WASM core.
  */
-const renderViewer = ({ json, buttons, downloadMode, initialQuery }: ViewerArgs) => {
-  const raw = JSON.stringify(json);
-  const page = createElement({ element: 'div', class: 'viewer' });
-  page.style.position = 'relative';
-  page.style.minHeight = '100vh';
+const renderViewer = ({ json, buttons, downloadMode }: ViewerArgs) => {
+  const page = createElement({ element: 'div' });
 
   const container = document.createElement('mjf-container');
-  container.setRawContent(createElement({ element: 'pre', content: raw }));
-  container.setFormattedContent(buildDom(toTokens(json)));
+  container.setRawContent(createElement({ element: 'pre', content: json }));
 
   const toolbox = document.createElement('mjf-toolbox');
   toolbox.buttons = buttons;
@@ -56,18 +59,32 @@ const renderViewer = ({ json, buttons, downloadMode, initialQuery }: ViewerArgs)
   const panel = document.createElement('mjf-sticky-panel');
   panel.appendChild(toolbox);
 
-  const runQuery = (query: string) => {
+  const wrapper = async <T>(promise: Promise<T>): Promise<T> => {
+    try {
+      container.startLoading();
+      return await promise;
+    } finally {
+      container.stopLoading();
+    }
+  };
+
+  const jqQuery = async (query: string) => {
     toolbox.error = null;
     try {
-      const response = fakeJq(raw, query);
-      container.setQueryContent(buildDom(response));
+      container.setQueryContent(prepareResponse(await jq(json, query)));
+      await pushHistory(extractDomainKey(globalThis.location.href), query);
     } catch (error: unknown) {
       if (isErrorNode(error)) {
-        toolbox.error = error.error;
+        if (error.scope === 'jq') {
+          toolbox.error = error.error;
+          return;
+        }
+
+        container.message(`Error ${error.error} in ${error.scope}`, error.stack ? `Stack trace: ${error.stack}` : '');
         return;
       }
 
-      container.setQueryContent(createErrorNode('Query failed', String(error)));
+      console.error(error);
     }
   };
 
@@ -76,24 +93,43 @@ const renderViewer = ({ json, buttons, downloadMode, initialQuery }: ViewerArgs)
     container.type = event.detail;
   });
 
-  toolbox.addEventListener('jq-query', event => {
+  toolbox.addEventListener('jq-query', async event => {
     action('jq-query')(event.detail);
-    runQuery(event.detail);
+    await wrapper(jqQuery(event.detail));
   });
 
-  toolbox.addEventListener('download', event => {
+  toolbox.addEventListener('download', async event => {
     action('download')(event.detail);
-    container.message('Download', `A real extension would now save the ${event.detail} file.`);
+    const suffix = event.detail === 'raw' ? '' : `_${event.detail}`;
+    try {
+      await download(event.detail, json, `response${suffix}.json`);
+    } catch (error: unknown) {
+      container.message('Unable to download file', isErrorNode(error) ? error.error : String(error));
+    }
   });
 
-  if (initialQuery) {
-    toolbox.tab = 'query';
-    container.type = 'query';
-    runQuery(initialQuery);
-  }
+  void wrapper(tokenize(json))
+    .then(response => container.setFormattedContent(prepareResponse(response)))
+    .catch((error: unknown) => container.setError(error));
 
   page.append(container, panel);
   return page;
+};
+
+/** Types a query into the toolbox input and submits it, as a user would. */
+const runQuery = (query: string): Story['play'] => async ({ canvasElement }) => {
+  const toolbox = canvasElement.querySelector('mjf-toolbox');
+  toolbox?.shadowRoot?.querySelector<HTMLButtonElement>('button[data-type="query"]')?.click();
+  await toolbox?.updateComplete;
+
+  const queryInput = toolbox?.shadowRoot?.querySelector('mjf-query-input');
+  await queryInput?.updateComplete;
+
+  const input = queryInput?.shadowRoot?.querySelector('input');
+  if (input) {
+    input.value = query;
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+  }
 };
 
 const meta = {
@@ -102,23 +138,21 @@ const meta = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'The whole JSON page as the content script assembles it. '
-          + 'Queries are evaluated by a small jq subset (`.a.b`, `.[0]`, `.[]`, `keys`, `length`, pipes).',
+        component: 'The whole JSON page as the content script assembles it, backed by the real WASM tokenizer and jq engine.',
       },
     },
   },
   render: renderViewer,
+  decorators: [withContainer({ minHeight: '400px' })],
   argTypes: {
     downloadMode: {
       control: { type: 'select' },
       options: ['dropdown', 'raw', 'formatted', 'minified'] satisfies DownloadMode[],
     },
-    initialQuery: { control: 'text' },
-    json: { control: 'object' },
+    json: { control: 'text' },
   },
   args: {
     json: sample,
-    initialQuery: '',
     buttons: DEFAULT_SETTINGS.buttons,
     downloadMode: 'dropdown',
   },
@@ -129,16 +163,16 @@ type Story = StoryObj<ViewerArgs>;
 
 export const Default: Story = {};
 
-export const QueryResult: Story = {
-  args: { initialQuery: '.items[] | .name' },
+export const QueryResults: Story = {
+  play: runQuery('.items[] | .name'),
 };
 
-export const QuerySingleValue: Story = {
-  args: { initialQuery: '.contact' },
+export const QuerySingleResult: Story = {
+  play: runQuery('.contact'),
 };
 
 export const QueryError: Story = {
-  args: { initialQuery: 'unknown_function' },
+  play: runQuery('.items | unknown_function'),
 };
 
 export const DirectDownload: Story = {
@@ -147,12 +181,12 @@ export const DirectDownload: Story = {
 
 export const WithoutQuery: Story = {
   args: {
-    buttons: { query: false, formatted: true, raw: true, download: true },
+    buttons: { ...DEFAULT_SETTINGS.buttons, query: false },
   },
 };
 
-export const DownloadOnly: Story = {
+export const FormattedOnly: Story = {
   args: {
-    buttons: { query: false, formatted: false, raw: false, download: true },
+    buttons: { query: false, formatted: true, raw: false, download: false },
   },
 };

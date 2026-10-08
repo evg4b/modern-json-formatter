@@ -43,9 +43,10 @@ export const renderComponent = (args: Args, { component, id, parameters }: Story
 };
 
 /**
- * Wraps the story in a box: for components positioned against their parent
- * (sticky panel, floating message) or that need a constrained size (sidebar).
+ * Wraps the story in a box that also contains `position: fixed` children
+ * (sticky panel, floating message): a transform makes the box their containing
+ * block, so they stay inside it, also when several stories share a docs page.
  */
 export const withContainer = (style: StyleInfo): Decorator => story => html`
-  <div style=${styleMap(style)}>${story()}</div>
+  <div style=${styleMap({ position: 'relative', transform: 'translateZ(0)', ...style })}>${story()}</div>
 `;

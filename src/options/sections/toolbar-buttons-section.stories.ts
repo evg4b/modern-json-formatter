@@ -8,6 +8,7 @@ interface ToolbarButtonsSectionArgs {
 
 const meta = {
   title: 'Options/ToolbarButtonsSection',
+  // There is no Formatted checkbox: the formatted view is always available, so `formatted` stays true.
   component: 'mjf-toolbar-buttons-section',
   parameters: {
     events: ['buttons-change'],
@@ -31,7 +32,7 @@ export const DownloadOnly: Story = {
   args: {
     buttons: {
       query: false,
-      formatted: false,
+      formatted: true,
       raw: false,
       download: true,
     },
@@ -42,7 +43,7 @@ export const NoneEnabled: Story = {
   args: {
     buttons: {
       query: false,
-      formatted: false,
+      formatted: true,
       raw: false,
       download: false,
     },
@@ -64,7 +65,7 @@ export const QueryAndDownload: Story = {
   args: {
     buttons: {
       query: true,
-      formatted: false,
+      formatted: true,
       raw: false,
       download: true,
     },

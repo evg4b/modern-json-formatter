@@ -11,7 +11,7 @@ interface StickyPanelArgs extends ChildrenArgs {
 const meta = {
   title: 'Core/StickyPanel',
   component: 'mjf-sticky-panel',
-  decorators: [withContainer({ position: 'relative', height: '200px', border: '1px dashed #666' })],
+  decorators: [withContainer({ height: '200px', border: '1px dashed #666' })],
   argTypes: {
     position: {
       control: { type: 'select' },

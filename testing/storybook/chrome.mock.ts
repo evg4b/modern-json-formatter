@@ -1,7 +1,5 @@
-import type { DomainCountResponse } from '@core/background';
+import type { DomainCountResponse, Message as BackgroundMessage } from '@core/background';
 import type { ExtensionSettings } from '@core/settings';
-import type { ErrorNode, TokenizerResponse, TokenNode, TupleNode } from '@wasm/types';
-import { toTokens } from './tokens';
 
 /**
  * In-memory stand-in for the extension runtime used by Storybook.
@@ -10,6 +8,10 @@ import { toTokens } from './tokens';
  * `chrome.runtime.sendMessage` and read settings from `chrome.storage.sync`.
  * Neither exists outside an extension, so this module installs a fake `chrome`
  * global whose behaviour stories can tune with `configureChromeMock`.
+ *
+ * Parsing, formatting and jq go through the real background handler and WASM
+ * core, so results and error messages match the extension exactly. History,
+ * settings and downloads are kept in memory.
  */
 export interface ChromeMockState {
 
@@ -24,9 +26,6 @@ export interface ChromeMockState {
 
   /** Artificial delay for every background response, in milliseconds. */
   latency: number;
-
-  /** When set, every background request fails with this message. */
-  failure: string | null;
 }
 
 const SETTINGS_KEY = 'mjf_settings';
@@ -46,7 +45,6 @@ const initialState = (): ChromeMockState => ({
   ],
   settings: null,
   latency: 0,
-  failure: null,
 });
 
 let state = initialState();
@@ -59,119 +57,15 @@ export const configureChromeMock = (patch: Partial<ChromeMockState>) => {
   state = { ...state, ...patch };
 };
 
-const jqError = (error: string): ErrorNode => ({ type: 'error', scope: 'jq', error });
-
-const applySegment = (value: unknown, segment: string): unknown[] => {
-  if (segment === '' || segment === '.') {
-    return [value];
-  }
-
-  if (segment === 'keys') {
-    if (value === null || typeof value !== 'object') {
-      throw jqError(`${JSON.stringify(value)} has no keys`);
-    }
-
-    return [Array.isArray(value) ? value.map((_, index) => index) : Object.keys(value).sort()];
-  }
-
-  if (segment === 'length') {
-    if (Array.isArray(value) || typeof value === 'string') {
-      return [value.length];
-    }
-
-    return [value && typeof value === 'object' ? Object.keys(value).length : 0];
-  }
-
-  if (!segment.startsWith('.')) {
-    throw jqError(`${segment}/0 is not defined at <top-level>, line 1:`);
-  }
-
-  let results: unknown[] = [value];
-  const parts = segment.slice(1).match(/[^.[\]]+|\[\d*]/g) ?? [];
-
-  for (const part of parts) {
-    results = results.flatMap(item => {
-      if (part === '[]') {
-        if (Array.isArray(item)) {
-          return item;
-        }
-
-        if (item && typeof item === 'object') {
-          return Object.values(item);
-        }
-
-        throw jqError(`Cannot iterate over ${JSON.stringify(item)}`);
-      }
-
-      if (part.startsWith('[')) {
-        const index = Number(part.slice(1, -1));
-        if (!Array.isArray(item)) {
-          throw jqError(`Cannot index ${typeof item} with number`);
-        }
-
-        return [item[index] ?? null];
-      }
-
-      if (item === null) {
-        return [null];
-      }
-
-      if (typeof item !== 'object' || Array.isArray(item)) {
-        throw jqError(`Cannot index ${Array.isArray(item) ? 'array' : typeof item} with "${part}"`);
-      }
-
-      return [(item as Record<string, unknown>)[part] ?? null];
-    });
-  }
-
-  return results;
-};
-
-/**
- * Tiny jq subset: paths (`.a.b`, `.[0]`, `.[]`), `keys`, `length` and pipes.
- * Anything else yields a jq-scoped error, which is handy for error stories.
- */
-export const fakeJq = (json: string, query: string): TokenNode | TupleNode => {
-  const input: unknown = JSON.parse(json);
-  const results = query
-    .split('|')
-    .map(segment => segment.trim())
-    .reduce<unknown[]>((values, segment) => values.flatMap(value => applySegment(value, segment)), [input]);
-
-  return results.length === 1
-    ? toTokens(results[0])
-    : { type: 'tuple', items: results.map(toTokens) };
-};
-
-const tokenize = (json: string): TokenizerResponse => {
-  try {
-    return toTokens(JSON.parse(json));
-  } catch (error: unknown) {
-    return { type: 'error', scope: 'tokenizer', error: (error as Error).message };
-  }
-};
-
 interface Message {
   action: string;
   payload: unknown;
 }
 
+/** Actions answered by the extension's own background handler, which runs the real WASM core. */
+const WASM_ACTIONS = new Set(['tokenize', 'format', 'jq']);
+
 const handlers: Record<string, (payload: never) => unknown> = {
-  'tokenize': (json: string) => tokenize(json),
-  'format': (json: string) => {
-    try {
-      return JSON.stringify(JSON.parse(json), null, 2);
-    } catch (error: unknown) {
-      return { type: 'error', scope: 'worker', error: (error as Error).message };
-    }
-  },
-  'jq': ({ json, query }: { json: string; query: string }) => {
-    try {
-      return fakeJq(json, query);
-    } catch (error: unknown) {
-      return error instanceof Error ? jqError(error.message) : error as ErrorNode;
-    }
-  },
   'get-history': ({ prefix }: { prefix: string }) => state.history.filter(query => query.startsWith(prefix)),
   'push-history': ({ query }: { query: string }) => {
     state.history = [query, ...state.history.filter(item => item !== query)];
@@ -191,16 +85,18 @@ const delay = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, m
 const sendMessage = async ({ action, payload }: Message): Promise<unknown> => {
   await delay(state.latency);
 
-  if (state.failure) {
-    return { type: 'error', scope: 'worker', error: state.failure } satisfies ErrorNode;
+  if (WASM_ACTIONS.has(action)) {
+    // Loaded on first use: the WASM module makes importers async, which must not reach `.storybook/preview.ts`.
+    const { handler } = await import('../../src/background/handler');
+    return handler({ action, payload } as BackgroundMessage);
   }
 
-  const handler = handlers[action];
-  if (!handler) {
+  const fake = handlers[action];
+  if (!fake) {
     throw new Error(`[storybook] unknown background action: ${action}`);
   }
 
-  return handler(payload as never);
+  return fake(payload as never);
 };
 
 const storage = {

@@ -11,12 +11,13 @@ interface FloatingMessageArgs extends ChildrenArgs {
 const meta = {
   title: 'Core/FloatingMessage',
   component: 'mjf-floating-message',
-  decorators: [withContainer({ position: 'relative', height: '120px' })],
+  decorators: [withContainer({ height: '160px' })],
   parameters: {
     docs: {
       description: {
-        component: 'Toast shown at the bottom of the page. It slides in, hides itself after 10 seconds '
-          + 'or when the cross is clicked, then removes itself from the DOM — re-render the story to see it again.',
+        component: 'Toast pinned to the bottom-right corner. It slides in, hides itself after 10 seconds '
+          + 'or when the cross is clicked, then removes itself from the DOM — re-render the story to see it again. '
+          + 'The extension creates every toast as `info-message`, including errors.',
       },
     },
   },
@@ -39,6 +40,13 @@ type Story = StoryObj<FloatingMessageArgs>;
 export const Info: Story = {};
 
 export const ErrorMessage: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Supported by the component but not currently used by the extension.',
+      },
+    },
+  },
   args: {
     type: 'error-message',
     header: 'Error',
@@ -61,10 +69,16 @@ export const WithoutHeader: Story = {
   },
 };
 
-export const ErrorWithStackTrace: Story = {
+export const WorkerError: Story = {
   args: {
-    type: 'error-message',
     header: 'Error RuntimeError: unreachable in worker',
     children: 'Stack trace: RuntimeError: unreachable at worker_core.wasm:0x1f2a3 at tokenize (worker.js:12:7)',
+  },
+};
+
+export const DownloadFailed: Story = {
+  args: {
+    header: 'Unable to download file',
+    children: 'Download blocked by the browser.',
   },
 };

@@ -21,6 +21,7 @@ const allButtons: ToolbarButtonsSettings = {
 
 const meta = {
   title: 'Content Script/Toolbox',
+  // `buttons.formatted` is always on: the options page has no switch for it.
   component: 'mjf-toolbox',
   parameters: {
     events: ['tab-changed', 'download', 'jq-query'],
@@ -101,16 +102,23 @@ export const SingleTabHidesSwitcher: Story = {
   },
 };
 
-export const QueryWithoutOtherTabs: Story = {
+export const QueryAndFormatted: Story = {
   args: {
     tab: 'query',
-    buttons: { query: true, formatted: false, raw: false, download: false },
+    buttons: { query: true, formatted: true, raw: false, download: false },
   },
 };
 
-export const NothingEnabled: Story = {
+export const NothingVisible: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Query, Raw and Download turned off: a single tab needs no switcher, so the toolbox is empty.',
+      },
+    },
+  },
   args: {
-    buttons: { query: false, formatted: false, raw: false, download: false },
+    buttons: { query: false, formatted: true, raw: false, download: false },
   },
 };
 
@@ -125,6 +133,6 @@ export const DownloadMenuOpen: Story = {
 export const InStickyPanel: Story = {
   decorators: [
     story => html`<mjf-sticky-panel position="rightTop">${story()}</mjf-sticky-panel>`,
-    withContainer({ position: 'relative', height: '200px', border: '1px dashed #666' }),
+    withContainer({ height: '200px', border: '1px dashed #666' }),
   ],
 };

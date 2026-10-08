@@ -9,6 +9,8 @@ interface SectionArgs {
   section: keyof FaqSection;
 }
 
+const twoResults = ['1', '2'].join('\n');
+
 const renderSection = (content: TemplateResult<1>) => {
   const section = document.createElement('mjf-section');
   section.content = content;
@@ -85,7 +87,7 @@ export const CustomContent: Story = {
     <h3 id="custom-example">Example</h3>
     <pre><code>jq '.items[] | .name'</code></pre>
     <mjf-example-table query=".name" input='{"name":"Alice"}' output='"Alice"'></mjf-example-table>
-    <mjf-example-table query=".[]" input="[1,2]" output="1, 2"></mjf-example-table>
+    <mjf-example-table query=".[]" input="[1,2]" .output=${twoResults}></mjf-example-table>
   `),
 };
 

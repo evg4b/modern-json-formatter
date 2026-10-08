@@ -19,8 +19,8 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: 'Runnable jq example. Press the play button or Enter to evaluate the query against the input '
-          + '(here via a small jq subset instead of the WASM worker).',
+        component: 'Runnable jq example from the FAQ. Press the play button or Enter to evaluate the query against the input '
+          + 'with the real jq engine. Several results are listed one per line.',
       },
     },
   },
@@ -51,7 +51,7 @@ export const MultipleResults: Story = {
   args: {
     query: '.[]',
     input: '[1, "two", {"three": 3}]',
-    output: '1\n"two"\n{"three":3}',
+    output: '1\n"two"\n{"three": 3}',
   },
 };
 

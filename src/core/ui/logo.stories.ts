@@ -5,7 +5,6 @@ import type { LogoSize } from './logo';
 
 interface LogoArgs {
   size: LogoSize;
-  alt: string;
 }
 
 const meta = {
@@ -19,7 +18,6 @@ const meta = {
   },
   args: {
     size: '128',
-    alt: 'Modern JSON Formatter',
   },
 } satisfies Meta<LogoArgs>;
 

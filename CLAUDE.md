@@ -132,7 +132,12 @@ Import side-effect mocks at the top of test files: `import '@testing/browser.moc
 production build in `dist/`.
 
 - `e2e/support/fixtures.ts` — loads `dist/` as an unpacked extension, exposes the
-  extension id, and serves page bodies by fulfilling the request
+  extension id and service worker, and serves page bodies by fulfilling the request;
+  `configure` seeds settings through the service worker, `query` runs a jq
+  expression, and `downloads` records what `chrome.downloads` was asked to save
+- `e2e/support/downloads.ts` — wraps `chrome.downloads.download` in the service
+  worker and waits for in-flight downloads before the context closes, since an
+  unfinished download stalls the teardown
 - `e2e/support/shadow.ts` — resolves selectors through **closed** shadow roots over
   CDP, since Playwright locators stop at them; segments are separated by `>>>`
 - `e2e/support/ui.ts` — the known element paths, kept out of the specs

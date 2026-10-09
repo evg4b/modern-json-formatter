@@ -48,3 +48,28 @@ test('highlights links while the modifier is held', async ({ page, shadow }) => 
   await page.keyboard.up('ControlOrMeta');
   expect(await classes()).not.toContain('active-links');
 });
+
+test.describe('link detection', () => {
+  const strings = [
+    { value: 'http://example.com', href: 'http://example.com' },
+    { value: 'ftp://example.com/file', href: 'ftp://example.com/file' },
+    { value: ' https://example.com/padded ', href: 'https://example.com/padded' },
+    { value: 'mailto:hello@example.com', href: 'mailto:hello@example.com' },
+    { value: 'www.example.com', href: null },
+    { value: '/relative/path', href: null },
+    { value: 'user@localhost', href: null },
+  ];
+
+  test.beforeEach(async ({ open, shadow }) => {
+    await open(JSON.stringify(strings.map(({ value }) => value)));
+    await shadow.find(ui.tree);
+  });
+
+  for (const [index, { value, href }] of strings.entries()) {
+    test(`${href ? 'links' : 'does not link'} ${JSON.stringify(value)}`, async ({ shadow }) => {
+      const string = await shadow.find(`${ui.tree} > .array > .inner > .item:nth-child(${index + 1}) > .string`);
+
+      expect(await string.evaluate<string | null>('function () { return this.getAttribute("href"); }')).toBe(href);
+    });
+  }
+});

@@ -6,15 +6,13 @@ const request = createClient(message => sendMessage(message));
 
 export const format = (json: string): Promise<string> => request('format', json);
 
-export const jq = (json: string, query: string): Promise<TupleNode> => request('jq', { json, query });
+export const jq = (json: string, query: string, url?: string): Promise<TupleNode> => request('jq', { json, query, url });
 
 export const tokenize = (json: string): Promise<TokenNode> => request('tokenize', json);
 
-export const getHistory = (domain: string, prefix: string): Promise<string[]> => request('get-history', { domain, prefix });
+export const getHistory = (url: string, prefix: string): Promise<string[]> => request('get-history', { url, prefix });
 
 export const clearHistory = (): Promise<void> => request('clear-history', undefined);
-
-export const pushHistory = (domain: string, query: string): Promise<void> => request('push-history', { domain, query });
 
 export const getDomains = (): Promise<DomainCount[]> => request('get-domains', undefined);
 

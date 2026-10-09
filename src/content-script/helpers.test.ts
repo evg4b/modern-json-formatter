@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@rstest/core';
-import { extractDomainKey, extractFileName } from './helpers';
+import { extractFileName } from './helpers';
 
 describe('extractFileName', () => {
   const cases = [
@@ -19,24 +19,5 @@ describe('extractFileName', () => {
 
   test.each(cases)('$url → $expected', ({ url, expected }) => {
     expect(extractFileName(url)).toBe(expected);
-  });
-});
-
-describe('extractDomainKey', () => {
-  const cases = [
-    { url: null, expected: '' },
-    { url: undefined, expected: '' },
-    { url: '', expected: '' },
-    { url: 'https://example.com/api/data.json', expected: 'example.com' },
-    { url: 'https://api.example.com/v1/users', expected: 'api.example.com' },
-    { url: 'http://localhost:3000/data.json', expected: 'localhost' },
-    { url: 'file:///Users/user/data.json', expected: '/Users/user/data.json' },
-    { url: 'file:///data.json', expected: '/data.json' },
-    { url: 'file:///path/to/my-file.json', expected: '/path/to/my-file.json' },
-    { url: 'file:///C:/Users/user/data.json', expected: '/C:/Users/user/data.json' },
-  ];
-
-  test.each(cases)('$url → $expected', ({ url, expected }) => {
-    expect(extractDomainKey(url)).toBe(expected);
   });
 });

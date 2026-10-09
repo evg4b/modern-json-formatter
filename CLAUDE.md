@@ -118,7 +118,7 @@ Tests use **Rstest** (Rsbuild's test runner, Vitest-compatible) with **happy-dom
 
 **Available mocks in `testing/`:**
 - `browser.mock.ts` — Chrome extension APIs (`resource`, `sendMessage`)
-- `background.mock.ts` — Background script message handlers (`download`, `format`, `jq`, `tokenize`, `pushHistory`)
+- `background.mock.ts` — Background script message handlers (`download`, `format`, `jq`, `tokenize`, `getHistory`, `clearHistory`, `getDomains`)
 - `worker-wasm.mock.ts` — WASM exports (`initialize`, `jq`, `tokenize`, `format`, `minify`)
 - `helpers.ts` — `wrapMock<T>()` utility for typing mocked functions
 - `json.ts` — `TokenNode` test fixtures (`tObject`, `tArray`, `tString`, `tNull`, etc.)

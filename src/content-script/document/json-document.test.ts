@@ -1,6 +1,6 @@
 import '@testing/background.mock';
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
-import { download, format, jq, pushHistory, tokenize } from '@core/background';
+import { download, format, jq, tokenize } from '@core/background';
 import { wrapMock } from '@testing/helpers';
 import { tErrorNode, tNull, tObject, tProperty, tString, tTuple } from '@testing/json';
 import { JsonDocument, ONE_MEGABYTE_LENGTH } from './json-document';
@@ -82,32 +82,18 @@ describe('JsonDocument', () => {
   });
 
   describe('query', () => {
-    test('returns the result and records the query for the domain', async () => {
+    test('runs the query with the page url so it is recorded', async () => {
       const node = tTuple(tNull());
       wrapMock(jq).mockResolvedValue(node);
 
       expect(await open().query('.key')).toEqual({ type: 'tree', node });
-      expect(jq).toHaveBeenCalledWith(content, '.key');
-      expect(pushHistory).toHaveBeenCalledWith('api.example.com', '.key');
-    });
-
-    test('keeps the result when recording history fails', async () => {
-      const node = tTuple(tNull());
-      wrapMock(jq).mockResolvedValue(node);
-      wrapMock(pushHistory).mockRejectedValue(tErrorNode('quota exceeded'));
-
-      expect(await open().query('.key')).toEqual({
-        type: 'tree',
-        node,
-        notice: { header: 'Error quota exceeded in worker', content: '' },
-      });
+      expect(jq).toHaveBeenCalledWith(content, '.key', url);
     });
 
     test('reports an invalid query', async () => {
       wrapMock(jq).mockRejectedValue(tErrorNode('unknown function', 'jq'));
 
       expect(await open().query('nope')).toEqual({ type: 'invalid-query', message: 'unknown function' });
-      expect(pushHistory).not.toHaveBeenCalled();
     });
 
     test('reports a worker error with its stack', async () => {

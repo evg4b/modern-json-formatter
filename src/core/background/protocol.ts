@@ -10,9 +10,8 @@ export interface DomainCount {
 export interface Protocol {
   'tokenize': { payload: string; reply: TokenNode };
   'format': { payload: string; reply: string };
-  'jq': { payload: { json: string; query: string }; reply: TupleNode };
-  'get-history': { payload: { domain: string; prefix: string }; reply: string[] };
-  'push-history': { payload: { domain: string; query: string }; reply: void };
+  'jq': { payload: { json: string; query: string; url?: string }; reply: TupleNode };
+  'get-history': { payload: { url: string; prefix: string }; reply: string[] };
   'clear-history': { payload: undefined; reply: void };
   'get-domains': { payload: undefined; reply: DomainCount[] };
   'download': { payload: { type: DownloadType; filename: string; content: string }; reply: void };

@@ -2,7 +2,7 @@ import '@testing/browser.mock';
 import { sendMessage } from '@core/browser';
 import { wrapMock } from '@testing/helpers';
 import type { ErrorNode, TokenNode, TupleNode } from '@wasm/types';
-import { clearHistory, download, format, getDomains, getHistory, jq, pushHistory, tokenize } from './binding';
+import { clearHistory, download, format, getDomains, getHistory, jq, tokenize } from './binding';
 import { type DomainCount } from './protocol';
 import { beforeEach, describe, expect, rstest, test } from '@rstest/core';
 
@@ -28,7 +28,15 @@ describe('binding', () => {
 
     const result = await jq('json', 'query');
     expect(result).toEqual(mockResponse);
-    expect(mockSendMessage).toHaveBeenCalledWith({ action: 'jq', payload: { json: 'json', query: 'query' } });
+    expect(mockSendMessage).toHaveBeenCalledWith({ action: 'jq', payload: { json: 'json', query: 'query', url: undefined } });
+  });
+
+  test('jq should pass the page url', async () => {
+    mockSendMessage.mockResolvedValue({ type: 'tuple', items: [] });
+
+    await jq('json', 'query', 'https://example.com/');
+    expect(mockSendMessage)
+      .toHaveBeenCalledWith({ action: 'jq', payload: { json: 'json', query: 'query', url: 'https://example.com/' } });
   });
 
   test('tokenize should resolve with TokenNode', async () => {
@@ -44,10 +52,10 @@ describe('binding', () => {
     const mockResponse: string[] = [];
     mockSendMessage.mockResolvedValue(mockResponse);
 
-    const result = await getHistory('domain', 'prefix');
+    const result = await getHistory('https://example.com/', 'prefix');
     expect(result).toEqual(mockResponse);
     expect(mockSendMessage)
-      .toHaveBeenCalledWith({ action: 'get-history', payload: { domain: 'domain', prefix: 'prefix' } });
+      .toHaveBeenCalledWith({ action: 'get-history', payload: { url: 'https://example.com/', prefix: 'prefix' } });
   });
 
   test('clearHistory should resolve with void', async () => {
@@ -55,14 +63,6 @@ describe('binding', () => {
 
     await clearHistory();
     expect(mockSendMessage).toHaveBeenCalledWith({ action: 'clear-history', payload: undefined });
-  });
-
-  test('pushHistory should resolve with void', async () => {
-    mockSendMessage.mockResolvedValue(undefined);
-
-    await pushHistory('domain', 'query');
-    expect(mockSendMessage)
-      .toHaveBeenCalledWith({ action: 'push-history', payload: { domain: 'domain', query: 'query' } });
   });
 
   test('download should call sendMessage with correct payload', async () => {

@@ -280,7 +280,7 @@ describe('mjf-query-input', () => {
     });
 
     test('should load history', () => {
-      expect(getHistory).toHaveBeenCalledWith(window.location.hostname, '');
+      expect(getHistory).toHaveBeenCalledWith(window.location.href, '');
     });
 
     test('should load history on focus', () => {

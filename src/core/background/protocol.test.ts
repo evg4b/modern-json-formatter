@@ -8,7 +8,6 @@ const handlers = (overrides: Partial<Handlers> = {}): Handlers => ({
   'format': json => `formatted:${json}`,
   'jq': () => ({ type: 'tuple', items: [] }),
   'get-history': () => [],
-  'push-history': () => undefined,
   'clear-history': () => undefined,
   'get-domains': () => [],
   'download': () => undefined,
@@ -20,9 +19,9 @@ describe('createHandler', () => {
     const getHistory = rstest.fn(() => ['.a']);
     const handle = createHandler(handlers({ 'get-history': getHistory }));
 
-    const reply = await handle({ action: 'get-history', payload: { domain: 'example.com', prefix: '.' } });
+    const reply = await handle({ action: 'get-history', payload: { url: 'https://example.com/', prefix: '.' } });
 
-    expect(getHistory).toHaveBeenCalledWith({ domain: 'example.com', prefix: '.' });
+    expect(getHistory).toHaveBeenCalledWith({ url: 'https://example.com/', prefix: '.' });
     expect(reply).toEqual(['.a']);
   });
 

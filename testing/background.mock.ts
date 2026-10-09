@@ -6,7 +6,6 @@ rstest.mock('@core/background', () => ({
   tokenize: rstest.fn(),
   getHistory: rstest.fn(),
   clearHistory: rstest.fn(),
-  pushHistory: rstest.fn(),
   getDomains: rstest.fn(),
   download: rstest.fn(),
 }));

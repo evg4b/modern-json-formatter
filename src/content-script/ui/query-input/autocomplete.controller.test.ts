@@ -20,7 +20,7 @@ describe('AutocompleteController with real debounce', () => {
       removeController: rstest.fn(),
     };
 
-    controller = new AutocompleteController(host, 'example.com');
+    controller = new AutocompleteController(host, 'https://example.com/data.json');
   });
 
   afterEach(() => {
@@ -44,7 +44,7 @@ describe('AutocompleteController with real debounce', () => {
 
     await Promise.resolve();
 
-    expect(getHistory).toHaveBeenCalledWith('example.com', '');
+    expect(getHistory).toHaveBeenCalledWith('https://example.com/data.json', '');
     expect(controller.options).toEqual(['one', 'two']);
     expect(host.requestUpdate).toHaveBeenCalled();
   });
@@ -59,7 +59,7 @@ describe('AutocompleteController with real debounce', () => {
     rstest.advanceTimersByTime(250);
     await Promise.resolve();
 
-    expect(getHistory).toHaveBeenCalledWith('example.com', 'pre');
+    expect(getHistory).toHaveBeenCalledWith('https://example.com/data.json', 'pre');
     expect(controller.options).toEqual(['prefixed']);
     expect(host.requestUpdate).toHaveBeenCalled();
   });

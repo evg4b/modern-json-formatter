@@ -1,7 +1,7 @@
-import { download, format, jq, pushHistory, tokenize } from '@core/background';
+import { download, format, jq, tokenize } from '@core/background';
 import { type DownloadType, isErrorNode } from '@core/background/protocol';
 import type { TokenNode, TupleNode } from '@wasm/types';
-import { extractDomainKey, extractFileName } from '../helpers';
+import { extractFileName } from '../helpers';
 
 export const ONE_MEGABYTE_LENGTH = 927182;
 
@@ -21,7 +21,7 @@ export type RenderResult
     | { type: 'failure'; failure: Failure };
 
 export type QueryResult
-  = { type: 'tree'; node: TupleNode; notice?: Notice }
+  = { type: 'tree'; node: TupleNode }
     | { type: 'invalid-query'; message: string }
     | { type: 'notice'; notice: Notice };
 
@@ -84,22 +84,14 @@ export class JsonDocument {
   }
 
   public async query(query: string): Promise<QueryResult> {
-    let node: TupleNode;
     try {
-      node = await jq(this.content, query);
+      return { type: 'tree', node: await jq(this.content, query, this.options.url) };
     } catch (error: unknown) {
       if (isErrorNode(error) && error.scope === 'jq') {
         return { type: 'invalid-query', message: error.error };
       }
 
       return { type: 'notice', notice: toNotice(error) };
-    }
-
-    try {
-      await pushHistory(extractDomainKey(this.options.url), query);
-      return { type: 'tree', node };
-    } catch (error: unknown) {
-      return { type: 'tree', node, notice: toNotice(error) };
     }
   }
 

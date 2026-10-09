@@ -38,7 +38,7 @@ export class SectionElement extends LitElement {
       pre {
         display: block;
         color: var(--code-color);
-        font-family: monospace;
+        font-family: var(--code-font-family);
         padding: 10px 10px;
         border-radius: 3px;
         background: var(--code-background);
@@ -47,6 +47,7 @@ export class SectionElement extends LitElement {
         code {
           padding: 0;
           margin: 0;
+          font-family: inherit;
         }
       }
 

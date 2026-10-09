@@ -44,6 +44,7 @@ export class DropdownElement extends LitElement {
         padding: 8px 10px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        font-family: var(--font-family);
         font-size: 14px;
         width: 100%;
         text-align: left;

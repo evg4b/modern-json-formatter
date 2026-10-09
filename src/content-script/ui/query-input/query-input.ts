@@ -70,6 +70,7 @@ export class QueryInputElement extends LitElement {
         border-radius: var(--input-border-radius);
         padding: 0 5px;
         outline: none;
+        font-family: var(--font-family);
         transition-property: border-color, background, color;
         transition-duration: 0.2s;
         transition-timing-function: ease-in-out;

@@ -11,6 +11,9 @@ export default defineConfig({
   retries: isCi ? 1 : 0,
   workers: isCi ? 2 : undefined,
   reporter: isCi ? [['github'], ['html', { open: 'never' }]] : [['list']],
+  expect: {
+    toHaveScreenshot: { threshold: 0.3, maxDiffPixels: 400 },
+  },
   use: {
     viewport: { width: 1280, height: 720 },
     trace: 'on-first-retry',

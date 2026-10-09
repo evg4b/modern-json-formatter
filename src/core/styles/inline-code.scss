@@ -1,6 +1,6 @@
 code:not(pre code) {
   color: var(--code-color);
-  font-family: monospace;
+  font-family: var(--code-font-family);
   padding: 1px 5px;
   border-radius: 3px;
   background: var(--code-background);

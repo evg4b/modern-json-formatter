@@ -1,6 +1,9 @@
 @mixin variables {
   --container-padding: 30px;
 
+  --font-family: 'mjf-roboto', sans-serif;
+  --code-font-family: 'mjf-jetbrains-mono', monospace;
+
   /* code */
   --indentation: 30px;
   --font-size: 14px;

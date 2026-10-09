@@ -477,10 +477,19 @@ view is committed once per theme and neither can regress unnoticed:
 test('matches the raw view', { tag: '@screenshot' }, async ({ page, shadow }) => {
 ```
 
-Text rendering depends on the fonts installed on the machine, so the comparison
-only holds in one place: `mcr.microsoft.com/playwright:v1.63.0-noble`. Both CI
-and `make e2e` run there, which is why running the suite with plain `yarn e2e` on
-macOS reports diffs.
+Every font the pages render is bundled with the extension and declared in
+`assets/font.css`: JetBrains Mono for code and Roboto for the rest of the UI.
+Nothing falls back to a font installed on the machine, so every platform
+renders the same glyphs and plain `yarn e2e` on the host checks against the
+same images as CI. Font smoothing is switched off with
+`-webkit-font-smoothing: antialiased`, because macOS would otherwise thicken
+light text on dark backgrounds. The platforms still antialias glyph edges a
+little differently, which is what the `threshold` and `maxDiffPixels` in
+`playwright.config.ts` absorb. When you add styles, use `var(--font-family)` or
+`var(--code-font-family)` instead of a generic family, and set the font on
+`button` and `input` explicitly, since they don't inherit it.
+
+CI and `make e2e` run the suite in `mcr.microsoft.com/playwright:v1.64.0-noble`.
 
 After an intentional UI change, regenerate the images:
 

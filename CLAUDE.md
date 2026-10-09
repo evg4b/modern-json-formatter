@@ -139,11 +139,15 @@ production build in `dist/`.
 
 Screenshots live under `e2e/__screenshots__/`, one per theme. Tests tagged
 `@screenshot` run in both the `dark` and `light` projects, which is where the
-suffix on each image comes from; everything else runs in `dark` only. Rendering
-depends on the host's fonts, so `make e2e` runs the suite in the same Playwright
-container CI uses — `yarn e2e` on the host runs the same tests but its
-screenshots will not match. Regenerate the images with `make e2e-update` after an
-intentional UI change.
+suffix on each image comes from; everything else runs in `dark` only. Every
+font the UI renders is bundled (`assets/font.css`: JetBrains Mono for code,
+Roboto for everything else), so every platform renders the same glyphs and
+`yarn e2e` on the host matches CI within the `threshold` and `maxDiffPixels` in
+`playwright.config.ts`, which absorb antialiasing differences between
+platforms; `-webkit-font-smoothing: antialiased` keeps macOS from thickening
+light-on-dark text. Never fall back to a system font (`local()`, a bare
+`monospace`/`sans-serif`, or a form control's default font). Regenerate the
+images with `make e2e-update` after an intentional UI change.
 
 ### Build System
 

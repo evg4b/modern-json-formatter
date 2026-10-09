@@ -108,7 +108,7 @@ export class ExampleTableElement extends LitElement {
 
       .code, input {
         color: var(--code-color);
-        font-family: monospace;
+        font-family: var(--code-font-family);
         font-weight: 400;
         font-size: 15px;
         line-height: 1.5;

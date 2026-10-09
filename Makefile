@@ -1,4 +1,4 @@
-PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright:v1.63.0-noble
+PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright:v1.64.0-noble
 PLAYWRIGHT_MODULES := modern-json-formatter-e2e-modules
 
 PLAYWRIGHT_RUN := docker run --rm \

@@ -22,6 +22,7 @@ export class RoundedButtonElement extends LitElement {
           border-radius: 30px;
           padding: 3px 10px;
           background-color: transparent;
+          font-family: var(--font-family);
 
           transition-property: color, border, background-color;
           transition-duration: 250ms;

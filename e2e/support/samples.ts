@@ -1,58 +1,17 @@
-export const sample = `{
-  "id": 9007199254740993,
-  "name": "Modern JSON Formatter",
-  "active": true,
-  "archived": false,
-  "description": null,
-  "score": 4.85,
-  "tags": ["json", "jq", "wasm"],
-  "versions": [
-    { "number": "2.1.0", "downloads": 12045 },
-    { "number": "2.0.0", "downloads": 8310 }
-  ],
-  "meta": { "empty": {}, "none": [] }
-}`;
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-export const sampleFormatted = `{
-  "id": 9007199254740993,
-  "name": "Modern JSON Formatter",
-  "active": true,
-  "archived": false,
-  "description": null,
-  "score": 4.85,
-  "tags": [
-    "json",
-    "jq",
-    "wasm"
-  ],
-  "versions": [
-    {
-      "number": "2.1.0",
-      "downloads": 12045
-    },
-    {
-      "number": "2.0.0",
-      "downloads": 8310
-    }
-  ],
-  "meta": {
-    "empty": {},
-    "none": []
-  }
-}`;
+const load = (name: string) => readFileSync(join(import.meta.dirname, 'samples', name), 'utf8').replace(/\n$/, '');
 
-export const sampleMinified = '{"id":9007199254740993,"name":"Modern JSON Formatter","active":true,"archived":false,'
-  + '"description":null,"score":4.85,"tags":["json","jq","wasm"],'
-  + '"versions":[{"number":"2.1.0","downloads":12045},{"number":"2.0.0","downloads":8310}],'
-  + '"meta":{"empty":{},"none":[]}}';
+export const sample = load('sample.json');
 
-export const invalid = '{ "broken": ';
+export const sampleFormatted = load('sample-formatted.json');
 
-export const links = `{
-  "site": "https://example.com/docs",
-  "mail": "hello@example.com",
-  "plain": "not a link"
-}`;
+export const sampleMinified = load('sample-minified.json');
+
+export const invalid = load('invalid.json');
+
+export const links = load('links.json');
 
 export const nested = (depth: number, leaf = '"deep"') => '{"a":'.repeat(depth) + leaf + '}'.repeat(depth);
 

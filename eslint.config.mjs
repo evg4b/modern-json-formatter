@@ -94,6 +94,7 @@ export default [
       'worker-wasm/pkg/',
       'worker-wasm/core/target/',
       'brag-output/',
+      'storybook-static/',
     ],
   },
 ];

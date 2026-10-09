@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@rstest/core';
-import { extractFileName } from './helpers';
+import { extractFileName, throws } from './helpers';
 
 describe('extractFileName', () => {
   const cases = [
@@ -19,5 +19,16 @@ describe('extractFileName', () => {
 
   test.each(cases)('$url → $expected', ({ url, expected }) => {
     expect(extractFileName(url)).toBe(expected);
+  });
+});
+
+describe('throws', () => {
+  const cases = [
+    { value: undefined, expected: 'Unexpected value' },
+    { value: 'Custom error', expected: 'Custom error' },
+  ];
+
+  test.each(cases)('should throw error with message $expected', ({ value, expected }) => {
+    expect(() => throws(value)).toThrow(expected);
   });
 });

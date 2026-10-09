@@ -35,6 +35,12 @@ declare global {
   }
 }
 
+const DOWNLOAD_LABELS: Record<DownloadType, string> = {
+  raw: 'Raw',
+  formatted: 'Formatted',
+  minified: 'Minified',
+};
+
 interface VisibleTab {
   tab: TabType;
   label: string;
@@ -93,11 +99,10 @@ export class ToolboxElement extends LitElement {
     { tab: 'raw', label: 'Raw', key: 'raw' },
   ];
 
-  private readonly dropdownItems = [
-    { label: 'Raw', onClick: () => this.dispatchEvent(new DownloadEvent('raw')) },
-    { label: 'Formatted', onClick: () => this.dispatchEvent(new DownloadEvent('formatted')) },
-    { label: 'Minified', onClick: () => this.dispatchEvent(new DownloadEvent('minified')) },
-  ];
+  private readonly dropdownItems = Object.entries(DOWNLOAD_LABELS).map(([type, label]) => ({
+    label,
+    onClick: () => this.dispatchEvent(new DownloadEvent(type as DownloadType)),
+  }));
 
   public override render() {
     const visibleTabs = this.allTabs.filter(({ key }) => this.buttons[key]);
@@ -117,7 +122,8 @@ export class ToolboxElement extends LitElement {
   }
 
   private renderDownloadButton() {
-    if (this.downloadMode === 'dropdown') {
+    const mode = this.downloadMode;
+    if (mode === 'dropdown') {
       return html`
         <button ${dropdown(this.dropdownItems)} class="square" title="Download">
           ${unsafeSVG(downloadSvg)}
@@ -125,10 +131,8 @@ export class ToolboxElement extends LitElement {
       `;
     }
 
-    const title = this.directDownloadTitle();
-
     return html`
-      <button class="square" title=${title}
+      <button class="square" title="Download ${DOWNLOAD_LABELS[mode]}"
               @click=${this.directDownloadHandler}>
         ${unsafeSVG(downloadSvg)}
       </button>
@@ -150,20 +154,10 @@ export class ToolboxElement extends LitElement {
     `);
   }
 
-  private directDownloadTitle(): string {
-    if (this.downloadMode === 'formatted') return 'Download Formatted';
-    if (this.downloadMode === 'minified') return 'Download Minified';
-    return 'Download Raw';
-  }
-
-  private directDownloadType(): DownloadType {
-    if (this.downloadMode === 'formatted') return 'formatted';
-    if (this.downloadMode === 'minified') return 'minified';
-    return 'raw';
-  }
-
   private directDownloadHandler() {
-    this.dispatchEvent(new DownloadEvent(this.directDownloadType()));
+    if (this.downloadMode !== 'dropdown') {
+      this.dispatchEvent(new DownloadEvent(this.downloadMode));
+    }
   }
 
   private clickHandler(event: MouseEvent) {

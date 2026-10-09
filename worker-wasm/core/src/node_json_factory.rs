@@ -1,44 +1,37 @@
-use jaq_json::Num;
+use crate::parser::{Factory, Number};
 use crate::{Node, Property};
-use crate::parser::Factory;
-use crate::utils::determine_variant;
+use std::borrow::Cow;
 
 pub struct NodeJsonFactory;
 
 impl Factory<Node> for NodeJsonFactory {
+    type Members = Vec<Property>;
+
     fn null(&self) -> Node {
         Node::Null
     }
 
-    fn bool(&self, val: bool) -> Node {
-        Node::Boolean { value: val }
+    fn bool(&self, value: bool) -> Node {
+        Node::Boolean { value }
     }
 
-    fn number(&self, n: Num) -> Node {
-        Node::Number { value: n.to_string() }
+    fn number(&self, number: Number<'_>) -> Node {
+        Node::Number { value: number.text().to_owned() }
     }
 
-    fn string(&self, s: Vec<u8>) -> Node {
-        let string = String::from_utf8_lossy(&s);
-        Node::String {
-            value: string.to_string(),
-            variant: determine_variant(string.trim()),
-        }
+    fn string(&self, value: Cow<'_, str>) -> Node {
+        Node::string(value)
     }
 
-    fn array(&self, arr: Vec<Node>) -> Node {
-        Node::Array { items: arr }
+    fn array(&self, items: Vec<Node>) -> Node {
+        Node::Array { items }
     }
 
-    fn object(&self, obj: Vec<(String, Node)>) -> Node {
-        Node::Object {
-            properties: obj.into_iter()
-                .map(|(k, v)| Property { key: k, value: v })
-                .collect(),
-        }
+    fn insert(&self, members: &mut Vec<Property>, key: Cow<'_, str>, value: Node) {
+        members.push(Property { key: key.into_owned(), value });
     }
 
-    fn tuple(&self, items: Vec<Node>) -> Node {
-        Node::Tuple { items }
+    fn object(&self, members: Vec<Property>) -> Node {
+        Node::Object { properties: members }
     }
 }

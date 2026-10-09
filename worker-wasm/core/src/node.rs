@@ -1,3 +1,6 @@
+use crate::utils::determine_variant;
+use std::borrow::Cow;
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Property {
     pub key: String,
@@ -34,30 +37,55 @@ pub enum Node {
     },
 }
 
+impl Node {
+    /// A string node, tagged with the variant it looks like (a URL, an e-mail).
+    pub(crate) fn string(value: Cow<'_, str>) -> Self {
+        Self::String {
+            variant: determine_variant(&value),
+            value: value.into_owned(),
+        }
+    }
+
+    /// Wraps the values that a single jq query produced.
+    pub(crate) fn tuple(items: Vec<Self>) -> Self {
+        Self::Tuple { items }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::node_json_factory::NodeJsonFactory;
-    use crate::parser::{parse_json, Factory};
 
     #[test]
-    fn node_implements_clone() {
-        let original = NodeJsonFactory.object(vec![
-            ("x".to_string(), parse_json(b"1", NodeJsonFactory).unwrap()),
-        ]);
-        assert_eq!(original.clone(), original);
+    fn detects_the_variant_of_a_string() {
+        assert_eq!(
+            Node::string("https://example.com".into()),
+            Node::String {
+                value: "https://example.com".to_string(),
+                variant: Some(StringVariant::Url),
+            },
+        );
+        assert_eq!(
+            Node::string("plain".into()),
+            Node::String { value: "plain".to_string(), variant: None },
+        );
     }
 
     #[test]
-    fn property_implements_clone() {
-        let obj = NodeJsonFactory.object(vec![("key".to_string(), NodeJsonFactory.bool(true))]);
-        assert_eq!(obj.clone(), obj);
+    fn clones_whole_trees() {
+        let node = Node::tuple(vec![Node::Object {
+            properties: vec![Property {
+                key: "x".to_string(),
+                value: Node::Array { items: vec![Node::Boolean { value: true }, Node::Null] },
+            }],
+        }]);
+
+        assert_eq!(node.clone(), node);
     }
 
     #[test]
-    fn string_variant_implements_clone_and_partial_eq() {
+    fn string_variants_compare_by_value() {
         assert_eq!(StringVariant::Url, StringVariant::Url.clone());
-        assert_eq!(StringVariant::Email, StringVariant::Email.clone());
         assert_ne!(StringVariant::Url, StringVariant::Email);
     }
 }

@@ -8,15 +8,15 @@ use convert::node_to_js_value;
 #[wasm_bindgen]
 pub fn tokenize(json: &str) -> Result<JsValue, JsError> {
     tokenize_json(json)
+        .map(node_to_js_value)
         .map_err(|e| JsError::new(&e.to_string()))
-        .and_then(node_to_js_value)
 }
 
 #[wasm_bindgen]
 pub fn query(json: &str, query: &str) -> Result<JsValue, JsError> {
     query_json(json, query)
+        .map(node_to_js_value)
         .map_err(|e| JsError::new(&e.to_string()))
-        .and_then(node_to_js_value)
 }
 
 #[wasm_bindgen]

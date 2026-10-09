@@ -4,7 +4,7 @@ use crate::jaq_json_factory::JaqJsonFactory;
 use crate::parser::parse_json;
 
 pub fn format_json(input: &str) -> Result<String, Box<dyn Error>> {
-    let val = parse_json(input.as_bytes(), JaqJsonFactory)?;
+    let val = parse_json(input, JaqJsonFactory)?;
     let pp = Pp {
         indent: Some("  ".to_string()),
         sep_space: true,

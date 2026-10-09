@@ -26,6 +26,7 @@ make check            # lint + test
 make e2e              # Build the extension, then run the end-to-end suite (Docker)
 make e2e-update       # Same, regenerating the committed screenshots (Docker)
 make build-worker-wasm # Build Rust/WASM core
+make bench-worker-wasm # Benchmark the Rust core (time and allocations per call)
 make build-extension  # Production build
 make pack-extension   # Generate per-file checksums and zip for Chrome + Edge stores
 make release TYPE=patch|minor|major  # Bump version, tag, and push

@@ -10,3 +10,10 @@ jaq-std = "3.0.0"
 hifijson = "0.5.0"
 md5 = "0.7"
 sha2 = "0.10"
+
+[dev-dependencies]
+divan = "0.1.21"
+
+[[bench]]
+name = "json"
+harness = false

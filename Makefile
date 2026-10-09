@@ -20,6 +20,10 @@ build-worker-wasm:
 	@echo "Building WASM..."
 	@cd worker-wasm && $(MAKE)
 
+bench-worker-wasm:
+	@echo "Benchmarking WASM core..."
+	@cd worker-wasm && $(MAKE) bench
+
 e2e: build-extension
 	@echo "Running end-to-end tests..."
 	@$(PLAYWRIGHT_RUN) "yarn install --immutable && yarn e2e"

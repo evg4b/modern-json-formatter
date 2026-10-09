@@ -1,7 +1,7 @@
 import { expect, test } from './support/fixtures';
 import { dragSelect } from './support/selection';
 import { type ShadowDom } from './support/shadow';
-import { sample } from './support/samples';
+import { invalid, sample } from './support/samples';
 import { ui } from './support/ui';
 
 const TAGS = 7;
@@ -106,6 +106,13 @@ test.describe('formatted view', () => {
 
     await expect(page).toHaveScreenshot('formatted.png');
   });
+});
+
+test('reports invalid JSON in the formatted view', async ({ open, shadow }) => {
+  await open(invalid);
+
+  const error = await shadow.find(ui.errorNode);
+  expect(await error.text()).toContain('Invalid JSON file.');
 });
 
 test('leaves non-JSON pages alone', async ({ open, page, shadow }) => {

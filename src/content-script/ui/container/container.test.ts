@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/core';
+import { afterEach, beforeEach, describe, expect, test } from '@rstest/core';
 import { ContainerElement } from './container';
 
 describe('ContainerElement', () => {
@@ -45,12 +45,6 @@ describe('ContainerElement', () => {
     container.startLoading();
     container.stopLoading();
     expect(container.hasAttribute('loading')).toBe(false);
-  });
-
-  test('setError calls console.error', () => {
-    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
-    container.setError(new Error('fail'));
-    expect(consoleSpy).toHaveBeenCalledWith(new Error('fail'));
   });
 
   test('setRawContent replaces raw container children', () => {

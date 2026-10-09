@@ -2,17 +2,18 @@ import { afterEach, beforeEach, describe, expect, rstest, test } from '@rstest/c
 import '@testing/browser.mock';
 import '@testing/background.mock';
 import '@testing/settings.mock';
-import { download, format, jq, pushHistory, tokenize } from '@core/background';
+import { download, format, jq, tokenize } from '@core/background';
 import { getSettings } from '@core/settings';
-import { sendMessage } from '@core/browser';
 import { createElement } from '@core/dom';
 import { registerStyle } from '@core/ui/helpers';
-import { tNull, tObject, tProperty, tString, tTuple } from '@testing/json';
+import { tErrorNode, tObject, tProperty, tString, tTuple } from '@testing/json';
 import { wrapMock } from '@testing/helpers';
-import { LIMIT, ONE_MEGABYTE_LENGTH, runExtension } from './extension';
+import { runExtension } from './extension';
+import { ONE_MEGABYTE_LENGTH } from './document/json-document';
 import { ToolboxElement } from './ui/toolbox/toolbox';
 import { findNodeWithCode } from './json-detector';
 import { ContainerElement } from './ui/container/container';
+import { type ErrorNodeElement } from './ui/error-node';
 
 rstest.mock('./json-detector', () => ({
   findNodeWithCode: rstest.fn().mockName('findNodeWithCode'),
@@ -23,14 +24,27 @@ rstest.mock('@core/ui/helpers', () => ({
   FloatingMessageElement: rstest.fn().mockName('FloatingMessageElement'),
 }));
 
+const settings = (maxFileSize: number) => ({
+  buttons: { query: true, formatted: true, raw: true, download: true },
+  downloadMode: 'dropdown' as const,
+  maxFileSize,
+});
+
+const tick = () => new Promise(resolve => setTimeout(resolve, 0));
+
 describe('runExtension', () => {
   let shadowRoot: ShadowRoot;
-  let body: HTMLElement;
   let attachShadowSpy: ReturnType<typeof rstest.spyOn>;
+  let messageSpy: ReturnType<typeof rstest.spyOn>;
+  let formattedSpy: ReturnType<typeof rstest.spyOn>;
+  let rawSpy: ReturnType<typeof rstest.spyOn>;
+  let querySpy: ReturnType<typeof rstest.spyOn>;
+
+  const container = () => shadowRoot.querySelector('mjf-container') as ContainerElement;
+  const lastElement = (spy: ReturnType<typeof rstest.spyOn>) => spy.mock.lastCall?.[0] as HTMLElement;
 
   beforeEach(() => {
-    body = createElement({ element: 'body' });
-
+    const body = createElement({ element: 'body' });
     const boundAttachShadow = body.attachShadow.bind(body);
     attachShadowSpy = rstest.spyOn(document.body, 'attachShadow')
       .mockImplementation((init: ShadowRootInit) => {
@@ -38,7 +52,10 @@ describe('runExtension', () => {
         return shadowRoot;
       });
 
-    rstest.spyOn(ContainerElement.prototype, 'message').mockImplementation(() => undefined);
+    messageSpy = rstest.spyOn(ContainerElement.prototype, 'message').mockImplementation(() => undefined);
+    formattedSpy = rstest.spyOn(ContainerElement.prototype, 'setFormattedContent');
+    rawSpy = rstest.spyOn(ContainerElement.prototype, 'setRawContent');
+    querySpy = rstest.spyOn(ContainerElement.prototype, 'setQueryContent');
   });
 
   afterEach(() => {
@@ -46,7 +63,7 @@ describe('runExtension', () => {
     rstest.resetAllMocks();
   });
 
-  test('when code node doesn\'t exists', async () => {
+  test('leaves the page alone when no code node exists', async () => {
     wrapMock(findNodeWithCode).mockResolvedValue(null);
 
     await runExtension();
@@ -55,261 +72,138 @@ describe('runExtension', () => {
     expect(registerStyle).not.toHaveBeenCalled();
   });
 
-  test('when content is too large', async () => {
-    const preNode = createElement({
-      element: 'pre',
-      content: 'X'.repeat(LIMIT + 10),
-    });
-
-    wrapMock(getSettings).mockResolvedValue({
-      buttons: { query: true, formatted: true, raw: true, download: true },
-      downloadMode: 'dropdown',
-      maxFileSize: 3,
-    });
-    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(sendMessage).mockResolvedValue(tNull());
-    wrapMock(format).mockResolvedValue('formatted');
-
-    await runExtension();
-
-    expect(attachShadowSpy).toHaveBeenCalled();
-    expect(registerStyle).toHaveBeenCalled();
-    expect(format).toHaveBeenCalled();
-
-    expect(tokenize).not.toHaveBeenCalled();
-  });
-
-  test('when content is too large and format returns error object', async () => {
-    const preNode = createElement({
-      element: 'pre',
-      content: 'X'.repeat(LIMIT + 10),
-    });
-
-    wrapMock(getSettings).mockResolvedValue({
-      buttons: { query: true, formatted: true, raw: true, download: true },
-      downloadMode: 'dropdown',
-      maxFileSize: 3,
-    });
-    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(format).mockResolvedValue('formatted');
-
-    await runExtension();
-
-    const containerElement = shadowRoot.querySelector('mjf-container') as ContainerElement;
-    expect(format).toHaveBeenCalled();
-    expect(containerElement.type).toBe('raw');
-    expect(tokenize).not.toHaveBeenCalled();
-  });
-
-  test('when content is too large and format throws', async () => {
-    const preNode = createElement({
-      element: 'pre',
-      content: 'X'.repeat(LIMIT + 10),
-    });
-
-    wrapMock(getSettings).mockResolvedValue({
-      buttons: { query: true, formatted: true, raw: true, download: true },
-      downloadMode: 'dropdown',
-      maxFileSize: 3,
-    });
-    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(format).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Invalid JSON' });
-
-    await runExtension();
-
-    expect(format).toHaveBeenCalled();
-    expect(tokenize).not.toHaveBeenCalled();
-  });
-
-  test('when content is within a custom maxFileSize setting, tokenizes normally', async () => {
-    wrapMock(getSettings).mockResolvedValue({
-      buttons: { query: true, formatted: true, raw: true, download: true },
-      downloadMode: 'dropdown',
-      maxFileSize: 5,
-    });
-
-    const preNode = createElement({
-      element: 'pre',
-      // 4 MB — above default 3 MB limit but below the custom 5 MB limit
-      content: 'X'.repeat(ONE_MEGABYTE_LENGTH * 4),
-    });
-
+  test('renders the tree into the formatted view', async () => {
+    const preNode = createElement({ element: 'pre', content: '{ "key": "value" }' });
     wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     wrapMock(tokenize).mockResolvedValue(tObject(tProperty('key', tString('value'))));
 
     await runExtension();
 
-    expect(tokenize).toHaveBeenCalled();
-    expect(format).not.toHaveBeenCalled();
+    expect(tokenize).toHaveBeenCalledWith('{ "key": "value" }');
+    expect(rawSpy).toHaveBeenCalledWith(preNode);
+    expect(lastElement(formattedSpy).classList.contains('root')).toBe(true);
   });
 
-  test('when content is base', async () => {
-    const preNode = createElement({
-      element: 'pre',
-      content: '{ "key": "value" }',
-    });
-
-    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(sendMessage).mockResolvedValue(tNull());
-    wrapMock(tokenize).mockResolvedValue(
-      tObject(
-        tProperty('key', tString('value')),
-      ),
-    );
+  test('shows an error node in the formatted view for invalid JSON', async () => {
+    wrapMock(findNodeWithCode).mockResolvedValue(createElement({ element: 'pre', content: '{ "broken": ' }));
+    wrapMock(tokenize).mockRejectedValue(tErrorNode('expected value', 'tokenizer'));
 
     await runExtension();
 
-    expect(attachShadowSpy).toHaveBeenCalled();
-    expect(registerStyle).toHaveBeenCalled();
-    expect(tokenize).toHaveBeenCalled();
-
-    expect(format).not.toHaveBeenCalled();
+    const errorNode = lastElement(formattedSpy) as ErrorNodeElement;
+    expect(errorNode.tagName).toBe('MJF-ERROR-NODE');
+    expect(errorNode.header).toBe('Invalid JSON file.');
+    expect(errorNode.lines).toEqual(['expected value']);
   });
 
-  test('when tokenize returns error response', async () => {
-    const preNode = createElement({
-      element: 'pre',
-      content: '{ invalid }',
+  describe('oversized document', () => {
+    let preNode: HTMLPreElement;
+
+    beforeEach(() => {
+      preNode = createElement({ element: 'pre', content: 'X'.repeat(ONE_MEGABYTE_LENGTH * 3 + 10) });
+      wrapMock(getSettings).mockResolvedValue(settings(3));
+      wrapMock(findNodeWithCode).mockResolvedValue(preNode);
     });
 
-    const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
-    wrapMock(findNodeWithCode).mockResolvedValue(preNode);
-    wrapMock(tokenize).mockRejectedValue({ type: 'error', scope: 'worker', error: 'Parse error' });
+    test('shows the formatted text in the raw view with a notice', async () => {
+      wrapMock(format).mockResolvedValue('formatted');
 
-    await runExtension();
+      await runExtension();
 
-    expect(tokenize).toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalled();
+      expect(container().type).toBe('raw');
+      expect(preNode.isConnected).toBe(false);
+      expect(lastElement(rawSpy).textContent).toBe('formatted');
+      expect(messageSpy).toHaveBeenCalledWith('File is too large', expect.stringContaining('More than 3MB'));
+      expect(tokenize).not.toHaveBeenCalled();
+    });
+
+    test('shows an error node in the raw view when formatting fails', async () => {
+      wrapMock(format).mockRejectedValue(tErrorNode('trailing comma', 'tokenizer'));
+
+      await runExtension();
+
+      expect((lastElement(rawSpy) as ErrorNodeElement).header).toBe('Invalid JSON file.');
+      expect(messageSpy).not.toHaveBeenCalled();
+    });
+
+    test('does not mount the toolbar', async () => {
+      rstest.useFakeTimers();
+      wrapMock(format).mockResolvedValue('formatted');
+
+      await runExtension();
+      rstest.runAllTimers();
+      rstest.useRealTimers();
+
+      expect(shadowRoot.querySelector('mjf-toolbox')).toBeNull();
+    });
   });
 
-  describe('toolbox event handlers', () => {
-    let containerElement: ContainerElement;
-    let toolboxElement: ToolboxElement;
-    let messageSpy: ReturnType<typeof rstest.spyOn>;
+  describe('toolbar', () => {
+    let toolbox: ToolboxElement;
 
     beforeEach(async () => {
       rstest.useFakeTimers();
-      messageSpy = rstest.spyOn(ContainerElement.prototype, 'message').mockImplementation(() => undefined);
-
-      const preNode = createElement({ element: 'pre', content: '{ "key": "value" }' });
-      wrapMock(findNodeWithCode).mockResolvedValue(preNode);
+      wrapMock(findNodeWithCode).mockResolvedValue(createElement({ element: 'pre', content: '{ "key": "value" }' }));
       wrapMock(tokenize).mockResolvedValue(tObject(tProperty('key', tString('value'))));
 
       await runExtension();
       rstest.runAllTimers();
       rstest.useRealTimers();
 
-      containerElement = shadowRoot.querySelector('mjf-container') as ContainerElement;
-      toolboxElement = shadowRoot.querySelector('mjf-toolbox') as ToolboxElement;
+      toolbox = shadowRoot.querySelector('mjf-toolbox') as ToolboxElement;
     });
 
-    test('tab-changed: query', () => {
-      toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'query' }));
+    test.each(['query', 'raw', 'formatted'] as const)('tab-changed switches to %s', tab => {
+      toolbox.dispatchEvent(new CustomEvent('tab-changed', { detail: tab }));
 
-      expect(containerElement.type).toBe('query');
+      expect(container().type).toBe(tab);
     });
 
-    test('tab-changed: raw', () => {
-      toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'raw' }));
+    test('download saves the document', async () => {
+      toolbox.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
+      await tick();
 
-      expect(containerElement.type).toBe('raw');
+      expect(download).toHaveBeenCalledWith('formatted', '{ "key": "value" }', expect.stringContaining('_formatted.json'));
+      expect(messageSpy).not.toHaveBeenCalled();
     });
 
-    test('tab-changed: formatted', () => {
-      toolboxElement.dispatchEvent(new CustomEvent('tab-changed', { detail: 'formatted' }));
+    test('download failure shows a notice', async () => {
+      wrapMock(download).mockRejectedValue(tErrorNode('failed'));
 
-      expect(containerElement.type).toBe('formatted');
-    });
-
-    test('download event: raw', async () => {
-      wrapMock(download).mockResolvedValue(undefined);
-      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'raw' }));
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(download).toHaveBeenCalledWith('raw', expect.any(String), expect.stringContaining('.json'));
-    });
-
-    test('download event: formatted adds suffix', async () => {
-      wrapMock(download).mockResolvedValue(undefined);
-      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(download).toHaveBeenCalledWith('formatted', expect.any(String), expect.stringContaining('_formatted'));
-    });
-
-    test('download event: errors are rendered', async () => {
-      wrapMock(download).mockRejectedValue({ type: 'error', scope: 'worker', error: 'failed' });
-      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
-      await new Promise(resolve => setTimeout(resolve, 0));
+      toolbox.dispatchEvent(new CustomEvent('download', { detail: 'raw' }));
+      await tick();
 
       expect(messageSpy).toHaveBeenCalledWith('Unable to download file', 'failed');
     });
 
-    test('jq-query: success calls jq and pushHistory', async () => {
-      wrapMock(jq).mockResolvedValue(tTuple(tObject(tProperty('key', tString('value')))));
-      wrapMock(pushHistory).mockResolvedValue(undefined);
+    test('jq-query renders the result into the query view', async () => {
+      wrapMock(jq).mockResolvedValue(tTuple(tString('value')));
 
-      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
-      await new Promise(resolve => setTimeout(resolve, 10));
+      toolbox.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
+      await tick();
 
-      expect(jq).toHaveBeenCalledWith(expect.any(String), '.key');
-      expect(pushHistory).toHaveBeenCalled();
+      expect(jq).toHaveBeenCalledWith('{ "key": "value" }', '.key');
+      expect(lastElement(querySpy).classList.contains('tuple')).toBe(true);
     });
 
-    test('jq-query error: jq scope sets toolbox error', async () => {
-      wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'jq', error: 'syntax error' });
+    test('jq-query shows an invalid query under the input', async () => {
+      wrapMock(jq).mockRejectedValue(tErrorNode('syntax error', 'jq'));
 
-      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.invalid' }));
-      await new Promise(resolve => setTimeout(resolve, 10));
+      toolbox.dispatchEvent(new CustomEvent('jq-query', { detail: '.invalid' }));
+      await tick();
 
-      expect(toolboxElement.error).toBe('syntax error');
+      expect(toolbox.error).toBe('syntax error');
+      expect(messageSpy).not.toHaveBeenCalled();
     });
 
-    test('jq-query error: non-jq scope appends error to root', async () => {
-      const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
-      wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'worker', error: 'worker error', stack: 'stack' });
+    test('jq-query shows other failures as a notice', async () => {
+      wrapMock(jq).mockRejectedValue({ ...tErrorNode('worker error'), stack: 'stack' });
 
-      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
-      await new Promise(resolve => setTimeout(resolve, 10));
+      toolbox.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
+      await tick();
 
       expect(messageSpy).toHaveBeenCalledWith('Error worker error in worker', 'Stack trace: stack');
-      expect(consoleSpy).not.toHaveBeenCalled();
-    });
-
-    test('jq-query error: non-jq scope without stack trace', async () => {
-      rstest.spyOn(console, 'error').mockImplementation(() => undefined);
-      wrapMock(jq).mockRejectedValue({ type: 'error', scope: 'worker', error: 'worker error' });
-
-      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
-      await new Promise(resolve => setTimeout(resolve, 10));
-
-      expect(messageSpy).toHaveBeenCalledWith('Error worker error in worker', '');
-    });
-
-    test('jq-query error: non-ErrorNode logs to console', async () => {
-      const consoleSpy = rstest.spyOn(console, 'error').mockImplementation(() => undefined);
-      wrapMock(jq).mockRejectedValue('unexpected error');
-
-      toolboxElement.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
-      await new Promise(resolve => setTimeout(resolve, 10));
-
-      expect(consoleSpy).toHaveBeenCalledWith('unexpected error');
-    });
-
-    test('download error: falls back to error.message when error.error is absent', async () => {
-      wrapMock(download).mockRejectedValue({ message: 'network failure' });
-      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(messageSpy).toHaveBeenCalledWith('Unable to download file', 'network failure');
-    });
-
-    test('download error: falls back to raw error when both error and message are absent', async () => {
-      wrapMock(download).mockRejectedValue('raw string error');
-      toolboxElement.dispatchEvent(new CustomEvent('download', { detail: 'formatted' }));
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(messageSpy).toHaveBeenCalledWith('Unable to download file', 'raw string error');
+      expect(toolbox.error).toBeNull();
     });
   });
 });

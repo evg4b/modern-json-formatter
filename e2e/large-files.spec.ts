@@ -64,7 +64,7 @@ test('treats a file one character over the limit as large', async ({ open, shado
 
 test('follows a raised size limit', async ({ configure, open, shadow }) => {
   await configure({ maxFileSize: 2 });
-  await open(large);
+  await open(ofLength(LIMIT + 1));
 
   await shadow.find(ui.tree);
   expect(await shadow.exists(ui.notice)).toBe(false);

@@ -1,4 +1,6 @@
-export type DownloadMode = 'dropdown' | 'raw' | 'formatted' | 'minified';
+import type { DownloadType } from '@core/background/protocol';
+
+export type DownloadMode = 'dropdown' | DownloadType;
 
 export interface ToolbarButtonsSettings {
   query: boolean;

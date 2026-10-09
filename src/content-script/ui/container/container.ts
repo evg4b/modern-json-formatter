@@ -10,6 +10,11 @@ declare global {
   }
 }
 
+const show = (view: HTMLElement, content: HTMLElement) => {
+  view.replaceChildren();
+  view.append(content);
+};
+
 @customElement('mjf-container')
 export class ContainerElement extends LitElement {
   public static override readonly shadowRootOptions: ShadowRootInit = {
@@ -34,19 +39,15 @@ export class ContainerElement extends LitElement {
   }
 
   public setRawContent(content: HTMLElement) {
-    this.raw.replaceChildren(content);
+    show(this.raw, content);
   }
 
   public setFormattedContent(content: HTMLElement) {
-    this.formatted.replaceChildren(content);
+    show(this.formatted, content);
   }
 
   public setQueryContent(content: HTMLElement) {
-    this.query.replaceChildren(content);
-  }
-
-  public setError(error: unknown) {
-    console.error(error);
+    show(this.query, content);
   }
 
   public startLoading() {

@@ -10,6 +10,7 @@ export const ui = {
   toolbar,
   tree: `${container} >>> .root`,
   rawText: `${container} >>> pre`,
+  errorNode: `${container} >>> mjf-error-node >>> .message`,
   rootToggle: `${container} >>> .root > .toggle`,
   propertyToggle: (index: number) => `${property(index)} > .toggle`,
   arrayItem: item,

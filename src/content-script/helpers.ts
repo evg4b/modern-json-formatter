@@ -28,13 +28,3 @@ export const extractFileName = (url: string | undefined | null): string => {
 
   return lastSection || hostname.replaceAll('.', '-');
 };
-
-export const extractDomainKey = (url: string | undefined | null): string => {
-  if (!url) {
-    return '';
-  }
-
-  const { hostname, pathname, protocol } = new URL(url);
-
-  return protocol === 'file:' ? pathname : hostname;
-};

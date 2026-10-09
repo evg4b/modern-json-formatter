@@ -1,6 +1,5 @@
 import type { Message as BackgroundMessage } from '@core/background';
 import { take } from 'es-toolkit';
-import { extractDomainKey } from '../../src/content-script/helpers';
 
 export interface ChromeMockState {
   history: string[];
@@ -8,7 +7,6 @@ export interface ChromeMockState {
 }
 
 const HISTORY_LIMIT = 10;
-const pageDomain = extractDomainKey(globalThis.location.href);
 
 const initialState = (): ChromeMockState => ({
   history: [
@@ -36,8 +34,8 @@ interface Message {
   payload: unknown;
 }
 
-const getHistory = ({ domain, prefix }: { domain: string; prefix: string }) => {
-  if (domain !== pageDomain) {
+const getHistory = ({ url, prefix }: { url: string; prefix: string }) => {
+  if (url !== globalThis.location.href) {
     return [];
   }
 
@@ -51,7 +49,7 @@ const sendMessage = async ({ action, payload }: Message): Promise<unknown> => {
 
   switch (action) {
     case 'get-history':
-      return getHistory(payload as { domain: string; prefix: string });
+      return getHistory(payload as { url: string; prefix: string });
     case 'jq': {
       // Loaded on first use: the WASM module makes importers async, which must not reach `.storybook/preview.ts`.
       const { handler } = await import('../../src/background/handler');

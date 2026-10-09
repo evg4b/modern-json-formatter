@@ -55,3 +55,14 @@ test('reports an invalid jq expression', { tag: '@screenshot' }, async ({ page, 
   await hideCaret(shadow);
   await expect(page).toHaveScreenshot('query-error.png');
 });
+
+test('offers a successful query from history after a reload', async ({ open, page, shadow }) => {
+  await runQuery(page, shadow, '.tags');
+  await shadow.find(ui.tree);
+
+  await open(sample);
+  await (await shadow.find(ui.tab('query'))).click();
+
+  const option = await shadow.find(ui.historyOption);
+  expect(await option.evaluate<string>('function () { return this.value; }')).toBe('.tags');
+});

@@ -30,7 +30,18 @@ const openDB = (): Promise<IDBDatabase> => {
   return wait(request as IDBRequest<IDBDatabase>);
 };
 
-export const getHistory = async ({ domain, prefix }: { domain: string; prefix: string }): Promise<string[]> => {
+export const extractDomainKey = (url: string | undefined | null): string => {
+  if (!url) {
+    return '';
+  }
+
+  const { hostname, pathname, protocol } = new URL(url);
+
+  return protocol === 'file:' ? pathname : hostname;
+};
+
+export const getHistory = async ({ url, prefix }: { url: string; prefix: string }): Promise<string[]> => {
+  const domain = extractDomainKey(url);
   const db = await openDB();
   try {
     const results = await wait(
@@ -51,7 +62,8 @@ export const getHistory = async ({ domain, prefix }: { domain: string; prefix: s
   }
 };
 
-export const pushHistory = async ({ domain, query }: { domain: string; query: string }): Promise<void> => {
+export const pushHistory = async ({ url, query }: { url: string; query: string }): Promise<void> => {
+  const domain = extractDomainKey(url);
   const db = await openDB();
   try {
     const store = db.transaction(STORE_NAME, 'readwrite')

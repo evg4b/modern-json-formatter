@@ -8,7 +8,7 @@ export class AutocompleteController implements ReactiveController {
 
   constructor(
     private readonly host: ReactiveControllerHost,
-    private readonly hostname: string,
+    private readonly url: string,
   ) {
     host.addController(this);
   }
@@ -22,7 +22,7 @@ export class AutocompleteController implements ReactiveController {
   }
 
   private readonly loadHistory = debounce(async (prefix: string) => {
-    this.options = await getHistory(this.hostname, prefix);
+    this.options = await getHistory(this.url, prefix);
     this.host.requestUpdate();
   }, 250);
 }

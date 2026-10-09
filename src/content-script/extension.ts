@@ -82,9 +82,6 @@ const createToolbar = (json: JsonDocument, container: ContainerElement, settings
     switch (result.type) {
       case 'tree':
         container.setQueryContent(buildDom(result.node));
-        if (result.notice) {
-          showNotice(container, result.notice);
-        }
         break;
       case 'invalid-query':
         toolbox.error = result.message;

@@ -182,7 +182,7 @@ describe('runExtension', () => {
       toolbox.dispatchEvent(new CustomEvent('jq-query', { detail: '.key' }));
       await tick();
 
-      expect(jq).toHaveBeenCalledWith('{ "key": "value" }', '.key');
+      expect(jq).toHaveBeenCalledWith('{ "key": "value" }', '.key', globalThis.location.href);
       expect(lastElement(querySpy).classList.contains('tuple')).toBe(true);
     });
 

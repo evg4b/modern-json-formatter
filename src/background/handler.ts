@@ -6,9 +6,19 @@ import { download } from './download';
 export const handler = createHandler({
   'tokenize': json => tokenize(json),
   'format': json => format(json),
-  'jq': payload => query(payload.json, payload.query),
+  'jq': async ({ json, query: expression, url }) => {
+    const result = query(json, expression);
+    if (url) {
+      try {
+        await pushHistory({ url, query: expression });
+      } catch (error: unknown) {
+        console.error('Unable to save query history', error);
+      }
+    }
+
+    return result;
+  },
   'get-history': payload => getHistory(payload),
-  'push-history': payload => pushHistory(payload),
   'clear-history': () => clearHistory(),
   'get-domains': () => getDomains(),
   'download': ({ type, content, filename }) => download(type, content, filename),

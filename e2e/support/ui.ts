@@ -20,5 +20,6 @@ export const ui = {
   download: `${toolbar} >>> button.square`,
   queryInput: `${queryInput} >>> input`,
   queryError: `${queryInput} >>> mjf-error-message`,
+  historyOption: `${queryInput} >>> datalist > option`,
   manualLink: `${queryInput} >>> mjf-info-button >>> a`,
 };

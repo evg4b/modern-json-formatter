@@ -27,6 +27,10 @@ Note that the LHS of assignment operators refers to a value in `.`. Thus `$var.f
 
 Note too that `.a,.b=0` does not set `.a` and `.b`, but `(.a,.b)=0` sets both.
 
+Assignment can add a key to an existing object, but it cannot build new structure: assigning into `null` (for example
+`null | .a = 1`, or `{} | .a.b = 1` where `.a` is missing) and assigning past the end of an array (`[] | .[0] = 1`) are
+errors. Start from an object that already has the parent keys, or build the value with object construction instead.
+
 ### Update-assignment: `|=`
 
 This is the "update" operator `|=`. It takes a filter on the right-hand side and works out the new value for the
@@ -42,8 +46,8 @@ Note that the left-hand side of `|=` refers to a value in `.`. Thus `$var.foo |=
 If the right-hand side outputs no values (i.e., `empty`), then the left-hand side path will be deleted, as with
 `del(path)`.
 
-If the right-hand side outputs multiple values, only the first one will be used (COMPATIBILITY NOTE: in jq 1.5 and
-earlier releases, it used to be that only the last one was used).
+If the right-hand side outputs multiple values, only the first one will be used, except when the left-hand side is
+`.[]` on an array: there every output is kept, so `[5,6] | .[] |= (1, 2)` gives `[1,2,1,2]`.
 
 #### Examples:
 <mjf-example-table query="(..|select(type==&quot;boolean&quot;)) |= if . then 1 else 0 end" input='[true,false,[5,true,[true,[false]],false]]' output="[1,0,[5,1,[1,[0]],0]]"></mjf-example-table>
@@ -87,8 +91,8 @@ The former will set the `a` field of the input to the `b` field of the input, an
 #### Examples:
 <mjf-example-table query=".a = .b" input='{"a": {"b": 10}, "b": 20}' output='{"a":20,"b":20}'></mjf-example-table>
 <mjf-example-table query=".a |= .b" input='{"a": {"b": 10}, "b": 20}' output='{"a":10,"b":20}'></mjf-example-table>
-<mjf-example-table query="(.a, .b) = range(3)" input='null' output='{"a":0,"b":0}&#10;{"a":1,"b":1}&#10;{"a":2,"b":2}'></mjf-example-table>
-<mjf-example-table query="(.a, .b) |= range(3)" input='null' output='{"a":0,"b":0}'></mjf-example-table>
+<mjf-example-table query="(.a, .b) = range(3)" input='{}' output='{"a":0,"b":0}&#10;{"a":1,"b":1}&#10;{"a":2,"b":2}'></mjf-example-table>
+<mjf-example-table query="(.a, .b) |= range(3)" input='{}' output='{"a":0,"b":0}'></mjf-example-table>
 
 ### Complex assignments
 

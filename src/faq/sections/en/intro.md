@@ -13,7 +13,10 @@ things that would be done with loops and iteration in other languages are just d
 together in jq.
 
 It's important to remember that every filter has an input and an output.
-Even literals like `"hello"` or `42`are filters - they take an input but always produce the same literal as output.
+Even literals like `"hello"` or `42` are filters - they take an input but always produce the same literal as output.
 Operations that combine two filters, like addition, generally feed the same input to both and combine the results.
 So, you can implement an averaging filter as `add / length` - feeding the input array both to the `add` filter and the
 `length` filter and then performing the division.
+
+Queries run inside the extension on jaq, a jq implementation written in Rust, so
+nothing is sent to a server. The last section of this manual lists where it differs from the `jq` command-line tool.

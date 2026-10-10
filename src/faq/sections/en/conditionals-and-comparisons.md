@@ -114,7 +114,7 @@ For example:
 # Repeat an expression until it raises "break" as an
 # error, then stop repeating without re-raising the error.
 # But if the error caught is not "break" then re-raise it.
-try repeat(exp) catch if .=="break" then empty else error
+try repeat(exp) catch if .=="break" then empty else error end
 ```
 
 jq has a syntax for named lexical labels to "break" or "go (back) to":
@@ -134,7 +134,7 @@ To break out of a `reduce`, for example:
 label $out | reduce .[] as $item (null; if .==false then break $out else ... end)
 ```
 
-The following jq program produces a syntax error:
+The following jq program is rejected with an "undefined label" error:
 
 `break $out`
 

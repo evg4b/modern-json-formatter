@@ -16,9 +16,8 @@ some useful bits of jq's standard library.
 It may not be obvious at first, but jq is all about generators (yes, as often found in other languages). Some utilities
 are provided to help deal with generators.
 
-Some minimal I/O support (besides reading JSON from standard input, and writing JSON to standard output) is available.
-
-Finally, there is a module/library system.
+The command-line jq also has I/O builtins and a module system. Queries in this extension only see the current document,
+so those are not available here.
 
 ### Variable / Symbolic Binding Operator: `... as $identifier | ...`
 
@@ -104,51 +103,6 @@ which will not be visible where the old one was.
 <mjf-example-table query=". as $i|[(.*2|. as $i| $i), $i]" input='5' output="[10,5]"></mjf-example-table>
 <mjf-example-table query=". as [$a, $b, {c: $c}] | $a + $b + $c" input='[2, 3, {"c": 4, "d": 5}]' output="9"></mjf-example-table>
 <mjf-example-table query=".[] as [$a, $b] | {a: $a, b: $b}" input='[[0], [0, 1], [2, 1, 0]]' output="{&quot;a&quot;:0,&quot;b&quot;:null}&#10;{&quot;a&quot;:0,&quot;b&quot;:1}&#10;{&quot;a&quot;:2,&quot;b&quot;:1}"></mjf-example-table>
-
-### Destructuring Alternative Operator: `?//`
-
-The destructuring alternative operator provides a concise mechanism for destructuring an input that can take one of
-several forms.
-
-Suppose we have an API that returns a list of resources and events associated with them, and we want to get the user_id
-and timestamp of the first event for each resource. The API (having been clumsily converted from XML) will only wrap the
-events in an array if the resource has multiple events:
-
-```
-{"resources": [{"id": 1, "kind": "widget", "events": {"action": "create", "user_id": 1, "ts": 13}},
-               {"id": 2, "kind": "widget", "events": [{"action": "create", "user_id": 1, "ts": 14}, {"action": "destroy", "user_id": 1, "ts": 15}]}]}
-```
-
-We can use the destructuring alternative operator to handle this structural change simply:
-
-```
-.resources[] as {$id, $kind, events: {$user_id, $ts}} ?// {$id, $kind, events: [{$user_id, $ts}]} | {$user_id, $kind, $id, $ts}
-```
-
-Or, if we aren't sure if the input is an array of values or an object:
-
-```
-.[] as [$id, $kind, $user_id, $ts] ?// {$id, $kind, $user_id, $ts} | ...
-```
-
-Each alternative need not define all of the same variables, but all named variables will be available to the subsequent
-expression. Variables not matched in the alternative that succeeded will be `null`:
-
-```
-.resources[] as {$id, $kind, events: {$user_id, $ts}} ?// {$id, $kind, events: [{$first_user_id, $first_ts}]} | {$user_id, $first_user_id, $kind, $id, $ts, $first_ts}
-```
-
-Additionally, if the subsequent expression returns an error, the alternative operator will attempt to try the next
-binding. Errors that occur during the final alternative are passed through.
-
-```
-[[3]] | .[] as [$a] ?// [$b] | if $a != null then error("err: \($a)") else {$a,$b} end
-```
-
-#### Examples:
-<mjf-example-table query=".[] as {$a, $b, c: {$d, $e}} ?// {$a, $b, c: [{$d, $e}]} | {$a, $b, $d, $e}" input='[{"a": 1, "b": 2, "c": {"d": 3, "e": 4}}, {"a": 1, "b": 2, "c": [{"d": 3, "e": 4}]}]' output="{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:3,&quot;e&quot;:4}&#10;{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:3,&quot;e&quot;:4}"></mjf-example-table>
-<mjf-example-table query=".[] as {$a, $b, c: {$d}} ?// {$a, $b, c: [{$e}]} | {$a, $b, $d, $e}" input='[{"a": 1, "b": 2, "c": {"d": 3, "e": 4}}, {"a": 1, "b": 2, "c": [{"d": 3, "e": 4}]}]' output="{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:3,&quot;e&quot;:null}&#10;{&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:null,&quot;e&quot;:4}"></mjf-example-table>
-<mjf-example-table query=".[] as [$a] ?// [$b] | if $a != null then error(&quot;err: \($a)&quot;) else {$a,$b} end" input='[[3]]' output="{&quot;a&quot;:null,&quot;b&quot;:3}"></mjf-example-table>
 
 ### Defining Functions
 
@@ -269,7 +223,7 @@ this:
 #### Examples:
 <mjf-example-table query="reduce .[] as $item (0; . + $item)" input='[1,2,3,4,5]' output="15"></mjf-example-table>
 <mjf-example-table query="reduce .[] as [$i,$j] (0; . + $i * $j)" input='[[1,2],[3,4],[5,6]]' output="44"></mjf-example-table>
-<mjf-example-table query="reduce .[] as {$x,$y} (null; .x += $x | .y += [$y])" input='[{"x":"a","y":1},{"x":"b","y":2},{"x":"c","y":3}]' output="{&quot;x&quot;:&quot;abc&quot;,&quot;y&quot;:[1,2,3]}"></mjf-example-table>
+<mjf-example-table query="reduce .[] as {$x,$y} ({}; .x += $x | .y += [$y])" input='[{"x":"a","y":1},{"x":"b","y":2},{"x":"c","y":3}]' output="{&quot;x&quot;:&quot;abc&quot;,&quot;y&quot;:[1,2,3]}"></mjf-example-table>
 
 ### `foreach`
 
@@ -310,10 +264,14 @@ this means that the expression to the left of the recursive call should not prod
 For example:
 
 ```
-def recurse(f): def r: ., (f | select(. != null) | r); r;def while(cond; update):
+def recurse(f): def r: ., (f | r); r;
+
+def while(cond; update):
   def _while:
     if cond then ., (update | _while) else empty end;
-  _while;def repeat(exp):
+  _while;
+
+def repeat(exp):
   def _repeat:
     exp, _repeat;
   _repeat;

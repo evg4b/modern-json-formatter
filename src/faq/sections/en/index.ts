@@ -4,6 +4,7 @@ import assignment from './assignment.md';
 import basicFilters from './basic-filters.md';
 import builtinOperatorsAndFunctions from './builtin-operators-and-functions.md';
 import conditionalsAndComparisons from './conditionals-and-comparisons.md';
+import extensionQueries from './extension-queries.md';
 import hashing from './hashing.md';
 import intro from './intro.md';
 import math from './math.md';
@@ -21,4 +22,5 @@ export default {
   math,
   assignment,
   hashing,
+  extensionQueries,
 } satisfies FaqSection;

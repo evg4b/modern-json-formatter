@@ -1,50 +1,49 @@
 ## Regular expressions
 
-jq uses the [Oniguruma regular expression library](https://github.com/kkos/oniguruma/blob/master/doc/RE), as do PHP,
-TextMate, Sublime Text, etc, so the description here will focus on jq specifics.
+Regular expressions are handled by [regex-bites](https://docs.rs/regex-bites), a small engine with the syntax of
+Rust's [regex](https://docs.rs/regex/latest/regex/#syntax) crate. Compared with the Oniguruma library used by the
+command-line jq, it does not support look-around, backreferences or Unicode character classes such as `\p{L}`, and
+`\w`, `\d` and `\s` match ASCII characters only. Named groups are written `(?<name>...)` or `(?P<name>...)`.
 
-Oniguruma supports several flavors of regular expression, so it is important to know that jq uses
-the ["Perl NG" (Perl with named groups)](https://github.com/kkos/oniguruma/blob/master/doc/SYNTAX.md) flavor.
-
-The jq regex filters are defined so that they can be used using one of these patterns:
+The regex filters can be used using one of these patterns:
 
 ```
 STRING | FILTER(REGEX)
 STRING | FILTER(REGEX; FLAGS)
-STRING | FILTER([REGEX])
-STRING | FILTER([REGEX, FLAGS])
 ```
 
 where:
 
 - STRING, REGEX, and FLAGS are jq strings and subject to jq string interpolation;
 - REGEX, after string interpolation, should be a valid regular expression;
-- FILTER is one of `test`, `match`, or `capture`, as described below.
+- FILTER is one of `test`, `match`, `capture`, `scan`, `split`, `splits`, `sub` or `gsub`, as described below.
 
 Since REGEX must evaluate to a JSON string, some characters that are needed to form a regular expression must be
 escaped. For example, the regular expression `\s` signifying a whitespace character would be written as `"\\s"`.
 
-FLAGS is a string consisting of one of more of the supported flags:
+FLAGS is a string consisting of one or more of the supported flags:
 
 - `g` - Global search (find all matches, not just the first)
 - `i` - Case insensitive search
-- `m` - Multi line mode (`.` will match newlines)
-- `n` - Ignore empty matches
+- `m` - Multi line mode (`^` and `$` match at the start and end of every line)
+- `s` - Single line mode (`.` matches newlines)
 - `p` - Both s and m modes are enabled
-- `s` - Single line mode (`^` -> `\A`, `$` -> `\Z`)
-- `l` - Find longest possible matches
+- `n` - Ignore empty matches
+- `l` - Swap greediness, so `a*` is lazy and `a*?` is greedy
 - `x` - Extended regex format (ignore whitespace and comments)
+
+Any other flag is an error.
 
 To match a whitespace with the `x` flag, use `\s`, e.g.
 
 ```
-jq -n '"a b" | test("a\\sb"; "x")'
+"a b" | test("a\\sb"; "x")
 ```
 
 Note that certain flags may also be specified within REGEX, e.g.
 
 ```
-jq -n '("test", "TEst", "teST", "TEST") | test("(?i)te(?-i)st")'
+("test", "TEst", "teST", "TEST") | test("(?i)te(?-i)st")
 ```
 
 evaluates to: `true`, `true`, `false`, `false`.
@@ -71,15 +70,15 @@ Capturing group objects have the following fields:
 - `offset` - offset in UTF-8 codepoints from the beginning of the input
 - `length` - length in UTF-8 codepoints of this capturing group
 - `string` - the string that was captured
-- `name` - the name of the capturing group (or `null` if it was unnamed)
+- `name` - the name of the capturing group, present only for named groups
 
-Capturing groups that did not match anything return an offset of -1
+Capturing groups that did not match anything are left out of `captures`.
 
 #### Examples:
-<mjf-example-table query='match("(abc)+"; "g")' input='"abc abc"' output='{"offset": 0, "length": 3, "string": "abc", "captures": [{"offset": 0, "length": 3, "string": "abc", "name": null}]}&#10;{"offset": 4, "length": 3, "string": "abc", "captures": [{"offset": 4, "length": 3, "string": "abc", "name": null}]}'></mjf-example-table>
+<mjf-example-table query='match("(abc)+"; "g")' input='"abc abc"' output='{"offset": 0, "length": 3, "string": "abc", "captures": [{"offset": 0, "length": 3, "string": "abc"}]}&#10;{"offset": 4, "length": 3, "string": "abc", "captures": [{"offset": 4, "length": 3, "string": "abc"}]}'></mjf-example-table>
 <mjf-example-table query='match("foo")' input='"foo bar foo"' output='{"offset": 0, "length": 3, "string": "foo", "captures": []}'></mjf-example-table>
-<mjf-example-table query='match(["foo", "ig"])' input='"foo bar FOO"' output='{"offset": 0, "length": 3, "string": "foo", "captures": []}&#10;{"offset": 8, "length": 3, "string": "FOO", "captures": []}'></mjf-example-table>
-<mjf-example-table query='match("foo (?&lt;bar123&gt;bar)? foo"; "ig")' input='"foo bar foo foo foo"' output='{"offset": 0, "length": 11, "string": "foo bar foo", "captures": [{"offset": 4, "length": 3, "string": "bar", "name": "bar123"}]}&#10;{"offset": 12, "length": 8, "string": "foo foo", "captures": [{"offset": -1, "length": 0, "string": null, "name": "bar123"}]}'></mjf-example-table>
+<mjf-example-table query='match("foo"; "ig")' input='"foo bar FOO"' output='{"offset": 0, "length": 3, "string": "foo", "captures": []}&#10;{"offset": 8, "length": 3, "string": "FOO", "captures": []}'></mjf-example-table>
+<mjf-example-table query='match("foo (?&lt;bar123&gt;bar)? foo"; "ig")' input='"foo bar foo foo  foo"' output='{"offset": 0, "length": 11, "string": "foo bar foo", "captures": [{"offset": 4, "length": 3, "string": "bar", "name": "bar123"}]}&#10;{"offset": 12, "length": 8, "string": "foo  foo", "captures": []}'></mjf-example-table>
 <mjf-example-table query='[ match("."; "g")] | length' input='"abc"' output="3"></mjf-example-table>
 
 ### `capture(val)`, `capture(regex; flags)`
@@ -92,12 +91,15 @@ corresponding value.
 
 ### `scan(regex)`, `scan(regex; flags)`
 
-Emit a stream of the non-overlapping substrings of the input that match the regex in accordance with the flags, if any
-have been specified. If there is no match, the stream is empty. To capture all the matches for each input string, use
-the idiom `[ expr ]`, e.g. `[ scan(regex) ]`.
+Emit the substrings of the input that match the regex in accordance with the flags, if any have been specified. If
+there is no match, the stream is empty.
+
+Unlike the command-line jq, `scan` is not global by default: `scan(regex)` emits only the first match. Pass the `g` flag
+to get all non-overlapping matches, and collect them with `[ scan(regex; "g") ]`.
 
 #### Examples:
-<mjf-example-table query='scan("c")' input='"abcdefabc"' output='"c"&#10;"c"'></mjf-example-table>
+<mjf-example-table query='scan("c")' input='"abcdefabc"' output='"c"'></mjf-example-table>
+<mjf-example-table query='scan("c"; "g")' input='"abcdefabc"' output='"c"&#10;"c"'></mjf-example-table>
 
 ### `split(regex; flags)`
 

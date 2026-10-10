@@ -7,19 +7,18 @@ Booleans, null, strings and numbers are written the same way as in JSON. Just li
 values take an input and produce an output - `42` is a valid jq expression that takes an input, ignores it, and returns
 42 instead.
 
-Numbers in jq are internally represented by their IEEE754 double precision approximation. Any arithmetic operation with
-numbers, whether they are literals or results of previous filters, will produce a double precision floating point
-result.
+Integers are exact at any size, in arithmetic as well as in output. Numbers with a fraction or an exponent are
+converted to IEEE754 double precision values when arithmetic is applied to them, and division always produces a double.
 
-However, when parsing a literal jq will store the original literal string. If no mutation is applied to thisvalue then
-it will make to the output in its original form, even if conversion to double would result in aloss.
+A number that no operation changes is output in the exact form it was written in, even when converting it to a double
+would lose precision.
 
 ### Array construction: `[]`
 
 As in JSON, `[]` is used to construct arrays, as in `[1,2,3]`. The elements of the arrays can be any jq expression,
 including a pipeline. All of the results produced by all of the expressions are collected into one big array. You can
 use it to construct an array out of a known quantity of values (as in `[.foo, .bar, .baz]`) or to "collect" all the
-results of a filter into an array (as in`[.items[].name]`)
+results of a filter into an array (as in `[.items[].name]`).
 
 Once you understand the "," operator, you can look at jq's array syntax in a different light: the expression `[1,2,3]`
 is not using a built-in syntax for comma-separated arrays, but is instead applying the `[]` operator (collect results)
@@ -57,7 +56,7 @@ fields and you just want "user" and "title", you can write
 
 Because that is so common, there's a shortcut syntax for it: `{user, title}`.
 
-If one of the expressions produces multiple results, multiple dictionaries will be produced. If theinput's
+If one of the expressions produces multiple results, multiple dictionaries will be produced. If the input is
 
 ```
 { "user": "stedolan", "titles": ["JQ Primer", "More JQ"] }

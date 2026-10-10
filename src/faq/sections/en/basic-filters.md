@@ -5,42 +5,25 @@
 The absolute simplest filter is `.` . This filter takes its input and produces the same value as output. That is, this
 is the identity operator.
 
-Since jq by default pretty-prints all output, a trivial program consisting of nothing but `.`can be used to format JSON
-output from, say, `curl`.
+Applied to the whole document, `.` shows it unchanged in the query view.
 
-Although the identity filter never modifies the value of its input, jq processing can sometimes make it
-appear as though it does. For example, using the current implementation of jq, we would see that the
-expression:
+Although the identity filter never modifies its input, the way numbers are handled can make it look as if it does. In
+this extension:
 
-```
-1E1234567890 | .
-```
+1. A number that is only passed through keeps the exact text it was written with, so `1E1234567890 | .` produces
+   `1E1234567890` and `1.000` stays `1.000`.
 
-produces `1.7976931348623157e+308` on at least one platform. This is because, in the process
-of
-parsing the number, this particular version of jq has converted it to an IEEE754 double-precision
-representation, losing precision.
+2. Arithmetic on integers is exact at any size.
 
-The way in which jq handles numbers has changed over time and further changes are likely within the
-parameters set by the relevant JSON standards. The following remarks are therefore offered with the
-understanding that they are intended to be descriptive of the current version of jq and should not be
-interpreted as being prescriptive:
+3. Arithmetic that involves a number with a fraction or an exponent converts it to an IEEE754 double-precision
+   value, which can lose precision.
 
-1. Any arithmetic operation on a number that has not already been converted to an IEEE754 double precision
-   representation will trigger a conversion to the IEEE754 representation.
-
-2. jq will attempt to maintain the original decimal precision of number literals, but in expressions such `
-1E1234567890`, precision will be lost if the exponent is too large.
-
-3. In jq programs, a leading minus sign will trigger the conversion of the number to an IEEE754 representation.
-
-4. Comparisons are carried out using the untruncated big decimal representation of numbers if available, as illustrated
-   in one of the following examples.
+4. Comparisons between integers are exact, as one of the following examples shows.
 
 #### Examples:
 <mjf-example-table query="." input='"Hello, world!"' output="&quot;Hello, world!&quot;"></mjf-example-table>
 <mjf-example-table query="." input='0.12345678901234567890123456789' output="0.12345678901234567890123456789"></mjf-example-table>
 <mjf-example-table query="[., tojson]" input='12345678909876543212345' output="[12345678909876543212345,&quot;12345678909876543212345&quot;]"></mjf-example-table>
 <mjf-example-table query=". &lt; 0.12345678901234567890123456788" input='0.12345678901234567890123456789' output="false"></mjf-example-table>
-<mjf-example-table query="map([., . == 1]) | tojson" input='[1, 1.000, 1.0, 100e-2]' output="&quot;[[1,true],[1.000,true],[1.0,true],[1.00,true]]&quot;"></mjf-example-table>
-<mjf-example-table query=". as $big | [$big, $big + 1] | map(. &gt; 10000000000000000000000000000000)" input='10000000000000000000000000000001' output="[true, false]"></mjf-example-table>
+<mjf-example-table query="map([., . == 1]) | tojson" input='[1, 1.000, 1.0, 100e-2]' output="&quot;[[1,true],[1.000,true],[1.0,true],[100e-2,true]]&quot;"></mjf-example-table>
+<mjf-example-table query=". as $big | [$big, $big + 1] | map(. &gt; 10000000000000000000000000000000)" input='10000000000000000000000000000001' output="[true, true]"></mjf-example-table>

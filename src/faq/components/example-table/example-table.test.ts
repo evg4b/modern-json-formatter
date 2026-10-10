@@ -48,7 +48,7 @@ describe('ExampleTableElement', () => {
 
     test('renders two input fields', async () => {
       await element.updateComplete;
-      expect(element.shadowRoot!.querySelectorAll('input').length).toBe(2);
+      expect(element.shadowRoot!.querySelectorAll('input')).toHaveLength(2);
     });
 
   });

@@ -1,5 +1,11 @@
 const STRUCTURE = /^\s*[{["]/;
-const PRIMITIVE = /^\s*(?:true|false|null|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*$/;
+const KEYWORD = /^(?:true|false|null)$/;
+const NUMBER = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
+
+const isPrimitive = (text: string): boolean => {
+  const trimmed = text.trim();
+  return KEYWORD.test(trimmed) || NUMBER.test(trimmed);
+};
 
 const testNode = <T extends HTMLElement>(node: T | null): T | null => {
   if (!node) {
@@ -7,7 +13,7 @@ const testNode = <T extends HTMLElement>(node: T | null): T | null => {
   }
 
   const text = node.innerText;
-  return STRUCTURE.test(text) || PRIMITIVE.test(text) ? node : null;
+  return STRUCTURE.test(text) || isPrimitive(text) ? node : null;
 };
 
 export const getNodeWithCode = (list: NodeListOf<ChildNode>): HTMLPreElement | HTMLDivElement | null => {

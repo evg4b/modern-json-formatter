@@ -10,6 +10,8 @@ describe('ContainerElement', () => {
     await container.updateComplete;
   });
 
+  const renderRoot = () => Reflect.get(container, 'renderRoot') as ShadowRoot;
+
   afterEach(() => {
     document.body.removeChild(container);
   });
@@ -47,25 +49,43 @@ describe('ContainerElement', () => {
     expect(container.hasAttribute('loading')).toBe(false);
   });
 
-  test('setRawContent replaces raw container children', () => {
+  test('setRawContent replaces raw container children', async () => {
     const child = document.createElement('pre');
     container.setRawContent(child);
     container.type = 'raw';
+    await container.updateComplete;
+
+    expect(renderRoot().contains(child)).toBe(true);
   });
 
   test('setFormattedContent replaces formatted container children', () => {
     const child = document.createElement('div');
     container.setFormattedContent(child);
+
+    expect(renderRoot().contains(child)).toBe(true);
   });
 
-  test('setQueryContent replaces query container children', () => {
+  test('setQueryContent replaces query container children', async () => {
     const child = document.createElement('div');
     container.setQueryContent(child);
+    container.type = 'query';
+    await container.updateComplete;
+
+    expect(renderRoot().contains(child)).toBe(true);
+  });
+
+  test('set content replaces previous children', () => {
+    const first = document.createElement('div');
+    const second = document.createElement('div');
+    container.setFormattedContent(first);
+    container.setFormattedContent(second);
+
+    expect(renderRoot().contains(first)).toBe(false);
+    expect(renderRoot().contains(second)).toBe(true);
   });
 
   test('message appends mjf-floating-message to shadow DOM', () => {
     container.message('Header', 'Body text');
-    const renderRoot = Reflect.get(container, 'renderRoot') as ShadowRoot;
-    expect(renderRoot.querySelector('mjf-floating-message')).not.toBeNull();
+    expect(renderRoot().querySelector('mjf-floating-message')).not.toBeNull();
   });
 });

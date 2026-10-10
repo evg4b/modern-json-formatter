@@ -13,7 +13,7 @@ export type LogoSize = '512' | '256' | '128' | '48' | '32';
 
 @customElement('mjf-logo')
 export class LogoElement extends LitElement {
-  static override styles = css`
+  public static override readonly styles = css`
     :host {
       display: inline-flex;
     }

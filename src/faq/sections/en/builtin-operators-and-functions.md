@@ -4,14 +4,12 @@ Some jq operators (for instance, `+`) do different things depending on the type 
 etc.). However, jq never does implicit type conversions. If you try to add a string to an object you'll get an error
 message and no result.
 
-Please note that all numbers are converted to IEEE754 double precision floating point representation. Arithmetic and
-logical operators are working with these converted doubles. Results of all such operations are also limited to the
-double precision.
+Arithmetic on integers is exact at any size. A number with a fraction or an exponent is converted to an IEEE754 double
+precision value when an operator or function is applied to it, and the result is a double. Division and most math
+functions always return doubles, which are printed with a fraction (`10 / 2` gives `5.0`).
 
-The only exception to this behaviour of number is a snapshot of original number literal. When a number which originally
-was provided as a literal is never mutated until the end of the program then it is printed to the output in its original
-literal form. This also includes cases when the original literal would be truncated when converted to the IEEE754 double
-precision floating point number.
+A number that is never changed until the end of the program is printed in its original literal form, even when the
+literal could not be represented exactly as a double.
 
 ### Addition: `+`
 
@@ -45,10 +43,11 @@ the second array's elements from the first array.
 
 ### Multiplication, division, modulo: `*`, `/`, `%`
 
-These infix operators behave as expected when given two numbers. Division by zero raises an error. `x % y` computes x
-modulo y.
+These infix operators behave as expected when given two numbers. Dividing by zero produces `infinite` (or `-infinite`,
+or `nan` for `0 / 0`) rather than an error, while `x % 0` raises an error. `x % y` computes x modulo y and keeps the
+fraction, so `5.5 % 2` is `1.5`.
 
-Multiplying a string by a number produces the concatenation of that string that many times. `"x" * 0` produces `""`.
+Multiplying a string by a number produces the concatenation of that string that many times. `"x" * 0` produces `null`.
 
 Dividing a string by another splits the first using the second as separators.
 
@@ -56,10 +55,10 @@ Multiplying two objects will merge them recursively: this works like addition bu
 the same key, and the values are objects, the two are merged with the same strategy.
 
 #### Examples:
-<mjf-example-table query="10 / . * 3" input='5' output="6"></mjf-example-table>
+<mjf-example-table query="10 / . * 3" input='5' output="6.0"></mjf-example-table>
 <mjf-example-table query='. / ", "' input='"a, b,c,d, e"' output='["a","b,c,d","e"]'></mjf-example-table>
 <mjf-example-table query='{"k": {"a": 1, "b": 2}} * {"k": {"a": 0,"c": 3}}' input='null' output='{"k": {"a": 0, "b": 2, "c": 3}}'></mjf-example-table>
-<mjf-example-table query=".[] | (1 / .)?" input='[1,0,-1]' output="1&#10;-1"></mjf-example-table>
+<mjf-example-table query=".[] | 1 / ." input='[1,0,-1]' output="1.0&#10;Infinity&#10;-1.0"></mjf-example-table>
 
 ### `abs`
 
@@ -144,22 +143,21 @@ or an object if given an object.
 When the input to `map_values(f)` is an object, the output object has the same keys as the input object except for those
 keys whose values when piped to `f` produce no values at all.
 
-The key difference between `map(f)` and `map_values(f)` is that the former simply forms an array from all the values of
-`($x|f)` for each value, $x, in the input array or object, but `map_values(f)` only uses `first($x|f)`.
+`map(f)` forms an array from all the values of `($x|f)` for each value, $x, in the input array or object.
 
-Specifically, for object inputs, `map_values(f)` constructs the output object by examining in turn the value of
-`first(.[$k]|f)` for each
-key, $k, of the input. If this expression produces no values, then the corresponding key will be dropped; otherwise, the output object will have that value at the key, $
-k.
+For object inputs, `map_values(f)` constructs the output object by examining in turn the value of `first(.[$k]|f)` for
+each key, $k, of the input. If this expression produces no values, then the corresponding key will be dropped;
+otherwise, the output object will have that value at the key, $k.
 
-Here are some examples to clarify the behavior of `map` and `map_values` when applied to arrays. These examples assume
-the input is `[1]` in all cases:
+For array inputs, `map_values(f)` behaves like `map(f)` in this extension: every output of `f` is kept, and an element
+for which `f` produces nothing is dropped. These examples assume the input is `[1]` in all cases:
 
 ```
 map(.+1)          #=>  [2]
 map(., .)         #=>  [1,1]
-map(empty)        #=>  []map_values(.+1)   #=>  [2]
-map_values(., .)  #=>  [1]
+map(empty)        #=>  []
+map_values(.+1)   #=>  [2]
+map_values(., .)  #=>  [1,1]
 map_values(empty) #=>  []
 ```
 
@@ -175,13 +173,14 @@ In fact, these are their implementations.
 
 ### `pick(pathexps)`
 
-Emit the projection of the input object or array defined by the specified sequence of path expressions, such that if `p`
-is any one of these specifications, then `(. | p)` will evaluate to the same value as `(. | pick(pathexps) | p)`. For
-arrays, negative indices and `.[m:n]` specifications should not be used.
+Emit the projection of the input object defined by the specified sequence of path expressions, such that if `p` is any
+one of these specifications, then `(. | p)` will evaluate to the same value as `(. | pick(pathexps) | p)`.
+
+Use `pick` on objects. Applied to an array, it builds an object keyed by the picked indices (`[1,2,3,4] | pick(.[2])`
+gives `{"2": 3}`) instead of an array.
 
 #### Examples:
 <mjf-example-table query="pick(.a, .b.c, .x)" input='{"a": 1, "b": {"c": 2, "d": 3}, "e": 4}' output='{"a":1,"b":{"c":2},"x":null}'></mjf-example-table>
-<mjf-example-table query="pick(.[2], .[0], .[0])" input='[1,2,3,4]' output="[1,null,3]"></mjf-example-table>
 
 ### `path(path_expression)`
 
@@ -205,11 +204,19 @@ Note that the path expressions are not different from normal expressions. The ex
 
 ### `del(path_expression)`
 
-The builtin function `del` removes a key and its corresponding value from an object.
+The builtin function `del` removes a key and its corresponding value from an object, or elements from an array.
+
+Removing a key can change the order of the remaining keys: the last key of the object moves into the position of the
+deleted one. To keep the order, filter the entries instead: `with_entries(select(.key != "foo"))`.
+
+When deleting several array elements one by one, list the indices from highest to lowest (`del(.[2, 1])`) or use a
+slice (`del(.[1:])`). Each deletion shifts the elements after it, so `del(.[1, 2])` on a three-element array fails with
+an out-of-bounds error.
 
 #### Examples:
-<mjf-example-table query="del(.foo)" input='{"foo": 42, "bar": 9001, "baz": 42}' output='{"bar": 9001, "baz": 42}'></mjf-example-table>
-<mjf-example-table query="del(.[1, 2])" input='["foo", "bar", "baz"]' output='["foo"]'></mjf-example-table>
+<mjf-example-table query="del(.foo)" input='{"foo": 42, "bar": 9001, "baz": 42}' output='{"baz": 42, "bar": 9001}'></mjf-example-table>
+<mjf-example-table query='with_entries(select(.key != "foo"))' input='{"foo": 42, "bar": 9001, "baz": 42}' output='{"bar": 9001, "baz": 42}'></mjf-example-table>
+<mjf-example-table query="del(.[1:])" input='["foo", "bar", "baz"]' output='["foo"]'></mjf-example-table>
 
 ### `getpath(PATHS)`
 
@@ -223,10 +230,13 @@ The builtin function `getpath` outputs the values in `.` found at each path in `
 
 The builtin function `setpath` sets the `PATHS` in `.` to `VALUE`.
 
+Every step of the path except the last must already exist: `setpath` can add a key to an existing object, but it
+cannot create objects or arrays inside `null`, and it cannot set an index past the end of an array.
+
 #### Examples:
-<mjf-example-table query='setpath(["a","b"]; 1)' input='null' output='{"a": {"b": 1}}'></mjf-example-table>
 <mjf-example-table query='setpath(["a","b"]; 1)' input='{"a":{"b":0}}' output='{"a": {"b": 1}}'></mjf-example-table>
-<mjf-example-table query='setpath([0,"a"]; 1)' input='null' output='[{"a":1}]'></mjf-example-table>
+<mjf-example-table query='setpath(["a","c"]; 1)' input='{"a":{"b":0}}' output='{"a": {"b": 0, "c": 1}}'></mjf-example-table>
+<mjf-example-table query='setpath([0,"a"]; 1)' input='[{"a":0}]' output='[{"a":1}]'></mjf-example-table>
 
 ### `delpaths(PATHS)`
 
@@ -243,7 +253,8 @@ each `k: v` entry in the input, the output array includes `{"key": k, "value": v
 
 `from_entries` does the opposite conversion, and `with_entries(f)` is a shorthand for
 `to_entries | map(f) | from_entries`, useful for doing some operation to all keys and values of an object.
-`from_entries` accepts `"key"`, `"Key"`, `"name"`, `"Name"`, `"value"`, and `"Value"` as keys.
+`from_entries` reads only the `"key"` and `"value"` fields of each entry. A key that is not a string is converted to
+one, so `{"key": 1, "value": 2}` becomes `{"1": 2}`.
 
 #### Examples:
 <mjf-example-table query="to_entries" input='{"a": 1, "b": 2}' output='[{"key":"a", "value":1}, {"key":"b", "value":2}]'></mjf-example-table>
@@ -289,19 +300,6 @@ see below.
 #### Examples:
 <mjf-example-table query="try error catch ." input='"error message"' output='"error message"'></mjf-example-table>
 <mjf-example-table query='try error("invalid value: \(.)") catch .' input='42' output='"invalid value: 42"'></mjf-example-table>
-
-### `halt`
-
-Stops the jq program with no further outputs. jq will exit with exit status `0`.
-
-### `halt_error`, `halt_error(exit_code)`
-
-Stops the jq program with no further outputs. The input will be printed on `stderr` as raw output (i.e., strings will
-not have double quotes) with no decoration, not even a newline.
-
-The given `exit_code` (defaulting to `5`) will be jq's exit status.
-
-For example, `"Error: something went wrong\n"|halt_error(1)`.
 
 ### `paths`, `paths(node_filter)`
 
@@ -405,7 +403,7 @@ The `floor` function returns the floor of its numeric input.
 The `sqrt` function returns the square root of its numeric input.
 
 #### Examples:
-<mjf-example-table query="sqrt" input='9' output="3"></mjf-example-table>
+<mjf-example-table query="sqrt" input='9' output="3.0"></mjf-example-table>
 
 ### `tonumber`
 
@@ -437,9 +435,9 @@ if its input is infinite. The `isnan` builtin returns `true` if its input is a N
 positive infinite value. The `nan` builtin returns a NaN. The `isnormal` builtin returns true if its input is a normal
 number.
 
-Note that division by zero raises an error.
+Note that dividing a number by zero produces an infinite value (or NaN for `0 / 0`) rather than an error.
 
-Currently most arithmetic operations operating on infinities, NaNs, and sub-normals do not raise errors.
+Arithmetic operations on infinities, NaNs, and sub-normals do not raise errors.
 
 #### Examples:
 <mjf-example-table query=".[] | (infinite * .) &lt; 0" input='[-1, 1]' output="true&#10;false"></mjf-example-table>
@@ -584,14 +582,14 @@ combinations of `n` repetitions of the input array.
 
 ### `ltrimstr(str)`
 
-Outputs its input with the given prefix string removed, if it starts with it.
+Outputs its input with the given prefix string removed, if it starts with it. The input must be a string.
 
 #### Examples:
 <mjf-example-table query='[.[]|ltrimstr("foo")]' input='["fo", "foo", "barfoo", "foobar", "afoo"]' output='["fo","","barfoo","bar","afoo"]'></mjf-example-table>
 
 ### `rtrimstr(str)`
 
-Outputs its input with the given suffix string removed, if it ends with it.
+Outputs its input with the given suffix string removed, if it ends with it. The input must be a string.
 
 #### Examples:
 <mjf-example-table query='[.[]|rtrimstr("foo")]' input='["fo", "foo", "barfoo", "foobar", "foob"]' output='["fo","","bar","foobar","foob"]'></mjf-example-table>
@@ -624,12 +622,12 @@ Splits an input string on the separator argument.
 Joins the array of elements given as input, using the argument as separator. It is the inverse of `split`: that is,
 running `split("foo") | join("foo")` over any input string returns said input string.
 
-Numbers and booleans in the input are converted to strings. Null values are treated as empty strings. Arrays and objects
-in the input are not supported.
+Numbers, booleans and `null` in the input are converted to strings, so `null` appears as `null`. Arrays and objects in
+the input are not supported.
 
 #### Examples:
 <mjf-example-table query='join(", ")' input='["a","b,c,d","e"]' output='"a, b,c,d, e"'></mjf-example-table>
-<mjf-example-table query='join(" ")' input='["a",1,2.3,true,null,false]' output='"a 1 2.3 true false"'></mjf-example-table>
+<mjf-example-table query='join(" ")' input='["a",1,2.3,true,null,false]' output='"a 1 2.3 true null false"'></mjf-example-table>
 
 ### `ascii_downcase`, `ascii_upcase`
 
@@ -827,7 +825,7 @@ will return an integer that is probably of no interest.
 #### Examples:
 <mjf-example-table query="bsearch(0)" input='[0,1]' output="0"></mjf-example-table>
 <mjf-example-table query="bsearch(0)" input='[1,2,3]' output="-1"></mjf-example-table>
-<mjf-example-table query="bsearch(4) as $ix | if $ix &lt; 0 then .[-(1+$ix)] = 4 else . end" input='[1,2,3]' output="[1,2,3,4]"></mjf-example-table>
+<mjf-example-table query="bsearch(4) as $ix | if $ix &lt; 0 then .[:-(1+$ix)] + [4] + .[-(1+$ix):] else . end" input='[1,2,3]' output="[1,2,3,4]"></mjf-example-table>
 
 ### String interpolation: `\(exp)`
 
@@ -866,25 +864,22 @@ Serializes the input as JSON.
 Applies HTML/XML escaping, by mapping the characters `<>&'"` to their entity equivalents `&lt;`, `&gt;`, `&amp;`,
 `&apos;`, `&quot;`.
 
+- `@htmld`:
+
+The inverse of `@html`: decodes those entities back to characters.
+
 - `@uri`:
 
 Applies percent-encoding, by mapping all reserved URI characters to a `%XX` sequence.
 
-- `@csv`:
+- `@urid`:
 
-The input must be an array, and it is rendered as CSV with double quotes for strings, and quotes escaped by repetition.
-
-- `@tsv`:
-
-The input must be an array, and it is rendered as TSV (tab-separated values). Each input array will be printed as a
-single line. Fields are separated by a single tab (ascii `0x09`). Input characters line-feed (ascii `0x0a`),
-carriage-return (ascii `0x0d`), tab (ascii `0x09`) and backslash (ascii `0x5c`) will be output as escape sequences `\n`,
-`\r`, `\t`, `\\` respectively.
+The inverse of `@uri`: decodes `%XX` sequences.
 
 - `@sh`:
 
 The input is escaped suitable for use in a command-line for a POSIX shell. If the input is an array, the output will be
-a series of space-separated strings.
+a series of space-separated strings. Objects cannot be escaped this way.
 
 - `@base64`:
 
@@ -892,7 +887,7 @@ The input is converted to base64 as specified by RFC 4648.
 
 - `@base64d`:
 
-The inverse of `@base64`, input is decoded as specified by RFC 4648. Note\\: If the decoded string is not UTF-8, the
+The inverse of `@base64`, input is decoded as specified by RFC 4648. Note: if the decoded string is not UTF-8, the
 results are undefined.
 
 This syntax can be combined with string interpolation in a useful way. You can follow a `@foo` token with a string
@@ -913,29 +908,25 @@ Note that the slashes, question mark, etc. in the URL are not escaped, as they w
 
 #### Examples:
 <mjf-example-table query="@html" input='"This works if x &lt; y"' output='"This works if x &amp;lt; y"'></mjf-example-table>
-<mjf-example-table query='@sh "echo \(.)"' input='"O&#39;Hara&#39;s Ale"' output='"echo &#39;O&#39;\\&#39;&#39;Hara\\&#39;&#39;s Ale&#39;"'></mjf-example-table>
+<mjf-example-table query='@sh "echo \(.)"' input='"O&#39;Hara&#39;s Ale"' output='"echo &#39;O&#39;\\&#39;&#39;Hara&#39;\\&#39;&#39;s Ale&#39;"'></mjf-example-table>
 <mjf-example-table query="@base64" input='"This is a message"' output='"VGhpcyBpcyBhIG1lc3NhZ2U="'></mjf-example-table>
 <mjf-example-table query="@base64d" input='"VGhpcyBpcyBhIG1lc3NhZ2U="' output='"This is a message"'></mjf-example-table>
 
 ### Dates
 
 jq provides some basic date handling functionality, with some high-level and low-level builtins. In all cases these
-builtins deal exclusively with time in UTC.
+builtins deal exclusively with time in UTC. The current time (`now`) is not available in this extension.
 
 The `fromdateiso8601` builtin parses datetimes in the ISO 8601 format to a number of seconds since the Unix epoch (
 1970-01-01T00:00:00Z). The `todateiso8601` builtin does the inverse.
 
-The `fromdate` builtin parses datetime strings. Currently `fromdate` only supports ISO 8601 datetime strings, but in the
-future it will attempt to parse datetime strings in more formats.
+The `fromdate` builtin parses ISO 8601 datetime strings, including fractional seconds
+(`"2015-03-05T23:51:47.123Z" | fromdate` gives `1425599507.123`).
 
-The `todate` builtin is an alias for `todateiso8601`.
+The `todate` builtin is an alias for `todateiso8601`. Both take a number of seconds; a fraction is kept in the output.
 
-The `now` builtin outputs the current time, in seconds since the Unix epoch.
-
-Low-level jq interfaces to the C-library time functions are also provided: `strptime`, `strftime`, `strflocaltime`,
-`mktime`, `gmtime`, and `localtime`. Refer to your host operating system's documentation for the format strings used by
-`strptime` and `strftime`. Note: these are not necessarily stable interfaces in jq, particularly as to their
-localization functionality.
+Lower-level time functions are also provided: `strptime`, `strftime`, `strflocaltime`, `mktime`, `gmtime`, and
+`localtime`. They follow the C library interfaces of the same names.
 
 The `gmtime` builtin consumes a number of seconds since the Unix epoch and outputs a "broken down time" representation
 of Greenwich Mean Time as an array of numbers representing (in this order): the year, the month (zero-based), the day of
@@ -943,21 +934,19 @@ the month (one-based), the hour of the day, the minute of the hour, the second o
 the day of the year -- all one-based unless otherwise stated. The day of the week number may be wrong on some systems
 for dates before March 1st 1900, or after December 31 2099.
 
-The `localtime` builtin works like the `gmtime` builtin, but using the local timezone setting.
+The `localtime` builtin works like the `gmtime` builtin. The extension has no access to your timezone, so it returns
+UTC as well.
 
 The `mktime` builtin consumes "broken down time" representations of time output by `gmtime` and `strptime`.
 
 The `strptime(fmt)` builtin parses input strings matching the `fmt` argument. The output is in the "broken down time"
-representation consumed by `mktime` and output by `gmtime`.
+representation consumed by `mktime` and output by `gmtime`. The input must contain a full date.
 
-The `strftime(fmt)` builtin formats a time (GMT) with the given format. The `strflocaltime` does the same, but using the
-local timezone setting.
+The `strftime(fmt)` builtin formats a time (UTC) with the given format, given either as seconds since the epoch or as
+broken down time. `strflocaltime` does the same and, like `localtime`, uses UTC.
 
-The format strings for `strptime` and `strftime` are described in typical C library documentation. The format string for
-ISO 8601 datetime is `"%Y-%m-%dT%H:%M:%SZ"`.
-
-jq may not support some or all of this date functionality on some systems. In particular, the `%u` and `%j` specifiers
-for `strptime(fmt)` are not supported on macOS.
+The format strings for `strptime` and `strftime` use the usual C library `%` specifiers. The format string for ISO 8601
+datetime is `"%Y-%m-%dT%H:%M:%SZ"`.
 
 #### Examples:
 <mjf-example-table query="fromdate" input='"2015-03-05T23:51:47Z"' output="1425599507"></mjf-example-table>
@@ -1017,8 +1006,3 @@ for `strptime(fmt)` are not supported on macOS.
 [//]: #
 
 [//]: # "This builtin outputs `true` if any value in the source stream appears in the second stream, otherwise it outputs `false`."
-
-### `builtins`
-
-Returns a list of all builtin functions in the format `name/arity`. Since functions with the same name but different
-arities are considered separate functions, `all/0`, `all/1`, and `all/2` would all be present in the list.

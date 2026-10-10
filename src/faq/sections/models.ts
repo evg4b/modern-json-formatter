@@ -9,4 +9,5 @@ export interface FaqSection {
   math: MarkdownFile;
   assignment: MarkdownFile;
   hashing: MarkdownFile;
+  extensionQueries: MarkdownFile;
 }

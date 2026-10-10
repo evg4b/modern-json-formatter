@@ -1,11 +1,11 @@
 ## Hashing
 
-Modern JSON Formatter extends jq with built-in cryptographic hash functions. These functions take a **string** input and
+Modern JSON Formatter extends jq with built-in cryptographic hash functions. These functions take a string input and
 return the lowercase hexadecimal digest. Passing a non-string value (e.g. a number or object) raises an error.
 
 ### `md5`
 
-Computes the **MD5** hash of a string and outputs its 32-character lowercase hex digest.
+Computes the MD5 hash of a string and outputs its 32-character lowercase hex digest.
 
 > **Note:** MD5 is not cryptographically secure. Use it only for checksums or non-security-critical fingerprinting.
 
@@ -16,7 +16,7 @@ Computes the **MD5** hash of a string and outputs its 32-character lowercase hex
 
 ### `sha256`
 
-Computes the **SHA-256** hash of a string and outputs its 64-character lowercase hex digest.
+Computes the SHA-256 hash of a string and outputs its 64-character lowercase hex digest.
 
 #### Examples:
 <mjf-example-table query="sha256" input='"hello"' output='"2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"'></mjf-example-table>
@@ -24,7 +24,7 @@ Computes the **SHA-256** hash of a string and outputs its 64-character lowercase
 
 ### `sha512`
 
-Computes the **SHA-512** hash of a string and outputs its 128-character lowercase hex digest.
+Computes the SHA-512 hash of a string and outputs its 128-character lowercase hex digest.
 
 #### Examples:
 <mjf-example-table query="sha512" input='"hello"' output='"9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043"'></mjf-example-table>

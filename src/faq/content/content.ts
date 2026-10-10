@@ -38,6 +38,7 @@ export class ContentElement extends LitElement {
       <mjf-section .content=${lang.en.advancedFeatures}></mjf-section>
       <mjf-section .content=${lang.en.math}></mjf-section>
       <mjf-section .content=${lang.en.assignment}></mjf-section>
+      <mjf-section .content=${lang.en.extensionQueries}></mjf-section>
     `;
   }
 }

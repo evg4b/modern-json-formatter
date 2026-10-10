@@ -13,39 +13,51 @@ We will review and address it as soon as possible.
 
 ## Privacy Policy
 
-We take user privacy seriously and ensure that `modern-json-formatter` operates in a secure and privacy-respecting
-manner.
+`modern-json-formatter` processes everything on your device and sends nothing to us or to anyone else.
 
-- **No Data Collection** – We do not collect, store, or process any personal or sensitive user data.
-- **No Data Transmission** – We do not send any data over the internet, ensuring that your information remains private.
-- **No Analytics or Tracking** – We do not use tracking mechanisms, telemetry, or analytics to monitor user activity.
-- **Local Processing Only** – All JSON formatting is performed locally on your device, without any remote processing.
-- **No Third-Party Sharing** – We do not share any data with third parties, advertisers, or external services.
+- We do not collect any personal or sensitive data.
+- The extension makes no network requests. A WebAssembly module bundled with the extension parses, formats, queries
+  and hashes the JSON on your device.
+- There is no analytics, telemetry or tracking.
+- No data is shared with third parties, advertisers or external services.
 
-Your privacy and security are our top priorities. If you have any questions or concerns, feel free to contact us.
+The extension keeps two kinds of data in your browser:
+
+- The jq queries you run successfully, grouped by site (the hostname, or the file path for local files), in the
+  extension's IndexedDB. They feed the query autocomplete, and you can review and clear them on the options page.
+- Your settings (toolbar buttons, download mode, size limit), in `chrome.storage.sync`. If browser sync is turned on,
+  your browser syncs them across your devices through your browser account, as it does for other extensions.
+
+If you have questions or concerns, open an issue on GitHub.
 
 ## Verifying Release Integrity
 
-This guide explains how to verify that the extension installed from the Chrome Web Store or Microsoft Edge Store
-matches the source code published in a release.
+You can check that the extension installed from the Chrome Web Store or Microsoft Edge Add-ons store matches the
+source code published in a release.
 
 > **Why individual files, not the archive?**
 > Chrome Web Store and Microsoft Edge Store repackage the extension into their own `.crx` format before distribution.
 > The original `.zip` submitted to the store is not what end-users receive.
-> Hashing that archive is therefore meaningless for integrity verification.
+> Hashing that archive tells you nothing about what was installed.
 >
-> Instead, checksums are computed for **every individual file inside `dist/`** before packaging.
-> This lets you verify the exact source files that were shipped, regardless of how the browser vendor repackaged them.
+> Instead, the release build computes a checksum for every individual file inside `dist/` before packaging, so you can
+> check the files that were shipped regardless of how the store repackaged them.
 
-### Step 1 - Get hashes from your installed extension
+### Step 1: get hashes from your installed extension
 
-First, determine the version number of the installed extension (visible on the `chrome://extensions` page),
-then run the appropriate command for your OS to compute SHA256 hashes of all extension files.
+Find the version number of the installed extension on the `chrome://extensions` page, then run the command for your OS
+to compute SHA256 hashes of all extension files.
+
+The commands below use Chrome's default profile and the Chrome Web Store ID `dmofgolehdakghahlgibeaodbahpfkpf`. For
+Microsoft Edge, use the Edge ID `edjgdbhdfdodmabofpnkngphlbpjpihj` and the Edge profile folder instead:
+`%LOCALAPPDATA%\Microsoft\Edge\User Data\Default\Extensions` on Windows,
+`~/Library/Application Support/Microsoft Edge/Default/Extensions` on macOS and
+`~/.config/microsoft-edge/Default/Extensions` on Linux.
 
 #### Windows
 
 1. Open a PowerShell prompt.
-2. Set the version variable - replace `<VERSION>` with the installed version number:
+2. Set the version variable, replacing `<VERSION>` with the installed version number:
 
 ```powershell
 $env:VERSION = "<VERSION>"
@@ -64,7 +76,7 @@ Get-ChildItem "$env:LOCALAPPDATA\Google\Chrome\User Data\Default\Extensions\dmof
 #### macOS
 
 1. Open Terminal.
-2. Set the version variable - replace `<VERSION>` with the installed version number:
+2. Set the version variable, replacing `<VERSION>` with the installed version number:
 
 ```bash
 export VERSION=<VERSION>
@@ -80,7 +92,7 @@ find "${HOME}/Library/Application Support/Google/Chrome/Default/Extensions/dmofg
 #### Linux
 
 1. Open Terminal.
-2. Set the version variable - replace `<VERSION>` with the installed version number:
+2. Set the version variable, replacing `<VERSION>` with the installed version number:
 
 ```bash
 export VERSION=<VERSION>
@@ -90,13 +102,19 @@ export VERSION=<VERSION>
 
 ```bash
 find "${HOME}/.config/google-chrome/Default/Extensions/dmofgolehdakghahlgibeaodbahpfkpf/${VERSION}_0" \
-  -type f -exec sh -c 'echo "$(shasum -a 256 "$1" | cut -d" " -f1)  $(basename "$1")"' _ {} \; | sort
+  -type f -exec sh -c 'echo "$(sha256sum "$1" | cut -d" " -f1)  $(basename "$1")"' _ {} \; | sort
 ```
 
-> **Note:** The files `.DS_Store`, `verified_contents.json`, and `computed_hashes.json` are added by Chrome after
-> installation and are not part of the original extension package. Ignore them when comparing hashes.
+> **Note:** Some files will not match, and that is expected:
+>
+> - `_metadata/verified_contents.json` and `_metadata/computed_hashes.json` are added by the browser at installation.
+> - `.DS_Store` is created by macOS Finder.
+> - `manifest.json` is rewritten by the stores when they publish the extension (for example, they add `update_url`).
+>   The Edge package is also built from a manifest without the `key` field.
+>
+> Every other file must match.
 
-### Step 2 - Compare against release checksums
+### Step 2: compare against release checksums
 
 1. Go to the [releases page](https://github.com/evg4b/modern-json-formatter/releases).
 2. Select the version matching your installed extension.
@@ -106,8 +124,8 @@ find "${HOME}/.config/google-chrome/Default/Extensions/dmofgolehdakghahlgibeaodb
 
 ## Verifying via Local Build
 
-> **Note:** This section is for developers who want to independently reproduce the build and verify checksums
-> from source.
+> **Note:** This section is for developers who want to reproduce the build from source and check the checksums
+> themselves.
 
 ### Prerequisites
 
@@ -115,11 +133,12 @@ find "${HOME}/.config/google-chrome/Default/Extensions/dmofgolehdakghahlgibeaodb
 |--------------------|--------------------|-------------------------------------------------------------------------------|
 | **Node.js** (v24+) | JavaScript runtime | [nodejs.org](https://nodejs.org)                                              |
 | **Yarn** (v4.13+)  | Package manager    | `corepack enable`                                                             |
-| **Rust** (v1.60+)  | WASM core build    | [rust-lang.org](https://rust-lang.org/tools/install/)                         |
+| **Rust** (v1.85+)  | WASM core build    | [rust-lang.org](https://rust-lang.org/tools/install/)                         |
 | `wasm-pack`        | WASM bindgen tool  | [wasm-bindgen.github.io](https://wasm-bindgen.github.io/wasm-pack/installer/) |
 | **GNU Make**       | Build runner       | [gnu.org/software/make](https://www.gnu.org/software/make/)                   |
+| `jq`, `zip`        | Packaging          | your package manager                                                          |
 
-Verify your setup:
+Check your setup:
 
 ```bash
 node --version
@@ -137,7 +156,9 @@ wasm-pack --version
 make
 ```
 
-This produces `checksums.sha256.txt` in the project root containing SHA256 hashes for every file in `dist/`.
+This builds the WASM core and the extension, writes `checksums.sha256.txt` (SHA256 of every file in `dist/`) to the
+project root, and packs `extention.zip` for Chrome and `extention-msdn.zip` for Edge. The checksums are taken before the
+Edge package removes `key` from `dist/manifest.json`.
 
-3. Compare those hashes against the ones from Step 1 of the installed extension verification above.
-   Every file must match.
+3. Compare those hashes against the ones from Step 1 and against `checksums.sha256.txt` from the release. Apart from
+   the files listed in the note above, every file must match.

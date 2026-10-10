@@ -53,19 +53,28 @@
   </a>
 </p>
 
-# Key features:
+# Features
 
-- Fast parse and format JSON
-- Supports big numbers (includes x64 integer and float)
-- Guaranteed order of keys
-- JQ expression support
-- Formatted and Raw view switcher
-- Array and Object expand/collapse
-- Safe for selecting and copying JSON
-- Clickable links
+- Fast parsing and formatting in a Rust core compiled to WebAssembly
+- Numbers shown exactly as written, so integers and decimals too large for JavaScript keep every digit
+- Keys kept in the order the server sent them, duplicated keys included
+- Expand and collapse any object or array; a collapsed node shows how many properties or items it holds
+- Formatted and Raw views of the response
+- [jq](https://jqlang.org) queries on the current document, run by the [jaq](https://github.com/01mf02/jaq) engine and
+  extended with `md5`, `sha256` and `sha512`
+- Query history per site, offered as autocomplete in the query input
+- A built-in jq manual whose examples run in place
+- Download the document as received, formatted or minified
+- URLs and email addresses inside strings open with Ctrl+click (⌘+click on macOS)
+- Selecting and copying gives valid JSON: toggles and counters stay out of the copied text
+- Tolerates comments, trailing commas, `NaN` and `Infinity` in the document
+- Works on JSON served as plain text and on local `file://` pages (enable "Allow access to file URLs" for the extension)
+- Files over a size limit (10 MB by default) are formatted as plain text instead of an interactive tree
+- Light and dark themes that follow the system setting
+- Settings for the toolbar buttons, the download button's behaviour and the size limit, plus a page to review or clear
+  the query history
 
-
-# Installation:
+# Installation
 
 <table align="center">
   <tbody>
@@ -137,7 +146,7 @@
 Alternatively, you can install the extension manually from
 [the release page](https://github.com/evg4b/modern-json-formatter/releases/latest).
 
-# Browser compatibility:
+# Browser compatibility
 
 |                                                                                                                                                                                      | Browser name   | Support |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|---------|
@@ -149,9 +158,9 @@ Alternatively, you can install the extension manually from
 | <a title="Brave" href="https://brave.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" width="30px"></a>                                 | Brave          | ✅       |
 | <a title="Arc" href="https://arc.net"><img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Arc_%28browser%29_logo.svg" width="30px"></a>                                   | Arc Browser    | ✅       |
 
-If you can't find your browser in the list, please try to install the extension and if it doesn't work,
-[create a request for browser support](<https://github.com/evg4b/modern-json-formatter/issues/new?title=Browser%20support%20request&body=%23%20Browser%20Support%20Request%0A%0ABrowser%20Details%3A%0A-%20Name%3A%20____%20%5Be.g.%2C%20Firefox%5D%0A-%20Version%20*(optional)*%3A%20____%20%5Be.g.%2C%20114.0%5D%0A-%20Platform%20*(optional)*%3A%20____%20%5Be.g.%2C%20Windows%5D%0A%0AAdditional%20Info%3A%0A-%20Link%20to%20the%20browser%20website%3A%20____>).
+If your browser is not in the list, try installing the extension anyway. If it doesn't work,
+[request support for it](<https://github.com/evg4b/modern-json-formatter/issues/new?title=Browser%20support%20request&body=%23%20Browser%20Support%20Request%0A%0ABrowser%20Details%3A%0A-%20Name%3A%20____%20%5Be.g.%2C%20Firefox%5D%0A-%20Version%20*(optional)*%3A%20____%20%5Be.g.%2C%20114.0%5D%0A-%20Platform%20*(optional)*%3A%20____%20%5Be.g.%2C%20Windows%5D%0A%0AAdditional%20Info%3A%0A-%20Link%20to%20the%20browser%20website%3A%20____>).
 
-# Support the project:
+# Support the project
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X0SWTP3)

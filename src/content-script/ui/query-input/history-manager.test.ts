@@ -42,7 +42,7 @@ describe('HistoryManager', () => {
       historyManager.undo();
       historyManager.undo();
       historyManager.save(10);
-      expect(historyManager.redo()).toEqual(null);
+      expect(historyManager.redo()).toBeNull();
     });
   });
 });

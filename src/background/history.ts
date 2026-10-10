@@ -106,11 +106,10 @@ export const getDomains = async (): Promise<DomainCount[]> => {
 
     const results = await wait(index.getAll() as IDBRequest<QueryRecord[]>);
 
-    const rsp: DomainCount[] = [];
-    for (const domain of uniq(results.map(({ domain }) => domain))) {
-      const count = await wait(index.count(domain));
-      rsp.push({ domain, count });
-    }
+    const rsp = await Promise.all(
+      uniq(results.map(({ domain }) => domain))
+        .map(async (domain): Promise<DomainCount> => ({ domain, count: await wait(index.count(domain)) })),
+    );
 
     return rsp.toSorted((a, b) => b.count - a.count);
   } finally {

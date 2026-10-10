@@ -156,8 +156,15 @@ test.describe('document shapes', () => {
   const roots = [
     { name: 'true', body: 'true' },
     { name: 'false', body: 'false' },
+    { name: 'null', body: 'null' },
     { name: 'a number', body: '42' },
+    { name: 'zero', body: '0' },
+    { name: 'a negative number', body: '-21' },
+    { name: 'a fraction', body: '3.14' },
+    { name: 'an exponent', body: '-12.5e-3' },
     { name: 'a string', body: '"text"' },
+    { name: 'a numeric string', body: '"213123"' },
+    { name: 'an empty string', body: '""' },
     { name: 'an empty array', body: '[]' },
     { name: 'an empty object', body: '{}' },
   ];
@@ -297,6 +304,8 @@ test.describe('pages that are not JSON', () => {
     { name: 'plain text', body: 'hello world', text: 'hello world', contentType: 'text/plain' },
     { name: 'an empty response', body: '', text: '', contentType: 'application/json' },
     { name: 'a blank response', body: '   \n  ', text: '', contentType: 'application/json' },
+    { name: 'text that starts like a number', body: '42 is the answer', text: '42 is the answer', contentType: 'text/plain' },
+    { name: 'text that starts like a literal', body: 'nullable', text: 'nullable', contentType: 'text/plain' },
   ];
 
   for (const { name, body, text, contentType } of pages) {
@@ -308,4 +317,51 @@ test.describe('pages that are not JSON', () => {
       expect(await shadow.exists(ui.container)).toBe(false);
     });
   }
+});
+
+test.describe('HTTP error responses', () => {
+  const responses = [
+    '400 Bad Request',
+    '401 Unauthorized',
+    '403 Forbidden',
+    '404 Not Found',
+    '404 page not found',
+    '500 Internal Server Error',
+    '502 Bad Gateway',
+    '503 Service Unavailable',
+    'Not Found',
+    'Forbidden',
+  ];
+
+  for (const body of responses) {
+    for (const contentType of ['text/plain', 'application/json']) {
+      test(`leaves "${body}" served as ${contentType} alone`, async ({ open, page, shadow }) => {
+        await open(body, { contentType });
+
+        await expect(page.locator('body')).toHaveText(body);
+        expect(await shadow.exists(ui.toolbar)).toBe(false);
+        expect(await shadow.exists(ui.container)).toBe(false);
+      });
+    }
+  }
+
+  test('leaves an HTML error page alone', async ({ open, page, shadow }) => {
+    await open('<html><head><title>404 Not Found</title></head><body><center><h1>404 Not Found</h1></center><hr><center>nginx</center></body></html>', { contentType: 'text/html' });
+
+    await expect(page.locator('h1')).toHaveText('404 Not Found');
+    expect(await shadow.exists(ui.toolbar)).toBe(false);
+    expect(await shadow.exists(ui.container)).toBe(false);
+  });
+
+  test('formats a JSON error body', async ({ open, shadow }) => {
+    await open('{"status":404,"error":"Not Found"}');
+
+    expect(await (await shadow.find(ui.tree)).text()).toContain('"error":"Not Found"');
+  });
+
+  test('formats a JSON string error body', async ({ open, shadow }) => {
+    await open('"Not Found"');
+
+    expect(await (await shadow.find(ui.tree)).text()).toBe('"Not Found"');
+  });
 });

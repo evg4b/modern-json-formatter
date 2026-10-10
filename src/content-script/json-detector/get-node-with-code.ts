@@ -1,7 +1,13 @@
+const STRUCTURE = /^\s*[{["]/;
+const PRIMITIVE = /^\s*(?:true|false|null|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*$/;
+
 const testNode = <T extends HTMLElement>(node: T | null): T | null => {
-  return node && /(^\s*[{[\d"])|(^\s*true)|(^\s*false)/.test(node.innerText)
-    ? node
-    : null;
+  if (!node) {
+    return null;
+  }
+
+  const text = node.innerText;
+  return STRUCTURE.test(text) || PRIMITIVE.test(text) ? node : null;
 };
 
 export const getNodeWithCode = (list: NodeListOf<ChildNode>): HTMLPreElement | HTMLDivElement | null => {

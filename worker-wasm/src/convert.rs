@@ -1,4 +1,4 @@
-use core::{Node, Property, StringVariant};
+use json_core::{Node, Property, StringVariant};
 use js_sys::{Array, Object, Reflect};
 use wasm_bindgen::JsValue;
 

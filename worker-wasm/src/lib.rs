@@ -1,6 +1,6 @@
 mod convert;
 pub mod utils;
-use core::{format_json, minify_json, query_json, tokenize_json};
+use json_core::{format_json, minify_json, query_json, tokenize_json};
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsError, JsValue};
 use convert::node_to_js_value;
